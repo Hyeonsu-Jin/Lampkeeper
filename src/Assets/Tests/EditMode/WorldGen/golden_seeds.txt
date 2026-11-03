@@ -1,0 +1,4 @@
+# 골든 해시 시드 목록 (GoldenHashes.SeedTexts와 같은 순서)
+golden-seed-1
+KkeojinHaneul
+K7QM2RTX9B
