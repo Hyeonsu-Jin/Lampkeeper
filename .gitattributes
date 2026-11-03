@@ -2,7 +2,8 @@
 # Unity 게임 개발용 .gitattributes
 # - 텍스트 파일 줄바꿈 통일
 # - 씬·프리팹 병합에 Unity Smart Merge(UnityYAMLMerge) 사용
-#   (사용 전에 git config로 merge 드라이버를 한 번 등록해야 함)
+#   (merge 드라이버는 등록하지 않음. 충돌이 나면 git mergetool로 UnityYAMLMerge를 실행하며,
+#    저장소 로컬 git 설정 절차는 docs/dev/SMART_MERGE_SETUP.md 참고)
 # - 큰 바이너리 파일은 Git LFS로 관리
 #   (사용 전에 Git LFS 설치와 git lfs install 필요)
 # =============================================================
