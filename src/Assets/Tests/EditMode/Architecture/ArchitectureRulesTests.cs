@@ -176,6 +176,30 @@ namespace Game.Tests.Architecture
             CollectionAssert.AreEqual(new[] { Persistence, App, Domain, WorldGen }.OrderBy(n => n, StringComparer.Ordinal), pure);
         }
 
+        /// <summary>SDD 3.4.2 표(v0.8 + M1-04~M1-06 갱신): 시험 어셈블리가 참조하는 게임·라이브러리 어셈블리.</summary>
+        private static readonly Dictionary<string, string[]> ExpectedTestReferences = new Dictionary<string, string[]>
+        {
+            ["Game.Tests.Domain"] = new[] { Domain },
+            ["Game.Tests.Application"] = new[] { App, Domain, WorldGen },
+            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, Bootstrap, EditorTools, FishNet },
+            ["Game.Tests.Architecture"] = new string[0],
+            ["Game.Tests.WorldGen"] = new[] { WorldGen, App },
+            ["Game.Tests.Integration"] = new[] { App, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks },
+        };
+
+        [Test]
+        public void TestAssemblies_ReferenceExactlyTheAssembliesInSddTable()
+        {
+            var testAsmdefs = All.Where(a => a.Name.StartsWith("Game.Tests.", StringComparison.Ordinal)).Select(a => a.Name).OrderBy(n => n, StringComparer.Ordinal);
+            CollectionAssert.AreEqual(ExpectedTestReferences.Keys.OrderBy(n => n, StringComparer.Ordinal), testAsmdefs, "SDD 3.4.2의 시험 어셈블리 목록과 다릅니다.");
+            foreach (KeyValuePair<string, string[]> entry in ExpectedTestReferences)
+            {
+                // Test Runner·NUnit 참조는 표에서 공통이라 비교에서 뺀다.
+                var actual = Get(entry.Key).References.Where(r => !r.EndsWith("TestRunner", StringComparison.Ordinal));
+                CollectionAssert.AreEquivalent(entry.Value, actual, entry.Key + "의 참조가 SDD 3.4.2 표와 다릅니다.");
+            }
+        }
+
         // =========================================================
         // 2) 의존 방향: 안쪽으로만, 어댑터끼리·인프라끼리 금지
         // =========================================================

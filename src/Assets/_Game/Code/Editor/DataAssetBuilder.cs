@@ -22,6 +22,8 @@ namespace Game.Editor
         public const string BalancePath = DataRoot + "/Balance/BalanceConfig.asset";
         /// <summary>네트워크 튜닝 애셋 경로.</summary>
         public const string NetworkPath = DataRoot + "/Network/NetworkTuningConfig.asset";
+        /// <summary>그래픽 프리셋 애셋 경로.</summary>
+        public const string GraphicsPath = DataRoot + "/Graphics/GraphicsPresetConfig.asset";
         /// <summary>설정 뿌리 애셋 경로.</summary>
         public const string RootPath = DataRoot + "/GameDataConfig.asset";
         /// <summary>콘텐츠 정의 폴더.</summary>
@@ -33,9 +35,12 @@ namespace Game.Editor
         {
             BalanceConfig balance = LoadOrCreate<BalanceConfig>(BalancePath);
             NetworkTuningConfig network = LoadOrCreate<NetworkTuningConfig>(NetworkPath);
+            GraphicsPresetConfig graphics = LoadOrCreate<GraphicsPresetConfig>(GraphicsPath);
             GameDataConfig root = LoadOrCreate<GameDataConfig>(RootPath);
             root.Balance = balance;
             root.Network = network;
+            root.Graphics = graphics;
+            EditorUtility.SetDirty(graphics);
             EditorUtility.SetDirty(root);
             RefreshIndex();
         }

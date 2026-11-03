@@ -5,6 +5,10 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Game.Application",
+        "Game.Adapters.Presentation",
+        "Game.Infra.Platform",
+        "Game.Bootstrap",
+        "Game.Infra.Rendering",
         "Game.Infra.Transport",
         "FishNet.Runtime",
         "FishySteamworks"

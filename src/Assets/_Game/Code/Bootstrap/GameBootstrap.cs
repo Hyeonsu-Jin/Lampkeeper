@@ -15,12 +15,14 @@ using Game.Adapters.Presentation.Localization;
 using Game.Adapters.Presentation.UI.Screens;
 using Game.Application.Boot;
 using Game.Application.Config;
+using Game.Application.Perf;
 using Game.Application.Localization;
 using Game.Application.Ports;
 using Game.Bootstrap.DevTools;
 using Game.Infra.Config;
 using Game.Infra.Steam;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Game.Bootstrap
 {
@@ -28,6 +30,9 @@ namespace Game.Bootstrap
     public sealed class GameBootstrap : MonoBehaviour
     {
         private const string LogTag = "[Boot] ";
+
+        /// <summary>Bench 장면 이름(개발 빌드의 빌드 설정에만 들어간다).</summary>
+        public const string BenchSceneName = "Bench";
 
         [Header("설정(NFR-033)")]
         [SerializeField] private GameDataConfig _dataConfig;
@@ -44,6 +49,7 @@ namespace Game.Bootstrap
         private LaunchOptions _options;
         private ILocalizedText _text;
         private bool _bootSmoke;
+        private GraphicsBootstrapper _graphics;
 
         /// <summary>검증을 마친 설정. 로드에 실패하면 null.</summary>
         public IConfigProvider Config { get; private set; }
@@ -54,6 +60,25 @@ namespace Game.Bootstrap
         private void Start()
         {
             IReadOnlyList<string> args = DevCommandLine.GetArgs();
+
+            // [NFR-053] 결정론 비교 도구(-genhash, -genhash-compare)는 개발 빌드에서만 동작하고, 실행하면 부트를 멈추고 끝낸다.
+            if (BuildFlags.IsDevelopment && GenHashCommand.TryRun(args, out int genHashExitCode))
+            {
+                QuitGame(genHashExitCode);
+                return;
+            }
+
+            // [FR-158, FR-163] 파일 로그는 모든 빌드에서, 성능 측정·개발용 표시는 개발 빌드에서 켠다.
+            PerfOptions perfOptions = DevDiagnostics.Install(args);
+
+            // [NFR-021] -bench 가 있으면 부트 판정 없이 Bench 장면으로 간다(개발 빌드 전용).
+            if (BuildFlags.IsDevelopment && perfOptions.Bench.HasValue)
+            {
+                Debug.Log(LogTag + "-bench " + perfOptions.Bench.Value + ": Bench 장면으로 이동합니다.");
+                SceneManager.LoadScene(BenchSceneName);
+                return;
+            }
+
             _options = ParseOptions(args);
             _bootSmoke = BuildFlags.IsDevelopment && DevCommandLine.HasFlag(args, DevCommandLine.BootSmokeFlag);
 
@@ -62,6 +87,10 @@ namespace Game.Bootstrap
                 FinishSmokeIfRequested(DevCommandLine.ExitConfigError);
                 return;
             }
+
+            // [FR-120, FR-121] 옵션 화면(M2-01)이 생기기 전에는 기준 프리셋 「높음」 + 업스케일링 기본값으로 시작한다.
+            _graphics = GraphicsBootstrapper.TryCreate(_dataConfig.Graphics);
+            _graphics?.ApplyStartupSettings(null, perfOptions.Upscale);
 
             _text = CreateLocalizedText();
             _platform = new SteamPlatformService(BuildFlags.IsDevelopment);

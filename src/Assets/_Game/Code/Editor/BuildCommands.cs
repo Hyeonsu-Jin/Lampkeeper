@@ -30,7 +30,9 @@ namespace Game.Editor
         {
             ProjectConfigurator.Apply();
             DataAssetBuilder.CreateDefaults();
+            GraphicsAssetBuilder.CreateAll();
             BootSceneBuilder.CreateBootScene();
+            BenchSceneBuilder.CreateBenchScene();
         }
 
         /// <summary>Windows x64 개발 빌드(IL2CPP).</summary>
@@ -54,7 +56,7 @@ namespace Game.Editor
 
                 var options = new BuildPlayerOptions
                 {
-                    scenes = EnabledScenePaths(),
+                    scenes = EnabledScenePaths(development),
                     locationPathName = exePath,
                     target = BuildTarget.StandaloneWindows64,
                     options = development ? BuildOptions.Development : BuildOptions.None,
@@ -103,7 +105,7 @@ namespace Game.Editor
             }
         }
 
-        private static string[] EnabledScenePaths()
+        private static string[] EnabledScenePaths(bool development)
         {
             var paths = new System.Collections.Generic.List<string>();
             foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
@@ -112,6 +114,11 @@ namespace Game.Editor
                 {
                     paths.Add(scene.path);
                 }
+            }
+            // Bench 장면(측정 장면, M1-05)은 개발 빌드에만 넣는다. 출시 빌드에는 들어가지 않는다.
+            if (development && File.Exists(BenchSceneBuilder.BenchScenePath) && !paths.Contains(BenchSceneBuilder.BenchScenePath))
+            {
+                paths.Add(BenchSceneBuilder.BenchScenePath);
             }
             return paths.ToArray();
         }
