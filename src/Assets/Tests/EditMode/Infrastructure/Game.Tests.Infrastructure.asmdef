@@ -1,0 +1,32 @@
+{
+    "name": "Game.Tests.Infrastructure",
+    "rootNamespace": "Game.Tests.Infrastructure",
+    "references": [
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Game.Application",
+        "Game.Domain",
+        "Game.Infra.Config",
+        "Game.Adapters.Presentation",
+        "Game.Infra.Transport",
+        "Game.Infra.Steam",
+        "Game.Bootstrap",
+        "FishNet.Runtime",
+        "Game.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
