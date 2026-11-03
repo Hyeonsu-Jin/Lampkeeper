@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>등광탑 방어전 와이어프레임 (시안 A/B/C) - 꺼진 하늘 (임시 명칭)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  와이어프레임 전용 파일: 외부 자료 없이 이 파일 하나로 열립니다. 기준 좌표 1920x1080.
+  위쪽 버튼으로 시안(A/B/C)과 단계(확인창, 준비, 웨이브, 보스, 성공, 실패)를 바꿔 볼 수 있습니다.
+  - 점선 칸은 다른 기능의 자리입니다(나침반, 기본 HUD = D-02).
+  - 아이콘은 기호로 대신한 임시 표시. 숫자(웨이브 수, 손실 비율 등)는 예시값입니다(SRS 설정값).
+  - 성공/실패 연출은 깜빡임 없이 2초에 걸쳐 천천히 밝아지거나 어두워집니다(FR-131 섬광 줄이기 고려).
+  - 관련: docs/DESIGN_PROPOSAL.md D-08
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:#ddd;font-family:"Pretendard","Noto Sans KR","IBM Plex Sans KR","Malgun Gothic",sans-serif;overflow:hidden}
+body,body[data-theme="A"]{--panel:20,21,26;--text:#E8E4DC;--text2:#A9A59C;--light:#F2A53A;--pure:#6FD1B0;--danger:#E5594F;--hp:#E5594F;--line:rgba(232,228,220,.24);--r:6px;--track:#2c2e36;--ondark:#14151A}
+body[data-theme="B"]{--panel:16,24,32;--text:#EAF0F2;--text2:#9FB0B8;--light:#FFE9A8;--pure:#9FE3D0;--danger:#FF8A7A;--hp:#FF8A7A;--line:rgba(234,240,242,.24);--r:2px;--track:#243039;--ondark:#101820}
+body[data-theme="C"]{--panel:22,20,15;--text:#EDE6D3;--text2:#B3AA93;--light:#D9A441;--pure:#7FC8A0;--danger:#E8684F;--hp:#E8684F;--line:rgba(237,230,211,.28);--r:0px;--track:#2b281f;--ondark:#16140F}
+
+.tb{position:fixed;top:0;left:0;right:0;z-index:99;background:#1b1b1f;border-bottom:1px solid #333;padding:6px 10px;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;align-items:center;color:#ccc}
+.tb .grp{display:flex;gap:4px;align-items:center}
+.tb b{color:#8d8d95;font-weight:600;margin-right:2px}
+.tb button{background:#2a2a30;color:#ddd;border:1px solid #444;padding:3px 9px;border-radius:4px;cursor:pointer;font:inherit}
+.tb button.on{background:#F2A53A;color:#111;border-color:#F2A53A}
+#wrap{position:absolute;left:50%;transform:translateX(-50%);overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;height:1080px;transform-origin:0 0;overflow:hidden}
+
+/* 표시 전환 */
+body:not([data-v="A"]) .vA,body:not([data-v="B"]) .vB,body:not([data-v="C"]) .vC{display:none!important}
+body[data-lang="ko"] .en,body[data-lang="en"] .ko{display:none!important}
+body[data-dev="kb"] .pad,body[data-dev="pad"] .kb{display:none!important}
+body:not([data-ph="confirm"]) .ph-confirm,body:not([data-ph="prep"]) .ph-prep,body:not([data-ph="wave"]) .ph-wave,body:not([data-ph="boss"]) .ph-boss{display:none!important}
+body[data-live="0"] .live{display:none!important}
+body:not([data-ph="win"]):not([data-ph="lose"]) .res{display:none!important}
+body[data-ph="confirm"] #cp,body[data-ph="win"] #cp,body[data-ph="lose"] #cp{display:none!important}
+
+/* 장면 */
+.sc{position:absolute;inset:0;background:linear-gradient(#05060a 0%,#0d1117 55%,#07080b 55%,#050506 100%)}
+.wash{position:absolute;inset:0;opacity:0;transition:opacity 2s ease;pointer-events:none}
+body[data-ph="win"] .wash{opacity:1;background:linear-gradient(rgba(255,226,150,.30),rgba(255,226,150,.12) 55%,rgba(120,170,90,.35))}
+body[data-ph="lose"] .wash{opacity:1;background:rgba(0,0,0,.45)}
+.world{position:absolute;left:50%;top:0;width:1920px;margin-left:-960px;height:1080px}
+.tower{position:absolute;left:1180px;top:250px;width:74px;height:400px;background:linear-gradient(#2a2a30,#17171b);clip-path:polygon(30% 0,70% 0,100% 100%,0 100%)}
+.tglow{position:absolute;left:1117px;top:190px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(242,165,58,.75),rgba(242,165,58,0) 68%)}
+body[data-ph="confirm"] .tglow{opacity:.12}
+body[data-ph="lose"] .tower,body[data-ph="lose"] .tglow{opacity:.18}
+.en1{position:absolute;width:34px;height:70px;border-radius:16px 16px 4px 4px;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.08)}
+.xh{position:absolute;left:954px;top:534px;width:12px;height:12px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.7)}
+.wnote{position:absolute;font-size:16px;color:rgba(255,255,255,.55);font-style:italic;text-shadow:0 0 3px #000}
+
+/* HUD 공통 */
+.hud{position:absolute;top:0;height:1080px;left:50%;width:1920px;margin-left:-960px;color:var(--text);font-size:20px}
+.hud>*{position:absolute}
+.pn{background:rgba(var(--panel),.82);border:1px solid var(--line);border-radius:var(--r);color:var(--text)}
+small{font-size:16px;color:var(--text2)}
+.dash{border:2px dashed rgba(255,255,255,.35);color:rgba(255,255,255,.55);display:grid;place-items:center;font-size:16px;background:rgba(0,0,0,.15)}
+.g{position:relative;background:var(--track);height:var(--h,14px);border-radius:3px;overflow:hidden;flex:1}
+.g i{position:absolute;inset:0 auto 0 0;width:calc(var(--p)*1%);background:var(--c)}
+.g u{position:absolute;top:0;bottom:0;width:2px;background:rgba(0,0,0,.6)}
+.key{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border:2px solid var(--text);border-radius:6px;font-weight:700;margin-right:8px;font-size:18px}
+.key.pad{border-radius:50%;padding:0}
+.btn{display:inline-flex;align-items:center;padding:8px 18px;border:2px solid var(--line);border-radius:var(--r);background:rgba(var(--panel),.92);font-weight:700;margin-right:12px}
+.btn.main{background:var(--light);color:var(--ondark);border-color:var(--light)}
+.btn.main .key{border-color:var(--ondark)}
+.btn.danger{border-color:var(--danger);color:var(--danger)}
+.btn.focus{outline:3px solid var(--light);outline-offset:3px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.cd{font-size:44px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--light)}
+.ready{display:flex;gap:14px;flex-wrap:wrap;margin:8px 0 4px;font-weight:600}
+.ready .no{color:var(--text2)}
+.ready .ok{color:var(--pure)}
+
+/* 기본 자리 표시 */
+.p-comp{left:50%;margin-left:-350px;top:28px;width:700px;height:50px}
+.p-hud{left:50%;margin-left:-580px;bottom:40px;width:1160px;height:100px}
+
+/* 확인창(공통) */
+.dim{inset:0;background:rgba(0,0,0,.5)}
+.modal{left:50%;margin-left:-400px;top:250px;width:800px;padding:26px 32px}
+.modal h2{font-size:32px;margin-bottom:12px}
+.modal ul{margin:10px 0 18px 22px;line-height:1.6}
+.modal li b{color:var(--light)}
+.modal .why{font-size:16px;color:var(--text2);margin-bottom:16px}
+
+/* ---------- 시안 A ---------- */
+.aCard{left:50%;margin-left:-380px;top:96px;width:760px;padding:12px 18px}
+.aCard .towerhp{display:flex;gap:12px;align-items:center;margin-top:8px}
+.aCard .towerhp .g{--h:20px}
+.aBtns{left:50%;margin-left:-300px;bottom:160px;width:600px;text-align:center}
+.bossA{left:50%;margin-left:-380px;top:236px;width:760px;padding:8px 18px}
+.bannerA{left:50%;margin-left:-260px;top:330px;width:520px;text-align:center;padding:10px;font-size:26px;font-weight:800;letter-spacing:.02em}
+.resA{left:50%;margin-left:-410px;top:220px;width:820px;padding:30px 36px}
+
+/* ---------- 시안 B ---------- */
+.bCard{right:40px;top:40px;width:320px;padding:10px 14px}
+.edge{left:40px;top:520px;padding:8px 14px;font-weight:700}
+.bPrompt{left:50%;margin-left:-330px;bottom:160px;width:660px;padding:10px 16px;text-align:center}
+.bBoss{left:50%;margin-left:-350px;bottom:160px;width:700px;padding:8px 16px}
+.bRes{left:50%;margin-left:-520px;bottom:160px;width:1040px;padding:16px 28px}
+.tring{position:absolute;left:1146px;top:100px;width:142px;height:142px;border-radius:50%;display:grid;place-items:center;text-align:center;line-height:1.15;font-weight:800;color:var(--text);border:2px solid var(--line);background:rgba(var(--panel),.82)}
+.tring.hp{background:conic-gradient(var(--light) 68%,var(--track) 0);border:none}
+.tring.hp::after{content:"";position:absolute;inset:12px;border-radius:50%;background:rgb(var(--panel))}
+.tring>div{position:relative;z-index:1}
+.tring .big{font-size:40px;color:var(--light)}
+.tring small{display:block}
+
+/* ---------- 시안 C ---------- */
+.cPanel{right:40px;top:120px;width:340px;padding:14px 16px}
+.cPanel h3{font-size:22px;margin-bottom:8px;display:flex;justify-content:space-between}
+.steps{list-style:none;margin:8px 0}
+.steps li{display:flex;gap:10px;align-items:center;height:34px;padding:0 8px;border-left:4px solid transparent;color:var(--text2)}
+.steps li.cur{border-left-color:var(--light);background:rgba(255,255,255,.07);color:var(--text);font-weight:700}
+.steps li.done{color:var(--pure)}
+.steps li span.m{width:26px;text-align:center}
+.cBanner{left:50%;margin-left:-240px;top:120px;width:480px;text-align:center;padding:10px;font-size:26px;font-weight:800}
+.cRes{right:40px;top:120px;width:380px;padding:18px 20px}
+
+/* 결과(성공/실패) 내용 */
+.rt{font-size:34px;margin-bottom:10px}
+.rt.win{color:var(--light)} .rt.lose{color:var(--danger)}
+.rc ul{margin:8px 0 16px 22px;line-height:1.6;font-size:20px}
+</style>
+</head>
+<body data-v="A" data-dev="kb" data-lang="ko" data-theme="A" data-ratio="16" data-ph="wave" data-live="1">
+
+<div id="tb" class="tb">
+  <div class="grp"><b>시안(1/2/3)</b>
+    <button data-set="v=A" class="on">A 상단 방어전 바</button><button data-set="v=B">B 등광탑 중심(월드 속)</button><button data-set="v=C">C 우측 진행 패널</button></div>
+  <div class="grp"><b>단계</b>
+    <button data-set="ph=confirm">활성화 확인</button><button data-set="ph=prep">준비 카운트다운</button><button data-set="ph=wave" class="on">웨이브 진행</button><button data-set="ph=boss">보스 등장</button><button data-set="ph=win">성공(정화)</button><button data-set="ph=lose">실패(탑 파괴)</button></div>
+  <div class="grp"><b>입력</b>
+    <button data-set="dev=kb" class="on">키보드·마우스</button><button data-set="dev=pad">게임패드</button></div>
+  <div class="grp"><b>언어</b>
+    <button data-set="lang=ko" class="on">한국어</button><button data-set="lang=en">English</button></div>
+  <div class="grp"><b>색 테마</b>
+    <button data-set="theme=A" class="on">A</button><button data-set="theme=B">B</button><button data-set="theme=C">C</button></div>
+  <div class="grp"><b>화면비</b>
+    <button data-set="ratio=16" class="on">16:9</button><button data-set="ratio=21">21:9</button></div>
+</div>
+
+<div id="wrap"><div id="stage">
+  <div class="sc"></div>
+  <div class="world">
+    <div class="tglow"></div><div class="tower"></div>
+    <div class="en1 live" style="left:700px;top:560px"></div>
+    <div class="en1 live" style="left:820px;top:600px"></div>
+    <div class="en1 live" style="left:1400px;top:580px"></div>
+    <div class="en1 live" style="left:1520px;top:620px"></div>
+    <div class="en1 live" style="left:1000px;top:640px"></div>
+    <div class="wnote" style="left:1130px;top:660px">(등광탑 - 월드 예시)</div>
+    <div class="tring vB ph-prep"><div><span class="big">0:42</span><small><span class="ko">준비 3/5</span><span class="en">Ready 3/5</span></small></div></div>
+    <div class="tring hp vB live"><div><b style="font-size:34px">68%</b><small>84 m</small></div></div>
+    <div class="xh"></div>
+  </div>
+  <div class="wash"></div>
+
+  <div class="hud">
+    <div class="p-comp dash">나침반 (D-02) - 방어전 중 등광탑 방향 표시</div>
+    <div class="p-hud dash">기본 HUD 자리 (D-02: 상태, 퀵슬롯, 버프)</div>
+
+    <!-- ===== 활성화 확인 (FR-153): 세 시안 공통 ===== -->
+    <div class="dim ph-confirm"></div>
+    <div class="modal pn ph-confirm">
+      <h2>🗼 <span class="ko">등광탑을 활성화할까요?</span><span class="en">Activate the Lamp Tower?</span></h2>
+      <ul>
+        <li><span class="ko">방어전이 시작됩니다. 웨이브 <b>5개</b>, 마지막 웨이브에 <b>보스</b>가 나타납니다.</span><span class="en"><b>5 waves</b> will come; a <b>boss</b> appears in the last wave.</span></li>
+        <li><span class="ko">실패하면 등광탑이 파괴되고 건설 재료의 <b>30%</b>가 사라집니다. 나머지는 자리에 남습니다.</span><span class="en">If it fails, the tower is destroyed and <b>30%</b> of its materials are lost. The rest stays on site.</span></li>
+        <li><span class="ko">확인하면 준비 시간이 시작됩니다. 준비 중에는 취소할 수 있습니다.</span><span class="en">Confirming starts a preparation countdown. You can cancel during it.</span></li>
+      </ul>
+      <div class="why"><span class="ko">현재 접속 인원 5명 기준으로 적 수와 보스 체력이 정해집니다.</span><span class="en">Enemy count and boss health are set for the current 5 players.</span></div>
+      <div>
+        <span class="btn main"><span class="key kb">Enter</span><span class="key pad">Ⓐ</span><span class="ko">활성화</span><span class="en">Activate</span></span>
+        <span class="btn focus"><span class="key kb">Esc</span><span class="key pad">Ⓑ</span><span class="ko">취소 (기본 선택)</span><span class="en">Cancel (default)</span></span>
+      </div>
+    </div>
+
+    <!-- ===== 시안 A ===== -->
+    <div class="aCard pn vA ph-prep">
+      <div class="row"><b>🗼 <span class="ko">방어전 준비</span><span class="en">Defense preparation</span></b><span class="cd">0:42</span></div>
+      <div class="g" style="--p:70;--c:var(--light);--h:10px;margin-top:6px"></div>
+      <div class="ready"><span class="ok">✔ 하루</span><span class="ok">✔ 서림</span><span class="ok">✔ 이안</span><span class="no">○ 도윤</span><span class="no">○ <span class="ko">나</span><span class="en">You</span></span></div>
+      <small><span class="ko">준비 3/5 · 전원이 준비하면 바로 시작합니다</span><span class="en">Ready 3/5 · Starts immediately when all are ready</span></small>
+    </div>
+    <div class="aBtns vA ph-prep">
+      <span class="btn main"><span class="key kb">F</span><span class="key pad">Ⓨ</span><span class="ko">준비 완료</span><span class="en">Ready</span></span>
+      <span class="btn danger"><span class="key kb">X</span><span class="key pad">Ⓧ</span><span class="ko">방어전 취소</span><span class="en">Cancel defense</span></span>
+      <br><small><span class="ko">취소는 활성화한 플레이어와 호스트만 보입니다</span><span class="en">Cancel is shown to the activator and the host only</span></small>
+    </div>
+
+    <div class="aCard pn vA live">
+      <div class="row"><b class="ph-wave"><span class="ko">웨이브 3 / 5</span><span class="en">Wave 3 / 5</span></b><b class="ph-boss">★ <span class="ko">웨이브 5 / 5 · 보스</span><span class="en">Wave 5 / 5 · Boss</span></b><span>☠ <span class="ko">남은 적</span><span class="en">Enemies</span> <b>14</b></span></div>
+      <div class="towerhp"><span style="color:var(--light);font-size:26px">🗼</span>
+        <div class="g"><i style="width:68%;background:var(--light)"></i><u style="left:25%"></u><u style="left:50%"></u><u style="left:75%"></u></div><b style="width:56px;text-align:right">68%</b></div>
+      <small><span class="ko">등광탑 체력 6,800 / 10,000 (예시) - 0이 되면 실패</span><span class="en">Tower HP 6,800 / 10,000 (sample) - fails at 0</span></small>
+    </div>
+    <div class="bossA pn vA ph-boss">
+      <div class="row"><b>☠ <span class="ko">재 군주 (예시 이름)</span><span class="en">Ash Lord (sample name)</span></b><span>100%</span></div>
+      <div class="g" style="--h:18px;margin-top:6px"><i style="width:100%;background:var(--danger)"></i></div>
+    </div>
+    <div class="bannerA pn vA ph-boss"><span class="ko">보스 등장</span><span class="en">Boss incoming</span></div>
+
+    <div class="res resA pn vA"><div class="rc"></div></div>
+
+    <!-- ===== 시안 B ===== -->
+    <div class="bCard pn vB live">
+      <div class="row"><b class="ph-wave"><span class="ko">웨이브 3 / 5</span><span class="en">Wave 3 / 5</span></b><b class="ph-boss">★ <span class="ko">5 / 5 · 보스</span><span class="en">5 / 5 · Boss</span></b><span>☠ 14</span></div>
+      <small><span class="ko">등광탑은 머리 위 고리로 확인</span><span class="en">Check the tower on the ring above it</span></small>
+    </div>
+    <div class="edge pn vB live"><span style="color:var(--light)">▶</span> <span class="ko">등광탑 84 m · 68%</span><span class="en">Lamp Tower 84 m · 68%</span></div>
+    <div class="wnote vB live" style="left:40px;top:570px">(탑이 시야 밖일 때 가장자리 표시 예시)</div>
+    <div class="bPrompt pn vB ph-prep">
+      <b>🗼 <span class="ko">준비 0:42 · 준비 3/5</span><span class="en">Prep 0:42 · Ready 3/5</span></b><br>
+      <span class="key kb">F</span><span class="key pad">Ⓨ</span><span class="ko">준비 완료</span><span class="en">Ready</span>
+      <span style="margin-left:24px;color:var(--danger)"><span class="key kb">X</span><span class="key pad">Ⓧ</span><span class="ko">취소 (길게)</span><span class="en">Cancel (hold)</span></span>
+      <br><small>✔ 하루 ✔ 서림 ✔ 이안 ○ 도윤 ○ <span class="ko">나</span><span class="en">You</span></small>
+    </div>
+    <div class="bBoss pn vB ph-boss">
+      <div class="row"><b>☠ <span class="ko">재 군주 (예시 이름)</span><span class="en">Ash Lord (sample name)</span></b><span>100%</span></div>
+      <div class="g" style="--h:18px;margin-top:6px"><i style="width:100%;background:var(--danger)"></i></div>
+    </div>
+    <div class="res bRes pn vB"><div class="rc"></div></div>
+
+    <!-- ===== 시안 C ===== -->
+    <div class="cPanel pn vC" id="cp">
+      <h3><span>🗼 <span class="ko">방어전</span><span class="en">Defense</span></span><span class="ph-prep cd" style="font-size:28px">0:42</span><span class="live">☠ 14</span></h3>
+      <ul class="steps" id="steps"></ul>
+      <div class="live"><div class="g" style="--h:18px"><i style="width:68%;background:var(--light)"></i></div><small><span class="ko">등광탑 68% (6,800 / 10,000 예시)</span><span class="en">Tower 68% (6,800 / 10,000 sample)</span></small></div>
+      <div class="ph-boss" style="margin-top:8px"><b>☠ <span class="ko">재 군주 (예시)</span><span class="en">Ash Lord (sample)</span></b><div class="g" style="--h:16px;margin-top:4px"><i style="width:100%;background:var(--danger)"></i></div></div>
+      <div class="ph-prep">
+        <div class="ready"><span class="ok">✔ 하루</span><span class="ok">✔ 서림</span><span class="ok">✔ 이안</span><span class="no">○ 도윤</span><span class="no">○ <span class="ko">나</span><span class="en">You</span></span></div>
+        <div style="margin-top:8px"><span class="btn main"><span class="key kb">F</span><span class="key pad">Ⓨ</span><span class="ko">준비 완료</span><span class="en">Ready</span></span></div>
+        <div style="margin-top:8px"><span class="btn danger"><span class="key kb">X</span><span class="key pad">Ⓧ</span><span class="ko">취소</span><span class="en">Cancel</span></span></div>
+      </div>
+    </div>
+    <div class="cBanner pn vC ph-boss"><span class="ko">보스 등장</span><span class="en">Boss incoming</span></div>
+    <div class="res cRes pn vC"><div class="rc"></div></div>
+  </div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), body=document.body;
+const T=(k,e)=>'<span class="ko">'+k+'</span><span class="en">'+e+'</span>';
+function fit(){
+  const tb=$('#tb'), wrap=$('#wrap'), st=$('#stage');
+  const w = body.dataset.ratio==='21' ? 2520 : 1920;
+  st.style.width=w+'px';
+  const s=Math.min(innerWidth/w,(innerHeight-tb.offsetHeight-4)/1080);
+  st.style.transform='scale('+s+')';
+  wrap.style.width=(w*s)+'px'; wrap.style.height=(1080*s)+'px'; wrap.style.top=(tb.offsetHeight+2)+'px';
+}
+function render(){
+  const ph=body.dataset.ph;
+  body.dataset.live=(ph==='wave'||ph==='boss')?'1':'0';
+  const cur = ph==='prep'?0 : ph==='wave'?3 : ph==='boss'?5 : -1;
+  const names=[T('준비 단계','Preparation'),T('웨이브 1','Wave 1'),T('웨이브 2','Wave 2'),T('웨이브 3','Wave 3'),T('웨이브 4','Wave 4'),T('웨이브 5 · 보스','Wave 5 · Boss')];
+  $('#steps').innerHTML=names.map((n,i)=>{
+    const c=i<cur?'done':(i===cur?'cur':''); const m=i<cur?'✔':(i===cur?'▶':'○');
+    return '<li class="'+c+'"><span class="m">'+m+'</span>'+n+'</li>';
+  }).join('');
+  const btn='<div><span class="btn main"><span class="key kb">Enter</span><span class="key pad">Ⓐ</span>'+T('계속','Continue')+'</span></div>';
+  let h='';
+  if(ph==='win'){
+    h='<h2 class="rt win">☀ '+T('정화 성공','Purification complete')+'</h2><ul><li>'+T('정화 구역이 넓어졌습니다 (반경 +120 m, 예시)','The purified zone expanded (+120 m radius, sample)')+'</li><li>'+T('새로 열린 제작법 3개 · 재료 2종 (예시)','Unlocked 3 recipes and 2 materials (sample)')+'</li><li>'+T('목표가 갱신되었습니다','Your goal was updated')+'</li></ul>'+btn;
+  } else if(ph==='lose'){
+    h='<h2 class="rt lose">✕ '+T('등광탑 파괴','Lamp Tower destroyed')+'</h2><ul><li>'+T('건설 재료의 30%가 사라졌습니다 (예시값)','30% of the build materials were lost (sample value)')+'</li><li>'+T('남은 70%는 등광탑 자리에 떨어져 있습니다','The other 70% dropped at the tower site')+'</li><li>'+T('같은 자리나 다른 자리에 다시 지어 재도전할 수 있습니다','Rebuild here or elsewhere to try again')+'</li></ul>'+btn;
+  }
+  document.querySelectorAll('.rc').forEach(e=>e.innerHTML=h);
+}
+document.querySelectorAll('[data-set]').forEach(b=>b.addEventListener('click',()=>{
+  const [k,v]=b.dataset.set.split('=');
+  body.dataset[k]=v;
+  document.querySelectorAll('[data-set^="'+k+'="]').forEach(x=>x.classList.toggle('on',x===b));
+  render(); fit();
+}));
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{const m={'1':'A','2':'B','3':'C'}[e.key]; if(m) $('[data-set="v='+m+'"]').click();});
+render(); fit();
+</script>
+</body>
+</html>

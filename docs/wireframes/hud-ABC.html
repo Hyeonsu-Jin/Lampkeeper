@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>HUD 와이어프레임 (시안 A/B/C) - 꺼진 하늘 (임시 명칭)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  와이어프레임 전용 파일: 외부 자료(CDN) 없이 이 파일 하나로 열립니다.
+  - 기준 좌표는 1920x1080. 창 크기에 맞춰 통째로 축소/확대됩니다.
+  - 글꼴은 PC에 설치된 것을 씁니다(Pretendard, Noto Sans KR, IBM Plex Sans KR 순, 없으면 맑은 고딕).
+  - 아이콘은 이모지/기호로 대신한 임시 표시입니다. 확정 모드에서 단색 아이콘 세트로 정합니다.
+  - 색은 "색 테마 A/B/C"(D-01 시안)를 바꿔 볼 수 있습니다.
+  - 관련: docs/DESIGN_PROPOSAL.md D-02 (HUD)
+-->
+<style>
+:root{--w:1920px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:#ddd;font-family:"Pretendard","Noto Sans KR","IBM Plex Sans KR","Malgun Gothic",sans-serif;overflow:hidden}
+
+/* ---------- 색 테마 (D-01 시안 A/B/C) ---------- */
+body,body[data-theme="A"]{--panel:20,21,26;--text:#E8E4DC;--text2:#A9A59C;--light:#F2A53A;--pure:#6FD1B0;--danger:#E5594F;--hp:#E5594F;--sp:#A8D45A;--sand:#D8CBB0;--toxic:#C77DDB;--cold:#6DB8F0;--dark:#8F9BFF;--line:rgba(232,228,220,.24);--r:6px;--track:#2c2e36;--ondark:#14151A}
+body[data-theme="B"]{--panel:16,24,32;--text:#EAF0F2;--text2:#9FB0B8;--light:#FFE9A8;--pure:#9FE3D0;--danger:#FF8A7A;--hp:#FF8A7A;--sp:#B6E27F;--sand:#CFE0E4;--toxic:#D79BEA;--cold:#8CCBFF;--dark:#A9B4FF;--line:rgba(234,240,242,.24);--r:2px;--track:#243039;--ondark:#101820}
+body[data-theme="C"]{--panel:22,20,15;--text:#EDE6D3;--text2:#B3AA93;--light:#D9A441;--pure:#7FC8A0;--danger:#E8684F;--hp:#E8684F;--sp:#A9C95A;--sand:#CDBF9A;--toxic:#C98BD6;--cold:#7DB5DD;--dark:#9AA3E6;--line:rgba(237,230,211,.28);--r:0px;--track:#2b281f;--ondark:#16140F}
+
+/* ---------- 도구 모음(와이어프레임 조작용) ---------- */
+.tb{position:fixed;top:0;left:0;right:0;z-index:99;background:#1b1b1f;border-bottom:1px solid #333;padding:6px 10px;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;align-items:center;color:#ccc}
+.tb .grp{display:flex;gap:4px;align-items:center}
+.tb b{color:#8d8d95;font-weight:600;margin-right:2px}
+.tb button{background:#2a2a30;color:#ddd;border:1px solid #444;padding:3px 9px;border-radius:4px;cursor:pointer;font:inherit}
+.tb button.on{background:#F2A53A;color:#111;border-color:#F2A53A}
+#wrap{position:absolute;left:50%;transform:translateX(-50%);overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;height:1080px;transform-origin:0 0;overflow:hidden}
+
+/* ---------- 표시 전환 규칙 ---------- */
+body:not([data-v="A"]) .vA,body:not([data-v="B"]) .vB,body:not([data-v="C"]) .vC{display:none!important}
+body[data-lang="ko"] .en,body[data-lang="en"] .ko{display:none!important}
+body[data-dev="kb"] .pad,body[data-dev="pad"] .kb{display:none!important}
+body:not([data-st="alert"]) .s-alert,body:not([data-st="call"]) .s-call{display:none!important}
+body[data-th="guard"] .exposed,body[data-th="exposed"] .guard{display:none!important}
+body[data-wrist="down"] .w-up,body[data-wrist="up"] .w-down{display:none!important}
+
+/* ---------- 장면(게임 화면 대용) ---------- */
+.sc{position:absolute;inset:0}
+body[data-scene="night"] .sc{background:linear-gradient(#05060a 0%,#0d1117 55%,#07080b 55%,#050506 100%)}
+body[data-scene="ash"] .sc{background:linear-gradient(#8a8c8e 0%,#6b6d70 55%,#3f4042 55%,#2f3032 100%)}
+body[data-scene="sun"] .sc{background:linear-gradient(#cfeaf7 0%,#f7ecc0 55%,#86b25f 55%,#5f8f42 100%)}
+.world{position:absolute;left:50%;top:0;width:1920px;margin-left:-960px;height:1080px}
+.tree{position:absolute;background:rgba(0,0,0,.38);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.bush{position:absolute;left:1010px;top:640px;width:170px;height:90px;border-radius:50% 50% 30% 30%;background:#44663a;opacity:.92}
+.npc{position:absolute;left:520px;top:450px;width:74px;height:190px;border-radius:34px 34px 6px 6px;background:rgba(36,36,42,.9)}
+.xh{position:absolute;left:954px;top:534px;width:12px;height:12px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgba(0,0,0,.7)}
+.wnote{position:absolute;font-size:16px;color:rgba(255,255,255,.55);font-style:italic;text-shadow:0 0 3px #000}
+
+/* ---------- 공통 요소 ---------- */
+.hud{position:absolute;top:0;height:1080px;left:50%;width:1920px;margin-left:-960px;color:var(--text);font-size:20px}
+body[data-fit="edge"] .hud{left:0;width:100%;margin-left:0}
+.hud>*{position:absolute}
+.pn{background:rgba(var(--panel),.78);border:1px solid var(--line);border-radius:var(--r);color:var(--text)}
+.t2{color:var(--text2)}
+small{font-size:16px;color:var(--text2)}
+.g{position:relative;background:var(--track);height:var(--h,14px);border-radius:3px;overflow:hidden;flex:1}
+.g i{position:absolute;inset:0 auto 0 0;width:calc(var(--p)*1%);background:var(--c)}
+.g.low i{background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.4) 0 6px,transparent 6px 12px)}
+.vr{display:flex;align-items:center;gap:8px;height:28px}
+.vr .ic{width:26px;text-align:center}
+.vr b{width:40px;text-align:right;font-variant-numeric:tabular-nums}
+.key{display:inline-grid;place-items:center;min-width:34px;height:34px;padding:0 8px;border:2px solid var(--text);border-radius:6px;font-weight:700;margin-right:10px}
+.key.pad{border-radius:50%;min-width:34px;padding:0}
+.badge{width:38px;height:38px;display:grid;place-items:center;background:var(--c);color:var(--ondark);font-style:normal;flex:none}
+.badge.hex{clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%)}
+.badge.dia{transform:rotate(45deg);width:30px;height:30px;margin:4px}
+.badge.dia b{transform:rotate(-45deg)}
+.badge.cir{border-radius:50%}
+.badge b{font-size:20px;line-height:1}
+.chip{display:flex;gap:12px;align-items:center;padding:8px 12px;margin-top:8px}
+.chip .ct{font-weight:700}
+.chip em{font-style:normal;margin-left:6px;padding:1px 8px;border:2px solid currentColor;border-radius:4px;font-size:16px}
+.chip .ok{color:var(--pure)} .chip .bad{color:var(--danger)}
+.chip.warn{border:2px solid var(--danger)}
+
+/* 상호작용 안내 / 십자선 */
+.prompt{left:50%;margin-left:-190px;width:380px;top:566px;padding:10px 14px;display:flex;align-items:center;flex-wrap:wrap}
+.prompt small{flex-basis:100%;margin-left:44px}
+
+/* 나침반 */
+.compass{left:50%;margin-left:-350px;top:28px;width:700px;height:50px;overflow:hidden}
+.compass .strip{position:absolute;inset:0}
+.tick{position:absolute;bottom:0;width:2px;height:10px;background:var(--text2);transform:translateX(-1px)}
+.tick.big{height:16px;background:var(--text)}
+.clb{position:absolute;top:2px;transform:translateX(-50%);font-size:18px;font-weight:700}
+.mk{position:absolute;top:4px;transform:translateX(-50%);text-align:center;font-size:20px;line-height:1.05;white-space:nowrap}
+.mk small{display:block;font-size:14px}
+.mk.down{color:var(--danger)} .mk.ping{color:var(--light)} .mk.ally{color:var(--pure)}
+.cnow{position:absolute;left:50%;margin-left:-8px;top:-5px;color:var(--light);font-size:16px}
+body[data-v="B"]:not([data-st="alert"]):not([data-st="call"]) .compass{opacity:.4}
+.goal{left:50%;top:88px;transform:translateX(-50%);padding:6px 16px;white-space:nowrap}
+
+/* 호트바 */
+.hotbar{left:50%;margin-left:-277px;bottom:40px;display:flex;gap:6px}
+.slot{position:relative;width:64px;height:64px;display:grid;place-items:center;font-size:30px;background:rgba(var(--panel),.78);border:1px solid var(--line);border-radius:var(--r)}
+.slot i{position:absolute;left:4px;top:1px;font-size:14px;font-style:normal;color:var(--text2)}
+.slot em{position:absolute;right:5px;bottom:2px;font-size:15px;font-style:normal}
+.slot.sel{outline:3px solid var(--light);outline-offset:1px;background:rgba(var(--panel),.95)}
+.slot.sel .dur{position:absolute;left:6px;right:6px;bottom:4px;height:5px;background:var(--track)}
+.slot.sel .dur u{display:block;height:100%;width:82%;background:var(--light)}
+.toolname{left:50%;margin-left:-150px;width:300px;bottom:116px;padding:6px 12px;display:flex;gap:10px;align-items:center;justify-content:center}
+
+/* 시안 A */
+.vl{left:50%;margin-left:-593px;bottom:40px;width:300px;padding:10px 12px}
+.vrp{left:50%;margin-left:293px;bottom:40px;width:300px;padding:8px 12px}
+
+/* 동료 목록 */
+.allies{right:40px;top:40px;width:270px;padding:8px 12px}
+.allies h4{font-size:16px;color:var(--text2);font-weight:600;margin-bottom:4px}
+.ar{display:flex;align-items:center;gap:8px;height:34px}
+.ar span.nm{width:70px;font-weight:600}
+.ar .st{font-size:16px;width:92px;text-align:right}
+.ar.dn .st{color:var(--danger);font-weight:700}
+
+/* 채팅 */
+.chat{left:40px;bottom:40px;width:430px;padding:8px 12px;font-size:18px;line-height:1.5}
+.chat .sys{color:var(--text2);font-style:italic}
+.chat .hint{margin-top:4px;border-top:1px solid var(--line);padding-top:4px;font-size:16px;color:var(--text2)}
+
+/* 핑·이름표(월드 속 마커) */
+.pingm{right:430px;top:330px;padding:6px 12px;border-color:var(--light)}
+.ntag{left:50%;margin-left:-470px;top:410px;padding:3px 12px;font-weight:700;font-size:20px}
+.threat{right:40px;bottom:40px;width:340px}
+
+/* 시안 B 경고 */
+.alertchip{left:40px;top:470px;padding:8px 14px;border:2px solid var(--danger);display:flex;gap:10px;align-items:center;font-weight:700}
+.alertdown{left:50%;top:88px;transform:translateX(-50%);padding:6px 16px;border:2px solid var(--danger);font-weight:700}
+.vcard{left:40px;bottom:40px;width:320px;padding:10px 12px}
+.ringedge{position:absolute;inset:0;pointer-events:none}
+
+/* 시안 C 손목 계기 */
+.wrist{left:36px;bottom:-14px;width:430px;height:210px;transform-origin:left bottom;transform:perspective(900px) rotateY(16deg) rotateX(8deg) rotate(-5deg);transition:transform .25s}
+body[data-wrist="down"] .wrist{transform:perspective(900px) rotateY(16deg) rotateX(8deg) rotate(-5deg) translateY(138px)}
+.wdev{position:absolute;inset:0;padding:10px 14px;border:2px solid var(--line);background:rgba(var(--panel),.88)}
+.wtop{display:flex;gap:16px;height:46px;align-items:center;font-weight:700;font-variant-numeric:tabular-nums}
+.rings{display:flex;gap:12px;margin-top:6px}
+.ring{position:relative;width:88px;height:88px;border-radius:50%;background:conic-gradient(var(--c) calc(var(--p)*1%),var(--track) 0)}
+.ring::after{content:"";position:absolute;inset:11px;border-radius:50%;background:rgb(var(--panel))}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;z-index:1;text-align:center;font-size:18px;font-weight:700;line-height:1.1}
+.ring span small{font-size:13px}
+.sparc{left:50%;margin-left:-40px;top:500px;width:80px;height:80px;border-radius:50%;background:conic-gradient(var(--sp) 62%,transparent 0);-webkit-mask:radial-gradient(circle,transparent 35px,#000 36px);mask:radial-gradient(circle,transparent 35px,#000 36px)}
+.vig{inset:0;pointer-events:none;box-shadow:inset 0 0 200px 50px rgba(199,125,219,.30)}
+body[data-th="exposed"] .vig{box-shadow:inset 0 0 240px 90px rgba(199,125,219,.55)}
+.ltag{left:50%;margin-left:-480px;top:396px;padding:3px 12px;display:flex;gap:8px;align-items:center;font-weight:700}
+.lamp{width:14px;height:20px;border-radius:7px 7px 3px 3px;background:var(--light);box-shadow:0 0 10px var(--light)}
+.lamp.off{background:transparent;border:2px solid var(--text2);box-shadow:none}
+.cmini{left:480px;bottom:48px;display:none}
+.hotbar.slim .slot{opacity:.55;width:54px;height:54px;font-size:26px}
+.hotbar.slim .slot.sel{opacity:1}
+.hotbar.slim{margin-left:-246px}
+</style>
+</head>
+<body data-v="A" data-scene="night" data-dev="kb" data-lang="ko" data-theme="A" data-ratio="16" data-fit="center" data-st="calm" data-th="guard" data-wrist="down">
+
+<div id="tb" class="tb">
+  <div class="grp"><b>시안(1/2/3)</b>
+    <button data-set="v=A" class="on">A 상시 표시</button><button data-set="v=B">B 상황 표시</button><button data-set="v=C">C 장치형</button></div>
+  <div class="grp"><b>장면</b>
+    <button data-set="scene=night" class="on">잠식 밤</button><button data-set="scene=ash">잠식 낮</button><button data-set="scene=sun">정화 낮(밝음)</button></div>
+  <div class="grp"><b>입력</b>
+    <button data-set="dev=kb" class="on">키보드·마우스</button><button data-set="dev=pad">게임패드</button></div>
+  <div class="grp"><b>언어</b>
+    <button data-set="lang=ko" class="on">한국어</button><button data-set="lang=en">English</button></div>
+  <div class="grp"><b>색 테마(D-01)</b>
+    <button data-set="theme=A" class="on">A 불씨</button><button data-set="theme=B">B 새벽빛</button><button data-set="theme=C">C 놋쇠</button></div>
+  <div class="grp"><b>화면비</b>
+    <button data-set="ratio=16" class="on">16:9</button><button data-set="ratio=21">21:9</button>
+    <b>HUD 위치</b><button data-set="fit=center" class="on">가운데 16:9</button><button data-set="fit=edge">가장자리</button></div>
+  <div class="grp"><b>환경 위협(독기)</b>
+    <button data-set="th=guard" class="on">막는 중</button><button data-set="th=exposed">노출 중</button></div>
+  <div class="grp vB"><b>B 상태</b>
+    <button data-set="st=calm" class="on">평상시</button><button data-set="st=alert">경고 발생</button><button data-set="st=call">호출(Tab/패드 길게)</button></div>
+  <div class="grp vC"><b>C 손목 계기</b>
+    <button data-set="wrist=down" class="on">내림</button><button data-set="wrist=up">올림</button></div>
+</div>
+
+<div id="wrap"><div id="stage">
+  <div class="sc"></div>
+  <div class="tree" style="left:2%;top:330px;width:150px;height:300px"></div>
+  <div class="tree" style="left:96%;top:320px;width:160px;height:310px"></div>
+  <div class="world">
+    <div class="tree" style="left:140px;top:300px;width:170px;height:320px"></div>
+    <div class="tree" style="left:380px;top:360px;width:130px;height:260px"></div>
+    <div class="tree" style="left:1500px;top:290px;width:180px;height:330px"></div>
+    <div class="tree" style="left:1730px;top:350px;width:140px;height:270px"></div>
+    <div class="npc"></div>
+    <div class="bush"></div>
+    <div class="wnote" style="left:1012px;top:740px">(열매 덤불 - 월드 예시)</div>
+    <div class="wnote" style="left:470px;top:650px">(동료 캐릭터 - 월드 예시)</div>
+    <div class="xh"></div>
+  </div>
+
+  <div class="hud">
+    <!-- ===== 공통: 나침반, 목표(A, 호출 시 B), 상호작용 안내, 핑, 이름표 ===== -->
+    <div class="compass pn"><div class="strip" id="cstrip"></div><div class="cnow">▼</div></div>
+
+    <div class="goal pn vA"><span style="color:var(--light)">◎</span> <span class="ko">목표: 첫 등광탑 재료 모으기</span><span class="en">Goal: Gather materials for the first Lamp Tower</span></div>
+    <div class="goal pn vB s-call"><span style="color:var(--light)">◎</span> <span class="ko">목표: 첫 등광탑 재료 모으기</span><span class="en">Goal: Gather materials for the first Lamp Tower</span></div>
+
+    <div class="prompt pn">
+      <span class="key kb">E</span><span class="key pad">Ⓐ</span>
+      <b><span class="ko">열매 채집</span><span class="en">Gather berries</span></b>
+      <small><span class="ko">열매 덤불 · 상호작용 거리 안</span><span class="en">Berry bush · in range</span></small>
+    </div>
+
+    <div class="pingm pn"><span style="color:var(--light);font-weight:700">▼</span> <b>서림</b> · <span class="ko">광석</span><span class="en">Ore</span> · 42 m</div>
+
+    <!-- 동료 이름표: A, B는 이름만 / C는 등불 이름표 -->
+    <div class="ntag pn vA vB">하루</div>
+    <div class="ltag pn vC"><i class="lamp"></i>하루</div>
+
+    <!-- ===== 시안 A: 하단 중앙 군집 ===== -->
+    <div class="vl pn vA">
+      <div class="vr"><span class="ic" style="color:var(--hp)">♥</span><div class="g" style="--p:72;--c:var(--hp);--h:20px"></div><b>72</b></div>
+      <div class="vr"><span class="ic" style="color:var(--sp)">⚡</span><div class="g" style="--p:62;--c:var(--sp);--h:10px"></div><b>62</b></div>
+    </div>
+    <div class="vrp pn vA">
+      <div class="vr"><span class="ic">🍖</span><div class="g" style="--p:38;--c:var(--sand);--h:10px"></div><b>38</b></div>
+      <div class="vr"><span class="ic">💧</span><div class="g" style="--p:55;--c:var(--sand);--h:10px"></div><b>55</b></div>
+      <div class="vr"><span class="ic">🌙</span><div class="g" style="--p:64;--c:var(--sand);--h:10px"></div><b>64</b></div>
+    </div>
+    <div class="hotbar vA" data-hb="full"></div>
+    <div class="toolname pn vA"><span>🪓</span><b><span class="ko">돌도끼</span><span class="en">Stone Axe</span></b><small>82/100</small></div>
+
+    <div class="allies pn vA">
+      <h4><span class="ko">동료 4</span><span class="en">Allies 4</span></h4>
+      <div class="ar"><span class="nm">하루</span><div class="g" style="--p:90;--c:var(--hp);--h:10px"></div><span class="st">90%</span></div>
+      <div class="ar"><span class="nm">서림</span><div class="g" style="--p:55;--c:var(--hp);--h:10px"></div><span class="st">55%</span></div>
+      <div class="ar dn"><span class="nm">도윤</span><div class="g low" style="--p:100;--c:var(--track);--h:10px"></div><span class="st">✚ <span class="ko">쓰러짐</span><span class="en">Downed</span> 0:24</span></div>
+      <div class="ar"><span class="nm">이안</span><div class="g" style="--p:100;--c:var(--hp);--h:10px"></div><span class="st">100%</span></div>
+    </div>
+
+    <div class="chat pn vA">
+      <div><b>서림</b>: <span class="ko">늪 입구에 광석 있어요</span><span class="en">There is ore at the swamp entrance</span></div>
+      <div class="sys">◆ <span class="ko">도윤이 쓰러졌습니다</span><span class="en">Doyun is down</span></div>
+      <div><b>하루</b>: <span class="ko">가요!</span><span class="en">On my way!</span></div>
+      <div class="hint"><span class="kb">[Enter] 채팅</span><span class="pad">Ⓨ 채팅(Steam 화면 키보드)</span></div>
+    </div>
+
+    <!-- ===== 시안 B: 평소엔 최소, 필요할 때만 ===== -->
+    <div class="toolname pn vB" style="bottom:40px"><span>🪓</span><b><span class="ko">돌도끼</span><span class="en">Stone Axe</span></b><small>82/100</small></div>
+
+    <div class="alertchip pn vB s-alert"><span style="color:var(--danger)">⚠</span> 🍖 <span class="ko">허기 낮음 24%</span><span class="en">Hunger low 24%</span></div>
+    <div class="alertdown pn vB s-alert"><span style="color:var(--danger)">✚</span> <span class="ko">도윤 쓰러짐 0:24 · 동쪽 ▶</span><span class="en">Doyun is down 0:24 · East ▶</span></div>
+
+    <div class="vcard pn vB s-call">
+      <div class="vr"><span class="ic" style="color:var(--hp)">♥</span><div class="g" style="--p:72;--c:var(--hp);--h:16px"></div><b>72</b></div>
+      <div class="vr"><span class="ic" style="color:var(--sp)">⚡</span><div class="g" style="--p:62;--c:var(--sp);--h:10px"></div><b>62</b></div>
+      <div class="vr"><span class="ic">🍖</span><div class="g" style="--p:38;--c:var(--sand);--h:10px"></div><b>38</b></div>
+      <div class="vr"><span class="ic">💧</span><div class="g" style="--p:55;--c:var(--sand);--h:10px"></div><b>55</b></div>
+      <div class="vr"><span class="ic">🌙</span><div class="g" style="--p:64;--c:var(--sand);--h:10px"></div><b>64</b></div>
+    </div>
+    <div class="hotbar vB s-call" data-hb="full" style="bottom:116px"></div>
+    <div class="allies pn vB s-call">
+      <h4><span class="ko">동료 4</span><span class="en">Allies 4</span></h4>
+      <div class="ar"><span class="nm">하루</span><div class="g" style="--p:90;--c:var(--hp);--h:10px"></div><span class="st">90%</span></div>
+      <div class="ar"><span class="nm">서림</span><div class="g" style="--p:55;--c:var(--hp);--h:10px"></div><span class="st">55%</span></div>
+      <div class="ar dn"><span class="nm">도윤</span><div class="g low" style="--p:100;--c:var(--track);--h:10px"></div><span class="st">✚ 0:24</span></div>
+      <div class="ar"><span class="nm">이안</span><div class="g" style="--p:100;--c:var(--hp);--h:10px"></div><span class="st">100%</span></div>
+    </div>
+
+    <!-- ===== 시안 C: 손목 계기 + 최소 HUD ===== -->
+    <div class="vig vC"></div>
+    <div class="sparc vC"></div>
+    <div class="hotbar slim vC" data-hb="slim"></div>
+    <div class="wrist vC">
+      <div class="wdev">
+        <div class="wtop">
+          <span style="color:var(--hp)">♥ 72</span><span>🍖 38</span><span>💧 55</span><span>🌙 64</span>
+          <span style="margin-left:auto"><span class="exposed bad" style="color:var(--danger)">⬢ ☣ !</span><span class="guard" style="color:var(--toxic)">⬢ ☣ ✔</span></span>
+        </div>
+        <div class="rings w-up">
+          <div class="ring" style="--p:72;--c:var(--hp)"><span>♥<br>72</span></div>
+          <div class="ring" style="--p:38;--c:var(--sand)"><span>🍖<br>38</span></div>
+          <div class="ring" style="--p:55;--c:var(--sand)"><span>💧<br>55</span></div>
+          <div class="ring" style="--p:64;--c:var(--sand)"><span>🌙<br>64</span></div>
+        </div>
+        <div class="w-up" style="margin-top:6px;font-size:16px;color:var(--text2)"><span class="guard"><span class="ko">독기: 해독 절임으로 막는 중 02:31</span><span class="en">Miasma: blocked by Antidote Stew 02:31</span></span><span class="exposed" style="color:var(--danger);font-weight:700"><span class="ko">독기: 노출 중 · 체력 -2/초</span><span class="en">Miasma: exposed · HP -2/s</span></span></div>
+      </div>
+    </div>
+
+    <!-- ===== 환경 위협 / 버프 칩 (A, B 공통) ===== -->
+    <div class="threat vA vB">
+      <div class="chip pn guard">
+        <i class="badge hex" style="--c:var(--toxic)"><b>☣</b></i>
+        <div><div class="ct"><span class="ko">독기</span><span class="en">Miasma</span><em class="ok"><span class="ko">막는 중</span><span class="en">Blocked</span></em></div><small>🍲 <span class="ko">해독 절임 02:31</span><span class="en">Antidote Stew 02:31</span></small></div>
+      </div>
+      <div class="chip pn warn exposed">
+        <i class="badge hex" style="--c:var(--toxic)"><b>☣</b></i>
+        <div><div class="ct"><span class="ko">독기</span><span class="en">Miasma</span><em class="bad">⚠ <span class="ko">노출 중</span><span class="en">Exposed</span></em></div><small><span class="ko">체력 -2/초 · 방독 마스크 또는 해독 요리 필요</span><span class="en">HP -2/s · Need a gas mask or antidote dish</span></small></div>
+      </div>
+    </div>
+
+    <!-- 다른 시안과 비교용: 공통 사양 안내 -->
+    <div class="wnote vB s-call" style="left:50%;margin-left:-260px;top:140px;width:520px;text-align:center">호출 중: 놓치기 쉬운 정보를 한 번에 확인</div>
+  </div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), body=document.body;
+function fit(){
+  const tb=$('#tb'), wrap=$('#wrap'), st=$('#stage');
+  const w = body.dataset.ratio==='21' ? 2520 : 1920;
+  st.style.width=w+'px';
+  const availH=innerHeight-tb.offsetHeight-4;
+  const s=Math.min(innerWidth/w, availH/1080);
+  st.style.transform='scale('+s+')';
+  wrap.style.width=(w*s)+'px'; wrap.style.height=(1080*s)+'px'; wrap.style.top=(tb.offsetHeight+2)+'px';
+}
+document.querySelectorAll('[data-set]').forEach(b=>b.addEventListener('click',()=>{
+  const [k,v]=b.dataset.set.split('=');
+  body.dataset[k]=v;
+  document.querySelectorAll('[data-set^="'+k+'="]').forEach(x=>x.classList.toggle('on',x===b));
+  fit();
+}));
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{const m={'1':'A','2':'B','3':'C'}[e.key]; if(m) $('[data-set="v='+m+'"]').click();});
+
+/* 나침반: 시선 북쪽 기준 +-90도를 700px에 표시 */
+(function(){
+  const strip=$('#cstrip'), PX=700/180, C=350; let h='';
+  for(let d=-90; d<=90; d+=15){ h+='<div class="tick'+(d%45===0?' big':'')+'" style="left:'+(C+d*PX)+'px"></div>'; }
+  h+='<div class="clb" style="left:'+C+'px">N</div><div class="clb t2" style="left:'+(C+45*PX)+'px;color:var(--text2)">NE</div><div class="clb" style="left:'+(C-45*PX)+'px;color:var(--text2)">NW</div>';
+  const MK=[[-75,'⌂','침대','Bed',''],[-50,'▼','서림','Seorim','ping'],[12,'✚','도윤','Doyun','down'],[35,'◆','하루','Haru','ally'],[80,'✕','사망','Death','']];
+  MK.forEach(m=>{h+='<div class="mk '+m[4]+'" style="left:'+(C+m[0]*PX)+'px">'+m[1]+'<small><span class="ko">'+m[2]+'</span><span class="en">'+m[3]+'</span></small></div>';});
+  strip.innerHTML=h;
+})();
+
+/* 퀵슬롯 */
+document.querySelectorAll('[data-hb]').forEach(el=>{
+  const items=[['🔦',''],['🪓','sel'],['⛏',''],['🍎','x4'],['🪵','x23'],['🧱','x8'],['🔥',''],['',''] ];
+  el.innerHTML=items.map((it,i)=>'<div class="slot '+(it[1]==='sel'?'sel':'')+'"><i>'+(i+1)+'</i>'+it[0]+(it[1]&&it[1]!=='sel'?'<em>'+it[1].slice(1)+'</em>':'')+(it[1]==='sel'?'<span class="dur"><u></u></span>':'')+'</div>').join('');
+});
+fit();
+</script>
+</body>
+</html>

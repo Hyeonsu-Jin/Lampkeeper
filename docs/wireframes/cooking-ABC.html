@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>요리 솥 와이어프레임 (시안 A/B/C) - 꺼진 하늘 (임시 명칭)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<!--
+  와이어프레임 전용 파일: 외부 자료 없이 이 파일 하나로 열립니다. 기준 좌표 1920x1080.
+  - 요리법 이름, 재료, 버프 시간은 모두 "예시 데이터"입니다(SRS 부록 C-23 미정).
+  - 요리법 목록의 행을 눌러 선택해 볼 수 있습니다. A는 탭, C는 필터 칩도 눌러 볼 수 있습니다.
+  - 위쪽의 "훈연대/절구" 버튼으로 기구 상태(미설치, 범위 밖, 연결됨)를 바꾸면 요리법 상태가 바뀝니다.
+  - 아이콘은 기호로 대신한 임시 표시입니다.
+  - 관련: docs/DESIGN_PROPOSAL.md D-09 (FR-089~FR-097)
+-->
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#000;color:#ddd;font-family:"Pretendard","Noto Sans KR","IBM Plex Sans KR","Malgun Gothic",sans-serif;overflow:hidden}
+body,body[data-theme="A"]{--panel:20,21,26;--text:#E8E4DC;--text2:#A9A59C;--light:#F2A53A;--pure:#6FD1B0;--danger:#E5594F;--toxic:#C77DDB;--cold:#6DB8F0;--dark:#8F9BFF;--line:rgba(232,228,220,.24);--r:6px;--track:#2c2e36;--ondark:#14151A}
+body[data-theme="B"]{--panel:16,24,32;--text:#EAF0F2;--text2:#9FB0B8;--light:#FFE9A8;--pure:#9FE3D0;--danger:#FF8A7A;--toxic:#D79BEA;--cold:#8CCBFF;--dark:#A9B4FF;--line:rgba(234,240,242,.24);--r:2px;--track:#243039;--ondark:#101820}
+body[data-theme="C"]{--panel:22,20,15;--text:#EDE6D3;--text2:#B3AA93;--light:#D9A441;--pure:#7FC8A0;--danger:#E8684F;--toxic:#C98BD6;--cold:#7DB5DD;--dark:#9AA3E6;--line:rgba(237,230,211,.28);--r:0px;--track:#2b281f;--ondark:#16140F}
+
+.tb{position:fixed;top:0;left:0;right:0;z-index:99;background:#1b1b1f;border-bottom:1px solid #333;padding:6px 10px;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;align-items:center;color:#ccc}
+.tb .grp{display:flex;gap:4px;align-items:center}
+.tb b{color:#8d8d95;font-weight:600;margin-right:2px}
+.tb button{background:#2a2a30;color:#ddd;border:1px solid #444;padding:3px 9px;border-radius:4px;cursor:pointer;font:inherit}
+.tb button.on{background:#F2A53A;color:#111;border-color:#F2A53A}
+#wrap{position:absolute;left:50%;transform:translateX(-50%);overflow:hidden;background:#000}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;color:var(--text);font-size:20px}
+
+body[data-lang="ko"] .en,body[data-lang="en"] .ko{display:none!important}
+body[data-dev="kb"] .pad,body[data-dev="pad"] .kb{display:none!important}
+
+.sc{position:absolute;inset:0;background:linear-gradient(#0a0c10,#14181f 58%,#0b0c0f 58%,#060607)}
+.pot{position:absolute;left:880px;top:560px;width:160px;height:120px;border-radius:20px 20px 70px 70px;background:#1f1f24;box-shadow:0 0 60px 20px rgba(242,165,58,.18)}
+.dimall{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.wnote{position:absolute;font-size:16px;color:rgba(255,255,255,.5);font-style:italic}
+
+.pn{background:rgba(var(--panel),.94);border:1px solid var(--line);border-radius:var(--r)}
+.ck{position:absolute;left:300px;top:90px;width:1320px;height:860px;display:flex;flex-direction:column}
+.hd{display:flex;align-items:center;gap:20px;padding:14px 22px;border-bottom:1px solid var(--line);height:72px}
+.hd h2{font-size:28px}
+.hd .uts2{display:flex;gap:10px;margin-left:auto;font-size:18px}
+.hd .close{margin-left:12px}
+#body{flex:1;min-height:0;display:flex;flex-direction:column}
+.ft{height:78px;border-top:1px solid var(--line);padding:10px 22px;display:flex;justify-content:space-between;gap:20px;align-items:center;font-size:18px}
+.ft .help{flex:1}
+.ft .help.bad{color:var(--danger);font-weight:700}
+.ft .keys{color:var(--text2);white-space:nowrap}
+small{font-size:16px;color:var(--text2)}
+
+/* 공통 부품 */
+.chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px;border:2px solid var(--line);border-radius:999px;font-size:16px;white-space:nowrap}
+.chip.ok{border-color:var(--pure);color:var(--pure)}
+.chip.no{border-color:var(--danger);color:var(--danger)}
+.chip.far{border-color:var(--light);color:var(--light);border-style:dashed}
+.badge{width:30px;height:30px;display:grid;place-items:center;background:var(--c);color:var(--ondark);font-style:normal;flex:none}
+.badge.hex{clip-path:polygon(25% 3%,75% 3%,100% 50%,75% 97%,25% 97%,0 50%)}
+.badge.dia{transform:rotate(45deg);width:24px;height:24px;margin:3px}
+.badge.dia b{transform:rotate(-45deg)}
+.badge.cir{border-radius:50%}
+.badge b{font-size:16px;line-height:1}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border:2px solid var(--line);border-radius:var(--r);font-weight:800;font-size:22px}
+.btn.main{background:var(--light);color:var(--ondark);border-color:var(--light)}
+.btn.dis{border-style:dashed;color:var(--text2)}
+.key{display:inline-grid;place-items:center;min-width:30px;height:30px;padding:0 6px;border:2px solid currentColor;border-radius:6px;font-weight:700;font-size:16px}
+.key.pad{border-radius:50%;padding:0}
+
+/* 요리법 행 */
+.rrow{display:flex;align-items:center;gap:12px;height:56px;padding:0 14px;border-bottom:1px solid rgba(255,255,255,.07);cursor:pointer}
+.rrow.sel{outline:3px solid var(--light);outline-offset:-3px;background:rgba(255,255,255,.07)}
+.rrow .st{width:30px;text-align:center;font-size:22px}
+.rrow .nm{flex:1;font-weight:700}
+.rrow .need{display:flex;gap:4px;font-size:16px;color:var(--text2)}
+.rrow .stt{width:100px;text-align:right;font-size:16px;font-weight:700}
+.rrow.s-ok .st,.rrow.s-ok .stt{color:var(--pure)}
+.rrow.s-mats .st,.rrow.s-mats .stt{color:var(--light)}
+.rrow.s-utensil .st,.rrow.s-utensil .stt{color:var(--danger)}
+.rrow.s-utensil .nm,.rrow.s-mats .nm{color:var(--text2)}
+.sec{padding:8px 14px;font-size:16px;color:var(--text2);background:rgba(255,255,255,.05);font-weight:700}
+
+/* 상세 */
+.det{padding:16px 22px}
+.det h3{font-size:26px;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.det .meta{color:var(--text2);margin-bottom:8px;font-size:18px}
+.det table{border-collapse:collapse;margin:8px 0}
+.det td{padding:3px 14px 3px 0;font-size:19px}
+.det td.lack{color:var(--danger);font-weight:700}
+.det .uts{display:flex;gap:8px;margin:8px 0;flex-wrap:wrap;align-items:center}
+.det .act{display:flex;align-items:center;gap:18px;margin-top:10px}
+.det .reason{color:var(--danger);font-weight:700;font-size:18px}
+.det.h{display:flex;gap:40px;align-items:flex-start}
+
+/* 시안 A */
+.tabs{display:flex;border-bottom:1px solid var(--line);height:64px}
+.tab{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;font-weight:700;cursor:pointer;border-bottom:4px solid transparent;color:var(--text2)}
+.tab small{font-size:15px}
+.tab.cur{border-bottom-color:var(--light);color:var(--text);background:rgba(255,255,255,.06)}
+.tab.lock{color:var(--text2)}
+.cols{flex:1;display:flex;min-height:0}
+.cols .l{width:620px;border-right:1px solid var(--line)}
+.cols .r{flex:1}
+
+/* 시안 B */
+.schem{position:relative;width:520px;border-right:1px solid var(--line)}
+.ring2{position:absolute;left:60px;top:150px;width:400px;height:400px;border-radius:50%;border:3px dashed rgba(255,255,255,.35)}
+.ring2 + .rl{position:absolute;left:150px;top:560px;width:220px;text-align:center;font-size:16px;color:var(--text2)}
+.potn{position:absolute;left:210px;top:300px;width:100px;height:100px;border-radius:24px 24px 50px 50px;border:3px solid var(--light);display:grid;place-items:center;text-align:center;font-size:18px;font-weight:800;background:rgba(var(--panel),1)}
+.un{position:absolute;width:104px;height:104px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:16px;line-height:1.2;font-weight:700;border:3px solid var(--pure);background:rgba(var(--panel),1)}
+.un.none{border:3px dashed var(--text2);color:var(--text2)}
+.un.far{border:3px solid var(--light);color:var(--text2);opacity:.85}
+.un.need{outline:5px solid var(--light);outline-offset:4px}
+.un .ic{font-size:26px;display:block}
+.un small{display:block;font-size:14px}
+.lnk{position:absolute;height:3px;background:var(--pure);transform-origin:0 50%}
+.lnk.far{background:repeating-linear-gradient(90deg,var(--light) 0 8px,transparent 8px 16px)}
+.rcol{flex:1;display:flex;flex-direction:column;min-width:0}
+.rcol .list{height:340px;overflow:hidden;border-bottom:1px solid var(--line)}
+
+/* 시안 C */
+.chips{display:flex;gap:10px;padding:12px 18px;align-items:center;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.chips .sepv{width:2px;height:28px;background:var(--line)}
+.chips .f{cursor:pointer;padding:5px 16px;border:2px solid var(--line);border-radius:999px;font-weight:700;font-size:18px}
+.chips .f.cur{border-color:var(--light);background:rgba(255,255,255,.1)}
+.strip{display:flex;gap:12px;align-items:center;padding:8px 18px;border-bottom:1px solid var(--line);font-size:18px;color:var(--text2)}
+.cList{height:360px;overflow:hidden}
+</style>
+</head>
+<body data-v="B" data-dev="kb" data-lang="ko" data-theme="A" data-smoker="none" data-mortar="far">
+
+<div id="tb" class="tb">
+  <div class="grp"><b>시안(1/2/3)</b>
+    <button data-set="v=A">A 방식 탭 + 목록</button><button data-set="v=B" class="on">B 솥 도식 + 목록</button><button data-set="v=C">C 필터 목록</button></div>
+  <div class="grp"><b>훈연대</b>
+    <button data-set="smoker=none" class="on">미설치</button><button data-set="smoker=ok">연결됨</button></div>
+  <div class="grp"><b>절구</b>
+    <button data-set="mortar=far" class="on">범위 밖</button><button data-set="mortar=ok">연결됨</button></div>
+  <div class="grp"><b>입력</b>
+    <button data-set="dev=kb" class="on">키보드·마우스</button><button data-set="dev=pad">게임패드</button></div>
+  <div class="grp"><b>언어</b>
+    <button data-set="lang=ko" class="on">한국어</button><button data-set="lang=en">English</button></div>
+  <div class="grp"><b>색 테마</b>
+    <button data-set="theme=A" class="on">A</button><button data-set="theme=B">B</button><button data-set="theme=C">C</button></div>
+</div>
+
+<div id="wrap"><div id="stage">
+  <div class="sc"></div><div class="pot"></div>
+  <div class="wnote" style="left:850px;top:690px">(요리 솥 - 월드 예시)</div>
+  <div class="dimall"></div>
+  <div class="ck pn">
+    <div class="hd"><h2>🍲 <span class="ko">요리 솥</span><span class="en">Cooking Pot</span></h2><small><span class="ko">솥에는 단계나 레벨이 없습니다. 주변 보조 기구가 조리 방식을 엽니다.</span><span class="en">The pot has no levels. Nearby utensils unlock cooking methods.</span></small><div class="uts2" id="hdUts"></div><span class="chip close"><span class="key kb">Esc</span><span class="key pad">Ⓑ</span><span class="ko">닫기</span><span class="en">Close</span></span></div>
+    <div id="body"></div>
+    <div class="ft"><div class="help" id="help"></div><div class="keys"><span class="kb">↑↓ 선택 · Enter 요리하기 · Tab 탭</span><span class="pad">✥ 선택 · Ⓐ 요리하기 · LB/RB 탭</span></div></div>
+  </div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), body=document.body;
+const T=(k,e)=>'<span class="ko">'+k+'</span><span class="en">'+e+'</span>';
+const U={
+ board:{ic:'🔪',ko:'도마',en:'Cutting board',mk:'손질',me:'Prep',st:'ok'},
+ jar:{ic:'🏺',ko:'항아리',en:'Jar',mk:'발효·절임',me:'Ferment/Pickle',st:'ok'},
+ smoker:{ic:'♨',ko:'훈연대',en:'Smoker',mk:'훈제',me:'Smoke',st:'none'},
+ mortar:{ic:'⚗',ko:'절구',en:'Mortar',mk:'가루·약재',me:'Powder/Herb',st:'far'}
+};
+const BF={toxic:{cls:'hex',ic:'☣',c:'--toxic',ko:'독기 저항',en:'Miasma resist'},cold:{cls:'dia',ic:'❄',c:'--cold',ko:'혹한 저항',en:'Cold resist'},dark:{cls:'cir',ic:'◐',c:'--dark',ko:'어둠 저항',en:'Darkness resist'}};
+const R=[
+ {id:1,ko:'구운 뿌리 죽',en:'Roast Root Porridge',need:[],prim:'base',mats:[['뿌리채소','Root veg',2,5],['물','Water',1,3]],buff:null},
+ {id:2,ko:'따뜻한 수프',en:'Warming Soup',need:['board'],prim:'board',mats:[['고원 감자','Plateau potato',2,4],['소금','Salt',1,2]],buff:'cold'},
+ {id:3,ko:'해독 절임 스튜',en:'Antidote Pickle Stew',need:['jar','board'],prim:'jar',mats:[['늪 이끼','Marsh moss',3,1],['소금','Salt',2,2],['물','Water',1,3]],buff:'toxic'},
+ {id:4,ko:'야광 버섯 요리',en:'Glowcap Dish',need:['mortar'],prim:'mortar',mats:[['야광 버섯','Glowcap',2,6],['소금','Salt',1,2]],buff:'dark'},
+ {id:5,ko:'훈제 고기',en:'Smoked Meat',need:['smoker'],prim:'smoker',mats:[['고기','Meat',2,3],['소금','Salt',1,2]],buff:null},
+ {id:6,ko:'절임 열매',en:'Pickled Berries',need:['jar'],prim:'jar',mats:[['열매','Berries',4,9],['소금','Salt',1,2]],buff:null}
+];
+const S={sel:3,tab:'jar',f:'all',thr:null};
+
+const miss=r=>r.need.filter(u=>U[u].st!=='ok');
+const lack=r=>r.mats.filter(m=>m[3]<m[2]);
+const stat=r=>miss(r).length?'utensil':(lack(r).length?'mats':'ok');
+const stLabel={ok:T('만들 수 있음','Ready'),mats:T('재료 부족','Missing items'),utensil:T('기구 부족','Missing utensil')};
+const stGlyph={ok:'✔',mats:'▲',utensil:'✕'};
+const utState=u=>({ok:T('연결됨','Linked'),none:T('미설치','Not built'),far:T('범위 밖','Out of range')}[U[u].st]);
+const utChip=u=>'<span class="chip '+(U[u].st==='ok'?'ok':(U[u].st==='far'?'far':'no'))+'">'+({ok:'✔',none:'✕',far:'⚠'}[U[u].st])+' '+U[u].ic+' '+T(U[u].ko,U[u].en)+'</span>';
+const badge=b=>b?'<i class="badge '+BF[b].cls+'" style="--c:var('+BF[b].c+')"><b>'+BF[b].ic+'</b></i>':'';
+function reason(r){
+  const m=miss(r), l=lack(r);
+  if(m.length){
+    return m.map(u=>U[u].st==='far'
+      ? T(U[u].ko+' 필요: 솥 인식 범위 밖입니다. 솥 가까이로 옮기세요','Need '+U[u].en+': it is out of the pot\'s range. Move it closer')
+      : T(U[u].ko+' 필요: 설치되지 않았습니다','Need '+U[u].en+': not built yet')).join(' / ');
+  }
+  if(l.length) return l.map(x=>T(x[0]+' '+(x[2]-x[3])+' 부족',x[1]+' '+(x[2]-x[3])+' short')).join(' / ');
+  return '';
+}
+function row(r){
+  const s=stat(r);
+  return '<div class="rrow s-'+s+(S.sel===r.id?' sel':'')+'" data-sel="'+r.id+'"><span class="st">'+stGlyph[s]+'</span><span class="nm">'+T(r.ko,r.en)+'</span><span class="need">'+(r.need.length?r.need.map(u=>U[u].ic+T(U[u].ko,U[u].en)).join(' + '):T('솥만','Pot only'))+'</span>'+badge(r.buff)+'<span class="stt">'+stLabel[s]+'</span></div>';
+}
+function detail(r,h){
+  const s=stat(r), why=reason(r);
+  const mats='<table>'+r.mats.map(m=>'<tr><td>'+T(m[0],m[1])+'</td><td class="'+(m[3]<m[2]?'lack':'')+'">'+m[3]+' / '+m[2]+'</td><td>'+(m[3]<m[2]?'✕':'✔')+'</td></tr>').join('')+'</table>';
+  const uts='<div class="uts">'+(r.need.length?r.need.map(utChip).join(''):'<span class="chip ok">✔ 🍲 '+T('솥만 있으면 됨','Pot only')+'</span>')+'</div>';
+  const buff=r.buff?'<div style="display:flex;gap:10px;align-items:center;margin:4px 0">'+badge(r.buff)+'<b>'+T(BF[r.buff].ko,BF[r.buff].en)+' 10:00</b><small>'+T('(예시 시간)','(sample time)')+'</small></div>':'<div class="meta">'+T('버프 없음 (회복 요리)','No buff (restores stats)')+'</div>';
+  const btn=s==='ok'?'<span class="btn main"><span class="key kb">Enter</span><span class="key pad">Ⓐ</span>'+T('요리하기','Cook')+'</span>':'<span class="btn dis">🔒 '+T('요리하기','Cook')+'</span>';
+  const left='<h3>'+T(r.ko,r.en)+' <span class="chip '+(s==='ok'?'ok':(s==='mats'?'far':'no'))+'">'+stGlyph[s]+' '+stLabel[s]+'</span></h3><div class="meta">'+T('필요한 것','Requires')+'</div>'+uts;
+  const mid=buff+mats;
+  const act='<div class="act">'+btn+'<span class="reason">'+why+'</span></div>';
+  return h?'<div class="det h"><div>'+left+'</div><div>'+mid+'</div></div><div class="det" style="padding-top:0">'+act+'</div>':'<div class="det">'+left+mid+act+'</div>';
+}
+function render(){
+  const v=body.dataset.v; U.smoker.st=body.dataset.smoker; U.mortar.st=body.dataset.mortar;
+  const r=R.find(x=>x.id===S.sel)||R[0];
+  let h='';
+  if(v==='A'){
+    const tabs=['base','board','jar','smoker','mortar'];
+    h='<div class="tabs">'+tabs.map(t=>{
+      const locked=t!=='base'&&U[t].st!=='ok';
+      const nm=t==='base'?T('기본','Basic'):T(U[t].mk,U[t].me);
+      const sub=t==='base'?T('솥만','Pot only'):(locked?'🔒 '+(U[t].st==='far'?T('범위 밖','Out of range'):T('미설치','Not built'))+' · '+T(U[t].ko,U[t].en):'● '+T(U[t].ko+' 연결','Linked'));
+      return '<div class="tab'+(S.tab===t?' cur':'')+(locked?' lock':'')+'" data-tab="'+t+'"><span>'+nm+'</span><small>'+sub+'</small></div>';
+    }).join('')+'</div>';
+    const list=R.filter(x=>x.prim===S.tab);
+    h+='<div class="cols"><div class="l">'+(list.length?list.map(row).join(''):'<div class="det">'+T('이 방식의 요리법이 없습니다.','No recipes here.')+'</div>')+'<div class="det"><small>'+T('※ 기구가 둘 이상 필요한 요리법은 대표 방식 탭에만 나옵니다 (시안 A의 약점)','※ Recipes needing 2+ utensils appear only under their main tab (a weakness of option A)')+'</small></div></div><div class="r">'+detail(r,false)+'</div></div>';
+  } else if(v==='B'){
+    const pos={board:[208,60],jar:[368,196],smoker:[208,332+60],mortar:[-6,196]};
+    // 도식: 중심 (260,350) 반지름 200 점선 원이 인식 범위
+    const nodes=Object.keys(U).map(u=>{
+      const p={board:[208,150],jar:[340,298],smoker:[208,450],mortar:[24,298]}[u];
+      const cls=U[u].st==='ok'?'':(U[u].st==='none'?'none':'far');
+      return '<div class="un '+cls+(r.need.indexOf(u)>=0?' need':'')+'" style="left:'+p[0]+'px;top:'+p[1]+'px"><div><span class="ic">'+U[u].ic+'</span>'+T(U[u].ko,U[u].en)+'<small>'+utState(u)+'</small></div></div>';
+    }).join('');
+    const lnk=(x1,y1,x2,y2,cls)=>{const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy),ang=Math.atan2(dy,dx)*180/Math.PI;return '<div class="lnk '+cls+'" style="left:'+x1+'px;top:'+y1+'px;width:'+len+'px;transform:rotate('+ang+'deg)"></div>';};
+    let links='';
+    const C=[260,350];
+    const P={board:[260,202],jar:[380+0,350],smoker:[260,498],mortar:[128,350]};
+    if(U.board.st==='ok') links+=lnk(260,254,260,300,'');
+    if(U.jar.st==='ok') links+=lnk(340,350,310,350,'');
+    if(U.smoker.st==='ok') links+=lnk(260,450,260,400,'');
+    if(U.mortar.st==='ok') links+=lnk(128,350,210,350,''); else links+=lnk(128,350,210,350,'far');
+    const groups=[['ok',T('지금 만들 수 있음','Ready now')],['mats',T('재료 부족','Missing items')],['utensil',T('기구 부족','Missing utensil')]];
+    const lst=groups.map(g=>{const rs=R.filter(x=>stat(x)===g[0]);return rs.length?'<div class="sec">'+g[1]+' ('+rs.length+')</div>'+rs.map(row).join(''):'';}).join('');
+    h='<div class="cols" style="min-height:0"><div class="schem"><div style="padding:14px 18px;font-weight:700">'+T('솥 주변 기구','Utensils around the pot')+'</div><div class="ring2" style="left:100px;top:190px;width:320px;height:320px"></div><div class="rl" style="top:575px;left:150px;position:absolute;width:220px;text-align:center;font-size:16px;color:var(--text2)">'+T('점선 안 = 솥 인식 범위','Dashed ring = pot range')+'</div>'+links+'<div class="potn" style="left:210px;top:300px"><div>🍲<br>'+T('솥','Pot')+'</div></div>'+nodes+'</div><div class="rcol"><div class="list">'+lst+'</div>'+detail(r,false)+'</div></div>';
+  } else {
+    const F=[['all',T('전체','All')],['ok',T('만들 수 있음','Ready')],['mats',T('재료 부족','Missing items')],['utensil',T('기구 부족','Missing utensil')]];
+    const TH=[['toxic','☣ '+T('독기','Miasma')],['cold','❄ '+T('혹한','Cold')],['dark','◐ '+T('어둠','Darkness')]];
+    let rs=R.filter(x=>(S.f==='all'||stat(x)===S.f)&&(!S.thr||x.buff===S.thr));
+    h='<div class="chips">'+F.map(f=>'<span class="f'+(S.f===f[0]?' cur':'')+'" data-f="'+f[0]+'">'+f[1]+'</span>').join('')+'<span class="sepv"></span><small>'+T('위협별','By threat')+'</small>'+TH.map(t=>'<span class="f'+(S.thr===t[0]?' cur':'')+'" data-thr="'+t[0]+'">'+t[1]+'</span>').join('')+'</div>'
+      +'<div class="strip"><b>'+T('연결된 기구','Linked utensils')+'</b>'+Object.keys(U).map(utChip).join('')+'</div>'
+      +'<div class="cList">'+(rs.length?rs.map(row).join(''):'<div class="det">'+T('조건에 맞는 요리법이 없습니다. 필터를 바꿔 보세요.','No recipes match. Change the filter.')+'</div>')+'</div>'+detail(r,true);
+  }
+  $('#body').innerHTML=h;
+  $('#hdUts').innerHTML=Object.keys(U).map(u=>'<span>'+U[u].ic+' '+utState(u)+'</span>').join('');
+  const why=reason(r);
+  $('#help').className='help'+(why?' bad':'');
+  $('#help').innerHTML=why?('⚠ '+T(R.find(x=>x.id===S.sel).ko,R.find(x=>x.id===S.sel).en)+': '+why):T('Enter로 요리합니다. 재료와 기구가 모두 갖춰졌습니다.','Ready to cook: all items and utensils are in place.');
+}
+function fit(){
+  const tb=$('#tb'), wrap=$('#wrap'), st=$('#stage');
+  const s=Math.min(innerWidth/1920,(innerHeight-tb.offsetHeight-4)/1080);
+  st.style.transform='scale('+s+')';
+  wrap.style.width=(1920*s)+'px'; wrap.style.height=(1080*s)+'px'; wrap.style.top=(tb.offsetHeight+2)+'px';
+}
+document.querySelectorAll('[data-set]').forEach(b=>b.addEventListener('click',()=>{
+  const [k,v]=b.dataset.set.split('=');
+  body.dataset[k]=v;
+  document.querySelectorAll('[data-set^="'+k+'="]').forEach(x=>x.classList.toggle('on',x===b));
+  render(); fit();
+}));
+$('#body').addEventListener('click',e=>{
+  const t=e.target.closest('[data-sel],[data-tab],[data-f],[data-thr]'); if(!t) return;
+  if(t.dataset.sel) S.sel=+t.dataset.sel;
+  if(t.dataset.tab) S.tab=t.dataset.tab;
+  if(t.dataset.f) S.f=t.dataset.f;
+  if(t.dataset.thr) S.thr=(S.thr===t.dataset.thr?null:t.dataset.thr);
+  render();
+});
+addEventListener('resize',fit);
+addEventListener('keydown',e=>{const m={'1':'A','2':'B','3':'C'}[e.key]; if(m) $('[data-set="v='+m+'"]').click();});
+render(); fit();
+</script>
+</body>
+</html>
