@@ -1,0 +1,135 @@
+# =============================================================
+# Unity 게임 개발용 .gitignore
+# - Unity 프로젝트(Assets, Packages, ProjectSettings 폴더)는
+#   저장소의 src/ 폴더에 있습니다 (SDD 3.8, D-01).
+# - 기반: github/gitignore의 Unity.gitignore
+# =============================================================
+
+# -------------------------------------------------------------
+# Unity가 자동으로 만드는 폴더 (다시 생성되므로 커밋하지 않음)
+# -------------------------------------------------------------
+.utmp/
+/src/[Ll]ibrary/
+/src/[Tt]emp/
+/src/[Oo]bj/
+/src/[Bb]uild/
+/src/[Bb]uilds/
+/src/[Ll]ogs/
+/src/[Uu]ser[Ss]ettings/
+*.log
+
+# 메모리 캡처와 녹화 파일 (용량이 크고 민감한 데이터가 있을 수 있음)
+/src/[Mm]emoryCaptures/
+/src/[Rr]ecordings/
+
+# Blender 백업 파일
+*.blend1
+*.blend1.meta
+
+# Asset Store 업로드 도구를 무시하려면 아래 주석을 해제
+# /src/[Aa]ssets/AssetStoreTools*
+
+# -------------------------------------------------------------
+# IDE / 에디터
+# -------------------------------------------------------------
+# JetBrains Rider
+/src/[Aa]ssets/Plugins/Editor/JetBrains*
+.idea/
+*.DotSettings.user
+
+# Visual Studio
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# Unity가 자동으로 만드는 솔루션·프로젝트 파일
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# 위 파일들에 대해 Unity가 만드는 .meta 파일
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# -------------------------------------------------------------
+# 빌드 결과물과 실행 중 생성 파일
+# -------------------------------------------------------------
+*.apk
+*.aab
+*.unitypackage
+*.unitypackage.meta
+*.app
+
+# Gradle 캐시 (Android 빌드)
+.gradle/
+
+# 크래시 리포트, Mono 크래시 파일
+sysinfo.txt
+mono_crash.*
+
+# Crashlytics
+crashlytics-build.properties
+
+# Test Runner가 만드는 임시 씬
+InitTestScene*.unity*
+/src/[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# -------------------------------------------------------------
+# Addressables
+# -------------------------------------------------------------
+/src/ServerData
+/src/[Aa]ssets/StreamingAssets/aa*
+/src/[Aa]ssets/AddressableAssetsData/link.xml*
+/src/[Aa]ssets/Addressables_Temp*
+/src/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+
+# -------------------------------------------------------------
+# Visual Scripting 자동 생성 파일
+# -------------------------------------------------------------
+/src/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db
+/src/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Flow/UnitOptions.db.meta
+/src/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers
+/src/[Aa]ssets/Unity.VisualScripting.Generated/VisualScripting.Core/Property Providers.meta
+
+# -------------------------------------------------------------
+# 비밀 값 (절대 커밋하지 않음)
+# -------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.pem
+*.mobileprovision
+
+# -------------------------------------------------------------
+# 에이전트 설정 (git으로 관리하지 않음)
+# - docs/ 산출물은 커밋함 (사용자 결정 2026-11-03)
+# -------------------------------------------------------------
+/CLAUDE.md
+/.claude/agents/
+
+# -------------------------------------------------------------
+# 운영체제
+# -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
