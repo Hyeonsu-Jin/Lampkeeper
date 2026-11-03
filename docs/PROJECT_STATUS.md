@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
 - 현재 단계: Do (착수 전, Plan 승인됨 2026-11-03)
-- 다음에 할 일: push 여부 결정 → M1 착수 전 결정(기본 키 할당, C-28 게임패드 종류, Steam 없이 1인 플레이, C-46 차단 범위, C-48 첫 실행 언어, C-33, C-43, C-49) → Do(M1, developer)
+- 다음에 할 일: (2026-11-03 main을 origin에 push 완료) M1 착수 전 결정(기본 키 할당, C-28 게임패드 종류, Steam 없이 1인 플레이, C-46 차단 범위, C-48 첫 실행 언어, C-33, C-43, C-49) → Do(M1, developer)
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -71,7 +71,8 @@
 | 2026-11-03 | M4 제작 추가: 도구·무기·대응 장비는 제작대에서 제작(제작대 상호작용 시 제작 UI 팝업), 제작대·횃불 등 기본품은 손 제작. 레시피북 키는 열람과 손 제작만(제작대 필요 항목은 "제작대 필요" 표시). C-11 해소 | 사용자 결정 |
 | 2026-11-03 | Plan 단계 완료 승인 (SRS v0.8, SDD v0.6, STORYBOARD v1.3). git init(main 브랜치)과 git lfs install 진행 | 사용자 결정 |
 | 2026-11-03 | 형상 관리 범위: docs/는 커밋, CLAUDE.md와 .claude/agents/는 git 제외 (.gitignore에서 /docs/ 줄 삭제) | 사용자 결정 |
-| 2026-11-03 | 원격 저장소: origin = https://github.com/Hyeonsu-Jin/Lampkeeper (사용자가 추가). Plan 산출물을 Conventional Commits 규칙으로 6개 커밋 (476a149 chore, 91a9514 srs, 3f326a2 sdd, 3564e8b design, e6a8fd2 storyboard, status) | 사용자 결정 |
+| 2026-11-03 | 원격 저장소: origin = https://github.com/Hyeonsu-Jin/Lampkeeper (사용자가 추가). Plan 산출물을 Conventional Commits 규칙으로 6개 커밋 (4dcd38b chore, e6e12f8 srs, eecb0ff sdd, 899db6b design, f2d5649 storyboard, 4404fe1 status. 2026-11-03 사용자 요청으로 Co-Authored-By 꼬리말을 지우고 강제 push해 해시가 바뀜) | 사용자 결정 |
+| 2026-11-03 | Unity 에디터 조작 MCP 도구: Unity 공식 CLI 채택 (커뮤니티 MCP for Unity 대신). winget으로 Unity.CLI 1.0.0-beta.15 설치, 프로젝트 루트 .mcp.json에 `unity-editor-mcp`(unity mcp --project-path src) 등록. .mcp.json은 PC 전용 절대 경로가 있어 git 제외(.gitignore) | 사용자 결정 |
 | 2026-11-03 | Unity 프로젝트 위치는 src/ 유지 (SDD D-01). .gitignore의 루트 기준 Unity 규칙 21줄을 /src/ 기준으로 수정, 샘플 경로로 제외·커밋·LFS 동작 확인 | 사용자 결정 (A안) |
 | 2026-11-03 | 용광로: 채집한 광석은 용광로에서 가공, 연료와 광석을 넣어야 함. 연료 나무 2개 = 광석 1개, 석탄 1개 = 광석 4개. 석탄은 석탄 광맥 채광과 숯(나무를 구워 만듦) 둘 다. 가공은 시간이 걸리고 플레이어가 자리를 떠나도 연료가 있는 동안 계속(호스트 계산) | 사용자 결정 |
 | 2026-11-02 | 디자인 확인: I-01 환경 위협은 상태 칩+버프 남은 시간(누적 게이지 없음), I-03 공개 방 목록에 예약 자리 표시(예: 7/8, 예약 1), I-04 접근성 기반(글자 배율·색 토큰·모양 구분)을 M1 UI부터 적용, I-07 메뉴를 열어도 게임은 멈추지 않음, I-12 다크 단일 테마 | 사용자 결정 |
@@ -90,6 +91,8 @@
 | HDRP 실사 그래픽 + 멀티플레이 동시 부하 | 총괄 | 프레임·대역폭 목표 미달 | NFR로 성능 목표를 수치화 |
 | 동물·적 AI의 네트워크 동기화 | 총괄 | 구현·테스트 비용 증가 | 서버 권한 AI로 설계 |
 | git 저장소 아님 | 총괄 | 형상 관리 불가 | 해소: 2026-11-03 git init + git lfs install |
+| Unity CLI가 베타(1.0.0-beta.15)이고 MCP로 씬 편집·컴파일 오류 확인이 부족하다는 사용자 보고가 있음 | 총괄(조사) | 에디터 자동 조작 범위 제한 | 셸 명령(unity, unity eval)과 함께 사용, M1에서 실제 동작 범위 확인 |
+| MCP 연결 전제: src/ Unity 프로젝트 생성 + Unity Pipeline 패키지 설치 + Editor 실행 필요. 설치된 Editor는 6000.0.84f1로 SDD 권장(6000.3 LTS)과 다름 | 총괄 | 프로젝트 생성 전에는 MCP가 Editor에 연결되지 않음 | M1-01에서 6000.3 LTS 설치·프로젝트 생성·unity pipeline install |
 | .gitattributes의 Unity Smart Merge(merge=unityyamlmerge)는 git config로 merge 드라이버를 등록해야 동작 | 총괄 | 씬·프리팹 충돌 시 일반 병합으로 처리됨 | M1에서 Unity 설치 경로 확인 후 드라이버 등록 (devops-engineer 또는 developer) |
 | Steamworks는 플랫폼(로비·초대·릴레이)이고 동기화 라이브러리는 별도로 필요 | 총괄 | 구조 결정 누락 | 네트워크 라이브러리(FishNet 등) 선택 필요 |
 | Steam 전송 방식은 한 PC에서 두 빌드로 자기 자신에게 접속 불가 | 총괄(조사) | 로컬 테스트 어려움 | 개발용 일반 전송과 Steam 전송을 바꿔 끼울 수 있게 설계 |
