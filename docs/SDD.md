@@ -4,13 +4,13 @@
 
 | 항목 | 내용 |
 |---|---|
-| 문서 버전 | 0.6 |
+| 문서 버전 | 0.7 |
 | 작성일 | 2026-11-02 (최종 수정 2026-11-02) |
 | 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영) |
 | 작성 | architect (기획 에이전트, 설계 담당) |
 | 준거 표준 | IEEE Std 1016-2009 (설계 관점·설계 뷰 구조), ISO/IEC/IEEE 12207 (아키텍처 정의·설계 정의 프로세스) |
-| 범위 | SRS v0.8의 FR 179개, NFR 57개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
-| 참조 문서 | `docs/SRS.md` **v0.8** (v0.7에 M4 제작 추가 반영: FR-173 제작대, FR-174 제작대 제작 UI(C-11 해소), FR-175 용광로, FR-176 연료 규칙, FR-177 가공 진행, FR-178 숯 만들기, FR-179 석탄 광맥. v0.7 내용: v0.6에 손목 계기 결정 반영: C-58 올림 방식 기본 토글, C-59 올린 동안 모든 행동 가능, 등불 이름표 체력 4단계 + 꺼짐. v0.6 내용: v0.5에 HUD 디자인 변경 반영: 장치형 HUD 기본, FR-171 HUD 표시 방식 옵션, FR-172 손목 계기 올림/내림, NFR-001 「표시되고 있는 동안」 기준. v0.5 내용: v0.4에 2026-11-02 디자인 관련 사용자 결정 반영: 공개 목록 예약 자리 표시, M1부터 접근성 기반, 화면을 열어도 게임 진행 유지, 독립 레시피북, 다크 단일 테마. v0.4 내용: v0.3의 세션 참가 조건 변경 — 「초대 전용 / 친구 전용 / 공개」, 새 월드 생성·세션 열기 때 선택, 월드별 저장, 기본값 「친구 전용」 — 에 더해 2026-11-02 사용자 결정 반영: C-51 M1 범위 축소, C-52 성능 측정 기준, 인원 배율 적용 범위 등), `docs/PROJECT_STATUS.md` (2026-11-02 결정 기록·위험 목록), `CLAUDE.md` |
+| 범위 | SRS v0.9의 FR 179개, NFR 57개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
+| 참조 문서 | `docs/SRS.md` **v0.9** (v0.8에 M1 착수 전 사용자 결정 반영: Unity 6000.3.27f2, M1 측정은 이 PC 1대 + 봇 7개·다른 CPU 결정론과 실제 8대 P8은 M6, Steam 실행 필수(오프라인 플레이 없음), C-28·C-33·C-43·C-46·C-48·C-49 해소. v0.8 내용: v0.7에 M4 제작 추가 반영: FR-173 제작대, FR-174 제작대 제작 UI(C-11 해소), FR-175 용광로, FR-176 연료 규칙, FR-177 가공 진행, FR-178 숯 만들기, FR-179 석탄 광맥. v0.7 내용: v0.6에 손목 계기 결정 반영: C-58 올림 방식 기본 토글, C-59 올린 동안 모든 행동 가능, 등불 이름표 체력 4단계 + 꺼짐. v0.6 내용: v0.5에 HUD 디자인 변경 반영: 장치형 HUD 기본, FR-171 HUD 표시 방식 옵션, FR-172 손목 계기 올림/내림, NFR-001 「표시되고 있는 동안」 기준. v0.5 내용: v0.4에 2026-11-02 디자인 관련 사용자 결정 반영: 공개 목록 예약 자리 표시, M1부터 접근성 기반, 화면을 열어도 게임 진행 유지, 독립 레시피북, 다크 단일 테마. v0.4 내용: v0.3의 세션 참가 조건 변경 — 「초대 전용 / 친구 전용 / 공개」, 새 월드 생성·세션 열기 때 선택, 월드별 저장, 기본값 「친구 전용」 — 에 더해 2026-11-02 사용자 결정 반영: C-51 M1 범위 축소, C-52 성능 측정 기준, 인원 배율 적용 범위 등), `docs/PROJECT_STATUS.md` (2026-11-02 결정 기록·위험 목록), `CLAUDE.md` |
 | 후속 문서 | `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md` (ui-ux-designer), `src/` 소스 코드 (developer) |
 
 ### 1.1 용어 (SRS 1.3에 더해 설계에서 쓰는 말)
@@ -50,6 +50,7 @@
 | 0.4 | 2026-11-02 | architect | HUD 디자인 변경 반영(사용자 결정 2026-11-02), 참조 SRS v0.6, 상태 「승인」 유지. (1) 장치형 HUD 기본 + 일반 HUD 옵션: 두 방식이 같은 HUD 뷰모델을 공유하고 표시 방식만 교체하는 구조(3.7.11 신설, **DES-074 HudViewModel**, **DES-120 DiegeticHud** 신설, DES-091·097 갱신). (2) 손목 계기는 UI Toolkit 패널을 렌더 텍스처로 그리고 표시 면을 (A) 3D 소품(기본) / (B) 화면 공간 기울인 평면(STORYBOARD v1.1 잠정) 중 교체 가능하게 함(최종 선택 사용자 결정, 두 방식 모두 R-18 영향 없음), 올림 방식 `WristRaiseMode`(누르는 동안/토글)·다른 창 열리면 자동 내림·이름표 체력 단계 수 설정값, 1인칭 손 그리기·시야 가장자리 위협 효과는 DES-114 경유(3.4.4, D-21 신설, R-18 갱신). (3) 손목 올림/내림 Input Action, 올린 동안 행동 제한은 교체 지점 `IWristRaisedActionRule`, 게임은 멈추지 않음(3.7.6, 3.7.9, 3.10.7). (4) 요리 솥 화면은 데이터 변경 없음(FR-094 비고). (5) 7장 M2에 HUD 작업 2개 추가(M2 11 → 13, 합계 97 → 99), 8장 R-21~R-23 추가. FR-171·FR-172 추적. 설계 요소 104개 |
 | 0.5 | 2026-11-02 | architect | 손목 계기 사용자 결정 반영, 참조 SRS v0.7, 상태 「승인」 유지. (1) `IWristSurface` 기본 구현 = **(B) 화면 공간 기울인 평면**(UI Toolkit 사용자 지정 메시, HDRP 무관). (A) 3D 손목 소품은 교체 지점만 남기고 구현 작업에서 제외, M6 수직 슬라이스에서 (A) 전환 여부 사용자 결정(M6-11에 추가). M2-12에서 손 애니메이션·1인칭 손 그리기 패스·소품 아트 제외. (2) C-58 해소: `WristRaiseMode` 기본 토글, 옵션 누르는 동안. (3) C-59 해소: 올린 동안 모든 행동 가능, `IWristRaisedActionRule` 교체 지점 삭제 → 확정 규칙(제한 없음, 다른 창이 열리면 자동 내림). (4) 등불 이름표 체력 4단계(76%↑/51~75%/26~50%/25%↓) + 꺼짐(쓰러짐), 설정값 기본 4. (5) STORYBOARD v1.2 맞춤: 피격 호·위협 테두리를 계기 위 UI 레이어로 그리고 HDRP는 월드 보조 색조만, 1920×1080 기준 UI 좌표·렌더 텍스처 크기, 설정값 `손목 자동 내림 시간`(기본값 결정 대기). 고친 곳: 3.4.4, 3.7.6, 3.7.9, 3.7.11, 3.10.7, DES-114·120, D-21, FR-172 추적, M2-12, M6-11, R-21~R-23. 설계 요소·작업 수 변화 없음 |
 | 0.6 | 2026-11-03 | architect | M4 제작 추가 반영(사용자 결정 2026-11-03), 참조 SRS v0.8, 상태 「승인」 유지. (1) 제작대·제작 UI: `ICraftingStationRule` 교체 지점 → 확정 규칙 `CraftingStationRules`(도구·무기·대응 장비는 제작대에서만, 기본품은 손 제작), 레시피북 `Hotkey` = 열람 + 손 제작, `Station` = 팝업(3.7.6, 3.7.10, DES-010·091). (2) 용광로: **DES-036 FurnaceRules**(연료 점수, 가공 규칙), **DES-075 FurnaceService**(가공 일정 큐) 신설. 건축물 테이블에는 「불 켜짐」만 두고, 칸·진행은 열어 본 사람에게만 구독 방식 전송, 진행은 「시작 시각 + 가공 시간」만 보내 클라이언트가 계산(3.7.2, 3.11.18, 3.10.8 신설). (3) 프레임 예산에 용광로 반영(3.12.3), 상한 설정값 `용광로 최대 수`. (4) 저장 청크 `FURN`(3.5.2, ERD). (5) 경험치 `Smelt` 잠정 발행(3.7.8). (6) 석탄 광맥: 생성 프로필에 자원 종류 추가(생성기 0.x 갱신, DES-008·043). (7) 7장 M4 9 → 13(합계 99 → 103), R-24·R-25 추가. (8) SRS v0.8 정의에 맞춤: 연료 점수 나무 2·석탄 16·광석 1개 4점, 남은 점수 저장·꺼낼 수 없음, `FURN`은 진행 경과 저장, 석탄은 생성 검증 진행 재료, 기능 건축물 목록(FR-057), 새 C 항목 C-60~C-66을 교체 지점(`IStationUseRule`, `IFurnaceTimeRule`, `ISmeltXpRecipientRule`)과 설정값으로. 설계 요소 106개 |
+| 0.7 | 2026-11-03 | architect | M1 착수 전 사용자 결정 반영(2026-11-03), 참조 SRS v0.9, 상태 「승인」 유지. (1) Unity **6000.3.27f2** 고정(D-03, M1-01). (2) 측정 계획: M1은 이 PC 1대 + 봇 7개, 다른 CPU 결정론 교차 검증·실제 8대 P8은 M6 수직 슬라이스로(3.12.4, M1-04, M1-12, M3-03, M4-09, M6-10, R-02 갱신, R-26·R-27 신설), M6 전 다른 PC 비교는 `-genhash` 결과 파일 수집으로 선택 실시(3.7.4). (3) Steam 실행 필수, 오프라인 플레이 없음, Steam 없으면 부트 안내 화면 SCR-001(3.10.1, DES-100·102, 3.7.4). (4) C-46 차단 범위 = 호스트의 모든 월드: 차단 목록을 월드 파일 `BANS` 청크에서 호스트 PC 사용자 데이터 `bans.json`으로(3.5.1, 3.5.2, ERD, 3.5.7, 3.7.6, DES-031·110). (5) C-43 오류 보고 로컬 파일만(3.1, DES-107). (6) C-48 첫 실행 언어 = Steam 언어(3.7.9, DES-093). (7) C-49 메모리 상한 확정(3.12.8). (8) C-33 해소(M1-03). (9) 입력 기본 할당 = STORYBOARD 2.4, 게임패드 아이콘 Xbox 먼저·PlayStation은 M2(C-28, 3.7.9, M1-08, M2-01). (10) M1-01에 Unity Pipeline 패키지 설치(에디터 전용 확인)·Unity Smart Merge 드라이버 등록 추가, 아키텍처 시험에 Pipeline 패키지 검사(3.4.3). 설계 요소·작업 수 변화 없음 |
 
 ---
 
@@ -106,7 +107,7 @@ flowchart LR
 | Windows 탐색기 | 월드 폴더·보고 폴더 열기 | FR-152, FR-158 |
 | 입력 장치·GPU | 입력 이벤트, 렌더링 | NFR-004, NFR-005, FR-120, FR-121 |
 
-시스템 경계 밖(만들지 않는 것): 전용 서버 프로그램, 웹 서비스, 자동 충돌 전송 서비스(C-43 미결), 음성 채팅(영구 제외).
+시스템 경계 밖(만들지 않는 것): 전용 서버 프로그램, 웹 서비스, 자동 충돌 전송 서비스(C-43 해소: 로컬 파일만, 외부 전송 경로 없음), 음성 채팅(영구 제외), Steam 없이 하는 오프라인 플레이(SRS v0.9: Steam 실행 필수).
 
 ### 3.2 구성 관점
 
@@ -440,7 +441,7 @@ flowchart TB
 
 #### 3.4.3 의존 규칙의 강제 방법
 - **컴파일 단계**: asmdef 참조 목록에 없는 어셈블리는 쓸 수 없습니다. `noEngineReferences: true`이면 `UnityEngine` 네임스페이스를 쓰는 순간 컴파일 오류가 납니다. 미리 컴파일된 DLL(Steamworks.NET 등)은 `overrideReferences: true` + 명시 목록으로만 허용합니다.
-- **아키텍처 시험(EditMode, DES-112)**: 리플렉션으로 각 어셈블리의 참조 어셈블리 이름을 읽어 3.4.2 표와 다르면 실패합니다. 예: `Game.Domain`이 `UnityEngine*`, `FishNet*`, `Steamworks*` 중 하나라도 참조하면 실패.
+- **아키텍처 시험(EditMode, DES-112)**: 리플렉션으로 각 어셈블리의 참조 어셈블리 이름을 읽어 3.4.2 표와 다르면 실패합니다. 예: `Game.Domain`이 `UnityEngine*`, `FishNet*`, `Steamworks*` 중 하나라도 참조하면 실패. v0.7: 게임 어셈블리(`Game.*`) 어느 것도 Unity Pipeline 패키지(에디터 조작 MCP용, M1-01) 어셈블리를 참조하지 않는지, 그 패키지 어셈블리가 에디터 전용(`includePlatforms: Editor`)이라 플레이어 빌드에 들어가지 않는지 검사.
 - **코드 검사 기준**: 참가자 쪽 코드에서 `WorldState`를 직접 바꾸는 경로 0건(NFR-030). `WorldState` 변경 메서드는 `Game.Application` 내부(internal)로 두고, 서버 시뮬레이션과 명령 처리기만 호출합니다.
 - **렌더링 격리 검사**: 아키텍처 시험에서 `Game.Infra.Rendering` 외 어셈블리가 `Unity.RenderPipelines.*`를 참조하면 실패합니다.
 
@@ -490,7 +491,8 @@ flowchart LR
 | 생성 데이터 | 지형 높이, 물, 자원 오브젝트 초기 배치, 등광탑 후보 자리 | 각 PC가 시드로 계산 | 저장 안 함(메모리) | 월드 로드~종료 |
 | 월드 상태(바뀐 상태) | 자원 변화, 건축물, 드롭, 작물, 등광탑, 정화 구역, 시각, 해금, 스토리, 목표, 보관함 | 호스트 | 월드 파일 | 영구 |
 | 플레이어 진행 | NFR-023 항목 전체 | 호스트 | 월드 파일 안(SteamID 키) | 영구 |
-| 월드 설정 | 이름, 시드 문자열·값, 생성기 버전, 난이도, **참가 조건(SRS v0.3)**, Steam Cloud 켬/끔, 차단 목록(C-46 기본: 월드별) | 호스트 | 월드 파일 | 영구 |
+| 월드 설정 | 이름, 시드 문자열·값, 생성기 버전, 난이도, **참가 조건(SRS v0.3)**, Steam Cloud 켬/끔 | 호스트 | 월드 파일 | 영구 |
+| 차단 목록 (v0.7) | 차단한 SteamID, 표시 이름, 차단 시각. **C-46 해소: 호스트의 모든 월드에 적용** | 호스트 PC | `bans.json`(사용자 데이터, 3.5.7) — 월드 파일에 넣지 않음 | 영구(PC별) |
 | 세션 일시 데이터 | 접속자 목록, 재접속 자리 예약, 비밀번호, 비밀번호 시도 기록, 준비 상태, 채팅, 핑 | 호스트 메모리 | 저장 안 함 | 세션 동안 |
 | 사용자 설정 | 입력 할당(장치별), 감도·시야각, 그래픽, 오디오, 접근성, 언어, 표시 옵션, 광과민성 경고 확인 여부 | 각 PC | `settings.json` | 영구(PC별) |
 | 콘텐츠 정의·설정값 | 아이템, 제작법, 드롭 표, 웨이브, 스킬 노드, 부록 C.1 수치, 생성 프로필 | 빌드에 포함 | ScriptableObject 애셋 | 빌드별 |
@@ -526,7 +528,7 @@ flowchart LR
   CROP  작물: EntityId, 종류, 위치, 생장 누적, 물 유지 종료 시각, 단계
   DROP  드롭 아이템: EntityId, 아이템, 수량, 위치, 내구도
   PROG  해금 상태, 스토리 진행(결말 여부, 공개된 단서), 월드 목표 진행, 업적 공동 조건 진행
-  BANS  차단 목록 (C-46 결정 전 기본: 월드별)
+  (BANS  v0.7에서 제외 — C-46 해소로 차단 목록은 호스트 PC의 bans.json에 저장. 청크 id는 재사용하지 않음)
   EXPL  탐험 기록 (C-53 결정 전 기본: 공유 → 월드 단위)
   PLYR  플레이어 진행 n개: SteamID64, 표시 이름, NFR-023 항목
   (모르는 청크 id는 건너뛰고 보존 — 이후 버전 호환)
@@ -551,7 +553,6 @@ erDiagram
     WORLD_FILE ||--o{ CROP : has
     WORLD_FILE ||--o{ DROP_ITEM : has
     WORLD_FILE ||--|| PROGRESSION : has
-    WORLD_FILE ||--o{ BAN_ENTRY : has
     WORLD_FILE ||--o{ PLAYER_PROGRESS : has
     PLAYER_PROGRESS ||--o{ INVENTORY_SLOT : has
     PLAYER_PROGRESS ||--o{ ACTIVE_BUFF : has
@@ -664,6 +665,7 @@ flowchart LR
 ```
 %USERPROFILE%\AppData\LocalLow\<회사>\<제품>\
   settings.json
+  bans.json                     ← 호스트의 차단 목록(모든 월드 공통, C-46). formatVersion + [{steamId, displayName, bannedAtUtc}]. 원자적 저장(임시 파일 → 교체)
   Worlds\
     <worldFolderId>\            ← 월드마다 폴더 하나 (FR-152 「폴더 열기」 대상)
       world.sav                 ← 현재 월드 파일 (이것 하나만 옮기면 이전 완료, FR-022)
@@ -782,6 +784,7 @@ FishNet Broadcast(NetworkObject에 묶이지 않는 메시지)를 기본으로 �
 | `IPerfProbe` | `Begin/End(marker)`, `Count(name, value)` | Infra.Platform | ProfilerMarker 래퍼 |
 | `IDomainEventSink` | `Publish(evt)`, `Subscribe<T>(handler)` | Application 내부 | 동기 호출 |
 | `ILocalSettingsStore` | `Load()`, `Save(settings)` | Infra.Platform | |
+| `IBanListStore` (v0.7) | `Load()`, `Add(PlayerId, name)`, `Remove(PlayerId)`, `Contains(PlayerId)` | Infra.Platform (`bans.json`) | 호스트의 모든 월드 공통(C-46) |
 
 #### 3.7.4 개발용 실행 옵션 (DES-103, DES-113, 개발 빌드에서만)
 
@@ -793,7 +796,9 @@ FishNet Broadcast(NetworkObject에 묶이지 않는 메시지)를 기본으로 �
 | `-genhash <seeds.txt> -out <report.json> [-genver <v>]` | 화면 없이 시드 목록을 생성해 요약값 보고(NFR-053 다른 PC 비교) |
 | `-genvalidate <count> -out <report.json>` | NFR-055 자동 시험(검증 조건 + 같은 PC 반복 결정론) |
 | `-bench P1|P8 [-upscale on|off]` | 측정 장면 실행과 CSV 기록(NFR-021) |
-| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). 8인 사전 부하 시험용 |
+| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). M1 대체 측정(이 PC 1대 + 봇 7개)과 8인 사전 부하 시험용. `-batchmode -nographics`로 화면 없이 실행 가능 |
+| (선택) 다른 PC 결정론 비교 | M6 전에도 할 수 있는 선택 절차: 다른 PC(Intel/AMD)에서 같은 빌드로 `-genhash seeds.txt -out <PC이름>.json`을 실행해 결과 파일을 모으고, 개발 PC에서 비교 도구(`-genhash-compare a.json b.json ...`, 개발 빌드)로 불일치 시드·부분 요약값을 보고. 정식 판정은 M6-10 |
+| Steam 없이 실행 | 출시·일반 개발 빌드는 Steam이 없으면 부트 안내 화면(SCR-001)에서 멈춤. 예외: 개발 빌드에서 `-transport tugboat`와 `-devPlayerId`를 함께 주면 Steam 초기화 없이 같은 PC 시험 가능(개발 빌드 전용) |
 | `-perflog` | 성능 CSV 기록(FR-163) |
 
 #### 3.7.5 거부 사유 코드 (NFR-003)
@@ -845,7 +850,7 @@ FishNet Broadcast(NetworkObject에 묶이지 않는 메시지)를 기본으로 �
 | `IEnemyDropRule` | C-24 | 드롭 없음 | M5 |
 | `IEndingConditionRule` | C-26 | 최종 등광탑 성공만 | M10 |
 | `ISkipTimeRule` | C-42 | 작물·물은 게임 시간만큼 진행, 버프는 실시간 기준(변화 없음) | M5 |
-| `IBanScopeRule` | C-46 | 월드별 차단 목록 | M1 |
+| ~~`IBanScopeRule`~~ → 확정 (v0.7) | C-46 **해소** | 교체 지점 아님. 차단은 호스트의 모든 월드에 적용, `IBanListStore`(포트) → `bans.json`(DES-110) | M2 |
 | `IDifficultyEditRule` | C-47 | 생성 후 변경 불가 | M3 |
 | `IMapShareRule` | C-53 | 탐험 기록 공유 | M6 |
 | `IProficiencyModel` | C-06 | M8 착수 전 결정(잠정 구현 없음, 이벤트 기록만) | M8 |
@@ -891,9 +896,9 @@ record ActionCompleted(ActionType Type, PlayerId Player, ContentId Target, int A
 
 | 주제 | 설계 | 요소 |
 |---|---|---|
-| 입력 | Unity Input System. Input Actions 애셋 하나에 제어 체계 2개(`KeyboardMouse`, `Gamepad`). 재설정은 `PerformInteractiveRebinding`, 저장은 제어 체계별 바인딩 덮어쓰기 JSON을 따로(FR-117). 같은 체계 안 충돌 검사 후 「비우기/취소」. 마지막 입력 장치 감지(`InputUser.onChange`, 제어 체계 전환)로 `InputDeviceContext` 갱신 → 안내 아이콘 교체(FR-166, NFR-002). UI Toolkit 내비게이션으로 모든 메뉴를 게임패드로 이동. v0.4: 손목 계기 올림/내림 Action `ToggleWrist` 추가(키보드·게임패드 기본 할당은 결정 대기. 동작 방식은 `WristRaiseMode` 기본 토글 / 옵션 누르는 동안, C-58 해소) | DES-092 |
+| 입력 | Unity Input System. Input Actions 애셋 하나에 제어 체계 2개(`KeyboardMouse`, `Gamepad`). 재설정은 `PerformInteractiveRebinding`, 저장은 제어 체계별 바인딩 덮어쓰기 JSON을 따로(FR-117). 같은 체계 안 충돌 검사 후 「비우기/취소」. 마지막 입력 장치 감지(`InputUser.onChange`, 제어 체계 전환)로 `InputDeviceContext` 갱신 → 안내 아이콘 교체(FR-166, NFR-002). UI Toolkit 내비게이션으로 모든 메뉴를 게임패드로 이동. **v0.7: 기본 바인딩은 STORYBOARD 2.4의 기본 할당표(키보드·마우스 + Xbox 패드)를 그대로 따름. 안내 아이콘은 Xbox 계열을 먼저(M1), PlayStation 계열은 M2(C-28 해소)** — 아이콘 묶음은 장치 계열별 데이터라 추가해도 코드 변경 없음. v0.4: 손목 계기 올림/내림 Action `ToggleWrist` 추가(키보드·게임패드 기본 할당은 결정 대기. 동작 방식은 `WristRaiseMode` 기본 토글 / 옵션 누르는 동안, C-58 해소) | DES-092 |
 | 게임패드 글자 입력 | `ITextInputService` → Steam 화면 키보드 | DES-102 |
-| 다국어 | Unity Localization 패키지 String Table(ko, en). 도메인·애플리케이션은 텍스트 키와 인자만 다루고, 문장 조립은 받는 PC의 언어로(알림도 키 + 인자로 전송). 빌드 전 검사: 모든 키가 두 언어에 있는지(누락 0건, NFR-044). 첫 실행 언어는 C-48(잠정: Steam 언어가 한국어면 한국어, 아니면 영어) | DES-093 |
+| 다국어 | Unity Localization 패키지 String Table(ko, en). 도메인·애플리케이션은 텍스트 키와 인자만 다루고, 문장 조립은 받는 PC의 언어로(알림도 키 + 인자로 전송). 빌드 전 검사: 모든 키가 두 언어에 있는지(누락 0건, NFR-044). 첫 실행 언어(C-48 해소): 사용자 설정에 언어가 없을 때 Localization 초기화 단계에서 `SteamApps.GetCurrentGameLanguage()`(Steam 언어)를 읽어 한국어면 한국어, 그 밖은 영어로 정하고 사용자 설정에 저장 | DES-093, DES-102 |
 | 사용자 입력 글자 | 채팅·월드 이름·Steam 이름은 리치 텍스트 해석 끔(UI Toolkit `enableRichText = false`), 제어 문자 제거는 호스트에서(NFR-050) | DES-034, DES-091 |
 | 글자 크기 | 루트 USS 클래스(`text-small/normal/large`)가 글자 크기 배율 변수를 바꿔 일괄 변경. **M1 UI부터** 모든 글자 크기는 배율 변수로만 지정(3.7.10) | DES-095, DES-091 |
 | 색각 보정 | 월드 화면: HDRP 사용자 지정 후처리(색 변환 행렬, DES-114). UI: 색 토큰 + 모양·아이콘 병행 규칙으로 색 없이도 구분(FR-130 수용 기준), **M1 UI부터** 적용(3.7.10) | DES-095, DES-091 |
@@ -1238,8 +1243,9 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Boot
-    Boot --> SteamMissing: Steam 미실행
-    SteamMissing --> MainMenu: 오프라인 메뉴(멀티 메뉴 막음)
+    Boot --> SteamMissing: Steam 미실행·미로그인
+    SteamMissing --> Boot: 다시 시도(안내 화면 SCR-001)
+    SteamMissing --> [*]: 종료
     Boot --> MainMenu
     MainMenu --> Hosting: 세션 열기
     MainMenu --> Connecting: 참가/다시 참가
@@ -1254,6 +1260,7 @@ stateDiagram-v2
     ShutdownCountdown --> MainMenu: 종료
     InGame --> MainMenu: 나가기 / 강퇴 / 호스트 끊김(연결 끊김 판정 시간)
 ```
+- **Steam 실행 필수(v0.7, SRS v0.9)**: 1인 플레이도 Steam이 실행·로그인된 상태에서만 합니다(1인 세션도 호스트 세션과 같은 경로). Steam이 없으면 부트에서 안내 화면(SCR-001)만 보이고 메인 메뉴로 가지 않습니다. 개발 빌드의 Tugboat 같은 PC 시험만 예외입니다(3.7.4).
 
 #### 3.10.2 플레이어 생명 상태
 
@@ -1492,7 +1499,7 @@ func PlaceInCell(key, cell, w, profile):
     return out
 ```
 
-**석탄 광맥(v0.6, FR-179)**: 생성 프로필의 지역별 자원 종류 표(`Biome(region).PickType`)에 석탄 광맥을 추가합니다(분포 후보: 모든 생성 지역, C-64). 생성 알고리즘은 바뀌지 않지만 프로필 값이 바뀌므로 생성 결과가 달라집니다. 개발 중 생성기 0.x라 버전 보존은 필요 없고(3.11.7), 골든 해시 갱신과 다중 PC 결정론 재시험을 합니다. 석탄은 생성 검증 대상(진행 재료, SRS v0.8)이므로 검증 조건(3)의 `지역별 진행 재료 최소 수량`에 석탄을 넣습니다. 나무로도 가공할 수 있어 석탄이 적어도 진행이 막히지는 않지만, 검증 기준을 밑돌면 다른 진행 재료와 같이 재생성 대상입니다.
+**석탄 광맥(v0.6, FR-179)**: 생성 프로필의 지역별 자원 종류 표(`Biome(region).PickType`)에 석탄 광맥을 추가합니다(분포 후보: 모든 생성 지역, C-64). 생성 알고리즘은 바뀌지 않지만 프로필 값이 바뀌므로 생성 결과가 달라집니다. 개발 중 생성기 0.x라 버전 보존은 필요 없고(3.11.7), 골든 해시 갱신과 결정론 재시험(이 PC Mono·IL2CPP 교차, 다른 CPU는 M6-10)을 합니다. 석탄은 생성 검증 대상(진행 재료, SRS v0.8)이므로 검증 조건(3)의 `지역별 진행 재료 최소 수량`에 석탄을 넣습니다. 나무로도 가공할 수 있어 석탄이 적어도 진행이 막히지는 않지만, 검증 기준을 밑돌면 다른 진행 재료와 같이 재생성 대상입니다.
 
 생성 시간 목표(NFR-052, 25초 이하)를 맞추는 방법: 타일·셀 단위 `Parallel.For`(6코어 12스레드 사용), 높이 1 m 간격, 침식 반복 수와 거친 격자 크기는 생성 프로필 값. 생성은 백그라운드 스레드에서 돌고 메인 스레드는 진행 표시만 갱신합니다(응답 없음 방지).
 
@@ -1811,9 +1818,11 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 #### 3.12.4 호스트 서버 처리 예산 측정 방법
 1. **표식**: 서버 처리 각 항목을 `ProfilerMarker`로 감쌉니다(`Server.Total`, `Server.Commands`, `Server.AiDecide`, `Server.AiApply`, `Server.Systems`, `Server.Replication`). 클라이언트 쪽도 `Client.Mirror`, `Client.Views`, `Client.UI`.
 2. **수집**: `ProfilerRecorder`로 표식별 프레임 시간을 읽어 1초마다 평균·p95·p99·최댓값을 계산하고, 개발용 성능 표시(FR-163)와 CSV(`-perflog`)에 남깁니다. 메인 스레드 시간, GPU 프레임 시간(`FrameTimingManager`), GC 할당량, 송수신 대역폭(FishNet 통계), RTT, 활동 생물 수, 바뀐 자원 수도 같이 기록합니다.
-3. **조건**: SRS 3.3 P8(권장 사양 8대, Steam 릴레이, `측정 기준 시드`, 자원 5,000개 변경, 활동 생물 = `동시 적 상한`, 5분). M1은 시험용 AI 60체 + `Bench` 씬.
+3. **조건**: SRS 3.3 P8(권장 사양 8대, Steam 릴레이, `측정 기준 시드`, 자원 5,000개 변경, 활동 생물 = `동시 적 상한`, 5분).
+   - **M1 (v0.7, 사용자 결정 2026-11-03)**: 이 PC 한 대에서 호스트 1 + 봇 7개(`-bot -batchmode -nographics`, Tugboat 직접 전송, 같은 PC)로 대체 측정합니다. 시험용 AI 60체 + `Bench` 씬. 판정 대상은 **호스트 서버 처리 예산(`Server.Total`)·대역폭(봇 연결별 송수신)·중도 참가 시간·메모리**이고, 호스트 FPS는 봇 프로세스가 같은 CPU를 나눠 써서 실제보다 낮게 나올 수 있으므로 참고값으로 기록합니다(봇 프로세스의 CPU 점유율을 함께 기록). Steam 릴레이 8인 접속은 이 PC + 가능한 다른 계정·PC로 기능 확인만 합니다.
+   - **M6-10**: 실제 권장 사양 PC 8대 P8로 정식 판정합니다.
 4. **판정** (C-52 확정): 기준 프리셋 「높음」 + 업스케일링 품질 모드(NVIDIA → DLSS, 그 밖 → FSR)로 측정합니다. 호스트 `Server.Total` 프레임당 평균 ≤ 3.0 ms, p99 ≤ 5.0 ms, 메인 스레드 평균 ≤ 13 ms. 호스트와 참가자 7명 모두 평균 FPS ≥ 60, 1% Low ≥ 45 FPS. 업스케일링을 끈 측정은 판정에 쓰지 않고 참고값으로만 기록합니다(GPU 여유 파악용). 측정 PC마다 GPU 종류와 쓴 업스케일러를 보고서에 적습니다.
-5. **사전 측정**: 8대를 모으기 전에 봇 클라이언트 7개(`-bot`, 같은 LAN, 직접 전송)로 서버 처리 예산만 먼저 측정합니다. 봇은 화면을 끄고 실행할 수 있어 PC 2~3대로 가능합니다.
+5. **사전 측정**: M1~M5는 봇 클라이언트 7개(`-bot`, 직접 전송)로 서버 처리 예산을 측정합니다(M1은 이 PC 한 대). 다른 PC를 쓸 수 있으면 봇을 그 PC로 옮겨 호스트 FPS의 왜곡을 줄일 수 있습니다(선택).
 6. **보고**: `docs/test/perf/M1_tech_verification.md`에 조건·결과·미달 항목·대응 제안을 남깁니다(NFR-021).
 
 #### 3.12.5 대역폭 추정 (P8, 참가자 1명이 받는 양)
@@ -1858,7 +1867,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 
 업스케일링 허용과 측정 조건은 C-52로 확정됐습니다(2026-11-02).
 
-#### 3.12.8 메모리 (NFR-048: 프로세스 10 GB, VRAM 7.5 GB 제안값)
+#### 3.12.8 메모리 (NFR-048: 프로세스 10 GB, VRAM 7.5 GB — C-49 확정, 사용자 결정 2026-11-03)
 - 시스템 메모리: 생성·게임 데이터 약 100 MB(3.5.5), Unity Terrain 36타일(512 m, 513² 높이 + 스플랫맵) 약 0.5 GB, 애셋(텍스처·메시·오디오)이 대부분. 지역별 애셋은 그 지역에 가까워질 때 읽는 방식(주소 지정 애셋 Addressables 도입)은 M9a에서 메모리 측정 후 결정합니다(지금은 넣지 않음).
 - VRAM: 지형 텍스처 배열, 식생·자원 메시, 그림자 맵, 볼류메트릭 버퍼. 프리셋별 텍스처 품질로 조절.
 
@@ -1910,7 +1919,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | DES-028 | StoryState | 엔터티 | 도메인 | 도입 표시 여부(플레이어별), 공개 단서, 결말 여부, 하늘 열림 | FR-110, FR-111, FR-113, FR-114 |
 | DES-029 | DifficultyMultipliers | 값 객체 | 도메인 | 상태 감소·적 체력·적 피해·실패 손실 배율, 프리셋(쉬움·보통·어려움), 손실 비율 100% 상한 | FR-156 |
 | DES-030 | WorldSettings | 엔터티 | 도메인 | 이름, 시드 문자열·값, 생성기 버전, 난이도, **참가 조건(초대 전용/친구 전용/공개, 기본 친구 전용, SRS v0.3)**, Cloud 켬/끔 | FR-012, FR-021, FR-144, FR-149, FR-167 |
-| DES-031 | SessionRules | 서비스(규칙) | 도메인 | 인원(접속 + 예약) 제한, 재접속 예약, 참가 경로 ↔ 참가 조건, 비밀번호 시도 제한, 차단 목록, 강퇴 권한 | FR-003, FR-004, FR-115, FR-144, FR-146~148 |
+| DES-031 | SessionRules | 서비스(규칙) | 도메인 | 인원(접속 + 예약) 제한, 재접속 예약, 참가 경로 ↔ 참가 조건, 비밀번호 시도 제한, 차단 목록(호스트의 모든 월드 공통, `IBanListStore`로 읽음, C-46), 강퇴 권한 | FR-003, FR-004, FR-115, FR-144, FR-146~148 |
 | DES-032 | MarkerRules | 서비스 + 엔터티 | 도메인 | 핑(개수 상한·유지 시간·대상 종류), 사망 위치, 탐험 기록(공유 여부 교체 지점) | FR-124~126, FR-141 |
 | DES-033 | 규칙 교체 지점 | 인터페이스 모음 | 도메인 | 미정 규칙(C 항목)별 인터페이스 + 잠정 구현, 선택값으로 교체(3.7.6) | NFR-033, FR-025, FR-027~031, FR-037, FR-041, FR-044, FR-045, FR-050, FR-052, FR-059, FR-062, FR-064, FR-067, FR-069, FR-082, FR-083~087, FR-094~096, FR-104, FR-113, FR-148, FR-156, FR-162, FR-170, FR-173, FR-177 |
 | DES-034 | TextRules | 서비스(규칙) | 도메인 | 길이 상한, 제어 문자 제거, 빈 메시지 거부, 채팅 빈도 | FR-127, NFR-050 |
@@ -1978,7 +1987,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | DES-090 | LightingAtmosphere | 컴포넌트 | 어댑터(표현) | 낮·밤, 장막 아래 잿빛 조명, 정화 구역, 완전한 어둠, 광원(횃불·랜턴)의 **상태 계산**. 적용은 `IRenderBackend`(DES-114) 호출 | FR-033~036, FR-106 |
 | DES-091 | UI (UI Toolkit) | 컴포넌트 모음 | 어댑터(표현) | 화면·HUD 프리젠터(배치는 STORYBOARD), 사유 메시지, 리치 텍스트 끔. 공통 USS 기반(글자 크기 배율·색 토큰·모양 구분 규칙, M1부터), 다크 단일 테마, 화면을 열어도 게임 진행 유지(로컬 입력 경로만 전환), 독립 레시피북(`OpenRecipeBook(source)`, v0.6: `Hotkey` = 열람 + 손 제작, `Station` = 제작대 팝업) (3.7.10, 3.10.7), 용광로 화면(v0.6, 진행 막대는 시작 시각 + 가공 시간으로 로컬 계산). v0.4: 일반 HUD(`ScreenHud`), HUD 공통 UXML 부품, `HudModeSwitcher`(재시작 없이 전환) (3.7.11) | NFR-001~003, NFR-056, NFR-057, FR-052, FR-094, FR-128, FR-171 |
 | DES-092 | InputLayer | 컴포넌트 | 어댑터(표현) | Input Actions, 장치별 재설정·저장, 장치 전환 감지, 안내 아이콘 | NFR-002, NFR-004, FR-117, FR-166 |
-| DES-093 | LocalizationLayer | 컴포넌트 | 어댑터(표현) | String Table 조회, 텍스트 키·인자 조립, 언어 전환(재시작 없음), 누락 키 검사 | NFR-034, NFR-044, FR-157 |
+| DES-093 | LocalizationLayer | 컴포넌트 | 어댑터(표현) | String Table 조회, 텍스트 키·인자 조립, 언어 전환(재시작 없음), 누락 키 검사. 첫 실행 언어 = Steam 언어(한국어면 한국어, 그 밖 영어, C-48) | NFR-034, NFR-044, FR-157 |
 | DES-094 | AudioLayer | 컴포넌트 | 어댑터(표현) | Audio Mixer 5그룹 볼륨, 중요 소리 자막 이벤트 | FR-119, FR-129 |
 | DES-095 | Accessibility | 컴포넌트 | 어댑터(표현) | 글자 크기(배율 변수 적용), 색각 보정 모드, 흔들림 배율, 섬광 제한 판단, 광과민성 경고. 후처리 적용은 DES-114 | FR-129~132, NFR-056 |
 | DES-096 | InteractionAndPlacement | 컴포넌트 | 어댑터(표현) | 조준 대상 판정·안내, 건축 미리보기(배치 가능 표시) | NFR-002, FR-057, FR-058 |
@@ -1991,20 +2000,20 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 
 | DES ID | 이름 | 종류 | 레이어 | 설명 | 관련 FR/NFR |
 |---|---|---|---|---|---|
-| DES-100 | CompositionRoot·SceneFlow | 모듈 | 인프라 | 구현 조립, 씬 전환, 호스트/참가자 구성 | NFR-031, NFR-032 |
+| DES-100 | CompositionRoot·SceneFlow | 모듈 | 인프라 | 구현 조립, 씬 전환, 호스트/참가자 구성. 부트에서 Steam 확인 → 없으면 안내 화면 SCR-001(오프라인 플레이 없음, 개발 빌드 Tugboat 예외) | NFR-006, NFR-031, NFR-032 |
 | DES-101 | TransportSelector·NetworkConfig | 모듈 | 인프라 | FishySteamworks/Tugboat 선택, 틱·시간 초과(연결 끊김 판정 시간)·MTU 설정 | FR-005, FR-006, NFR-008, NFR-031, NFR-049 |
-| DES-102 | SteamPlatformService | 모듈 | 인프라 | 초기화·App ID, 로비(참가 조건 → 로비 유형, 메타데이터 키 3.7.1 — 예약 자리 수 `kh_resv` 포함), 초대, 이름, 업적, 리치 프레즌스, 화면 키보드 | FR-001~003, FR-145, FR-164, FR-165, NFR-004, NFR-006, NFR-009 |
+| DES-102 | SteamPlatformService | 모듈 | 인프라 | 초기화·App ID, 로비(참가 조건 → 로비 유형, 메타데이터 키 3.7.1 — 예약 자리 수 `kh_resv` 포함), 초대, 이름, 업적, 리치 프레즌스, 화면 키보드, Steam 언어 조회(C-48) | FR-001~003, FR-145, FR-164, FR-165, NFR-004, NFR-006, NFR-009 |
 | DES-103 | DevTools | 도구 | 인프라 | 개발용 ID, 실행 옵션, 봇 클라이언트, 출시 빌드에서 제외 | FR-006, NFR-008 |
 | DES-104 | ConfigData·ContentRegistry | 데이터 + 모듈 | 인프라 | ScriptableObject 정의, 로더·검증, ContentId 부여, ContentHash | NFR-033, NFR-034 |
 | DES-105 | AiJobsBackend | 모듈 | 인프라 | 보행 격자, 흐름장, 조향, 공간 해시(Burst) | FR-067, NFR-011, NFR-017 |
 | DES-106 | SteamCloudSync | 모듈 | 인프라 | 월드별 원격 저장소 업로드·목록·내려받기·삭제 | FR-021, FR-151, NFR-007 |
-| DES-107 | Logging·CrashReporter | 모듈 | 인프라 | 파일 로그(회전, 민감 정보 제외), 세션 잠금 파일, 보고 압축 파일 | FR-158, NFR-042, NFR-045 |
+| DES-107 | Logging·CrashReporter | 모듈 | 인프라 | 파일 로그(회전, 민감 정보 제외), 세션 잠금 파일, 보고 압축 파일. C-43 해소: 로컬 압축 파일 생성과 폴더 열기까지만, 외부 전송 경로 없음(네트워크 호출 코드를 두지 않음) | FR-158, NFR-042, NFR-045 |
 | DES-108 | PerfTelemetry | 모듈 | 인프라 | 표식·기록기, 서버 처리 예산 감시, 개발용 성능 표시, CSV | FR-163, NFR-010~021, NFR-048 |
 | DES-109 | GraphicsService | 모듈 | 인프라(`Game.Infra.Rendering`) | HDRP 품질 단계·프리셋·세부 설정, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 | FR-120, FR-121, NFR-005, NFR-010~012, NFR-028 |
-| DES-110 | LocalSettingsStore | 모듈 | 인프라 | settings.json 읽기·쓰기(형식 버전) | NFR-047 |
+| DES-110 | LocalSettingsStore | 모듈 | 인프라 | settings.json 읽기·쓰기(형식 버전). v0.7: 호스트 차단 목록 `bans.json`(`IBanListStore` 구현, 모든 월드 공통, C-46) | NFR-047, FR-148 |
 | DES-111 | BackgroundRunner | 모듈 | 인프라 | 생성·저장 직렬화·압축을 메인 스레드 밖에서, 결과는 메인 스레드로 | NFR-018~020, NFR-052 |
-| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, 패키지 버전 고정, asmdef 규칙 시험 | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049 |
-| DES-113 | TestAndBenchHarness | 도구 | 인프라 | 골든 해시, `-genhash`(다른 PC 비교), `-genvalidate`(NFR-055), Bench 씬(P1/P8), 봇 | NFR-021, NFR-051, NFR-053, NFR-055 |
+| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, 패키지 버전 고정, asmdef 규칙 시험(Pipeline 패키지 에디터 전용 검사 포함), Unity Smart Merge 드라이버 설정(v0.7) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049 |
+| DES-113 | TestAndBenchHarness | 도구 | 인프라 | 골든 해시, `-genhash`(다른 PC 비교)·`-genhash-compare`(결과 파일 비교, v0.7), `-genvalidate`(NFR-055), Bench 씬(P1/P8), 봇 | NFR-021, NFR-051, NFR-053, NFR-055 |
 | DES-114 | RenderBackend (HDRP) | 모듈(어댑터 인터페이스 구현) | 인프라(`Game.Infra.Rendering`) | `IRenderBackend` 구현. Volume 혼합, 태양·광원·정화 마스크 쿠키 적용, 후처리(색각 보정·섬광 완화), 셰이더 전역 변수. v0.4: 위협 시 월드 보조 색조(Volume. 테두리·피격 호 본체는 UI 레이어, v0.5). 1인칭 손·손목 소품 그리기 패스는 메서드 자리만(손목 표시 (A) 선택 시 구현, v0.5). HDRP 의존 코드가 모이는 유일한 곳(3.4.4). v0.2 신설 | FR-033~036, FR-106, FR-130, FR-131, FR-172, NFR-028 |
 
 설계 요소 합계: **106개** (도메인 36, 월드 생성 8, 애플리케이션 26, 어댑터 21, 인프라 15). v0.4에서 DES-074, DES-120, v0.6에서 DES-036, DES-075 추가.
@@ -2029,8 +2038,8 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 
 | 구성 요소 | 권장 버전 | 확인 결과 | 비고 |
 |---|---|---|---|
-| Unity | **6000.3 LTS(6.3 LTS)의 최신 패치** | 6.3 LTS는 2025-12 출시, 2년 지원. 6.5(2026-06), 6.6 출시 확인. 6.7 LTS는 「2026년 말 예정」으로 보도됐으나 출시 여부 **확인 필요** | **6000.3 LTS로 고정(사용자 결정 2026-11-02)**. 올릴 때는 마일스톤 경계에서만, 골든 해시·성능 재측정으로 확인. 6.7 LTS 검토는 M6-11 재평가에서 |
-| HDRP | **17.3.x (6000.3와 함께 고정되는 버전)** | Unity 6부터 그래픽 패키지는 에디터 버전에 묶임. 17.3.0은 6000.3용으로 확인, 정확한 최신 패치 번호는 **확인 필요** | Unity가 2026 전략에서 HDRP를 **유지보수 모드**(새 기능 없음, 안정성·회귀 수정만)로 발표 → **HDRP 유지 + 렌더링 코드 격리 + M6 재평가**(사용자 결정 2026-11-02, D-20, 8장 R-09) |
+| Unity | **6000.3.27f2** (6.3 LTS, Windows IL2CPP 모듈 포함) | 6.3 LTS는 2025-12 출시, 2년 지원. 6.5(2026-06), 6.6 출시 확인. 6.7 LTS는 「2026년 말 예정」으로 보도됐으나 출시 여부 **확인 필요** | **6000.3.27f2로 고정(사용자 결정 2026-11-03, 개발 PC 설치 완료: `C:\Program Files\Unity\Hub\Editor\6000.3.27f2\Editor\Unity.exe`)**. 올릴 때는 마일스톤 경계에서만, 골든 해시·성능 재측정으로 확인. 6.7 LTS 검토는 M6-11 재평가에서 |
+| HDRP | **17.3.x (6000.3.27f2에 묶인 버전, 프로젝트 생성 때 `manifest.json`에서 확인해 기록)** | Unity 6부터 그래픽 패키지는 에디터 버전에 묶임. 17.3.0은 6000.3용으로 확인, 정확한 최신 패치 번호는 **확인 필요** | Unity가 2026 전략에서 HDRP를 **유지보수 모드**(새 기능 없음, 안정성·회귀 수정만)로 발표 → **HDRP 유지 + 렌더링 코드 격리 + M6 재평가**(사용자 결정 2026-11-02, D-20, 8장 R-09) |
 | FishNet | **4.7.4R** (최신, 10월 16일 배포) | Unity 6 지원 명시, 4.7.3R에서 6.5 대응, 4.7.4R은 6.6에서 경고 없이 컴파일 | 버전 고정, 올릴 때 회귀 시험(NFR-049) |
 | FishySteamworks | **4.1.1** (최신) | FishNet 4.x 대응. 4.7.x와의 조합은 배포 노트에 명시 없음 → **확인 필요**(M1 작업 M1-02에서 컴파일·8인 접속으로 확인) | 4.0.0부터 App ID는 Steamworks.NET 쪽에서 처리 |
 | Steamworks.NET | **2025.165.0** (Steamworks SDK 1.65, 최신) | 최소 Unity 2019.4 LTS. FishySteamworks 4.1.1과 조합은 **확인 필요** | UPM git URL + 태그로 고정. 문제 시 2025.164.1로 내림 |
@@ -2292,7 +2301,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | FR-145 | DES-102, DES-054 | 로비 필터, 예약 자리 수 표시(`kh_resv`, SRS v0.5) |
 | FR-146 | DES-031, DES-085 | 비밀번호는 저장 안 함 |
 | FR-147 | DES-031, DES-054 | |
-| FR-148 | DES-031, DES-054, DES-033 | C-46 |
+| FR-148 | DES-031, DES-054, DES-110 | C-46 해소: 호스트의 모든 월드 공통, `bans.json` |
 | FR-149 | DES-055, DES-030 | |
 | FR-150 | DES-055, DES-099 | |
 | FR-151 | DES-055, DES-099, DES-106 | |
@@ -2301,8 +2310,8 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | FR-154 | DES-017, DES-061 | |
 | FR-155 | DES-017, DES-061 | |
 | FR-156 | DES-029, DES-018, DES-033 | C-47 |
-| FR-157 | DES-093, DES-073 | |
-| FR-158 | DES-107 | |
+| FR-157 | DES-093, DES-073, DES-102 | 첫 실행 언어 = Steam 언어(C-48) |
+| FR-158 | DES-107 | 로컬 파일만(C-43) |
 | FR-159 | DES-097, DES-084, DES-120, DES-074 | 장치형 HUD: 머리 위 등불 이름표(체력 단계) |
 | FR-160 | DES-084, DES-091 | |
 | FR-161 | DES-013, DES-059 | |
@@ -2334,7 +2343,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | NFR-003 | DES-001, DES-050, DES-091 | 3.7.5 사유 코드 |
 | NFR-004 | DES-092, DES-102 | 화면 키보드 |
 | NFR-005 | DES-109, DES-108 | |
-| NFR-006 | DES-102 | |
+| NFR-006 | DES-102, DES-100 | Steam 실행 필수, 없으면 SCR-001(v0.7) |
 | NFR-007 | DES-106 | |
 | NFR-008 | DES-101, DES-103 | |
 | NFR-009 | DES-102, DES-112 | `kh_game` 필터 |
@@ -2349,7 +2358,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | NFR-018 | DES-072, DES-111, DES-108 | 3.12.6 |
 | NFR-019 | DES-055, DES-111 | |
 | NFR-020 | DES-055, DES-099, DES-111 | |
-| NFR-021 | DES-108, DES-113 | |
+| NFR-021 | DES-108, DES-113 | v0.7: M1은 이 PC 1대 + 봇 7개 대체 측정, 실제 8대 P8은 M6-10 |
 | NFR-022 | DES-055, DES-098, DES-036 | v0.6: 용광로 칸 내용·남은 연료 점수·진행 경과(`FURN`) |
 | NFR-023 | DES-002, DES-098 | |
 | NFR-024 | DES-098, DES-099 | |
@@ -2381,7 +2390,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | NFR-050 | DES-034, DES-069, DES-091 | |
 | NFR-051 | DES-113 | |
 | NFR-052 | DES-043, DES-047, DES-111 | |
-| NFR-053 | DES-040, DES-046, DES-113 | |
+| NFR-053 | DES-040, DES-046, DES-113 | v0.7: 다른 CPU 교차 검증은 M6-10(M6 전에는 `-genhash` 결과 수집으로 선택 실시) |
 | NFR-054 | DES-044, DES-046 | |
 | NFR-055 | DES-045, DES-113 | |
 | NFR-056 | DES-091, DES-095 | UI 접근성 기반(글자 크기 배율, 색 토큰, 색만으로 구분하지 않는 규칙)을 M1 첫 UI부터(3.7.10, SRS v0.5) |
@@ -2403,34 +2412,34 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 
 | 순서 | 작업 | 관련 DES | 관련 FR/NFR | 선행 작업 |
 |---|---|---|---|---|
-| M1-01 | 프로젝트 골격: `src/`에 Unity 6000.3 LTS(고정) + HDRP 프로젝트, asmdef 13개와 참조 규칙(HDRP 참조는 `Game.Infra.Rendering`만), 아키텍처 시험(렌더링 격리 검사 포함), 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, `.gitignore`·Git LFS (git init은 사용자 결정대로 Do 시작 전) | DES-100, DES-112, DES-114 | NFR-027~029, NFR-043 | — |
-| M1-02 | 네트워크 라이브러리 도입·버전 고정(FishNet 4.7.4R, FishySteamworks 4.1.1, Steamworks.NET 2025.165.0) 조합 컴파일 확인, TransportSelector, DevTools(`-transport`, `-host`, `-connect`, `-devPlayerId`), Steam 초기화·App ID 480 | DES-101, DES-102, DES-103 | FR-005, FR-006, NFR-006, NFR-008, NFR-009, NFR-031, NFR-049 | M1-01 |
-| M1-03 | 설정 데이터 기반: ConfigLoader·검증, Balance·Network 튜닝 애셋, ContentRegistry·ContentHash, IConfigProvider (결정 필요: C-33) | DES-104, DES-051 | NFR-033, NFR-034 | M1-01 |
-| M1-04 | **결정론 선행 검증**: DetMath, SeedCodec, 시험용 생성기 V0(높이 + 자원 2만 개 + 후보 자리), WorldHasher, 골든 해시 시험, `-genhash`. Intel·AMD PC 각 1대 이상 + 에디터(Mono)·IL2CPP 빌드 결과 비교 보고 | DES-040, DES-041, DES-043, DES-046, DES-047, DES-113 | NFR-053(선행), FR-169(선행) | M1-01 |
+| M1-01 | 프로젝트 골격: (1) `src/`에 **Unity 6000.3.27f2** + HDRP 프로젝트 생성(`C:\Program Files\Unity\Hub\Editor\6000.3.27f2\Editor\Unity.exe`), 스크립팅 백엔드 IL2CPP(출시·측정)·Mono(에디터), HDRP 패키지 버전을 `manifest.json`에서 확인해 기록. (2) asmdef 13개와 참조 규칙(HDRP 참조는 `Game.Infra.Rendering`만), 아키텍처 시험(렌더링 격리 검사 포함). (3) **Unity Pipeline 패키지 설치**: `unity pipeline install`(Unity CLI 1.0.0-beta.15) → 에디터 조작 MCP(`unity mcp --project-path src`) 연결 확인. 이 패키지는 에디터 전용 어셈블리인지 확인하고(아니면 사용 중지 후 보고), 게임 asmdef가 참조하지 않으며 플레이어 빌드에 들어가지 않는 것을 아키텍처 시험에 추가. (4) **Unity Smart Merge 드라이버**: 저장소 `.gitattributes`에 `*.unity`, `*.prefab`, `*.asset`, `*.mat`, `*.anim`, `*.controller`, `*.meta` 등 `merge=unityyamlmerge` 지정, 각 개발 PC의 git 설정에 `merge.unityyamlmerge.driver = "'C:/Program Files/Unity/Hub/Editor/6000.3.27f2/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"` 등록(등록 절차를 `docs/`의 개발 환경 안내에 기록), Unity 직렬화 「Force Text」·.meta 표시 설정. (5) 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, `.gitignore`·Git LFS (git init은 사용자 결정대로 Do 시작 전) | DES-100, DES-112, DES-114 | NFR-027~029, NFR-043 | — |
+| M1-02 | 네트워크 라이브러리 도입·버전 고정(FishNet 4.7.4R, FishySteamworks 4.1.1, Steamworks.NET 2025.165.0) 조합 컴파일 확인, TransportSelector, DevTools(`-transport`, `-host`, `-connect`, `-devPlayerId`), Steam 초기화·App ID 480, 부트의 Steam 확인 → 없으면 안내 화면 SCR-001(오프라인 플레이 없음, 개발 빌드 `-transport tugboat -devPlayerId`만 예외) | DES-101, DES-102, DES-103, DES-100 | FR-005, FR-006, NFR-006, NFR-008, NFR-009, NFR-031, NFR-049 | M1-01 |
+| M1-03 | 설정 데이터 기반: ConfigLoader·검증, Balance·Network 튜닝 애셋, ContentRegistry·ContentHash, IConfigProvider. 부록 C.1 설정값 후보로 시작(C-33 해소) | DES-104, DES-051 | NFR-033, NFR-034 | M1-01 |
+| M1-04 | **결정론 선행 검증**: DetMath, SeedCodec, 시험용 생성기 V0(높이 + 자원 2만 개 + 후보 자리), WorldHasher, 골든 해시 시험, `-genhash`·`-genhash-compare`. **이 PC에서** 에디터(Mono)·IL2CPP 빌드 결과 교차 비교, 같은 PC 반복 생성 일치, 골든 해시 고정까지 보고. 다른 CPU(Intel·AMD) 교차 검증은 M6-10으로 이동(다른 PC를 빌릴 수 있으면 `-genhash` 결과 파일 비교로 선택 실시) | DES-040, DES-041, DES-043, DES-046, DES-047, DES-113 | NFR-053(선행), FR-169(선행) | M1-01 |
 | M1-05 | 측정 기반: 서버·클라이언트 ProfilerMarker, PerfTelemetry(서버 처리 예산 감시, 개발용 성능 표시, CSV), Bench 씬, 기본 파일 로그(민감 정보 제외. 보관 개수·충돌 보고는 M2-10) | DES-108, DES-113, DES-107 | FR-163, NFR-021, NFR-042 | M1-01 |
 | M1-06 | 그래픽 기반: `IRenderBackend`·HdrpRenderBackend 골격, HDRP 품질 단계 4개, 프리셋 데이터, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 지정(C-52 확정). 옵션 화면은 M2-01 | DES-109, DES-114 | FR-120(데이터), FR-121(업스케일링), NFR-005, NFR-028 | M1-01 |
 | M1-07 | **8인 Steam 접속(최소)**: 로비 생성(M1은 참가 조건 「친구 전용」 고정)·검색(`kh_game` 필터)·참가·초대, 최대 인원 8, JoinHandshake(버전·ContentHash·로비 멤버·원격 SteamID), 나가기·연결 끊김 처리 | DES-054, DES-085, DES-102, DES-031, DES-072 | FR-001~005, FR-011(퇴장), NFR-009, NFR-038, NFR-039 | M1-02, M1-03 |
-| M1-08 | 1인칭 이동·달리기·스태미나(Input Actions 기본 할당: 키보드·마우스와 게임패드), PlayerAvatar(클라이언트 계산 + 호스트 검사), **UI 공통 기반 `Base.uss`(글자 크기 배율·다크 테마 색 토큰·모양 구분 규칙)와 USS 규칙 검사 시험**, 그 위에 HUD 스태미나·로비/접속 화면, UI 상태(Gameplay/Overlay)는 입력 경로만 전환 | DES-086, DES-084, DES-002, DES-003, DES-091, DES-092, DES-095 | FR-023~025, NFR-001(스태미나), NFR-056, NFR-057 | M1-07 |
+| M1-08 | 1인칭 이동·달리기·스태미나(Input Actions 기본 바인딩 = STORYBOARD 2.4 기본 할당표, 키보드·마우스 + Xbox 패드. 안내 아이콘은 Xbox 계열만, C-28), PlayerAvatar(클라이언트 계산 + 호스트 검사), **UI 공통 기반 `Base.uss`(글자 크기 배율·다크 테마 색 토큰·모양 구분 규칙)와 USS 규칙 검사 시험**, 그 위에 HUD 스태미나·로비/접속 화면, UI 상태(Gameplay/Overlay)는 입력 경로만 전환 | DES-086, DES-084, DES-002, DES-003, DES-091, DES-092, DES-095 | FR-023~025, NFR-001(스태미나), NFR-056, NFR-057 | M1-07 |
 | M1-09 | 명령·복제 기반: CommandDispatcher, RequestGuard, ServerCommandGateway, ServerWorld 틱, ReplicatedTable, ReplicationPublisher/Receiver, ClientWorldMirror | DES-050, DES-052, DES-053, DES-080~083, DES-072 | FR-007(구조), FR-008, NFR-030, NFR-040, NFR-041 | M1-07 |
 | M1-10 | **자원 2만 개 동기화**: V0 월드 로컬 생성, 시험용 타격 명령(호스트 검증), 자원 델타, 중도 참가(시드 → 생성 → 요약값 → 스냅샷 → 델타), ResourceViewStreamer, 「5,000개 변경」 상태 만드는 개발 도구 | DES-008, DES-057, DES-087, DES-089, DES-072 | FR-009, NFR-016, NFR-018 | M1-04, M1-09 |
 | M1-11 | **시험용 AI 60체 부하**: AiJobsBackend(보행 격자·흐름장·조향·공간 해시), AiScheduler(10 Hz 분산, LOD), 생물 복제(관심 범위 등급), CreatureViews(보간) | DES-105, DES-062, DES-082, DES-088, DES-019 | NFR-011, NFR-017 | M1-09 |
-| M1-12 | **M1 기술 검증 측정·보고**: 봇 사전 측정 → P8(8대, 기준 프리셋 「높음」 + 업스케일링 품질 모드로 판정, 끔은 참고), P1, 평균 FPS·1% Low(45), 대역폭, 중도 참가 시간, 메모리 → `docs/test/perf/M1_tech_verification.md`. 미달 시 3.12.9 순서로 대응안 제시 후 사용자 결정 | DES-108, DES-113 | NFR-010~018, NFR-021, NFR-048 | M1-05, M1-06, M1-08, M1-10, M1-11 |
+| M1-12 | **M1 기술 검증 측정·보고 (이 PC 1대 + 봇 7개)**: P8 대체 측정(호스트 + `-bot` 7개, 직접 전송, 기준 프리셋 「높음」 + 업스케일링 품질 모드)으로 호스트 서버 처리 예산·대역폭·중도 참가 시간·메모리(프로세스 10 GB / VRAM 7.5 GB)를 판정, 호스트 FPS·1% Low는 봇 CPU 점유와 함께 참고값으로 기록, P1(1인) 측정, Steam 릴레이 접속 기능 확인 → `docs/test/perf/M1_tech_verification.md`(측정 조건 한계 명시). 실제 8대 P8 판정과 다른 CPU 결정론은 M6-10. 미달 시 3.12.9 순서로 대응안 제시 후 사용자 결정 | DES-108, DES-113 | NFR-010~018, NFR-021, NFR-048 | M1-05, M1-06, M1-08, M1-10, M1-11 |
 | M1-13 | M1 완료 빌드, M1 FR 시험, 아키텍처 시험 | DES-112, DES-113 | NFR-043 | M1-01~M1-12 |
 
 ### M2 생존 상태 + M1에서 옮긴 부가 기능
 
 | 순서 | 작업 | 관련 DES | 관련 FR/NFR | 선행 작업 |
 |---|---|---|---|---|
-| M2-01 | (M1에서 이동) 다국어·입력·옵션 기반: Localization(ko/en, 누락 키 검사, M1 화면 텍스트 키 연결), Input System 2개 체계·장치 전환·안내 아이콘, SettingsService·LocalSettingsStore, 감도·반전·시야각·언어·그래픽 옵션 화면 (결정 필요: C-28 남은 부분, C-48) | DES-093, DES-092, DES-073, DES-110, DES-109 | FR-118, FR-120, FR-121, FR-157, FR-166, NFR-004, NFR-044, NFR-047 | M1-13 |
+| M2-01 | (M1에서 이동) 다국어·입력·옵션 기반: Localization(ko/en, 누락 키 검사, M1 화면 텍스트 키 연결), Input System 2개 체계·장치 전환·안내 아이콘, SettingsService·LocalSettingsStore, 감도·반전·시야각·언어·그래픽 옵션 화면, 첫 실행 언어 = Steam 언어(C-48), PlayStation 계열 안내 아이콘 추가(C-28) | DES-093, DES-092, DES-073, DES-110, DES-109 | FR-118, FR-120, FR-121, FR-157, FR-166, NFR-004, NFR-044, NFR-047 | M1-13 |
 | M2-02 | 체력·허기·갈증·피로도, SurvivalSystems 틱, 0 불이익(IZeroVitalPenaltyRule), 본인 상태 복제, HUD (결정 필요: C-04, C-37 남은 부분. 피로도 감소 속도 0으로 시험) | DES-003, DES-060, DES-033, DES-091 | FR-026~029, NFR-001 | M1-13 |
 | M2-03 | 쓰러짐·소생·사망·부활(IDeathRule, IDownedDamageRule) (결정 필요: C-05 남은 부분, C-45) | DES-004, DES-060, DES-033 | FR-030, FR-031, FR-142, FR-143 | M2-02 |
 | M2-04 | 낮/밤: WorldClock·시각 동기화, 장막 아래 조명·밤 가시 거리, 시작 정화 구역 햇빛 선적용(HDRP 적용은 DES-114) | DES-014, DES-090, DES-114, DES-015 | FR-033, FR-034, FR-035(시작 구역) | M1-13 |
 | M2-05 | 입력 재설정(장치별 저장, 충돌 경고, 기본값 복원), 오디오 설정 | DES-092, DES-094, DES-073 | FR-117, FR-119 | M2-01 |
 | M2-06 | 동료 상태 목록 | DES-091, DES-084 | FR-160 | M2-03 |
-| M2-07 | (M1에서 이동) 세션 관리: 참가 조건 선택(초대 전용/친구 전용/공개, 세션 열기 때 선택, 세션 중 변경 → 로비 유형·프레즌스 갱신. 월드 파일 저장은 M3-12), 공개 세션 목록(접속 인원·예약 자리 수 `7/8 · 예약 1` 표시. M2에서는 `kh_resv` 필드와 표시만, 값은 M3-12 전까지 0), 비밀번호(저장 안 함, 시도 제한), 강퇴, 차단(월드별 잠정) (결정 필요: C-46) | DES-031, DES-054, DES-102, DES-030 | FR-003, FR-144~148 | M1-13 |
+| M2-07 | (M1에서 이동) 세션 관리: 참가 조건 선택(초대 전용/친구 전용/공개, 세션 열기 때 선택, 세션 중 변경 → 로비 유형·프레즌스 갱신. 월드 파일 저장은 M3-12), 공개 세션 목록(접속 인원·예약 자리 수 `7/8 · 예약 1` 표시. M2에서는 `kh_resv` 필드와 표시만, 값은 M3-12 전까지 0), 비밀번호(저장 안 함, 시도 제한), 강퇴, 차단(호스트의 모든 월드 공통, `bans.json`·`IBanListStore`, C-46 해소) | DES-031, DES-054, DES-102, DES-030 | FR-003, FR-144~148 | M1-13 |
 | M2-08 | (M1에서 이동) 텍스트 채팅·알림 기록, 텍스트 검증 | DES-069, DES-034, DES-091 | FR-127, FR-128, NFR-042, NFR-050 | M2-01 |
 | M2-09 | (M1에서 이동) 광과민성 경고, 동료 이름표, 리치 프레즌스(메뉴·인원) | DES-095, DES-097, DES-070, DES-102 | FR-132, FR-159, FR-165 | M2-01, M2-07 |
-| M2-10 | (M1에서 이동) 로그 보관 개수·회전, 충돌 보고 (결정 필요: C-43) | DES-107 | FR-158, NFR-045, NFR-042 | M1-13 |
+| M2-10 | (M1에서 이동) 로그 보관 개수·회전, 충돌 보고(로컬 압축 파일 생성·폴더 열기까지만, 외부 전송 없음, C-43 해소) | DES-107 | FR-158, NFR-045, NFR-042 | M1-13 |
 | M2-11 | (v0.4) HUD 뷰모델과 일반 HUD: HudViewModel, 공통 UXML 부품(상태 막대·위협·버프 시간·목표 자리·동료 항목), ScreenHud, HUD 표시 방식 옵션과 재시작 없는 전환(M2-02·M2-06의 HUD 표시를 이 구조로 정리) | DES-074, DES-091, DES-073, DES-110 | FR-171, NFR-001, FR-160 | M2-01, M2-02, M2-06 |
 | M2-12 | (v0.4, v0.5 축소) 장치형 HUD: 계기 화면 렌더 텍스처, 표시 면 `IWristSurface` 인터페이스와 **(B) 화면 공간 기울인 평면 구현만**(UI Toolkit 사용자 지정 메시, 올림/내림은 위치·각도 보간), `ToggleWrist` Action(기본 할당 결정 대기)과 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능·다른 창이 열리면 자동 내림, 십자선 스태미나 호, 머리 위 등불 이름표(체력 4단계 + 꺼짐, 설정값), 피격 호·위협 테두리(UI 레이어, 계기 위)와 월드 보조 색조 골격(M2는 저체력·쓰러짐, 지역 위협은 M9a~c에서 연결)과 섬광 제한 적용, `손목 자동 내림 시간` 설정값, 손목 글자 가독성 확인(글자 크기 「크게」 포함). **제외**: (A)용 손 애니메이션·1인칭 손 그리기 패스·손목 소품 아트(M6-11 결정 뒤) | DES-120, DES-092, DES-114, DES-095, DES-097 | FR-172, FR-171, FR-159, NFR-001, FR-131 | M2-11, M2-09 |
 | M2-13 | M2 완료 빌드·시험 | DES-113 | NFR-043 | M2-01~M2-12 |
@@ -2441,7 +2450,7 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 |---|---|---|---|---|
 | M3-01 | 고정 큰 배치 데이터(지역 순서·경계·시작 지점·근원 자리), 생성기 0.x(잿빛 숲 내부 + 다른 지역 자리표시 지형), 경계 보정 (결정 필요: C-13, C-56 위치) | DES-042, DES-043 | FR-102(틀), FR-168(잿빛 숲) | M1-04 |
 | M3-02 | GeneratorRegistry·생성 프로필·골든 해시, GenerationValidator(잿빛 숲 조건), IGenRetryPolicy, `-genvalidate` (결정 필요: C-55, C-57) | DES-044, DES-045, DES-113 | FR-169, FR-170, NFR-054, NFR-055 | M3-01 |
-| M3-03 | TerrainViewBuilder(36타일·물), 생성 진행 표시, 생성 시간 측정, 다중 PC 결정론 시험(시드 100 × PC 3대) | DES-089, DES-111, DES-113 | FR-168, NFR-052, NFR-053 | M3-01 |
+| M3-03 | TerrainViewBuilder(36타일·물), 생성 진행 표시, 생성 시간 측정, 결정론 시험(이 PC에서 Mono·IL2CPP 교차 + 시드 100 반복 일치, 골든 해시 갱신. 다른 PC 3대 교차는 M6-10, 그 전에는 `-genhash` 결과 수집으로 선택 실시) | DES-089, DES-111, DES-113 | FR-168, NFR-052, NFR-053 | M3-01 |
 | M3-04 | 아이템 기반: 콘텐츠 정의(아이템·자원 종류·드롭 표), 인벤토리, 줍기·버리기·이동·나누기·가득 참·손에 들기 (결정 필요: C-10) | DES-005, DES-006, DES-007, DES-009, DES-057 | FR-038~042 | M1-09 |
 | M3-05 | 채집: E 채집, 도구 타격, 쓰러짐·파괴 애니메이션, 드롭, 동시 채집 (결정 필요: C-08, C-09) | DES-008, DES-009, DES-057, DES-087, DES-033 | FR-044, FR-045, FR-047~051 | M3-04 |
 | M3-06 | 섭취 | DES-057, DES-060 | FR-032 | M3-04 |
@@ -2467,7 +2476,7 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 | M4-06 | 보관함(열람 구독, 동시 사용) (결정 필요: C-50) | DES-005, DES-059 | FR-133, FR-134 | M4-04 |
 | M4-07 | 침대·수면·부활 지점 | DES-013, DES-059 | FR-140, FR-161 | M4-04 |
 | M4-08 | 횃불 광원 | DES-090, DES-006 | FR-036 | M4-01 |
-| M4-09 | (v0.6) 석탄 광맥: 생성 프로필 자원 표에 추가(분포 후보 모든 생성 지역, M4 시점에는 잿빛 숲만 생성됨, C-64), 생성기 0.x 갱신·골든 해시 갱신·다중 PC 결정론 재시험, 검증 조건(진행 재료)에 석탄 추가, 채광 규칙·드롭 표 (결정 필요: C-64) | DES-043, DES-008, DES-045, DES-113 | FR-179, NFR-053, NFR-055 | M3-15 |
+| M4-09 | (v0.6) 석탄 광맥: 생성 프로필 자원 표에 추가(분포 후보 모든 생성 지역, M4 시점에는 잿빛 숲만 생성됨, C-64), 생성기 0.x 갱신·골든 해시 갱신·결정론 재시험(이 PC Mono·IL2CPP 교차, 다른 PC는 M6-10), 검증 조건(진행 재료)에 석탄 추가, 채광 규칙·드롭 표 (결정 필요: C-64) | DES-043, DES-008, DES-045, DES-113 | FR-179, NFR-053, NFR-055 | M3-15 |
 | M4-10 | (v0.6) 용광로: 배치형 건축물(제작 위치 후보 제작대, C-61), 연료·재료·결과물 칸(태우지 않은 연료는 꺼낼 수 있음), 여러 플레이어 공유(보관함과 같은 동시 조작 규칙), 열람 구독 `FurnaceView`, 건축물 테이블 `lit`, 철거 시 칸 내용 드롭, 용광로 화면 | DES-036, DES-075, DES-012, DES-091 | FR-175 | M4-04, M4-06 |
 | M4-11 | (v0.6) 연료·가공 진행: 정수 연료 점수(나무 2·석탄 16·광석 1개 4점, 4점 미만이면 1개씩 태움, 남은 점수 저장·꺼낼 수 없음), 「남은 연료: 광석 n개분」 0.5개분 표시용 값, 완료 시각 최소 힙, 떠나도 진행·결과물 가득/연료 없음 정지, 「시작 시각 + 가공 시간」 전송·클라이언트 진행 막대, 저장 `FURN` 청크(진행 경과), 월드 닫힘·밤 건너뛰기 때 진행 안 함(`IFurnaceTimeRule`), 경험치(가공, `ISmeltXpRecipientRule` 잠정 = 재료 투입자), 용광로 다수 부하 측정(`용광로 최대 수`) (결정 필요: C-65, C-66) | DES-036, DES-075, DES-098, DES-025, DES-108 | FR-176, FR-177, NFR-046 | M4-10, M4-09 |
 | M4-12 | (v0.6) 숯 만들기: 나무 → 숯 작업 종류, 숯 연료 점수(후보 16, C-62)·비율(후보 나무 4개 + 연료 4점 → 숯 1개, C-63)·시간 설정값 (결정 필요: C-62, C-63) | DES-036, DES-075 | FR-178 | M4-11 |
@@ -2500,7 +2509,7 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 | M6-07 | 지도(탐험 기록) (결정 필요: C-53) | DES-097, DES-032, DES-071 | FR-124 | M6-01 |
 | M6-08 | 자막·글자 크기, 방어전·보스 섬광 재검증 | DES-095, DES-094 | FR-129, FR-131 | M2-01 |
 | M6-09 | 업적 구조, 리치 프레즌스(지역·방어전) (결정 필요: C-30, C-44) | DES-070, DES-102 | FR-164(구조), FR-165 | M6-04 |
-| M6-10 | **수직 슬라이스**: 8인 플레이 시험, 2차 성능 측정(기준 프리셋 「높음」 + 업스케일링 품질 모드, 평균 60·1% Low 45), 보고서 | DES-113, DES-108 | NFR-051, NFR-021 | M6-01~M6-09 |
+| M6-10 | **수직 슬라이스**: 8인 플레이 시험, **실제 권장 사양 PC 8대 P8 정식 측정**(Steam 릴레이, 기준 프리셋 「높음」 + 업스케일링 품질 모드, 평균 60·1% Low 45 — M1 대체 측정 결과와 비교), **다른 CPU 결정론 교차 검증**(Intel·AMD 포함 PC 3대 이상, 시드 100, 생성기 0.x 현재 버전 + M1~M5 골든 해시 시드, NFR-053), 보고서. 불일치가 나오면 원인(연산·순서·런타임)을 찾아 고친 뒤 M3~M6 생성 결과 재확인(R-26) | DES-113, DES-108, DES-046 | NFR-051, NFR-021, NFR-053, NFR-011~014 | M6-01~M6-09 |
 | M6-11 | **렌더 파이프라인 재평가 체크포인트** (사용자 결정 2026-11-02): M6-10 측정 결과(특히 GPU 시간), 실사 품질, Unity 렌더 파이프라인 정책·HDRP 지원 상황, 6.7 LTS 상태, 격리 상태(아키텍처 시험 결과, `Game.Infra.Rendering` 코드량, HDRP 전용 애셋 수)를 정리해 「HDRP 유지 / URP 전환 / Unity 버전 상승」 선택지와 영향(작업량·일정)을 보고 → 사용자 결정. **함께 결정(v0.5 추가)**: 손목 계기를 (B) 화면 공간 평면에서 (A) 3D 손목 소품으로 올릴지 — 수직 슬라이스 플레이 감상, 가독성(R-22), (A) 추가 작업량(손 애니메이션·1인칭 손 그리기 패스·소품 아트)과 URP 전환 시 영향(R-23)을 함께 보고. (A)로 정하면 그 작업을 다음 마일스톤에 추가 | DES-114, DES-109, DES-108, DES-112, DES-120 | NFR-028, NFR-011, NFR-012, FR-172 | M6-10 |
 
 ### M7 농사·요리
@@ -2578,8 +2587,8 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 
 | ID | 위험 | 영향 | 가능성 | 대응 (설계 반영) |
 |---|---|---|---|---|
-| R-01 | 호스트가 HDRP 렌더링 + 서버 처리(AI 60, 자원 2만, 7명 검증)를 16.7 ms 안에 못 함 | NFR-011 미달, 범위 축소 | 높음 | 틱 분리·판단 분산·Burst 흐름장·물리 미사용 AI·관심 범위(3.11.9~11), 서버 처리 예산 3 ms 감시(3.12.3~4), M1-12 조기 측정, 대응 순서 3.12.9. 판정 조건 확정(C-52: 「높음」 + 업스케일링 품질 모드, 1% Low 45) |
-| R-02 | 생성 결정론 실패(PC·런타임·엔진 버전 차이) | 참가 불가, 동기화 붕괴 | 중간 | 정수·고정소수점·카운터 난수·고정 순서 합치기(3.11.1), 순수 C# 어셈블리, 골든 해시, Mono·IL2CPP 교차 비교, 다중 PC `-genhash`(M1-04, M3-03), 참가 시 요약값 비교로 조기 차단 |
+| R-01 | 호스트가 HDRP 렌더링 + 서버 처리(AI 60, 자원 2만, 7명 검증)를 16.7 ms 안에 못 함 | NFR-011 미달, 범위 축소 | 높음 | 틱 분리·판단 분산·Burst 흐름장·물리 미사용 AI·관심 범위(3.11.9~11), 서버 처리 예산 3 ms 감시(3.12.3~4), M1-12 조기 측정(v0.7: 이 PC + 봇 7개 대체 측정, R-27), M6-10 실제 8대 정식 측정, 대응 순서 3.12.9. 판정 조건 확정(C-52: 「높음」 + 업스케일링 품질 모드, 1% Low 45) |
+| R-02 | 생성 결정론 실패(PC·런타임·엔진 버전 차이) | 참가 불가, 동기화 붕괴 | 중간 | 정수·고정소수점·카운터 난수·고정 순서 합치기(3.11.1), 순수 C# 어셈블리, 골든 해시, Mono·IL2CPP 교차 비교(M1-04, M3-03, 이 PC), 다른 CPU 교차는 M6-10(v0.7, 그 전은 `-genhash` 결과 수집으로 선택), 참가 시 요약값 비교로 조기 차단 |
 | R-03 | 정수 기반 생성의 지형 품질 저하·생성 시간 25초 초과 | 실사 목표 약화, NFR-018 위험 | 중간 | 큰 배치·근원은 손으로 제작, 경계 보정, M3-15 사용자 화면 확인, `Parallel.For`, 필요 시 같은 정수 알고리즘을 Burst로 옮김(골든 해시로 동일성 확인). 최후 수단: 로비 메타데이터의 시드로 참가 수락 전 미리 생성 시작 |
 | R-04 | FishySteamworks 4.1.1 ↔ FishNet 4.7.4R ↔ Steamworks.NET 2025.165.0 조합 비호환 | M1 지연 | 중간 | M1-02에서 먼저 컴파일·접속 확인. 실패 시 Steamworks.NET 2025.164.1로 내리거나 FishySteamworks 포크 수정. 전송은 `INetServer` 뒤에 있어 게임 로직 영향 없음 |
 | R-05 | 호스트 화면도 루프백 복제를 거치는 비용 | 호스트 프레임 손실 | 낮음~중간 | M1-12 측정. 크면 호스트 전용 직접 읽기 구현 추가(DES-072 내부) |
@@ -2602,5 +2611,7 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-22 | (v0.4 신규) 손목 계기 글자의 가독성: 기울인 평면은 원근으로 글자가 눌려 보이고, 렌더 텍스처 확대·축소로 흐릴 수 있음. 글자 크기 「크게」(FR-129)에서 잘림 가능. (A) 3D 소품으로 올리면 업스케일링·시야각·모션 블러 영향이 더해짐 | 정보 전달 실패, 접근성 저하 | **낮음~중간**(v0.5: (B)는 UI 오버레이라 업스케일링 영향 없음) | 텍스처 해상도·최소 글자 크기·기울임 각도를 설정값으로, 올렸을 때 기울임을 줄여 정면에 가깝게, M2-12에서 확인. 해결이 안 되면 사용자가 일반 HUD로 바꿀 수 있음(FR-171). (A) 전환 시 M6-11에서 다시 평가 |
 | R-23 | (v0.4 신규) 위협 시 월드 보조 색조(와 (A)를 고를 경우의 1인칭 손 그리기 패스)가 HDRP 전용 기능에 기대 URP 전환 시 다시 만들어야 함 | 전환 비용 증가 | 낮음 | v0.5: (B) 기본이라 손 그리기 패스는 아직 만들지 않음. 위협 테두리·피격 호 본체도 UI 레이어로 옮겨(STORYBOARD v1.2 레이어 순서) HDRP 코드는 보조 색조뿐. DES-114에만 두는 격리 원칙 유지(3.4.4). M6-11에서 렌더 파이프라인과 손목 방식을 함께 결정 |
 | R-24 | (v0.6 신규) M4 작업량 증가(9 → 13개): 제작대·레시피북 진입, 석탄 광맥 생성 변경, 용광로·연료·가공·숯이 기존 도구 등급·내구도·건축·보관함·침대·횃불과 한 마일스톤에 몰림. 미정 항목도 7개(C-60~C-66) | M4 일정 지연 | **중간~높음** | 용광로는 보관함(M4-06)의 동시 조작 규칙·구독 방식을 재사용하고, 가공 규칙은 순수 C#(DES-036)로 먼저 EditMode 시험. C-60~C-66은 모두 잠정 구현·설정값으로 진행해 결정 대기로 멈추지 않게 함. 지연 시 숯(M4-12)을 M5로 미루는 안을 사용자에게 제시(나무로도 가공 가능해 진행이 막히지 않음) |
-| R-25 | (v0.6 신규) 석탄 광맥 추가로 생성 결과가 바뀌어 M3에서 만든 시험 월드·골든 해시·측정 기준 시드 결과가 달라짐. 검증 조건에 석탄이 들어가 재생성 빈도가 늘 수 있음 | 시험 재작업, 생성 시간 증가 | 낮음~중간 | 생성기 0.x라 버전 보존 불필요(3.11.7). M4-09에서 골든 해시·다중 PC 결정론·`-genvalidate`(재생성 비율, NFR-052 생성 시간) 다시 측정. 석탄 최소 수량은 `지역별 진행 재료 최소 수량` 설정값으로 조정 |
+| R-26 | (v0.7 신규) 다른 CPU(Intel·AMD) 결정론 교차 검증이 M6-10으로 늦어짐. M6에서 불일치가 나오면 M3~M6에 만든 생성 규칙·시험 월드·골든 해시·측정 기준 시드를 다시 만들어야 하고, 그동안의 다중 접속 시험(같은 PC Tugboat)은 이 문제를 드러내지 못함 | M3~M6 생성 결과 재작업, M6 지연 | 중간 | 결정론 규칙(3.11.1)을 코드 리뷰 체크 항목으로 두고(실수·`Dictionary` 순회·문화권 API 금지 검사), 이 PC의 Mono·IL2CPP 교차를 매 생성 변경마다 실시. 다른 PC를 빌릴 수 있으면 M3-15·M4-13 시점에 `-genhash` 결과 파일 비교를 선택 실시해 조기 발견. 불일치 시 부분 요약값(지역·타일)으로 위치를 좁힘. 생성기는 0.x라 고쳐도 버전 보존 부담은 없음 |
+| R-27 | (v0.7 신규) M1 성능 측정을 이 PC 1대 + 봇 7개로 하면 봇 프로세스가 호스트와 CPU·메모리를 나눠 써 호스트 FPS가 실제보다 나쁘게, Steam 릴레이 지연·실제 참가자 렌더링 부하는 반영되지 않음. M1 결과가 M6 실측과 크게 다를 수 있음 | M1 판단 오류(과대·과소 대응), M6에서 성능 문제 늦게 발견 | 중간 | M1 판정은 서버 처리 예산·대역폭·중도 참가·메모리처럼 봇 영향이 작은 지표로 하고 FPS는 참고값. 봇은 `-batchmode -nographics`, 봇 CPU 점유를 기록. 다른 PC를 쓸 수 있으면 봇을 옮겨 재측정(선택). M6-10 실측 결과로 다시 판단 |
+| R-25 | (v0.6 신규) 석탄 광맥 추가로 생성 결과가 바뀌어 M3에서 만든 시험 월드·골든 해시·측정 기준 시드 결과가 달라짐. 검증 조건에 석탄이 들어가 재생성 빈도가 늘 수 있음 | 시험 재작업, 생성 시간 증가 | 낮음~중간 | 생성기 0.x라 버전 보존 불필요(3.11.7). M4-09에서 골든 해시·결정론(이 PC)·`-genvalidate`(재생성 비율, NFR-052 생성 시간) 다시 측정. 석탄 최소 수량은 `지역별 진행 재료 최소 수량` 설정값으로 조정 |
 
