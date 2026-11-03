@@ -12,7 +12,7 @@
 | 사이클 | 단계 | 상태 (대기/진행 중/완료/승인됨) | 날짜 | 산출물 |
 |---|---|---|---|---|
 | 1 | Plan | 승인됨 | 2026-11-03 | docs/SRS.md v0.8 (승인), docs/SDD.md v0.6 (승인), docs/DESIGN_PROPOSAL.md, docs/wireframes/ (hud, defense, cooking), docs/STORYBOARD.md v1.3 |
-| 1 | Do | 대기 | - | - |
+| 1 | Do | 진행 중 (M1 묶음 1 완료: M1-01~M1-03, 결정 대기) | 2026-11-03 | src/ (HDRP 17.3.0 프로젝트, asmdef 13+, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0, Boot 씬·SCR-001, 설정 데이터), docs/dev/SMART_MERGE_SETUP.md |
 | 1 | Check | 대기 | - | - |
 | 1 | Act | 대기 | - | - |
 
@@ -75,6 +75,8 @@
 | 2026-11-03 | Unity 에디터 조작 MCP 도구: Unity 공식 CLI 채택 (커뮤니티 MCP for Unity 대신). winget으로 Unity.CLI 1.0.0-beta.15 설치, 프로젝트 루트 .mcp.json에 `unity-editor-mcp`(unity mcp --project-path src) 등록. .mcp.json은 PC 전용 절대 경로가 있어 git 제외(.gitignore) | 사용자 결정 |
 | 2026-11-03 | M1 착수 전 결정: 기본 키 할당표 채택(WASD/Shift, E 상호작용, 마우스 왼쪽 공격, 1~8·휠 퀵슬롯, Tab 인벤토리, C 레시피북, B 건축, M 지도, K 스킬, Q 손목 계기, 가운데 버튼 핑, Enter 채팅, Esc 메뉴 / Xbox 패드 대응 배치) · C-28 Xbox 계열 아이콘 먼저, PlayStation은 M2 · Steam 실행 필수(오프라인 1인 플레이 없음) · C-48 첫 실행 언어는 Steam 언어(한국어면 한국어, 그 밖 영어) · C-46 차단은 호스트의 모든 월드 · C-43 오류 보고는 로컬 파일만 · C-33 설정값 후보로 시작해 테스트로 조정 · C-49 메모리 상한 프로세스 10GB / VRAM 7.5GB | 사용자 결정 (모두 총괄 추천안) |
 | 2026-11-03 | M1 개발 환경: Unity 6000.3 LTS 최신 패치 새로 설치 · 측정은 이 PC + 봇 7개로 먼저, 다른 CPU(Intel/AMD) 결정론 검증과 8대 실측은 M6 수직 슬라이스에서 · Unity CLI 충돌 보고·사용 신호 끔(UNITY_NO_CRASH_REPORT, UNITY_NO_CLI_INVOKED_TELEMETRY) | 사용자 결정 |
+| 2026-11-03 | M1 묶음 1 후속: Unity Pipeline 패키지 허용 + 안전장치(ENABLE_RUNTIME_PIPELINE* 기호 사용 금지, Game.* 참조 금지, 출시 빌드에 런타임 서버 미포함을 자동 시험) · Smart Merge는 실제 Unity 파일로 한 번 검증 후 유지/변경 결정 · Unity 생성 파일(.vsconfig, DefaultPrefabObjects.asset, UnityDefaultRuntimeTheme.tss)은 커밋 · 결정 반영 후 커밋·push | 사용자 결정 (모두 총괄 추천안) |
+| 2026-11-03 | 후속 결과: com.unity.pipeline 0.9.1-exp.1 재설치 + 안전장치(Attributes만 예외, ENABLE_RUNTIME_PIPELINE* 기호 금지 시험, 출시 빌드 산출물 검사 BuildArtifactInspector, 출시 IL2CPP 빌드에서 Pipeline 어셈블리 0건 확인) · Smart Merge 드라이버는 실제 Boot.unity로도 실패(확장자 없는 임시 파일 원인 확정) → 저장소 로컬 드라이버 제거, git mergetool 방식(unityyamlmerge)으로 등록, 첫 실제 충돌 때 확인 | 사용자 결정에 따른 조치 |
 | 2026-11-03 | Unity 프로젝트 위치는 src/ 유지 (SDD D-01). .gitignore의 루트 기준 Unity 규칙 21줄을 /src/ 기준으로 수정, 샘플 경로로 제외·커밋·LFS 동작 확인 | 사용자 결정 (A안) |
 | 2026-11-03 | 용광로: 채집한 광석은 용광로에서 가공, 연료와 광석을 넣어야 함. 연료 나무 2개 = 광석 1개, 석탄 1개 = 광석 4개. 석탄은 석탄 광맥 채광과 숯(나무를 구워 만듦) 둘 다. 가공은 시간이 걸리고 플레이어가 자리를 떠나도 연료가 있는 동안 계속(호스트 계산) | 사용자 결정 |
 | 2026-11-02 | 디자인 확인: I-01 환경 위협은 상태 칩+버프 남은 시간(누적 게이지 없음), I-03 공개 방 목록에 예약 자리 표시(예: 7/8, 예약 1), I-04 접근성 기반(글자 배율·색 토큰·모양 구분)을 M1 UI부터 적용, I-07 메뉴를 열어도 게임은 멈추지 않음, I-12 다크 단일 테마 | 사용자 결정 |
@@ -113,6 +115,10 @@
 | 결정론 생성 실패 시 동기화 전체 붕괴 | architect | 치명적 | 정수·Q16.16 고정소수점만 사용, float·Burst 금지, 골든 해시·교차 PC 시험 |
 | 클라이언트 권위 이동: 속도 한도 안의 위치 조작은 막지 못함 | architect | 협동 전용이라 영향 낮음 | Check 단계 보안 점검 대상 |
 | HUD 기본이 장치형(손목 계기, 3D 소품·애니메이션·월드 공간 UI) + 일반 HUD 옵션 두 벌 | 총괄 (DESIGN_PROPOSAL D-02 단점) | M2 일정 증가, 월드 공간 UI 구현 위험(SDD R-18), 8인 동료 체력은 등불 밝기 단계로만 구분 | 일반 HUD(A) 부품을 장치형이 재사용, 접근성 옵션으로 일반 HUD 제공 |
+| Unity Pipeline 패키지(com.unity.pipeline 0.9.1-exp.1)가 에디터 전용이 아님 | developer | 런타임 서버가 빌드에 들어갈 위험 | 해소: 허용 + 안전장치(기호 금지 시험, 출시 빌드 산출물 검사). MCP 실제 연결은 사용자가 GUI 에디터에서 확인 |
+| Smart Merge 드라이버가 확장자 없는 임시 파일 때문에 실패(실제 Boot.unity로 확인) | developer | 씬·프리팹 자동 병합 불가 | git mergetool 방식으로 변경(미시험), 첫 실제 충돌 때 확인. SDD M1-01 (4) 수정 필요 |
+| FishNet 4.7.4R은 com.unity.modules.physics2d 내장 모듈이 있어야 컴파일됨 | developer | 모듈 제거 시 빌드 실패 | manifest에 유지, SDD D-03에 기록 |
+| SCR-001(Steam 미실행) 실제 화면 미확인 (Steam 실행 중이라 단위 시험만) | developer | UI 표시 문제 늦게 발견 | 사용자가 에디터 GUI에서 Steam 끄고 확인 |
 | 다른 CPU(Intel·AMD) 결정론 확인이 M6로 늦어짐 → 불일치 시 M3~M6 생성 규칙·시험 월드·골든 해시 재작업 (SDD R-26) | architect, requirements-analyst | 중간 | 결정론 규칙을 코드 리뷰 체크 항목으로, 생성 규칙 변경 시 Mono/IL2CPP 교차 비교, 다른 PC를 빌릴 수 있으면 M3-15·M4-13에 -genhash 비교 |
 | M1 봇 7개가 같은 PC에서 돌아 호스트 FPS가 실제보다 나쁘게 나오고 Steam 릴레이 지연이 빠짐 (SDD R-27) | architect | 중간 | M1은 서버 처리 예산·대역폭·중도 참가·메모리로 판정, 호스트 FPS는 참고값, 최종 판정은 M6-10 실측 |
 | 기본 키 할당 충돌: 패드 채팅 버튼 미지정(보기 버튼이 인벤토리와 겹침), 핑 LT+RB와 퀵슬롯 RB 조합 처리, LB/RB 문맥별 사용 | ui-ux-designer | 낮음 (채팅 M2, 핑 M5) | M2 착수 전 결정 |
@@ -141,6 +147,7 @@
 | 1 (Plan 완료: SRS v0.5 / SDD v0.3 / STORYBOARD v1.0) | 170 | 57 | - | - | - | - |
 | 1 (SRS v0.6 / SDD v0.4 / STORYBOARD v1.1) | 172 | 57 | - | - | - | - |
 | 1 (SRS v0.8 / SDD v0.6 / STORYBOARD v1.3) | 179 | 57 | - | - | - | - |
+| 1 (Do M1 묶음 1) | 179 | 57 | EditMode 157 + PlayMode 5 (개발자 단위·아키텍처 시험) | 100% (162/162) | 0 | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
