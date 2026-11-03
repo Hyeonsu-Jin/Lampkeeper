@@ -4,9 +4,9 @@
 
 | 항목 | 내용 |
 |---|---|
-| 문서 버전 | 0.7 |
-| 작성일 | 2026-11-02 (최종 수정 2026-11-02) |
-| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영) |
+| 문서 버전 | 0.8 |
+| 작성일 | 2026-11-02 (최종 수정 2026-11-03) |
+| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8은 M1 구현 묶음 1 결과의 사실 반영으로 승인 상태 유지) |
 | 작성 | architect (기획 에이전트, 설계 담당) |
 | 준거 표준 | IEEE Std 1016-2009 (설계 관점·설계 뷰 구조), ISO/IEC/IEEE 12207 (아키텍처 정의·설계 정의 프로세스) |
 | 범위 | SRS v0.9의 FR 179개, NFR 57개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
@@ -51,6 +51,7 @@
 | 0.5 | 2026-11-02 | architect | 손목 계기 사용자 결정 반영, 참조 SRS v0.7, 상태 「승인」 유지. (1) `IWristSurface` 기본 구현 = **(B) 화면 공간 기울인 평면**(UI Toolkit 사용자 지정 메시, HDRP 무관). (A) 3D 손목 소품은 교체 지점만 남기고 구현 작업에서 제외, M6 수직 슬라이스에서 (A) 전환 여부 사용자 결정(M6-11에 추가). M2-12에서 손 애니메이션·1인칭 손 그리기 패스·소품 아트 제외. (2) C-58 해소: `WristRaiseMode` 기본 토글, 옵션 누르는 동안. (3) C-59 해소: 올린 동안 모든 행동 가능, `IWristRaisedActionRule` 교체 지점 삭제 → 확정 규칙(제한 없음, 다른 창이 열리면 자동 내림). (4) 등불 이름표 체력 4단계(76%↑/51~75%/26~50%/25%↓) + 꺼짐(쓰러짐), 설정값 기본 4. (5) STORYBOARD v1.2 맞춤: 피격 호·위협 테두리를 계기 위 UI 레이어로 그리고 HDRP는 월드 보조 색조만, 1920×1080 기준 UI 좌표·렌더 텍스처 크기, 설정값 `손목 자동 내림 시간`(기본값 결정 대기). 고친 곳: 3.4.4, 3.7.6, 3.7.9, 3.7.11, 3.10.7, DES-114·120, D-21, FR-172 추적, M2-12, M6-11, R-21~R-23. 설계 요소·작업 수 변화 없음 |
 | 0.6 | 2026-11-03 | architect | M4 제작 추가 반영(사용자 결정 2026-11-03), 참조 SRS v0.8, 상태 「승인」 유지. (1) 제작대·제작 UI: `ICraftingStationRule` 교체 지점 → 확정 규칙 `CraftingStationRules`(도구·무기·대응 장비는 제작대에서만, 기본품은 손 제작), 레시피북 `Hotkey` = 열람 + 손 제작, `Station` = 팝업(3.7.6, 3.7.10, DES-010·091). (2) 용광로: **DES-036 FurnaceRules**(연료 점수, 가공 규칙), **DES-075 FurnaceService**(가공 일정 큐) 신설. 건축물 테이블에는 「불 켜짐」만 두고, 칸·진행은 열어 본 사람에게만 구독 방식 전송, 진행은 「시작 시각 + 가공 시간」만 보내 클라이언트가 계산(3.7.2, 3.11.18, 3.10.8 신설). (3) 프레임 예산에 용광로 반영(3.12.3), 상한 설정값 `용광로 최대 수`. (4) 저장 청크 `FURN`(3.5.2, ERD). (5) 경험치 `Smelt` 잠정 발행(3.7.8). (6) 석탄 광맥: 생성 프로필에 자원 종류 추가(생성기 0.x 갱신, DES-008·043). (7) 7장 M4 9 → 13(합계 99 → 103), R-24·R-25 추가. (8) SRS v0.8 정의에 맞춤: 연료 점수 나무 2·석탄 16·광석 1개 4점, 남은 점수 저장·꺼낼 수 없음, `FURN`은 진행 경과 저장, 석탄은 생성 검증 진행 재료, 기능 건축물 목록(FR-057), 새 C 항목 C-60~C-66을 교체 지점(`IStationUseRule`, `IFurnaceTimeRule`, `ISmeltXpRecipientRule`)과 설정값으로. 설계 요소 106개 |
 | 0.7 | 2026-11-03 | architect | M1 착수 전 사용자 결정 반영(2026-11-03), 참조 SRS v0.9, 상태 「승인」 유지. (1) Unity **6000.3.27f2** 고정(D-03, M1-01). (2) 측정 계획: M1은 이 PC 1대 + 봇 7개, 다른 CPU 결정론 교차 검증·실제 8대 P8은 M6 수직 슬라이스로(3.12.4, M1-04, M1-12, M3-03, M4-09, M6-10, R-02 갱신, R-26·R-27 신설), M6 전 다른 PC 비교는 `-genhash` 결과 파일 수집으로 선택 실시(3.7.4). (3) Steam 실행 필수, 오프라인 플레이 없음, Steam 없으면 부트 안내 화면 SCR-001(3.10.1, DES-100·102, 3.7.4). (4) C-46 차단 범위 = 호스트의 모든 월드: 차단 목록을 월드 파일 `BANS` 청크에서 호스트 PC 사용자 데이터 `bans.json`으로(3.5.1, 3.5.2, ERD, 3.5.7, 3.7.6, DES-031·110). (5) C-43 오류 보고 로컬 파일만(3.1, DES-107). (6) C-48 첫 실행 언어 = Steam 언어(3.7.9, DES-093). (7) C-49 메모리 상한 확정(3.12.8). (8) C-33 해소(M1-03). (9) 입력 기본 할당 = STORYBOARD 2.4, 게임패드 아이콘 Xbox 먼저·PlayStation은 M2(C-28, 3.7.9, M1-08, M2-01). (10) M1-01에 Unity Pipeline 패키지 설치(에디터 전용 확인)·Unity Smart Merge 드라이버 등록 추가, 아키텍처 시험에 Pipeline 패키지 검사(3.4.3). 설계 요소·작업 수 변화 없음 |
+| 0.8 | 2026-11-03 | architect | M1 구현 묶음 1(M1-01~M1-03) 결과의 사실 반영, 참조 SRS v0.9 그대로, 상태 「승인」 유지. 설계 방향·의존 규칙 변경 없음. (1) D-03 실제 고정 버전 기록: HDRP 17.3.0, Input System 1.20.1, Test Framework 1.6.0, Burst 1.8.31, Collections 2.7.1, Mathematics 1.3.3, Localization 1.5.8, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0(git URL 고정) 조합 컴파일 확인, 내장 모듈 `com.unity.modules.physics2d` 필수(FishNet 4.7.4R 컴파일 조건), FishNet·FishySteamworks는 `Assets/ThirdParty/` 아래 자체 asmdef. (2) Unity Pipeline 패키지 `com.unity.pipeline` 0.9.1-exp.1 허용(사용자 결정 2026-11-03): v0.7의 「에디터 전용」 전제가 사실과 달라(에디터 전용 아님) 안전장치 3가지로 바꿈 — `ENABLE_RUNTIME_PIPELINE*` 기호 금지, `Game.*`의 Pipeline 참조 금지, 출시 빌드 산출물 검사(`BuildArtifactInspector`)로 Pipeline 런타임 어셈블리 0건 확인(속성 정의 `Unity.Pipeline.Attributes`만 허용). 실제 출시 IL2CPP 빌드에서 0건 확인(3.4.3, D-03, DES-112). (3) 3.4.2 asmdef 표를 실제와 같게: `Game.Infra.AiJobs`의 `Unity.Jobs` 참조 삭제(Unity 6 엔진 내장), 실제 어셈블리 이름(`FishNet.Runtime`, `com.rlabrecque.steamworks.net`) 표기, `Game.Editor`(에디터 전용)와 시험 어셈블리 5개를 행으로 추가, 3.4.1 규칙 3에 FishySteamworks 참조 위치 추가, 3.8.2 폴더 구조 맞춤. (4) Smart Merge: `.gitattributes` 병합 드라이버 방식이 실패해(UnityYAMLMerge가 git의 확장자 없는 임시 파일을 처리 못 함, Boot.unity로 확인) 저장소 로컬 `git mergetool` 방식으로 바꿈(M1-01, DES-112, R-28 신설). (5) 개발 실행 방식(사용자 결정 2026-11-03): 에디터를 열어 둔 채 Unity CLI로 컴파일·시험, batchmode 에디터 실행 금지, IL2CPP 빌드가 필요한 작업은 에디터를 닫는 시점을 명시(D-22 신설, 7장 공통 규칙, M1-04·M1-05·M1-12·M1-13, 3.7.4, 3.12.4, R-29 신설). 설계 요소·작업 수 변화 없음 |
 
 ---
 
@@ -414,7 +415,7 @@ flowchart TB
 규칙
 1. 화살표 방향(바깥 → 안쪽)으로만 참조합니다. 안쪽은 바깥 타입을 모르고, 필요한 기능은 포트(인터페이스)로 요구합니다.
 2. `Game.Domain`, `Game.WorldGen`, `Game.Application`, `Game.Adapters.Persistence`는 **`noEngineReferences: true`** 로 UnityEngine 참조를 막습니다. 이 네 어셈블리는 순수 C#이며 FishNet·Steamworks.NET도 참조하지 않습니다.
-3. FishNet은 `Game.Adapters.Net`, `Game.Infra.Transport`, `Game.Bootstrap`만, Steamworks.NET은 `Game.Infra.Steam`, `Game.Infra.Transport`(FishySteamworks 설정), `Game.Bootstrap`만 참조합니다.
+3. FishNet(`FishNet.Runtime`)은 `Game.Adapters.Net`, `Game.Infra.Transport`, `Game.Bootstrap`만, FishySteamworks는 `Game.Infra.Transport`, `Game.Bootstrap`만, Steamworks.NET(`com.rlabrecque.steamworks.net`)은 `Game.Infra.Steam`, `Game.Bootstrap`만 참조합니다(v0.8: 실제 구성에 맞춤. `Game.Infra.Transport`는 FishySteamworks를 거쳐 Steam 전송을 설정하므로 Steamworks.NET을 직접 참조하지 않음). 시험 어셈블리는 시험 대상에 필요한 범위에서 예외입니다(3.4.2).
 4. 어댑터끼리는 서로 참조하지 않습니다(Net ↔ Presentation 금지). 둘 사이 데이터는 애플리케이션의 `ClientWorldMirror`(DES-072)와 포트를 거칩니다.
 5. 인프라 어셈블리끼리도 참조하지 않습니다. 연결은 `Game.Bootstrap`이 합니다. 예외: `Game.Infra.Transport` → `Game.Adapters.Net`(전송 선택기가 NetworkManager 구성 요소를 설정해야 하므로), `Game.Infra.Rendering` → `Game.Adapters.Presentation`(표현 어댑터가 정의한 `IRenderBackend`를 구현하므로).
 6. 모든 게임 코드는 asmdef 안에 둡니다. `Assembly-CSharp`(기본 어셈블리)에는 코드를 두지 않습니다.
@@ -422,26 +423,40 @@ flowchart TB
 
 #### 3.4.2 asmdef 목록
 
+v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-112)이 이 표와 실제 참조를 비교하므로, asmdef 참조를 바꿀 때는 이 표를 먼저 고칩니다. 참조 이름은 실제 어셈블리 이름(`FishNet.Runtime`, `FishySteamworks`, `com.rlabrecque.steamworks.net`)으로 적습니다. 게임 런타임 어셈블리는 아래 13개(`Game.Domain` ~ `Game.Bootstrap`)이고, 경로는 `Assets/_Game/Code/` 아래(3.8.2)입니다.
+
 | asmdef | 레이어 | 참조 허용 | noEngineReferences | 비고 |
 |---|---|---|---|---|
 | `Game.Domain` | 도메인 | (없음) | true | 엔터티, 값 객체, 규칙, 도메인 이벤트, 규칙 교체 지점 인터페이스 |
 | `Game.WorldGen` | 도메인(생성 규칙) | `Game.Domain` | true | 결정론 수학, 생성기(버전별 폴더), 검증, 요약값. `allowUnsafeCode: false` |
 | `Game.Application` | 애플리케이션 | `Game.Domain`, `Game.WorldGen` | true | 유스케이스, 명령 처리, 서버 시뮬레이션, 복제 모델, 포트 |
 | `Game.Adapters.Persistence` | 어댑터 | `Game.Application`, `Game.Domain` | true | 월드 파일 코덱·저장소(System.IO). 경로는 생성자로 받음 |
-| `Game.Adapters.Net` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, FishNet | false | 메시지·직렬화, 게이트웨이, 복제 송수신, 플레이어 NetworkObject |
-| `Game.Adapters.Presentation` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, Unity.InputSystem, Unity.Localization, UI Toolkit (**HDRP 참조 금지**) | false | 뷰, UI 프리젠터, 입력, 조명 상태 계산, 오디오. 렌더링 적용은 `IRenderBackend`(이 어셈블리에 정의) 호출로만 |
-| `Game.Infra.Steam` | 인프라 | `Game.Application`, `Game.Domain`, Steamworks.NET | false | `IPlatformServices`, `ICloudSync` 구현 |
-| `Game.Infra.Transport` | 인프라 | `Game.Adapters.Net`, `Game.Application`, FishNet, FishySteamworks | false | 전송 선택(Steam/Tugboat), 네트워크 설정 적용 |
-| `Game.Infra.AiJobs` | 인프라 | `Game.Application`, `Game.Domain`, Unity.Burst, Unity.Collections, Unity.Mathematics, Unity.Jobs | false | `IAiNavigationBackend` 구현(흐름장, 이동, 공간 해시) |
+| `Game.Adapters.Net` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, `FishNet.Runtime` | false | 메시지·직렬화, 게이트웨이, 복제 송수신, 플레이어 NetworkObject |
+| `Game.Adapters.Presentation` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, `Unity.InputSystem`, `Unity.Localization`. UI Toolkit은 엔진 내장 모듈이라 별도 참조 없음 (**HDRP 참조 금지**) | false | 뷰, UI 프리젠터, 입력, 조명 상태 계산, 오디오. 렌더링 적용은 `IRenderBackend`(이 어셈블리에 정의) 호출로만 |
+| `Game.Infra.Steam` | 인프라 | `Game.Application`, `Game.Domain`, `com.rlabrecque.steamworks.net` | false | `IPlatformServices`, `ICloudSync` 구현 |
+| `Game.Infra.Transport` | 인프라 | `Game.Adapters.Net`, `Game.Application`, `FishNet.Runtime`, `FishySteamworks` | false | 전송 선택(Steam/Tugboat), 네트워크 설정 적용 |
+| `Game.Infra.AiJobs` | 인프라 | `Game.Application`, `Game.Domain`, `Unity.Burst`, `Unity.Collections`, `Unity.Mathematics` | false | `IAiNavigationBackend` 구현(흐름장, 이동, 공간 해시). v0.8: `Unity.Jobs` 참조 삭제(Unity 6에서 Job System은 엔진 내장이라 별도 어셈블리 참조가 필요 없음) |
 | `Game.Infra.Config` | 인프라 | `Game.Application`, `Game.Domain`, `Game.WorldGen` | false | ScriptableObject 정의와 로더 |
 | `Game.Infra.Platform` | 인프라 | `Game.Application`, `Game.Domain` | false | 로그, 충돌 보고, 성능 측정, 사용자 설정 저장, 백그라운드 작업 |
-| `Game.Infra.Rendering` | 인프라 | `Game.Adapters.Presentation`, `Game.Application`, `Game.Domain`, HDRP Runtime, Core RP Runtime | false | **렌더 파이프라인 의존 코드 전부**: Volume 제어, 조명·태양 쿠키·광원 적용, 후처리(색각 보정·노출), 업스케일링, 셰이더 전역 변수 연결, 그래픽 프리셋·품질 단계 (DES-109, DES-114) |
-| `Game.Bootstrap` | 인프라(조립) | 위 전부 | false | 컴포지션 루트, 씬 흐름, 개발 도구 |
-| `Game.Tests.*` | 시험 | 대상 어셈블리 + NUnit | 대상에 맞춤 | EditMode: Domain/Application/WorldGen/Architecture. PlayMode: 통합 |
+| `Game.Infra.Rendering` | 인프라 | `Game.Adapters.Presentation`, `Game.Application`, `Game.Domain`, `Unity.RenderPipelines.HighDefinition.Runtime`, `Unity.RenderPipelines.Core.Runtime` | false | **렌더 파이프라인 의존 코드 전부**: Volume 제어, 조명·태양 쿠키·광원 적용, 후처리(색각 보정·노출), 업스케일링, 셰이더 전역 변수 연결, 그래픽 프리셋·품질 단계 (DES-109, DES-114) |
+| `Game.Bootstrap` | 인프라(조립) | 위 게임 어셈블리 12개 전부, `FishNet.Runtime`, `com.rlabrecque.steamworks.net`, `FishySteamworks`(필요 시 `Unity.InputSystem`, `Unity.Localization`). HDRP 어셈블리는 직접 참조 금지(규칙 7) | false | 컴포지션 루트, 씬 흐름, 개발 도구 |
+| `Game.Editor` | 에디터 도구 (v0.8) | `Game.Domain`, `Game.Application`, `Game.Adapters.Presentation`, `Game.Infra.Config`, `Game.Bootstrap` | false | **`includePlatforms: Editor`**(플레이어 빌드 제외). 빌드 명령 `BuildCommands`, 출시 빌드 산출물 검사 `BuildArtifactInspector`(3.4.3), 프로젝트 설정 `ProjectConfigurator`, 씬·애셋 생성 스크립트(`BootSceneBuilder`, `DataAssetBuilder`). 게임 어셈블리는 이 어셈블리를 참조하지 않음. 경로 `Assets/_Game/Code/Editor/` |
+| `Game.Tests.Domain` | 시험(EditMode) | `Game.Domain` + Test Runner·NUnit | false | 도메인 규칙 시험. 경로 `Assets/Tests/EditMode/Domain/` |
+| `Game.Tests.Application` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.WorldGen` + Test Runner·NUnit | false | 유스케이스·명령·복제 모델 시험. 경로 `Assets/Tests/EditMode/Application/` |
+| `Game.Tests.Infrastructure` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.Infra.Config`, `Game.Adapters.Presentation`, `Game.Infra.Transport`, `Game.Infra.Steam`, `Game.Bootstrap`, `Game.Editor`, `FishNet.Runtime` + Test Runner·NUnit | false | 설정 로더·전송 선택·Steam 확인·부트·빌드 도구 시험. 경로 `Assets/Tests/EditMode/Infrastructure/` |
+| `Game.Tests.Architecture` | 시험(EditMode) | Test Runner·NUnit만(리플렉션·asmdef 파일 읽기로 검사) | false | 이 표와 실제 참조 비교, 의존 방향, 렌더링 격리, Pipeline 패키지 격리(3.4.3), 프로젝트 설정 검사(DES-112). 경로 `Assets/Tests/EditMode/Architecture/` |
+| `Game.Tests.Integration` | 시험(PlayMode) | `Game.Application`, `Game.Infra.Transport`, `FishNet.Runtime`, `FishySteamworks` + Test Runner·NUnit | false | 루프백 호스트 + 클라이언트 통합 시험. 경로 `Assets/Tests/PlayMode/Integration/` |
+
+- 시험 어셈블리는 모두 `defineConstraints: UNITY_INCLUDE_TESTS`, `overrideReferences: true` + `nunit.framework.dll`이고, EditMode 시험은 `includePlatforms: Editor`입니다. 아직 만들지 않은 계획 시험 어셈블리는 `Game.Tests.WorldGen`(골든 해시·결정론, M1-04)과 `Game.Tests.Persistence`(월드 파일 코덱, M3-08)이며, 만들 때 이 표에 행을 먼저 추가합니다.
+- 타사 어셈블리(게임 코드 아님, 아키텍처 시험의 게임 어셈블리 검사 대상 아님): FishNet은 `Assets/ThirdParty/FishNet/` 아래 자체 asmdef(`FishNet.Runtime`, `GameKit.Dependencies`, `Synapse`, `Unity.FishNet.CodeGen`, `MonoFN.Cecil`), FishySteamworks는 `Assets/ThirdParty/FishySteamworks/FishySteamworks.asmdef`, Steamworks.NET은 UPM 패키지(`com.rlabrecque.steamworks.net`).
 
 #### 3.4.3 의존 규칙의 강제 방법
 - **컴파일 단계**: asmdef 참조 목록에 없는 어셈블리는 쓸 수 없습니다. `noEngineReferences: true`이면 `UnityEngine` 네임스페이스를 쓰는 순간 컴파일 오류가 납니다. 미리 컴파일된 DLL(Steamworks.NET 등)은 `overrideReferences: true` + 명시 목록으로만 허용합니다.
-- **아키텍처 시험(EditMode, DES-112)**: 리플렉션으로 각 어셈블리의 참조 어셈블리 이름을 읽어 3.4.2 표와 다르면 실패합니다. 예: `Game.Domain`이 `UnityEngine*`, `FishNet*`, `Steamworks*` 중 하나라도 참조하면 실패. v0.7: 게임 어셈블리(`Game.*`) 어느 것도 Unity Pipeline 패키지(에디터 조작 MCP용, M1-01) 어셈블리를 참조하지 않는지, 그 패키지 어셈블리가 에디터 전용(`includePlatforms: Editor`)이라 플레이어 빌드에 들어가지 않는지 검사.
+- **아키텍처 시험(EditMode, DES-112)**: 리플렉션으로 각 어셈블리의 참조 어셈블리 이름을 읽어 3.4.2 표와 다르면 실패합니다. 예: `Game.Domain`이 `UnityEngine*`, `FishNet*`, `Steamworks*` 중 하나라도 참조하면 실패. `Game.Editor`와 `Game.Tests.*`가 플레이어 어셈블리 목록에 없는지도 검사합니다.
+- **Unity Pipeline 패키지 격리 (v0.8 갱신, 사용자 결정 2026-11-03)**: `com.unity.pipeline` 0.9.1-exp.1(Unity CLI·에디터 조작 MCP가 열린 에디터와 통신하는 패키지, D-03)은 v0.7에서 전제한 것과 달리 **에디터 전용이 아닙니다.** 그래서 다음 세 겹으로 막습니다.
+  1. **런타임 기호 금지**: 모든 빌드 대상의 Scripting Define Symbols와 프로젝트 파일에 `ENABLE_RUNTIME_PIPELINE*` 기호가 없어야 합니다(아키텍처 시험). 패키지 어셈블리는 `includePlatforms: Editor`이거나 이 기호가 있어야만 플레이어에 들어가도록 되어 있는지도 검사합니다(패키지 버전을 올리면 다시 확인).
+  2. **참조 금지**: `Game.*` 어셈블리는 `Unity.Pipeline*` 어셈블리를 하나도 참조하지 않습니다(아키텍처 시험). 플레이어 어셈블리 목록에 들어가도 되는 Pipeline 어셈블리는 런타임 기능이 없는 속성 정의 `Unity.Pipeline.Attributes`뿐입니다.
+  3. **출시 빌드 산출물 검사**: `Game.Editor`의 `BuildCommands`가 빌드 직후 `BuildArtifactInspector`로 데이터 폴더(Managed 폴더, IL2CPP `global-metadata.dat`)를 훑어 `Unity.Pipeline.Attributes` 외 Pipeline 어셈블리(`Unity.Pipeline`, `Unity.Pipeline.IlInterpreter` 등)가 있으면 빌드를 실패로 처리합니다. 실제 출시 IL2CPP 빌드에서 0건 확인(2026-11-03).
 - **코드 검사 기준**: 참가자 쪽 코드에서 `WorldState`를 직접 바꾸는 경로 0건(NFR-030). `WorldState` 변경 메서드는 `Game.Application` 내부(internal)로 두고, 서버 시뮬레이션과 명령 처리기만 호출합니다.
 - **렌더링 격리 검사**: 아키텍처 시험에서 `Game.Infra.Rendering` 외 어셈블리가 `Unity.RenderPipelines.*`를 참조하면 실패합니다.
 
@@ -796,7 +811,7 @@ FishNet Broadcast(NetworkObject에 묶이지 않는 메시지)를 기본으로 �
 | `-genhash <seeds.txt> -out <report.json> [-genver <v>]` | 화면 없이 시드 목록을 생성해 요약값 보고(NFR-053 다른 PC 비교) |
 | `-genvalidate <count> -out <report.json>` | NFR-055 자동 시험(검증 조건 + 같은 PC 반복 결정론) |
 | `-bench P1|P8 [-upscale on|off]` | 측정 장면 실행과 CSV 기록(NFR-021) |
-| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). M1 대체 측정(이 PC 1대 + 봇 7개)과 8인 사전 부하 시험용. `-batchmode -nographics`로 화면 없이 실행 가능 |
+| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). M1 대체 측정(이 PC 1대 + 봇 7개)과 8인 사전 부하 시험용. `-batchmode -nographics`로 화면 없이 실행 가능(v0.8: 빌드한 플레이어의 batchmode라 에디터 프로젝트 잠금과 무관. 금지 대상은 에디터의 batchmode 실행뿐, D-22) |
 | (선택) 다른 PC 결정론 비교 | M6 전에도 할 수 있는 선택 절차: 다른 PC(Intel/AMD)에서 같은 빌드로 `-genhash seeds.txt -out <PC이름>.json`을 실행해 결과 파일을 모으고, 개발 PC에서 비교 도구(`-genhash-compare a.json b.json ...`, 개발 빌드)로 불일치 시드·부분 요약값을 보고. 정식 판정은 M6-10 |
 | Steam 없이 실행 | 출시·일반 개발 빌드는 Steam이 없으면 부트 안내 화면(SCR-001)에서 멈춤. 예외: 개발 빌드에서 `-transport tugboat`와 `-devPlayerId`를 함께 주면 Steam 초기화 없이 같은 PC 시험 가능(개발 빌드 전용) |
 | `-perflog` | 성능 CSV 기록(FR-163) |
@@ -970,9 +985,9 @@ flowchart LR
 ├─ .claude/
 ├─ docs/                                  SRS, SDD, 디자인, 테스트 문서, 측정 보고서(docs/test/perf/)
 ├─ .gitignore                             src/Library, src/Temp, src/Logs, src/UserSettings, src/Builds, *.csproj, *.sln
-├─ .gitattributes                         Git LFS: *.fbx *.png *.tga *.psd *.wav *.exr *.asset(대용량 지형 데이터) 등
-└─ src/                                   ← Unity 프로젝트 루트 (Unity 6000.3 LTS)
-   ├─ Packages/manifest.json              패키지·버전 고정 (NFR-049)
+├─ .gitattributes                         Git LFS: *.fbx *.png *.tga *.psd *.wav *.exr *.asset(대용량 지형 데이터) 등. YAML 애셋의 `merge=unityyamlmerge` 지정은 남아 있으나 드라이버를 git 설정에 등록하지 않아 git 기본 병합으로 동작하고, 충돌 시 `git mergetool`로 UnityYAMLMerge 실행(M1-01 (4))
+└─ src/                                   ← Unity 프로젝트 루트 (Unity 6000.3.27f2)
+   ├─ Packages/manifest.json              패키지·버전 고정 (NFR-049, D-03)
    ├─ ProjectSettings/
    └─ Assets/
       ├─ _Game/
@@ -1013,7 +1028,8 @@ flowchart LR
       │  │  │  ├─ Config/                 Game.Infra.Config.asmdef (ScriptableObject 클래스, 로더)
       │  │  │  ├─ Platform/               Game.Infra.Platform.asmdef (Logging/, Crash/, Telemetry/, Settings/, Tasks/)
       │  │  │  └─ Rendering/              Game.Infra.Rendering.asmdef (HdrpRenderBackend, Graphics/, Upscaling/, PostProcess/) — HDRP 의존 코드는 여기만
-      │  │  └─ Bootstrap/                 Game.Bootstrap.asmdef (CompositionRoot, SceneFlow, DevTools/)
+      │  │  ├─ Bootstrap/                 Game.Bootstrap.asmdef (CompositionRoot, SceneFlow, DevTools/)
+      │  │  └─ Editor/                    Game.Editor.asmdef (에디터 전용: BuildCommands, BuildArtifactInspector, ProjectConfigurator, 씬·애셋 생성 스크립트)
       │  ├─ Data/                         ScriptableObject 애셋 (코드 아님)
       │  │  ├─ Balance/                   부록 C.1 설정값 묶음
       │  │  ├─ Content/                   Items/, Resources/, Recipes/, Buildings/, Creatures/, Waves/, Crops/, Cooking/, Buffs/, Skills/, Objectives/, Achievements/
@@ -1026,10 +1042,12 @@ flowchart LR
       │  ├─ Scenes/                       Boot, MainMenu, World, Bench
       │  ├─ UI/                           UXML, USS (화면 배치는 ui-ux-designer 결과를 따름)
       │  └─ Settings/                     HDRP 애셋(품질 단계별), Volume 프로필, Input Actions
-      ├─ ThirdParty/                      FishySteamworks(unitypackage 가져오기), 필요 시 FishNet
+      ├─ ThirdParty/
+      │  ├─ FishNet/                      FishNet 4.7.4R (자체 asmdef: FishNet.Runtime, GameKit.Dependencies, Synapse, Unity.FishNet.CodeGen, MonoFN.Cecil)
+      │  └─ FishySteamworks/              FishySteamworks 4.1.1 (FishySteamworks.asmdef)
       └─ Tests/
-         ├─ EditMode/                     Game.Tests.Domain, Game.Tests.Application, Game.Tests.WorldGen(골든 해시), Game.Tests.Persistence, Game.Tests.Architecture
-         └─ PlayMode/                     Game.Tests.Integration (루프백 호스트+클라이언트)
+         ├─ EditMode/                     Domain/(Game.Tests.Domain), Application/(Game.Tests.Application), Infrastructure/(Game.Tests.Infrastructure), Architecture/(Game.Tests.Architecture). 계획: WorldGen/(Game.Tests.WorldGen, 골든 해시, M1-04), Persistence/(Game.Tests.Persistence, M3-08)
+         └─ PlayMode/                     Integration/(Game.Tests.Integration, 루프백 호스트+클라이언트)
 ```
 
 #### 3.8.3 이름 규칙
@@ -1819,7 +1837,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 1. **표식**: 서버 처리 각 항목을 `ProfilerMarker`로 감쌉니다(`Server.Total`, `Server.Commands`, `Server.AiDecide`, `Server.AiApply`, `Server.Systems`, `Server.Replication`). 클라이언트 쪽도 `Client.Mirror`, `Client.Views`, `Client.UI`.
 2. **수집**: `ProfilerRecorder`로 표식별 프레임 시간을 읽어 1초마다 평균·p95·p99·최댓값을 계산하고, 개발용 성능 표시(FR-163)와 CSV(`-perflog`)에 남깁니다. 메인 스레드 시간, GPU 프레임 시간(`FrameTimingManager`), GC 할당량, 송수신 대역폭(FishNet 통계), RTT, 활동 생물 수, 바뀐 자원 수도 같이 기록합니다.
 3. **조건**: SRS 3.3 P8(권장 사양 8대, Steam 릴레이, `측정 기준 시드`, 자원 5,000개 변경, 활동 생물 = `동시 적 상한`, 5분).
-   - **M1 (v0.7, 사용자 결정 2026-11-03)**: 이 PC 한 대에서 호스트 1 + 봇 7개(`-bot -batchmode -nographics`, Tugboat 직접 전송, 같은 PC)로 대체 측정합니다. 시험용 AI 60체 + `Bench` 씬. 판정 대상은 **호스트 서버 처리 예산(`Server.Total`)·대역폭(봇 연결별 송수신)·중도 참가 시간·메모리**이고, 호스트 FPS는 봇 프로세스가 같은 CPU를 나눠 써서 실제보다 낮게 나올 수 있으므로 참고값으로 기록합니다(봇 프로세스의 CPU 점유율을 함께 기록). Steam 릴레이 8인 접속은 이 PC + 가능한 다른 계정·PC로 기능 확인만 합니다.
+   - **M1 (v0.7, 사용자 결정 2026-11-03)**: 이 PC 한 대에서 호스트 1 + 봇 7개(`-bot -batchmode -nographics`, Tugboat 직접 전송, 같은 PC)로 대체 측정합니다. 시험용 AI 60체 + `Bench` 씬. 판정 대상은 **호스트 서버 처리 예산(`Server.Total`)·대역폭(봇 연결별 송수신)·중도 참가 시간·메모리**이고, 호스트 FPS는 봇 프로세스가 같은 CPU를 나눠 써서 실제보다 낮게 나올 수 있으므로 참고값으로 기록합니다(봇 프로세스의 CPU 점유율을 함께 기록). Steam 릴레이 8인 접속은 이 PC + 가능한 다른 계정·PC로 기능 확인만 합니다. v0.8(D-22): 측정 빌드는 에디터를 닫고 만들며, 측정하는 동안에도 Unity 에디터를 닫아 둡니다(에디터 프로세스의 CPU·메모리 사용이 결과를 왜곡하지 않도록). 측정 보고서에 에디터를 닫은 상태였음을 적습니다.
    - **M6-10**: 실제 권장 사양 PC 8대 P8로 정식 판정합니다.
 4. **판정** (C-52 확정): 기준 프리셋 「높음」 + 업스케일링 품질 모드(NVIDIA → DLSS, 그 밖 → FSR)로 측정합니다. 호스트 `Server.Total` 프레임당 평균 ≤ 3.0 ms, p99 ≤ 5.0 ms, 메인 스레드 평균 ≤ 13 ms. 호스트와 참가자 7명 모두 평균 FPS ≥ 60, 1% Low ≥ 45 FPS. 업스케일링을 끈 측정은 판정에 쓰지 않고 참고값으로만 기록합니다(GPU 여유 파악용). 측정 PC마다 GPU 종류와 쓴 업스케일러를 보고서에 적습니다.
 5. **사전 측정**: M1~M5는 봇 클라이언트 7개(`-bot`, 직접 전송)로 서버 처리 예산을 측정합니다(M1은 이 PC 한 대). 다른 PC를 쓸 수 있으면 봇을 그 PC로 옮겨 호스트 FPS의 왜곡을 줄일 수 있습니다(선택).
@@ -2012,7 +2030,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | DES-109 | GraphicsService | 모듈 | 인프라(`Game.Infra.Rendering`) | HDRP 품질 단계·프리셋·세부 설정, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 | FR-120, FR-121, NFR-005, NFR-010~012, NFR-028 |
 | DES-110 | LocalSettingsStore | 모듈 | 인프라 | settings.json 읽기·쓰기(형식 버전). v0.7: 호스트 차단 목록 `bans.json`(`IBanListStore` 구현, 모든 월드 공통, C-46) | NFR-047, FR-148 |
 | DES-111 | BackgroundRunner | 모듈 | 인프라 | 생성·저장 직렬화·압축을 메인 스레드 밖에서, 결과는 메인 스레드로 | NFR-018~020, NFR-052 |
-| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, 패키지 버전 고정, asmdef 규칙 시험(Pipeline 패키지 에디터 전용 검사 포함), Unity Smart Merge 드라이버 설정(v0.7) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049 |
+| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, 패키지 버전 고정, asmdef 규칙 시험(3.4.2 표 비교, Pipeline 패키지 격리 3.4.3), Unity Smart Merge 설정(v0.8: `git mergetool` 방식, M1-01 (4)). v0.8: 에디터 전용 어셈블리 `Game.Editor`의 빌드 명령(`BuildCommands`)·출시 빌드 산출물 검사(`BuildArtifactInspector`, Pipeline 런타임 어셈블리 0건 확인)·프로젝트 설정 적용을 이 요소에 포함 | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049 |
 | DES-113 | TestAndBenchHarness | 도구 | 인프라 | 골든 해시, `-genhash`(다른 PC 비교)·`-genhash-compare`(결과 파일 비교, v0.7), `-genvalidate`(NFR-055), Bench 씬(P1/P8), 봇 | NFR-021, NFR-051, NFR-053, NFR-055 |
 | DES-114 | RenderBackend (HDRP) | 모듈(어댑터 인터페이스 구현) | 인프라(`Game.Infra.Rendering`) | `IRenderBackend` 구현. Volume 혼합, 태양·광원·정화 마스크 쿠키 적용, 후처리(색각 보정·섬광 완화), 셰이더 전역 변수. v0.4: 위협 시 월드 보조 색조(Volume. 테두리·피격 호 본체는 UI 레이어, v0.5). 1인칭 손·손목 소품 그리기 패스는 메서드 자리만(손목 표시 (A) 선택 시 구현, v0.5). HDRP 의존 코드가 모이는 유일한 곳(3.4.4). v0.2 신설 | FR-033~036, FR-106, FR-130, FR-131, FR-172, NFR-028 |
 
@@ -2034,19 +2052,27 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 - 이유: Unity의 MonoBehaviour는 프레임워크 클래스를 상속해야만 동작하므로 「어댑터」와 「프레임워크 코드」를 나누면 같은 일을 하는 클래스가 두 겹이 됨. 순수 레이어만 엄격히 지키면 규칙 시험·결정론 시험·전송 교체 같은 핵심 이점은 모두 얻음. (b)는 위반을 막지 못함. (c)는 FishNet·HDRP 일반 워크플로·UI와 맞물림이 약하고 학습 비용이 큼(AI 이동만 Job/Burst로 부분 적용).
 - 장점: 컴파일 단계에서 의존 방향 강제, Unity 없이 빠른 시험. 단점: 도메인에서 `Vector3` 대신 `System.Numerics.Vector3`를 써 어댑터에서 변환 필요. asmdef 수가 늘어 처음 설정이 번거로움.
 
-### D-03 엔진·라이브러리 버전 (웹 확인 2026-11-02)
+### D-03 엔진·라이브러리 버전 (웹 확인 2026-11-02, v0.8: M1-01~M1-03에서 실제 고정한 버전으로 갱신 2026-11-03)
 
-| 구성 요소 | 권장 버전 | 확인 결과 | 비고 |
+모든 버전은 `src/Packages/manifest.json`에 고정합니다(NFR-049). 올릴 때는 마일스톤 경계에서만, 이 표를 먼저 고치고 컴파일·EditMode·PlayMode·아키텍처 시험·골든 해시로 확인합니다.
+
+| 구성 요소 | 고정 버전 | 확인 결과 | 비고 |
 |---|---|---|---|
 | Unity | **6000.3.27f2** (6.3 LTS, Windows IL2CPP 모듈 포함) | 6.3 LTS는 2025-12 출시, 2년 지원. 6.5(2026-06), 6.6 출시 확인. 6.7 LTS는 「2026년 말 예정」으로 보도됐으나 출시 여부 **확인 필요** | **6000.3.27f2로 고정(사용자 결정 2026-11-03, 개발 PC 설치 완료: `C:\Program Files\Unity\Hub\Editor\6000.3.27f2\Editor\Unity.exe`)**. 올릴 때는 마일스톤 경계에서만, 골든 해시·성능 재측정으로 확인. 6.7 LTS 검토는 M6-11 재평가에서 |
-| HDRP | **17.3.x (6000.3.27f2에 묶인 버전, 프로젝트 생성 때 `manifest.json`에서 확인해 기록)** | Unity 6부터 그래픽 패키지는 에디터 버전에 묶임. 17.3.0은 6000.3용으로 확인, 정확한 최신 패치 번호는 **확인 필요** | Unity가 2026 전략에서 HDRP를 **유지보수 모드**(새 기능 없음, 안정성·회귀 수정만)로 발표 → **HDRP 유지 + 렌더링 코드 격리 + M6 재평가**(사용자 결정 2026-11-02, D-20, 8장 R-09) |
-| FishNet | **4.7.4R** (최신, 10월 16일 배포) | Unity 6 지원 명시, 4.7.3R에서 6.5 대응, 4.7.4R은 6.6에서 경고 없이 컴파일 | 버전 고정, 올릴 때 회귀 시험(NFR-049) |
-| FishySteamworks | **4.1.1** (최신) | FishNet 4.x 대응. 4.7.x와의 조합은 배포 노트에 명시 없음 → **확인 필요**(M1 작업 M1-02에서 컴파일·8인 접속으로 확인) | 4.0.0부터 App ID는 Steamworks.NET 쪽에서 처리 |
-| Steamworks.NET | **2025.165.0** (Steamworks SDK 1.65, 최신) | 최소 Unity 2019.4 LTS. FishySteamworks 4.1.1과 조합은 **확인 필요** | UPM git URL + 태그로 고정. 문제 시 2025.164.1로 내림 |
+| HDRP (`com.unity.render-pipelines.high-definition`) | **17.3.0** | Unity 6부터 그래픽 패키지는 에디터 버전에 묶임. 6000.3.27f2에서 17.3.0으로 설치·컴파일 확인(M1-01, 2026-11-03) | Unity가 2026 전략에서 HDRP를 **유지보수 모드**(새 기능 없음, 안정성·회귀 수정만)로 발표 → **HDRP 유지 + 렌더링 코드 격리 + M6 재평가**(사용자 결정 2026-11-02, D-20, 8장 R-09) |
+| FishNet | **4.7.4R** (10월 16일 배포) | Unity 6 지원 명시. 6000.3.27f2에서 컴파일 확인(M1-02) | `Assets/ThirdParty/FishNet/`에 소스로 가져옴. 자체 asmdef: `FishNet.Runtime`, `GameKit.Dependencies`, `Synapse`, `Unity.FishNet.CodeGen`, `MonoFN.Cecil`. 버전 고정, 올릴 때 회귀 시험(NFR-049) |
+| 내장 모듈 `com.unity.modules.physics2d` | 1.0.0 | **필수**: FishNet 4.7.4R이 이 모듈 없이는 컴파일되지 않음(M1-02에서 확인) | 2D 물리를 쓰지 않더라도 **`manifest.json`에서 지우지 않음** |
+| FishySteamworks | **4.1.1** | FishNet 4.7.4R·Steamworks.NET 2025.165.0과 **조합 컴파일 확인**(M1-02). 8인 Steam 릴레이 접속 확인은 M1-07·M1-12에서 | `Assets/ThirdParty/FishySteamworks/FishySteamworks.asmdef`로 별도 어셈블리. 4.0.0부터 App ID는 Steamworks.NET 쪽에서 처리 |
+| Steamworks.NET (`com.rlabrecque.steamworks.net`) | **2025.165.0** (Steamworks SDK 1.65) | 조합 컴파일 확인(M1-02) | **UPM git URL + 태그로 고정**(`https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net#2025.165.0`). 문제 시 2025.164.1로 내림 |
 | Tugboat | FishNet 4.7.4R에 포함된 버전 | — | 개발용 직접 전송 |
-| Input System, Localization, Burst, Collections, Mathematics | 6000.3 패키지 관리자가 권장하는 확인된 버전 | 프로젝트 생성 때 `manifest.json`에 고정해 기록 | |
+| Input System | **1.20.1** | 설치·컴파일 확인 | |
+| Test Framework | **1.6.0** | EditMode·PlayMode 시험 실행 확인 | |
+| Burst / Collections / Mathematics | **1.8.31 / 2.7.1 / 1.3.3** | `manifest.json`에 고정 | Job System은 엔진 내장이라 별도 패키지·어셈블리 참조 없음(3.4.2) |
+| Localization | **1.5.8** | `manifest.json`에 고정 | String Table 연결은 M2-01 |
+| Unity Pipeline (`com.unity.pipeline`) | **0.9.1-exp.1** (실험 버전) | Unity 공식 CLI 1.0.0-beta.15와 에디터 조작 MCP가 이 패키지로 **열린 에디터와 통신**(D-22). **에디터 전용 패키지가 아님**을 확인 | **허용(사용자 결정 2026-11-03)**, 단 3.4.3의 안전장치 3가지(런타임 기호 금지, `Game.*` 참조 금지, 출시 빌드 산출물 검사)를 지킴. 출시 IL2CPP 빌드에서 Pipeline 런타임 어셈블리 0건 확인. 실험 버전이라 올릴 때 3.4.3 검사를 다시 통과해야 함(R-29) |
 
 - 스크립팅 백엔드: 출시·측정 빌드 IL2CPP, 에디터 Mono. 생성 결정론은 둘 모두에서 골든 해시가 같아야 통과(D-08).
+- 개발 도구: Unity CLI 1.0.0-beta.15 + Unity Pipeline 패키지로 열린 에디터를 조작합니다(실행 방식은 D-22).
 
 ### D-04 플레이어 이동: 클라이언트 권위 + 호스트 검사
 - 결정: 플레이어 위치는 각자 계산해 보내고, 호스트는 속도·범위만 검사(3.11.12). 그 밖의 모든 게임 상태는 호스트 권위.
@@ -2145,6 +2171,24 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 - 대안: (a) 두 HUD를 따로 구현, (b) 손목 계기를 UI Toolkit 월드 공간 패널로, (c) uGUI 월드 공간 캔버스로, (d) 손목 화면을 셰이더·3D 메시(바늘·눈금)만으로 표현.
 - 이유: (a)는 정보 항목이 늘 때마다 두 곳을 고쳐야 함. (b)는 6000.3에서의 지원 범위가 확인되지 않았고, 손목 화면은 입력을 받지 않아 월드 공간 입력 처리가 필요 없음. (c)는 UI 기술이 둘로 나뉘고 USS 접근성 기반(NFR-056)을 다시 만들어야 함. (d)는 글자 크기 배율·다국어를 적용하기 어려움. 렌더 텍스처 방식은 같은 USS·다국어·글자 배율을 그대로 쓰고, 텍스처 연결은 파이프라인과 무관함(손 그리기 패스만 DES-114).
 - 장점: 정보 항목 추가 시 뷰모델·부품 한 곳만 고침, R-18(UI Toolkit 월드 공간 제약)의 영향을 받지 않음. 단점: 렌더 텍스처가 3D 표면에 그려지므로 업스케일링·시야각·손목 각도에 따라 글자가 흐릴 수 있음(R-22) → 텍스처 해상도와 손목 계기의 최소 글자 크기를 설정값으로 두고 M2-12에서 확인.
+
+### D-22 개발 실행 방식: 에디터를 열어 둔 채 Unity CLI로 조작 (v0.8, 사용자 결정 2026-11-03)
+- 결정: 개발 중에는 Unity 에디터를 열어 둡니다. 에이전트(developer, test-engineer 등)는 batchmode 에디터를 따로 띄우지 않고, Unity CLI(1.0.0-beta.15)가 Unity Pipeline 패키지(D-03)를 통해 **열린 에디터를 조작**합니다. 명령은 `src/`에서 실행합니다.
+
+  | 할 일 | 명령 |
+  |---|---|
+  | 컴파일 | `unity recompile` |
+  | EditMode 시험 | `unity command test run --mode EditMode --timeout 600 --result-only` |
+  | PlayMode 시험 | `unity command test run --mode PlayMode --async_tests true --result-only` → `unity command test status --result-only`를 완료될 때까지 반복 |
+  | Console 확인 | `unity command console get` |
+
+  - **쓰지 않는 실행**: batchmode 에디터를 띄우는 `unity build`, `unity test`, `Unity.exe -batchmode`. 열린 에디터와 프로젝트 잠금이 충돌합니다.
+  - **에디터를 닫아야 하는 작업**: 플레이어 빌드(IL2CPP 출시·측정·개발 빌드)와 그 산출물 검사(`BuildCommands` + `BuildArtifactInspector`, 3.4.3). 이 작업 직전에 사용자에게 에디터를 닫아 달라고 요청하고, `Unity.exe -batchmode -quit -projectPath src -executeMethod Game.Editor.BuildCommands.BuildWindowsDevelopment`(또는 `BuildWindowsRelease`)로 빌드한 뒤 다시 열어 달라고 안내합니다. 산출물 검사는 두 빌드 명령 모두에서 자동으로 돕니다. 해당 작업: M1-04(IL2CPP 결정론 교차 비교), M1-12(측정 빌드. M1-05 측정 기반과 M1-06 업스케일러의 빌드 확인도 여기서 함께), M1-13과 각 마일스톤 완료 빌드, M3-03·M3-15·M4-09(IL2CPP 골든 해시 재확인), M6-10, M10-06. 빌드는 몰아서 한 번에 하도록 작업 순서를 잡습니다.
+  - 만든 빌드(플레이어)를 `-batchmode -nographics`로 실행하는 것(봇 클라이언트 `-bot`, `-genhash` 등, 3.7.4)은 에디터 프로젝트를 잠그지 않으므로 에디터를 연 채로 해도 됩니다. 단, 성능 측정(M1-12, M6-10 등)은 에디터를 닫은 상태에서 합니다(3.12.4).
+  - 시범 결과(2026-11-03): 컴파일 오류 0, EditMode 157/157, PlayMode 5/5 통과.
+- 대안: (a) CLAUDE.md 기본 방식(작업마다 사용자가 에디터를 닫고 에이전트가 batchmode 실행), (b) 에이전트용 프로젝트 사본을 따로 두고 batchmode 실행.
+- 이유: (a)는 컴파일·시험 때마다 에디터를 닫았다 여는 대기가 생겨 사용자 작업(씬 다듬기, 플레이 확인)과 번갈아 하기 어려움. (b)는 `Library/` 중복(수 GB)과 사본 동기화 문제가 생김. 열린 에디터 조작은 import 결과를 그대로 쓰므로 가장 빠름.
+- 장점: 컴파일·시험 반복이 빠르고 사용자가 에디터를 계속 쓸 수 있음. 단점: 에디터 상태(열린 씬, 플레이 모드, 수정 중인 애셋)에 결과가 영향받을 수 있고, 실험 버전 패키지·베타 CLI에 의존함(R-29). 출시 빌드 검증은 여전히 에디터를 닫아야 함.
 
 ---
 
@@ -2405,6 +2449,8 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 - developer는 마일스톤 하나씩 위에서 아래 순서로 구현합니다. 각 마일스톤 안에서 SRS 2.6.1 공통 원칙 6가지(동기화, 호스트 검증, 저장 항목, 경험치 이벤트, 한국어·영어 텍스트, 게임패드 조작)를 함께 끝냅니다.
 - 「결정 필요」는 그 작업을 시작하기 전에 사용자에게 받아야 할 SRS 부록 C 항목입니다. 결정이 늦으면 잠정 구현(3.7.6)으로 진행하고 기록합니다.
 - 마일스톤 마지막 작업은 항상 「완료 빌드 + 그 마일스톤 FR 시험 + 아키텍처 시험」입니다(NFR-043).
+- **실행 방식 (v0.8, D-22)**: 컴파일·EditMode·PlayMode 시험·Console 확인은 열린 에디터에 Unity CLI(`unity recompile`, `unity command test run ...`, `unity command console get`)로 합니다. batchmode 에디터 실행(`unity build`, `unity test`, `Unity.exe -batchmode`)은 쓰지 않습니다. **플레이어 빌드(IL2CPP)가 필요한 작업에서만** 사용자에게 에디터를 닫아 달라고 요청한 뒤 `BuildCommands`를 batchmode로 실행합니다. M1은 해당 작업(M1-04, M1-12, M1-13)의 설명에 「에디터 닫음」 시점을 적었고, M2 이후에도 같은 규칙을 적용합니다(각 마일스톤 완료 빌드, IL2CPP 결정론 교차가 들어간 M3-03·M4-09, 측정·출시 작업 M3-15·M6-10·M10-06). 빌드는 한 번에 몰아 에디터를 닫는 횟수를 줄입니다.
+- **버전 고정 (v0.8)**: 패키지 버전은 D-03 표 그대로 둡니다. 특히 `com.unity.modules.physics2d`(FishNet 컴파일 조건)를 지우지 않고, `com.unity.pipeline`을 올리면 3.4.3 격리 검사를 다시 통과해야 합니다.
 
 ### M1 기반 — 기술 검증과 그에 필요한 최소 기능만 (C-51 확정, 사용자 결정 2026-11-02)
 
@@ -2412,19 +2458,19 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 
 | 순서 | 작업 | 관련 DES | 관련 FR/NFR | 선행 작업 |
 |---|---|---|---|---|
-| M1-01 | 프로젝트 골격: (1) `src/`에 **Unity 6000.3.27f2** + HDRP 프로젝트 생성(`C:\Program Files\Unity\Hub\Editor\6000.3.27f2\Editor\Unity.exe`), 스크립팅 백엔드 IL2CPP(출시·측정)·Mono(에디터), HDRP 패키지 버전을 `manifest.json`에서 확인해 기록. (2) asmdef 13개와 참조 규칙(HDRP 참조는 `Game.Infra.Rendering`만), 아키텍처 시험(렌더링 격리 검사 포함). (3) **Unity Pipeline 패키지 설치**: `unity pipeline install`(Unity CLI 1.0.0-beta.15) → 에디터 조작 MCP(`unity mcp --project-path src`) 연결 확인. 이 패키지는 에디터 전용 어셈블리인지 확인하고(아니면 사용 중지 후 보고), 게임 asmdef가 참조하지 않으며 플레이어 빌드에 들어가지 않는 것을 아키텍처 시험에 추가. (4) **Unity Smart Merge 드라이버**: 저장소 `.gitattributes`에 `*.unity`, `*.prefab`, `*.asset`, `*.mat`, `*.anim`, `*.controller`, `*.meta` 등 `merge=unityyamlmerge` 지정, 각 개발 PC의 git 설정에 `merge.unityyamlmerge.driver = "'C:/Program Files/Unity/Hub/Editor/6000.3.27f2/Editor/Data/Tools/UnityYAMLMerge.exe' merge -p %O %B %A %A"` 등록(등록 절차를 `docs/`의 개발 환경 안내에 기록), Unity 직렬화 「Force Text」·.meta 표시 설정. (5) 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, `.gitignore`·Git LFS (git init은 사용자 결정대로 Do 시작 전) | DES-100, DES-112, DES-114 | NFR-027~029, NFR-043 | — |
-| M1-02 | 네트워크 라이브러리 도입·버전 고정(FishNet 4.7.4R, FishySteamworks 4.1.1, Steamworks.NET 2025.165.0) 조합 컴파일 확인, TransportSelector, DevTools(`-transport`, `-host`, `-connect`, `-devPlayerId`), Steam 초기화·App ID 480, 부트의 Steam 확인 → 없으면 안내 화면 SCR-001(오프라인 플레이 없음, 개발 빌드 `-transport tugboat -devPlayerId`만 예외) | DES-101, DES-102, DES-103, DES-100 | FR-005, FR-006, NFR-006, NFR-008, NFR-009, NFR-031, NFR-049 | M1-01 |
+| M1-01 | 프로젝트 골격: (1) `src/`에 **Unity 6000.3.27f2** + HDRP 프로젝트 생성(`C:\Program Files\Unity\Hub\Editor\6000.3.27f2\Editor\Unity.exe`), 스크립팅 백엔드 IL2CPP(출시·측정)·Mono(에디터), HDRP 패키지 버전을 `manifest.json`에서 확인해 기록(v0.8: 17.3.0, D-03). (2) asmdef 13개와 참조 규칙(HDRP 참조는 `Game.Infra.Rendering`만), 아키텍처 시험(렌더링 격리 검사 포함). v0.8: 에디터 전용 `Game.Editor`와 시험 어셈블리 5개 포함(3.4.2). (3) **Unity Pipeline 패키지 설치**: `unity pipeline install`(Unity CLI 1.0.0-beta.15) → 에디터 조작 MCP(`unity mcp --project-path src`) 연결 확인. v0.8 결과: `com.unity.pipeline` 0.9.1-exp.1은 에디터 전용이 아니었고, 사용자 결정(2026-11-03)으로 **허용 + 안전장치 3가지**(3.4.3: `ENABLE_RUNTIME_PIPELINE*` 기호 금지, `Game.*` 참조 금지, 출시 빌드 산출물 검사 `BuildArtifactInspector`)를 적용. 출시 IL2CPP 빌드에서 Pipeline 런타임 어셈블리 0건 확인. (4) **Unity Smart Merge (v0.8 변경)**: `.gitattributes`의 `merge=unityyamlmerge` 드라이버 방식은 UnityYAMLMerge가 git이 넘기는 확장자 없는 임시 파일을 처리하지 못해 실패함(실제 `Boot.unity`로 확인). 저장소 로컬 git 설정을 **`git mergetool` 방식**으로 바꿈: `merge.tool=unityyamlmerge`, `mergetool.unityyamlmerge.cmd='<에디터 폴더>/Data/Tools/UnityYAMLMerge.exe' merge -p "$BASE" "$REMOTE" "$LOCAL" "$MERGED"`, `mergetool.unityyamlmerge.trustExitCode=false`, `mergetool.keepBackup=false`. 병합 드라이버(`merge.unityyamlmerge.driver`)는 등록하지 않으며, 씬·프리팹 충돌이 나면 `git mergetool`로 실행. 절차 문서 `docs/dev/SMART_MERGE_SETUP.md`. 첫 실제 충돌 때 동작 확인(R-28). Unity 직렬화 「Force Text」·.meta 표시 설정. (5) 개발/출시 정의 기호, App ID 설정 파일, 빌드 번호, `.gitignore`·Git LFS (git init은 사용자 결정대로 Do 시작 전) | DES-100, DES-112, DES-114 | NFR-027~029, NFR-043 | — |
+| M1-02 | 네트워크 라이브러리 도입·버전 고정(FishNet 4.7.4R, FishySteamworks 4.1.1, Steamworks.NET 2025.165.0 git URL 고정) 조합 컴파일 확인(v0.8: 확인됨, 내장 모듈 `com.unity.modules.physics2d` 필수, D-03), TransportSelector, DevTools(`-transport`, `-host`, `-connect`, `-devPlayerId`), Steam 초기화·App ID 480, 부트의 Steam 확인 → 없으면 안내 화면 SCR-001(오프라인 플레이 없음, 개발 빌드 `-transport tugboat -devPlayerId`만 예외) | DES-101, DES-102, DES-103, DES-100 | FR-005, FR-006, NFR-006, NFR-008, NFR-009, NFR-031, NFR-049 | M1-01 |
 | M1-03 | 설정 데이터 기반: ConfigLoader·검증, Balance·Network 튜닝 애셋, ContentRegistry·ContentHash, IConfigProvider. 부록 C.1 설정값 후보로 시작(C-33 해소) | DES-104, DES-051 | NFR-033, NFR-034 | M1-01 |
-| M1-04 | **결정론 선행 검증**: DetMath, SeedCodec, 시험용 생성기 V0(높이 + 자원 2만 개 + 후보 자리), WorldHasher, 골든 해시 시험, `-genhash`·`-genhash-compare`. **이 PC에서** 에디터(Mono)·IL2CPP 빌드 결과 교차 비교, 같은 PC 반복 생성 일치, 골든 해시 고정까지 보고. 다른 CPU(Intel·AMD) 교차 검증은 M6-10으로 이동(다른 PC를 빌릴 수 있으면 `-genhash` 결과 파일 비교로 선택 실시) | DES-040, DES-041, DES-043, DES-046, DES-047, DES-113 | NFR-053(선행), FR-169(선행) | M1-01 |
-| M1-05 | 측정 기반: 서버·클라이언트 ProfilerMarker, PerfTelemetry(서버 처리 예산 감시, 개발용 성능 표시, CSV), Bench 씬, 기본 파일 로그(민감 정보 제외. 보관 개수·충돌 보고는 M2-10) | DES-108, DES-113, DES-107 | FR-163, NFR-021, NFR-042 | M1-01 |
-| M1-06 | 그래픽 기반: `IRenderBackend`·HdrpRenderBackend 골격, HDRP 품질 단계 4개, 프리셋 데이터, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 지정(C-52 확정). 옵션 화면은 M2-01 | DES-109, DES-114 | FR-120(데이터), FR-121(업스케일링), NFR-005, NFR-028 | M1-01 |
+| M1-04 | **결정론 선행 검증**: DetMath, SeedCodec, 시험용 생성기 V0(높이 + 자원 2만 개 + 후보 자리), WorldHasher, 골든 해시 시험, `-genhash`·`-genhash-compare`. **이 PC에서** 에디터(Mono)·IL2CPP 빌드 결과 교차 비교, 같은 PC 반복 생성 일치, 골든 해시 고정까지 보고. v0.8 실행 순서(D-22): 골든 해시 시험(Mono)은 열린 에디터에서 EditMode 시험으로 → **에디터 닫음**: IL2CPP 개발 빌드(`BuildWindowsDevelopment`) → 빌드한 플레이어로 `-genhash` 실행(에디터 다시 열어도 됨) → 결과 비교. 다른 CPU(Intel·AMD) 교차 검증은 M6-10으로 이동(다른 PC를 빌릴 수 있으면 `-genhash` 결과 파일 비교로 선택 실시) | DES-040, DES-041, DES-043, DES-046, DES-047, DES-113 | NFR-053(선행), FR-169(선행) | M1-01 |
+| M1-05 | 측정 기반: 서버·클라이언트 ProfilerMarker, PerfTelemetry(서버 처리 예산 감시, 개발용 성능 표시, CSV), Bench 씬, 기본 파일 로그(민감 정보 제외. 보관 개수·충돌 보고는 M2-10). v0.8(D-22): 표식·기록기·CSV 형식은 열린 에디터에서 EditMode·PlayMode 시험으로 확인하고, 측정 빌드(IL2CPP)는 만들지 않음. 측정 빌드는 M1-12에서 한 번에 만듦(에디터를 닫는 횟수를 줄임) | DES-108, DES-113, DES-107 | FR-163, NFR-021, NFR-042 | M1-01 |
+| M1-06 | 그래픽 기반: `IRenderBackend`·HdrpRenderBackend 골격, HDRP 품질 단계 4개, 프리셋 데이터, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 지정(C-52 확정). 옵션 화면은 M2-01. v0.8(D-22): 품질 단계·업스케일러 동작은 먼저 열린 에디터(플레이 모드)에서 확인하고, 플레이어 빌드에서의 최종 확인(R-19)은 M1-12 측정 빌드 때 함께 함(이 작업만을 위해 에디터를 닫지 않음) | DES-109, DES-114 | FR-120(데이터), FR-121(업스케일링), NFR-005, NFR-028 | M1-01 |
 | M1-07 | **8인 Steam 접속(최소)**: 로비 생성(M1은 참가 조건 「친구 전용」 고정)·검색(`kh_game` 필터)·참가·초대, 최대 인원 8, JoinHandshake(버전·ContentHash·로비 멤버·원격 SteamID), 나가기·연결 끊김 처리 | DES-054, DES-085, DES-102, DES-031, DES-072 | FR-001~005, FR-011(퇴장), NFR-009, NFR-038, NFR-039 | M1-02, M1-03 |
 | M1-08 | 1인칭 이동·달리기·스태미나(Input Actions 기본 바인딩 = STORYBOARD 2.4 기본 할당표, 키보드·마우스 + Xbox 패드. 안내 아이콘은 Xbox 계열만, C-28), PlayerAvatar(클라이언트 계산 + 호스트 검사), **UI 공통 기반 `Base.uss`(글자 크기 배율·다크 테마 색 토큰·모양 구분 규칙)와 USS 규칙 검사 시험**, 그 위에 HUD 스태미나·로비/접속 화면, UI 상태(Gameplay/Overlay)는 입력 경로만 전환 | DES-086, DES-084, DES-002, DES-003, DES-091, DES-092, DES-095 | FR-023~025, NFR-001(스태미나), NFR-056, NFR-057 | M1-07 |
 | M1-09 | 명령·복제 기반: CommandDispatcher, RequestGuard, ServerCommandGateway, ServerWorld 틱, ReplicatedTable, ReplicationPublisher/Receiver, ClientWorldMirror | DES-050, DES-052, DES-053, DES-080~083, DES-072 | FR-007(구조), FR-008, NFR-030, NFR-040, NFR-041 | M1-07 |
 | M1-10 | **자원 2만 개 동기화**: V0 월드 로컬 생성, 시험용 타격 명령(호스트 검증), 자원 델타, 중도 참가(시드 → 생성 → 요약값 → 스냅샷 → 델타), ResourceViewStreamer, 「5,000개 변경」 상태 만드는 개발 도구 | DES-008, DES-057, DES-087, DES-089, DES-072 | FR-009, NFR-016, NFR-018 | M1-04, M1-09 |
 | M1-11 | **시험용 AI 60체 부하**: AiJobsBackend(보행 격자·흐름장·조향·공간 해시), AiScheduler(10 Hz 분산, LOD), 생물 복제(관심 범위 등급), CreatureViews(보간) | DES-105, DES-062, DES-082, DES-088, DES-019 | NFR-011, NFR-017 | M1-09 |
-| M1-12 | **M1 기술 검증 측정·보고 (이 PC 1대 + 봇 7개)**: P8 대체 측정(호스트 + `-bot` 7개, 직접 전송, 기준 프리셋 「높음」 + 업스케일링 품질 모드)으로 호스트 서버 처리 예산·대역폭·중도 참가 시간·메모리(프로세스 10 GB / VRAM 7.5 GB)를 판정, 호스트 FPS·1% Low는 봇 CPU 점유와 함께 참고값으로 기록, P1(1인) 측정, Steam 릴레이 접속 기능 확인 → `docs/test/perf/M1_tech_verification.md`(측정 조건 한계 명시). 실제 8대 P8 판정과 다른 CPU 결정론은 M6-10. 미달 시 3.12.9 순서로 대응안 제시 후 사용자 결정 | DES-108, DES-113 | NFR-010~018, NFR-021, NFR-048 | M1-05, M1-06, M1-08, M1-10, M1-11 |
-| M1-13 | M1 완료 빌드, M1 FR 시험, 아키텍처 시험 | DES-112, DES-113 | NFR-043 | M1-01~M1-12 |
+| M1-12 | **M1 기술 검증 측정·보고 (이 PC 1대 + 봇 7개)**: P8 대체 측정(호스트 + `-bot` 7개, 직접 전송, 기준 프리셋 「높음」 + 업스케일링 품질 모드)으로 호스트 서버 처리 예산·대역폭·중도 참가 시간·메모리(프로세스 10 GB / VRAM 7.5 GB)를 판정, 호스트 FPS·1% Low는 봇 CPU 점유와 함께 참고값으로 기록, P1(1인) 측정, Steam 릴레이 접속 기능 확인 → `docs/test/perf/M1_tech_verification.md`(측정 조건 한계 명시). 실제 8대 P8 판정과 다른 CPU 결정론은 M6-10. 미달 시 3.12.9 순서로 대응안 제시 후 사용자 결정. v0.8(D-22): 측정 전 **에디터 닫음** → IL2CPP 측정 빌드(개발 빌드 `BuildWindowsDevelopment`, 산출물 검사 포함) → 측정 중에도 **에디터는 닫아 둠**(에디터 프로세스가 CPU·메모리를 써 측정을 왜곡하므로) → 측정 끝난 뒤 다시 열기 | DES-108, DES-113 | NFR-010~018, NFR-021, NFR-048 | M1-05, M1-06, M1-08, M1-10, M1-11 |
+| M1-13 | M1 완료 빌드, M1 FR 시험, 아키텍처 시험. v0.8(D-22): FR·아키텍처 시험은 열린 에디터에서 Unity CLI로 → **에디터 닫음** → 출시 IL2CPP 빌드(`BuildWindowsRelease`)와 산출물 검사(Pipeline 런타임 어셈블리 0건, 3.4.3) | DES-112, DES-113 | NFR-043 | M1-01~M1-12 |
 
 ### M2 생존 상태 + M1에서 옮긴 부가 기능
 
@@ -2590,7 +2636,7 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-01 | 호스트가 HDRP 렌더링 + 서버 처리(AI 60, 자원 2만, 7명 검증)를 16.7 ms 안에 못 함 | NFR-011 미달, 범위 축소 | 높음 | 틱 분리·판단 분산·Burst 흐름장·물리 미사용 AI·관심 범위(3.11.9~11), 서버 처리 예산 3 ms 감시(3.12.3~4), M1-12 조기 측정(v0.7: 이 PC + 봇 7개 대체 측정, R-27), M6-10 실제 8대 정식 측정, 대응 순서 3.12.9. 판정 조건 확정(C-52: 「높음」 + 업스케일링 품질 모드, 1% Low 45) |
 | R-02 | 생성 결정론 실패(PC·런타임·엔진 버전 차이) | 참가 불가, 동기화 붕괴 | 중간 | 정수·고정소수점·카운터 난수·고정 순서 합치기(3.11.1), 순수 C# 어셈블리, 골든 해시, Mono·IL2CPP 교차 비교(M1-04, M3-03, 이 PC), 다른 CPU 교차는 M6-10(v0.7, 그 전은 `-genhash` 결과 수집으로 선택), 참가 시 요약값 비교로 조기 차단 |
 | R-03 | 정수 기반 생성의 지형 품질 저하·생성 시간 25초 초과 | 실사 목표 약화, NFR-018 위험 | 중간 | 큰 배치·근원은 손으로 제작, 경계 보정, M3-15 사용자 화면 확인, `Parallel.For`, 필요 시 같은 정수 알고리즘을 Burst로 옮김(골든 해시로 동일성 확인). 최후 수단: 로비 메타데이터의 시드로 참가 수락 전 미리 생성 시작 |
-| R-04 | FishySteamworks 4.1.1 ↔ FishNet 4.7.4R ↔ Steamworks.NET 2025.165.0 조합 비호환 | M1 지연 | 중간 | M1-02에서 먼저 컴파일·접속 확인. 실패 시 Steamworks.NET 2025.164.1로 내리거나 FishySteamworks 포크 수정. 전송은 `INetServer` 뒤에 있어 게임 로직 영향 없음 |
+| R-04 | FishySteamworks 4.1.1 ↔ FishNet 4.7.4R ↔ Steamworks.NET 2025.165.0 조합 비호환 | M1 지연 | 중간 → **낮음~중간**(v0.8) | M1-02에서 먼저 컴파일·접속 확인. v0.8: **조합 컴파일 확인 완료**(내장 모듈 `com.unity.modules.physics2d` 필요, D-03). 남은 확인은 실제 Steam 릴레이 접속(M1-07·M1-12). 실패 시 Steamworks.NET 2025.164.1로 내리거나 FishySteamworks 포크 수정. 전송은 `INetServer` 뒤에 있어 게임 로직 영향 없음 |
 | R-05 | 호스트 화면도 루프백 복제를 거치는 비용 | 호스트 프레임 손실 | 낮음~중간 | M1-12 측정. 크면 호스트 전용 직접 읽기 구현 추가(DES-072 내부) |
 | R-06 | FishNet·FishySteamworks 소수 관리자 의존 | 업데이트 중단 시 대응 어려움 | 중간 | 버전 고정·회귀 시험(NFR-049), 전송·복제를 어댑터에 가둠, 엔터티 테이블 방식이라 FishNet 의존 기능이 Broadcast·NetworkTransform·TimeManager로 적음 |
 | R-07 | 클라이언트 권위 이동의 속도 한도 안 조작 | 거리 검증 우회 일부 가능 | 낮음 | 협동 전용이라 이 수준으로 충분하다고 사용자가 확정(2026-11-02). 속도·범위 검사·`move_rejected` 로그(3.11.12). **Check 단계 보안 점검(security-auditor) 대상**: 우회 가능 범위와 거리 검증(FR-007)에 미치는 영향을 SECURITY_REPORT에서 평가 |
@@ -2614,4 +2660,6 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-26 | (v0.7 신규) 다른 CPU(Intel·AMD) 결정론 교차 검증이 M6-10으로 늦어짐. M6에서 불일치가 나오면 M3~M6에 만든 생성 규칙·시험 월드·골든 해시·측정 기준 시드를 다시 만들어야 하고, 그동안의 다중 접속 시험(같은 PC Tugboat)은 이 문제를 드러내지 못함 | M3~M6 생성 결과 재작업, M6 지연 | 중간 | 결정론 규칙(3.11.1)을 코드 리뷰 체크 항목으로 두고(실수·`Dictionary` 순회·문화권 API 금지 검사), 이 PC의 Mono·IL2CPP 교차를 매 생성 변경마다 실시. 다른 PC를 빌릴 수 있으면 M3-15·M4-13 시점에 `-genhash` 결과 파일 비교를 선택 실시해 조기 발견. 불일치 시 부분 요약값(지역·타일)으로 위치를 좁힘. 생성기는 0.x라 고쳐도 버전 보존 부담은 없음 |
 | R-27 | (v0.7 신규) M1 성능 측정을 이 PC 1대 + 봇 7개로 하면 봇 프로세스가 호스트와 CPU·메모리를 나눠 써 호스트 FPS가 실제보다 나쁘게, Steam 릴레이 지연·실제 참가자 렌더링 부하는 반영되지 않음. M1 결과가 M6 실측과 크게 다를 수 있음 | M1 판단 오류(과대·과소 대응), M6에서 성능 문제 늦게 발견 | 중간 | M1 판정은 서버 처리 예산·대역폭·중도 참가·메모리처럼 봇 영향이 작은 지표로 하고 FPS는 참고값. 봇은 `-batchmode -nographics`, 봇 CPU 점유를 기록. 다른 PC를 쓸 수 있으면 봇을 옮겨 재측정(선택). M6-10 실측 결과로 다시 판단 |
 | R-25 | (v0.6 신규) 석탄 광맥 추가로 생성 결과가 바뀌어 M3에서 만든 시험 월드·골든 해시·측정 기준 시드 결과가 달라짐. 검증 조건에 석탄이 들어가 재생성 빈도가 늘 수 있음 | 시험 재작업, 생성 시간 증가 | 낮음~중간 | 생성기 0.x라 버전 보존 불필요(3.11.7). M4-09에서 골든 해시·결정론(이 PC)·`-genvalidate`(재생성 비율, NFR-052 생성 시간) 다시 측정. 석탄 최소 수량은 `지역별 진행 재료 최소 수량` 설정값으로 조정 |
+| R-28 | (v0.8 신규) Unity Smart Merge의 `git mergetool` 방식이 실제 씬·프리팹 충돌에서 아직 검증되지 않음. 병합 드라이버 방식은 실패가 확인됨(확장자 없는 임시 파일). `.gitattributes`의 `merge=unityyamlmerge` 지정은 남아 있어, 누군가 CLAUDE.md 안내대로 `merge.unityyamlmerge.driver`를 등록하면 다시 실패 방식이 켜짐 | 씬·프리팹 병합 실패·손상, 수작업 병합 | 낮음~중간(혼자 개발이라 충돌 자체가 드묾) | 저장소 로컬 설정은 `git mergetool` 방식만(M1-01 (4), `docs/dev/SMART_MERGE_SETUP.md`), 드라이버는 등록하지 않음. **상태: 확인 대기** — 첫 실제 충돌 때 `git mergetool` 결과를 Unity에서 열어 확인하고 기록. 실패하면 충돌한 YAML 파일을 한쪽 버전으로 고르고 에디터에서 다시 작업 |
+| R-29 | (v0.8 신규) 개발 실행이 실험 버전 패키지(`com.unity.pipeline` 0.9.1-exp.1)와 베타 CLI(1.0.0-beta.15)에 기대고, 이 패키지는 에디터 전용이 아님. 버전이 바뀌면 런타임 어셈블리 구성이 달라지거나 CLI 동작이 바뀔 수 있음. 열린 에디터 상태(열린 씬·플레이 모드)가 시험 결과에 영향을 줄 수 있음 | 출시 빌드에 개발 도구 코드가 섞임(보안·크기), 개발 흐름 중단 | 중간 | 안전장치 3가지(3.4.3)와 출시 빌드 산출물 검사로 매 출시 빌드마다 0건 확인, 패키지 버전 고정(D-03)·올릴 때 격리 검사 재통과. CLI가 동작하지 않으면 CLAUDE.md 기본 방식(에디터를 닫고 batchmode)으로 바로 돌아갈 수 있음(빌드·시험 명령은 `Game.Editor`와 Test Framework에 있어 CLI와 무관). 마일스톤 완료 시험은 에디터를 새로 연 깨끗한 상태에서 실행. Check 단계 보안 점검(security-auditor) 대상 |
 

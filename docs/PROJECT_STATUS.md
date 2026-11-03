@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (착수 전, Plan 승인됨 2026-11-03)
-- 다음에 할 일: M1 착수 전 결정 반영 완료(SRS v0.9, SDD v0.7, STORYBOARD v1.4, Unity 6000.3.27f2 설치) → 문서 커밋(사용자 승인 시) → Do(M1, developer 구현 모드)(기본 키 할당, C-28 게임패드 종류, Steam 없이 1인 플레이, C-46 차단 범위, C-48 첫 실행 언어, C-33, C-43, C-49) → Do(M1, developer)
+- 현재 단계: Do (M1 진행 중, 묶음 2 완료 · cycle/1-mvp push)
+- 다음에 할 일: (M1 묶음 1 완료·push 8eed7fa, 2026-11-03 재개 · 에디터 열어 둔 채 진행) → SDD v0.8 갱신 완료(2026-11-03) → M1 묶음 2(M1-04~M1-06) 완료(2026-11-03, cycle/1-mvp 브랜치 신설 후 커밋 24e771b·c66df83·e5a66f4·6cf1f1b, push 2026-11-03) → architect로 SDD 3.4.2 시험 asmdef 참조 갱신 → 묶음 3(M1-07~09) → 묶음 4(M1-10~13). 사용자 GUI 확인 완료(2026-11-03: Console 오류 없음, Steam 끈 상태 SCR-001 정상, MCP 연결 정상)
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -12,7 +12,7 @@
 | 사이클 | 단계 | 상태 (대기/진행 중/완료/승인됨) | 날짜 | 산출물 |
 |---|---|---|---|---|
 | 1 | Plan | 승인됨 | 2026-11-03 | docs/SRS.md v0.8 (승인), docs/SDD.md v0.6 (승인), docs/DESIGN_PROPOSAL.md, docs/wireframes/ (hud, defense, cooking), docs/STORYBOARD.md v1.3 |
-| 1 | Do | 진행 중 (M1 묶음 1 완료: M1-01~M1-03, 결정 대기) | 2026-11-03 | src/ (HDRP 17.3.0 프로젝트, asmdef 13+, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0, Boot 씬·SCR-001, 설정 데이터), docs/dev/SMART_MERGE_SETUP.md |
+| 1 | Do | 진행 중 (M1 묶음 1·2 완료: M1-01~M1-06) | 2026-11-03 | src/ (HDRP 17.3.0 프로젝트, asmdef 13+, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0, Boot 씬·SCR-001, 설정 데이터), docs/dev/SMART_MERGE_SETUP.md |
 | 1 | Check | 대기 | - | - |
 | 1 | Act | 대기 | - | - |
 
@@ -85,6 +85,10 @@
 | 2026-11-02 | SUG-010 음성 채팅: 영구 제외 (추후에도 넣지 않음) | 사용자 결정 |
 | 2026-11-02 | 세션 참가 조건: [공개 / 친구 전용 / 초대 전용] 세 가지. 호스트가 새 월드를 만들 때와 기존 월드로 세션을 열 때 설정, 월드별로 저장, 세션 중 변경 가능. 새 월드 기본값 "친구 전용"(사용자 확정 2026-11-02. SRS의 "사용자 검토 대기" 표시는 SRS 승인 때 정리) | 사용자 결정 (SRS FR-144 세부화). 게임 안 행동 권한(SUG-018)은 보류 유지 |
 | 2026-11-02 | 세계관: B "꺼진 하늘" 채택. 잠식 = 하늘을 덮은 잿빛 장막, 정화탑 = 장막을 뚫고 빛을 쏘는 등광탑, 혹한·어둠·독기는 햇빛 소실과 재에서 비롯됨, 빛이 닿는 곳에는 적이 생기지 않음 | 사용자 결정 (HDRP 조명 연출과 규칙 일관성) |
+| 2026-11-03 | 개발 실행 방식: Unity 에디터를 열어 둔 채로 진행. 에이전트는 batchmode 대신 Unity CLI로 열린 에디터를 조작 (컴파일 `unity recompile`, EditMode `unity command test run --mode EditMode --result-only`, PlayMode `--async_tests true` 후 `unity command test status`로 확인, Console `unity command console get`). 시범 실행: 컴파일 오류 0, EditMode 157/157, PlayMode 5/5. batchmode를 띄우는 `unity build`/`unity test`/`-batchmode` 실행은 잠금 충돌로 금지, 출시 빌드 검사가 필요하면 사용자에게 에디터를 닫아 달라고 요청 | 사용자 결정 (에디터를 닫았다 여는 번거로움 제거, MCP·CLI 연결 확인 완료) |
+| 2026-11-03 | SDD v0.8 갱신 (architect): D-03 실제 고정 버전, 3.4.2 asmdef 표(Unity.Jobs 참조 삭제, Game.Editor·시험 asmdef 추가), 3.4.3 Pipeline 안전장치, M1-01 (4) mergetool 방식, D-22 에디터 열어 둔 채 개발 방식 신설, 위험 R-28(mergetool 미검증)·R-29(실험 패키지·베타 CLI 의존) 신설. 상태 「승인」 유지 | 묶음 1 결과 사실 반영 |
+| 2026-11-03 | 에디터 앞으로 가져오기(`unity command editor focus`, `unity recompile --focus`)를 필요할 때만 허용: PlayMode 시험·재생 모드 확인, 뷰 캡처, 그래픽·성능 측정 직전, 또는 에디터가 뒤에 있거나 최소화되어 명령이 30초 넘게 멈출 때. 단순 컴파일·EditMode 시험에는 쓰지 않음. 에이전트는 가져온 횟수와 이유를 보고. 뒤에 있어도 돌도록 `editor set_auto_tick` 100ms(유지) 설정 | 사용자 결정 (최소화·비활성 상태에서 작업이 멈추는 문제) |
+| 2026-11-03 | M1 묶음 2 결과(developer): M1-04 결정론 V0 + 골든 해시(golden-seed-1 Full f4797ecf0e9e888a 등 3시드×2크기), 열린 에디터에서 IL2CPP 개발 빌드(184초) 후 Mono와 해시·타일 요약 전부 일치, 병렬 수 1~16 반복 일치 · M1-05 PerfTelemetry(Stopwatch 기본, ProfilerMarker 보조)·CSV·F3 성능 표시·Bench 씬·파일 로그 가림 · M1-06 HDRP 품질 4단계·프리셋(기준 「높음」)·DLSS/FSR2 품질 모드(이 PC는 DLSS 확인), manifest에 com.unity.modules.nvidia·amd 추가 · 총괄 재확인: 컴파일 0, EditMode 282/282, PlayMode 10/10, .meta 누락 0 | developer 보고 + 총괄 검증 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -115,10 +119,10 @@
 | 결정론 생성 실패 시 동기화 전체 붕괴 | architect | 치명적 | 정수·Q16.16 고정소수점만 사용, float·Burst 금지, 골든 해시·교차 PC 시험 |
 | 클라이언트 권위 이동: 속도 한도 안의 위치 조작은 막지 못함 | architect | 협동 전용이라 영향 낮음 | Check 단계 보안 점검 대상 |
 | HUD 기본이 장치형(손목 계기, 3D 소품·애니메이션·월드 공간 UI) + 일반 HUD 옵션 두 벌 | 총괄 (DESIGN_PROPOSAL D-02 단점) | M2 일정 증가, 월드 공간 UI 구현 위험(SDD R-18), 8인 동료 체력은 등불 밝기 단계로만 구분 | 일반 HUD(A) 부품을 장치형이 재사용, 접근성 옵션으로 일반 HUD 제공 |
-| Unity Pipeline 패키지(com.unity.pipeline 0.9.1-exp.1)가 에디터 전용이 아님 | developer | 런타임 서버가 빌드에 들어갈 위험 | 해소: 허용 + 안전장치(기호 금지 시험, 출시 빌드 산출물 검사). MCP 실제 연결은 사용자가 GUI 에디터에서 확인 |
+| Unity Pipeline 패키지(com.unity.pipeline 0.9.1-exp.1)가 에디터 전용이 아님 | developer | 런타임 서버가 빌드에 들어갈 위험 | 해소: 허용 + 안전장치(기호 금지 시험, 출시 빌드 산출물 검사). MCP 실제 연결 사용자 확인 완료(2026-11-03) |
 | Smart Merge 드라이버가 확장자 없는 임시 파일 때문에 실패(실제 Boot.unity로 확인) | developer | 씬·프리팹 자동 병합 불가 | git mergetool 방식으로 변경(미시험), 첫 실제 충돌 때 확인. SDD M1-01 (4) 수정 필요 |
 | FishNet 4.7.4R은 com.unity.modules.physics2d 내장 모듈이 있어야 컴파일됨 | developer | 모듈 제거 시 빌드 실패 | manifest에 유지, SDD D-03에 기록 |
-| SCR-001(Steam 미실행) 실제 화면 미확인 (Steam 실행 중이라 단위 시험만) | developer | UI 표시 문제 늦게 발견 | 사용자가 에디터 GUI에서 Steam 끄고 확인 |
+| SCR-001(Steam 미실행) 실제 화면 미확인 (Steam 실행 중이라 단위 시험만) | developer | UI 표시 문제 늦게 발견 | 해소: 사용자가 에디터 GUI에서 Steam 끄고 확인, 정상(2026-11-03) |
 | 다른 CPU(Intel·AMD) 결정론 확인이 M6로 늦어짐 → 불일치 시 M3~M6 생성 규칙·시험 월드·골든 해시 재작업 (SDD R-26) | architect, requirements-analyst | 중간 | 결정론 규칙을 코드 리뷰 체크 항목으로, 생성 규칙 변경 시 Mono/IL2CPP 교차 비교, 다른 PC를 빌릴 수 있으면 M3-15·M4-13에 -genhash 비교 |
 | M1 봇 7개가 같은 PC에서 돌아 호스트 FPS가 실제보다 나쁘게 나오고 Steam 릴레이 지연이 빠짐 (SDD R-27) | architect | 중간 | M1은 서버 처리 예산·대역폭·중도 참가·메모리로 판정, 호스트 FPS는 참고값, 최종 판정은 M6-10 실측 |
 | 기본 키 할당 충돌: 패드 채팅 버튼 미지정(보기 버튼이 인벤토리와 겹침), 핑 LT+RB와 퀵슬롯 RB 조합 처리, LB/RB 문맥별 사용 | ui-ux-designer | 낮음 (채팅 M2, 핑 M5) | M2 착수 전 결정 |
@@ -137,6 +141,11 @@
 | 생성 결과가 플레이 불가능한 시드 | 총괄 | 진행 막힘 | 생성 검증 규칙(도달 가능성, 등광탑 자리, 필수 재료 수량)과 자동 시드 테스트 |
 | 8인 60 FPS 목표: 호스트는 렌더링과 서버 처리(적 AI 최대 60, 자원 2만 개 동기화)를 동시에 해야 함 | 총괄 | RTX 3060급 HDRP 실사 1080p에서 목표 미달 가능 | 업스케일링(DLSS/FSR) 활용, 적 AI·동기화 부하 최적화, M1 기술 검증에서 조기 측정 |
 | 확인 필요 39건 (부록 C) | requirements-analyst | 일부 FR 판정 불가 | SDD 전 필수(C-01, C-02, C-35)부터 결정, 나머지는 해당 마일스톤 전 결정 |
+| PlayMode 시험(TransportSelectorTests) 실행 때마다 Console에 FishNet "SpawnablePrefabs is null" 오류가 최대 5건 찍힘 (AddComponent 순간 OnValidate가 출력, 시험 판정은 LogAssert로 무시해 통과) | 사용자 보고 2026-11-03, 총괄 분석 | 낮음: 결함 아님, 진짜 오류와 헷갈릴 수 있음 | 사용자 결정: 현 상태 유지(2026-11-03). M1-07에서 NetworkManager 프리팹을 만들 때 SpawnablePrefabs(DefaultPrefabObjects) 지정 필수, 시험도 그 프리팹 사용으로 전환 검토 |
+| FSR2 경로(AMD·Intel GPU)는 실기기 없이 선택 규칙 단위 시험만 | developer (M1-06) | 다른 GPU에서 업스케일러 실패 늦게 발견 | 쓸 수 없으면 끄고 이유 기록하도록 구현. 다른 GPU 확인은 M6-10 |
+| Bench 씬의 서버 틱은 가짜 작업이라 서버 처리 예산 판정 불가 | developer (M1-05) | M1-12 전까지 서버 예산 판단 못 함 | M1-09·M1-11·M1-12에서 실제 작업으로 교체 |
+| HDRP가 lodBias를 애셋 값으로 덮어써서 프리셋 LOD 값은 GraphicsAssetBuilder가 애셋에 구워 넣음 | developer (M1-06) | 프리셋 값을 바꾸고 메뉴를 다시 실행하지 않으면 반영 안 됨 | M2-01 옵션 화면 작업 때 다시 확인 |
+| SDD 3.4.2 표와 시험 asmdef 참조가 다름 (Game.Tests.WorldGen 신설, Infrastructure·Integration 참조 추가) | developer (M1 묶음 2) | 문서와 실제 불일치 | architect로 SDD 갱신 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -148,6 +157,7 @@
 | 1 (SRS v0.6 / SDD v0.4 / STORYBOARD v1.1) | 172 | 57 | - | - | - | - |
 | 1 (SRS v0.8 / SDD v0.6 / STORYBOARD v1.3) | 179 | 57 | - | - | - | - |
 | 1 (Do M1 묶음 1) | 179 | 57 | EditMode 157 + PlayMode 5 (개발자 단위·아키텍처 시험) | 100% (162/162) | 0 | - |
+| 1 (Do M1 묶음 2) | 179 | 57 | EditMode 282 + PlayMode 10 (개발자 단위·아키텍처 시험) | 100% (292/292) | 0 | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
