@@ -10,6 +10,7 @@
         "Game.Adapters.Presentation",
         "Game.Infra.Transport",
         "Game.Infra.Steam",
+        "Game.Infra.Platform",
         "Game.Bootstrap",
         "FishNet.Runtime",
         "Game.Editor"

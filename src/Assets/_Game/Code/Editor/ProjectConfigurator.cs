@@ -53,6 +53,9 @@ namespace Game.Editor
             // HDRP는 선형 색 공간이 필요하다.
             PlayerSettings.colorSpace = ColorSpace.Linear;
 
+            // [NFR-021] GPU·메인 스레드 프레임 시간(FrameTimingManager)을 읽으려면 켜야 한다(개발용 성능 표시, DES-108).
+            PlayerSettings.enableFrameTimingStats = true;
+
             // 호스트 창이 뒤로 가도 서버가 멈추면 안 된다(8인 세션).
             PlayerSettings.runInBackground = true;
 
