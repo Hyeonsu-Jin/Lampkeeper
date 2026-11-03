@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7c2a9d8913033349a464fc2dd360792, type: 3}
+  m_Name: BalanceConfig
+  m_EditorClassIdentifier: Game.Infra.Config::Game.Infra.Config.BalanceConfig
+  Values:
+    Movement:
+      WalkSpeedMps: 4
+      RunSpeedMps: 7
+      InteractionDistanceMeters: 2.5
+    Stamina:
+      Max: 100
+      RunCostPerSecond: 10
+      RegenDelaySeconds: 1
+      RegenPerSecond: 20
+    Vitals:
+      HealthMax: 100
+      HungerMax: 100
+      HungerDepleteRealMinutes: 60
+      ThirstMax: 100
+      ThirstDepleteRealMinutes: 40
+      FatigueMax: 100
+      FatigueDepleteGameDays: 2
+      SleepRecoverRealSeconds: 60
+      DownedDurationSeconds: 60
+      ReviveSeconds: 5
+      ReviveHealthRatio: 0.25
+      PoisonDamagePerSecond: 1
+      ColdDamagePerSecond: 0.5
+      ColdStaminaRegenReduction: 0.5
+    WorldTime:
+      DayLengthRealMinutes: 30
+      DaytimeRatio: 0.65
+      NightVisibilityMeters: 5
+      DarknessVisibilityMeters: 3
+    Light:
+      TorchRadiusMeters: 8
+      LanternRadiusMeters: 12
+      DeviceLanternRadiusMeters: 15
+      RepelSeconds: 5
+    Inventory:
+      SlotCount: 32
+      MaxStackResource: 50
+      MaxStackTool: 1
+      MaxStackFood: 20
+      ContainerSlotCount: 24
+    Gathering:
+      TreeBasicHits: 5
+      TreeAdvancedMinHits: 8
+      TreeAdvancedMaxHits: 12
+      StoneHits: 4
+      CoalVeinHits: 5
+      OreBasicHits: 6
+      OreRareHits: 10
+    Furnace:
+      OreProcessFuelCost: 4
+      WoodFuelPoints: 2
+      CoalFuelPoints: 16
+      CharcoalFuelPoints: 16
+      ProcessRealSeconds: 20
+      CharcoalWoodCost: 4
+      CharcoalYield: 1
+    Durability:
+      BaseToolDurability: 100
+      DurabilityPerTier: 50
+      LossPerUse: 1
+      RepairMaterialRatio: 0.25
+      DemolishRefundRatio: 0.75
+    Save:
+      AutosaveIntervalMinutes: 10
+      BackupCount: 5
+      LogKeepRuns: 5
+    Defense:
+      WavesTutorial: 3
+      WavesNormal: 5
+      WavesCore: 7
+      WavesFinal: 10
+      WaveIntervalSeconds: 60
+      PrepSeconds: 60
+      WaveBonusPerExtraPlayer: 0.5
+      BossHealthBonusPerExtraPlayer: 0.75
+      PurifyRadiusNormalMeters: 100
+      PurifyRadiusCoreMeters: 200
+      PurifyRadiusTutorialMeters: 60
+      StartPurifyRadiusMeters: 30
+      FailMaterialLossRatio: 0.3
+      MaxConcurrentEnemies: 60
+    Creatures:
+      AnimalSpawnIntervalMinutes: 5
+      AnimalMaxPerPurifiedZone: 6
+      DetectionDistanceMeters: 20
+      NightRaidStartDelaySeconds: 60
+    Farming:
+      WaterKeepGameDays: 1
+      GrowMinGameDays: 1
+      GrowMaxGameDays: 3
+      StationRecognitionMeters: 3
+      BuffDurationMinutes: 10
+    Session:
+      MaxPlayers: 8
+      DisconnectTimeoutSeconds: 10
+      RequestsPerSecondLimit: 30
+      ReconnectHoldSeconds: 120
+      ShutdownNoticeSeconds: 30
+      PasswordMaxLength: 32
+      PasswordAttemptsPerMinute: 5
+      WorldNameMaxLength: 32
+      ChatMaxLength: 200
+      ChatPerSecond: 2
+      NoticeLogCount: 100
+      PingDurationSeconds: 15
+      PingMaxCount: 3
+      NameTagDistanceMeters: 50
+      FovMinDegrees: 70
+      FovMaxDegrees: 110
+      FovDefaultDegrees: 90
+    WorldGenRules:
+      BenchSeedText: BENCH-0001
+      MaxBoundaryStepMeters: 2
+      BoundaryBlendMeters: 1
+      MaxWalkableSlopeDegrees: 35
+      MinTowerSlotsForest: 6
+      MinTowerSlotsOther: 8
+      ResourceSafetyMultiplier: 1.5
+      ValidationSeedCount: 1000
+      ReleaseValidationSeedCount: 10000
+    Difficulty:
+      EasyMultiplier: 0.7
+      NormalMultiplier: 1
+      HardMultiplier: 1.4
+    Progression:
+      StatPointsPerLevel: 1

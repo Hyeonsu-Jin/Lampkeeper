@@ -1,0 +1,30 @@
+{
+    "name": "Game.Bootstrap",
+    "rootNamespace": "Game.Bootstrap",
+    "references": [
+        "Game.Domain",
+        "Game.WorldGen",
+        "Game.Application",
+        "Game.Adapters.Persistence",
+        "Game.Adapters.Net",
+        "Game.Adapters.Presentation",
+        "Game.Infra.Steam",
+        "Game.Infra.Transport",
+        "Game.Infra.AiJobs",
+        "Game.Infra.Config",
+        "Game.Infra.Platform",
+        "Game.Infra.Rendering",
+        "FishNet.Runtime",
+        "com.rlabrecque.steamworks.net",
+        "FishySteamworks"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

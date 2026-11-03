@@ -1,0 +1,4 @@
+<linker>
+  <!-- Game.Application의 설정 검증기·해시가 반사로 공개 필드를 읽는다(IL2CPP 코드 제거 방지). -->
+  <assembly fullname="Game.Application" preserve="all" />
+</linker>

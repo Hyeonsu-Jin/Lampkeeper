@@ -1,0 +1,17 @@
+{
+    "name": "Game.Infra.Platform",
+    "rootNamespace": "Game.Infra.Platform",
+    "references": [
+        "Game.Application",
+        "Game.Domain"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

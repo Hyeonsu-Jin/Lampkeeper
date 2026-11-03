@@ -1,0 +1,19 @@
+{
+    "name": "Game.Adapters.Net",
+    "rootNamespace": "Game.Adapters.Net",
+    "references": [
+        "Game.Application",
+        "Game.Domain",
+        "Game.WorldGen",
+        "FishNet.Runtime"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,149 @@
+/* =============================================================
+   Base.uss  -  UI 공통 기반 (최소 토큰)
+   역할  : 색 토큰, 글자 크기 단계 변수, 공통 버튼/모달 모양, 모양 구분 규칙의 뼈대.
+   위치  : 패널 루트(UIDocument.rootVisualElement)에 붙인다 (UiTheme.Apply).
+   관련  : SDD 3.7.10 (I-04 접근성 기반을 M1 UI부터, I-12 다크 단일 테마), NFR-056, FR-130
+   범위  : M1-02에서 SCR-001에 필요한 최소 토큰만 둔다. 전체 공통 기반 확장은 M1-08 작업이다.
+
+   규칙
+   1) 화면 USS에서 색 값(rgb, #...)을 직접 쓰지 않고 var(--color-*)만 쓴다.
+   2) 글자 크기는 var(--fs-*)로만 지정한다. 단계(text-small/normal/large) 클래스가 변수 값을 바꾼다.
+   3) 색으로 구분하는 정보(경고, 동료, 적, 핑 등)는 아이콘/모양/글자를 함께 쓴다 (예: 경고 문구 앞의 ⚠).
+   4) 다크 단일 테마. 테마 전환 구조는 만들지 않는다.
+   ============================================================= */
+
+:root {
+    /* 색 토큰 (다크 한 벌) */
+    --color-bg: rgb(14, 16, 20);
+    --color-backdrop: rgba(0, 0, 0, 0.88);
+    --color-surface: rgb(28, 32, 40);
+    --color-surface-raised: rgb(42, 48, 60);
+    --color-border: rgb(88, 98, 116);
+    --color-text: rgb(235, 238, 243);
+    --color-text-dim: rgb(170, 178, 192);
+    --color-ally: rgb(110, 200, 255);
+    --color-enemy: rgb(255, 120, 110);
+    --color-warning: rgb(255, 200, 70);
+    --color-danger: rgb(255, 100, 90);
+    --color-focus: rgb(255, 255, 255);
+    --color-primary: rgb(70, 130, 220);
+    --color-primary-text: rgb(255, 255, 255);
+
+    /* 글자 크기 (기본 = text-normal). 단계 클래스가 아래 값을 바꾼다 */
+    --fs-caption: 14px;
+    --fs-body: 18px;
+    --fs-button: 20px;
+    --fs-heading: 28px;
+}
+
+/* 글자 크기 단계: 패널 루트에 하나만 붙는다. 하위 요소는 변수를 상속한다 */
+.text-small {
+    --fs-caption: 12px;
+    --fs-body: 15px;
+    --fs-button: 17px;
+    --fs-heading: 24px;
+}
+
+.text-normal {
+    --fs-caption: 14px;
+    --fs-body: 18px;
+    --fs-button: 20px;
+    --fs-heading: 28px;
+}
+
+.text-large {
+    --fs-caption: 17px;
+    --fs-body: 22px;
+    --fs-button: 24px;
+    --fs-heading: 34px;
+}
+
+/* 공통: 숨김 */
+.is-hidden {
+    display: none;
+}
+
+/* 공통: 전체 화면 어두운 배경 (모달 뒤) */
+.screen-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-backdrop);
+    align-items: center;
+    justify-content: center;
+}
+
+/* 공통: 모달 상자 */
+.modal {
+    background-color: var(--color-surface);
+    border-width: 2px;
+    border-color: var(--color-border);
+    border-radius: 8px;
+    padding: 32px;
+}
+
+.modal__title {
+    color: var(--color-text);
+    font-size: var(--fs-heading);
+    -unity-font-style: bold;
+    margin-bottom: 16px;
+    white-space: normal;
+}
+
+.modal__body {
+    color: var(--color-text);
+    font-size: var(--fs-body);
+    white-space: normal;
+    margin-bottom: 12px;
+}
+
+/* 상태 문구: 색만이 아니라 굵기로도 구분한다 (모양 구분 규칙) */
+.modal__status {
+    font-size: var(--fs-body);
+    -unity-font-style: bold;
+    white-space: normal;
+    margin-bottom: 12px;
+}
+
+.status--warning {
+    color: var(--color-warning);
+}
+
+.modal__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+/* 공통: 버튼. 포커스는 굵은 테두리로 드러낸다 (색에만 의존하지 않음) */
+.btn {
+    font-size: var(--fs-button);
+    color: var(--color-text);
+    background-color: var(--color-surface-raised);
+    border-width: 2px;
+    border-color: var(--color-border);
+    border-radius: 6px;
+    padding: 10px 24px;
+    margin-left: 12px;
+    min-width: 140px;
+}
+
+.btn:hover {
+    border-color: var(--color-text-dim);
+}
+
+.btn:focus {
+    border-width: 4px;
+    border-color: var(--color-focus);
+}
+
+.btn:disabled {
+    color: var(--color-text-dim);
+}
+
+.btn--primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-text);
+}

@@ -1,0 +1,19 @@
+{
+    "name": "Game.Infra.Transport",
+    "rootNamespace": "Game.Infra.Transport",
+    "references": [
+        "Game.Adapters.Net",
+        "Game.Application",
+        "FishNet.Runtime",
+        "FishySteamworks"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

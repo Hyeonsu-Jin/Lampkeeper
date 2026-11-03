@@ -1,0 +1,16 @@
+{
+    "name": "Game.WorldGen",
+    "rootNamespace": "Game.WorldGen",
+    "references": [
+        "Game.Domain"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

@@ -1,0 +1,10 @@
+# English text table (key <TAB> text). Temporary M1 format; moves to Unity Localization String Tables in M2-01.
+# Rules: keys are lowercase letters, digits, underscore, dot. \n in text is a line break. Every key must also exist in strings.ko.txt (NFR-044).
+
+# SCR-001 Steam required notice
+steam.required.title	⚠ Steam is not running
+steam.required.desc	Start Steam and sign in, then press [Retry].\nThis game can only start while Steam is running.
+steam.required.retry	Retry
+steam.required.quit	Quit
+steam.required.checking	Checking...
+steam.required.retry_failed	Still not connected to Steam

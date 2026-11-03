@@ -1,0 +1,7 @@
+/* SCR-001 Steam 실행 필요 안내 - 화면 전용 스타일 (색·글자 크기는 Base.uss 변수만 사용) */
+
+/* 모달 폭 640 (STORYBOARD SCR-001), 화면 가운데 고정 */
+.modal--steam-required {
+    width: 640px;
+    max-width: 90%;
+}

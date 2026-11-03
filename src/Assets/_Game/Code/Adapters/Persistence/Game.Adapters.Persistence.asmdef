@@ -1,0 +1,17 @@
+{
+    "name": "Game.Adapters.Persistence",
+    "rootNamespace": "Game.Adapters.Persistence",
+    "references": [
+        "Game.Application",
+        "Game.Domain"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

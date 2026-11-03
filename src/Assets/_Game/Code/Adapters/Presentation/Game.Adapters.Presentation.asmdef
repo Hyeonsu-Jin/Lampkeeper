@@ -1,0 +1,20 @@
+{
+    "name": "Game.Adapters.Presentation",
+    "rootNamespace": "Game.Adapters.Presentation",
+    "references": [
+        "Game.Application",
+        "Game.Domain",
+        "Game.WorldGen",
+        "Unity.InputSystem",
+        "Unity.Localization"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
