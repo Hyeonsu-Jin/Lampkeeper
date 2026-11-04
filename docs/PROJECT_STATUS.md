@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 · 2026-11-04 커밋·push)
-- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작) M1 묶음 3 커밋 bf016ae·b97e9f2·411787f·bcfd9a0·31b5322·5c1a63b·86041f4·f3fc57a + docs 커밋, push(2026-11-04) → 다음 SDD 갱신 때 개발 전용 옵션 `-gameversion` 반영 → **M1 묶음 4(M1-10 자원 2만 개 동기화, M1-11 시험용 AI 60체 부하, M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개), M1-13 M1 완료 빌드·FR 시험·아키텍처 시험)** → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시
+- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 2026-11-04 커밋·push)
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작) uGUI 전환 커밋 279d85c·71e3ef3·efa451b·0e9aa2c·54afce3 + docs 커밋, push(2026-11-04) → 사용자 확인 대기: 키보드 Esc로 ESC 메뉴 열기·닫기, 방향키 포커스 표시, Boot 하이어라키의 UI 프리팹 인스턴스 · 사용자 결정 대기: Pretendard 글꼴 도입 방법, 중국어·일본어 대체 글꼴(추천: 지금은 안 넣음), CLAUDE.md 「씬과 프리팹은 에디터 스크립트로 생성」 규칙 변경 → 다음 SDD 갱신 때 `-gameversion` 반영 → **M1 묶음 4(M1-10 자원 2만 개 동기화, M1-11 시험용 AI 60체 부하, M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개), M1-13 M1 완료 빌드·FR 시험·아키텍처 시험)** → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -105,6 +105,9 @@
 | 2026-11-04 | 문서 갱신: SRS v0.11(NFR-058 게임 버전 SemVer 신설 → NFR 58개, FR-003 버전 불일치 거부, FR-145 친구 전용 방 미표시는 정상, FR-158, C-68 「메인 메뉴 버전 상시 표시」 미결) · SDD v0.12(3.7.12 게임 버전 규칙, DES-037 GameVersion 신설 → 108개, D-26, bundleVersion 단일 출처·빌드 중에만 +메타데이터, 참가 검사는 전체 문자열 일치, JoinRequest.gameVersion 문자열·protocolVer 2, R-33·R-34 해소, R-35 신설) · STORYBOARD v1.6(상태 문구 --color-text #E8E4DC, 색 토큰 대응표·토큰 4개 추가, SCR-016 친구 초대·세션 나가기 반응) · developer: ESC 메뉴 무반응 원인(로비 전체 화면 배경이 HUD 위를 덮음) 수정, 친구 초대 불가 시 안내 문구, 상태 문구 밝은 글자색. 총괄 재확인 EditMode 481/481 | 사용자 결정 반영 + 결함 수정 |
 | 2026-11-04 | SemVer 구현(developer): Domain GameVersion 값 객체, 참가 검사에 게임 버전 전체 문자열 비교, JoinRequest.gameVersion·ProtocolVersion 2, BuildCommands가 빌드 중에만 +dev.<UTC>.<커밋>[.dirty] 붙였다 복구, ReadBuildNumber 폐지, DevLobby에 버전 표시. 개발 빌드 확인: 플레이어 버전 0.1.0+dev.20261104054926.417edbb.dirty, Windows에서 + 문제 없음(R-35 6번 해소), 같은 빌드 접속 통과·다른 메타데이터 VersionMismatch 거부. 개발 전용 옵션 -gameversion 추가(SDD 미반영 → 다음 SDD 갱신 때 반영). 총괄 재확인: EditMode 541/541, PlayMode 16/16, .meta 누락 0, bundleVersion 0.1.0 | developer 보고 + 총괄 검증 |
 | 2026-11-04 | 사용자 재시험(키보드·마우스, 에디터): 방 열기 정상, ESC 메뉴 닫기·세션 나가기 정상, 나간 뒤 로비 화면 정상, 친구 초대는 안내 문구 「지금은 친구 초대 창을 열 수 없습니다 (Steam 오버레이가 꺼져 있거나 방이 Steam 방이 아닙니다)」 표시(에디터에서 예상된 동작), 로비 글자·버전 표시 정상 → ESC 메뉴 결함 해소 확인. 남은 수동 시험: Steam으로 실행한 빌드에서 실제 초대 창, 친구 계정 2PC 참가, Xbox 패드(나중에 한꺼번에) | 사용자 시험 |
+| 2026-11-04 | **UI 방식을 UI Toolkit → uGUI(Canvas + TextMeshPro)로 변경. 앞으로 만들 모든 UI도 uGUI 기반.** 이유(사용자): UI 오브젝트를 하이어라키에서 직접 만들고 관리하는 쪽이 유지보수에 낫다. 원칙: UI는 하이어라키·프리팹의 게임 오브젝트가 원본이고, 스크립트가 다시 만들어 덮어쓰지 않음. 기존 화면(SCR-001 Steam 필요, 개발용 로비, 게임 HUD·ESC 메뉴)을 uGUI로 옮김. SDD D-16 대체 | 사용자 결정 |
+| 2026-11-04 | 문서 갱신: SDD v0.13(D-27 uGUI + TextMeshPro로 D-16 대체, DES-122 UiThemeKit 신설 → 109개, 3.7.10 재작성: UiTheme 애셋 color-* 20·fs-* 6, ThemedText·UiButton·UiInputRouter 등, Overlay 캔버스 1920×1080 높이 기준, 숨길 때 Canvas·Raycaster·CanvasGroup 함께 끔, 생성기는 씬·UI 프리팹을 없을 때만 만들고 덮어쓰지 않음, R-18 해소, R-36~R-40 신설) · STORYBOARD v1.7(구현 용어 uGUI 기준, 디자인 변화 없음) | 사용자 결정 반영 |
+| 2026-11-04 | uGUI 전환 결과(developer, 사용량 한도로 1회 중지 후 재개): com.unity.ugui 2.0.0·TMP Essential Resources, UiTheme 애셋(color 20·fs 6·글꼴 3), ThemedText·UiButton·UiScreenStack·UiInputRouter 등, 프리팹 UiRoot·Common·Screens(SteamRequired·DevLobby·GameMenu)·Hud/GameHud, Boot 씬은 MCP로 개별 교체(프리팹 인스턴스 5개), UI Toolkit 자산 삭제, 생성기는 없을 때만 생성(Run All 전후 md5 동일), 한글은 개발 전용 OS 글꼴(맑은 고딕) 메모리 대체. 총괄 재확인에서 PlayMode UiLayerPlayTests 6개 실패 발견(결함: 메모리 대체 글꼴의 재질·아틀라스 파괴 후 죽은 참조) → debugger가 UiDevFontFallback 수정. 최종: EditMode 555(554 통과, 1 건너뜀=Pretendard 대기), PlayMode 22/22, Console 오류는 알려진 SpawnablePrefabs 소음만 | developer·debugger 보고 + 총괄 검증 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -170,6 +173,8 @@
 | 에디터 HUD(월드 진입 후 스태미나 호) 미확인: MCP 클릭 시뮬레이션이 UI Toolkit 버튼에 전달 안 됨. 로비 「준비됨」 글자 대비 낮아 보임 | developer (M1 묶음 3) | UI 결함 늦게 발견 | 사용자 수동 확인, 필요 시 Base.uss 색 토큰 조정 |
 | Steam 「친구 전용」 로비는 로비 검색 목록에 나오지 않음(Steam 정상 동작) | developer (M1-07) | 없음 | 해소: 사용자 확인 2026-11-04, 정상 동작이며 공개 목록은 「공개」 방만 |
 | 게임 버전 엄격 일치로 개발 빌드는 다시 빌드할 때마다 서로 접속 불가, 에디터 ↔ 플레이어 접속도 거부 · 사이클 시작 때 MINOR 올리기 누락 가능 · Windows 플레이어에서 bundleVersion의 + 처리 미확인 (SDD R-35) | architect (SDD v0.12) | 개발 중 다중 접속 시험 불편, 버전 번호 오류 | 다중 프로세스 시험은 같은 빌드 폴더 복사 사용. **총괄 규칙: 새 사이클의 첫 Do 작업에서 MINOR를 올림(사이클 2는 0.2.0)**. + 처리는 마무리 개발 빌드에서 확인 |
+| uGUI 전환 비용·회귀, TMP 한글 글꼴(아틀라스 크기, 동적 추가 순간 정지, Steam 이름의 중국어·일본어·이모지 □ 표시), 「오브젝트가 원본」 원칙의 작업 손실·병합 충돌, 손목 계기 캡처 카메라 비용, 캔버스 재빌드 성능 (SDD R-36~R-40) | architect (SDD v0.13) | M1·M2 일정, 표시 품질, 성능 | 기존 시험 유지 + UiPrefabRulesTests·UiLayerPlayTests, Pretendard 도입(사용자 작업), CJK 대체 글꼴은 사용자 결정, 정적·동적 캔버스 분리 |
+| 개발 전용 한글 대체 글꼴(OS 맑은 고딕, 메모리 전용)이 플레이어 빌드에서도 동작하는지 미확인, 다른 OS에서는 □ · 키보드 Esc로 ESC 메뉴 열기는 MCP 키 흉내가 안 먹어 미확인 · 처음 만드는 경로(새 PC에서 Boot 씬 생성) 미실행 | developer·debugger (uGUI 전환) | 한글 미표시, 입력 경로 결함 늦게 발견 | Pretendard 도입(사용자 작업), 사용자 수동 확인, M1-13 개발 빌드에서 확인 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -184,6 +189,7 @@
 | 1 (Do M1 묶음 2) | 179 | 57 | EditMode 282 + PlayMode 10 (개발자 단위·아키텍처 시험) | 100% (292/292) | 0 | - |
 | 1 (Do M1 묶음 3) | 179 | 57 | EditMode 476 + PlayMode 16 (개발자 단위·통합·아키텍처 시험) | 100% (492/492) | 0 | - |
 | 1 (Do M1 묶음 3 마무리: ESC 결함·SemVer) | 179 | 58 | EditMode 541 + PlayMode 16 | 100% (557/557) | 1 (ESC 메뉴 버튼 무반응, 수정됨) | - |
+| 1 (Do M1 묶음 3 마무리: uGUI 전환) | 179 | 58 | EditMode 555(1 건너뜀) + PlayMode 22 | 100% (576/576, 건너뜀 제외) | 1 (PlayMode 대체 글꼴 죽은 참조, 수정됨) | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)

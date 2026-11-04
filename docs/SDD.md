@@ -4,14 +4,14 @@
 
 | 항목 | 내용 |
 |---|---|
-| 문서 버전 | 0.12 |
+| 문서 버전 | 0.13 |
 | 작성일 | 2026-11-02 (최종 수정 2026-11-04) |
-| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영으로 승인 상태 유지) |
+| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, v0.13은 UI 방식 변경(UI Toolkit → uGUI, 사용자 결정 2026-11-04) 반영으로 승인 상태 유지) |
 | 작성 | architect (기획 에이전트, 설계 담당) |
 | 준거 표준 | IEEE Std 1016-2009 (설계 관점·설계 뷰 구조), ISO/IEC/IEEE 12207 (아키텍처 정의·설계 정의 프로세스) |
 | 범위 | SRS v0.11의 FR 179개, NFR 58개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
 | 참조 문서 | `docs/SRS.md` **v0.11** (v0.10에 사용자 결정 2026-11-04 반영: 게임 버전 = 시맨틱 버저닝(SemVer 2.0.0) `MAJOR.MINOR.PATCH`, 출시 전 `0.y.z`(0.1.0부터)·공개 출시 `1.0.0`, 배포한 번호 재사용 금지, 사이클 태그 규칙과 같음(NFR-058). v0.10 내용: v0.9에 사용자 결정 2026-11-03 반영: 스태미나 0일 때 불이익 없음(달리기만 걷기 속도), `스태미나 회복 지연` 1초 확정, C-04는 스태미나 부분만 해소·허기·갈증·피로도·혹한은 미결. v0.9 내용: v0.8에 M1 착수 전 사용자 결정 반영: Unity 6000.3.27f2, M1 측정은 이 PC 1대 + 봇 7개·다른 CPU 결정론과 실제 8대 P8은 M6, Steam 실행 필수(오프라인 플레이 없음), C-28·C-33·C-43·C-46·C-48·C-49 해소. v0.8 내용: v0.7에 M4 제작 추가 반영: FR-173 제작대, FR-174 제작대 제작 UI(C-11 해소), FR-175 용광로, FR-176 연료 규칙, FR-177 가공 진행, FR-178 숯 만들기, FR-179 석탄 광맥. v0.7 내용: v0.6에 손목 계기 결정 반영: C-58 올림 방식 기본 토글, C-59 올린 동안 모든 행동 가능, 등불 이름표 체력 4단계 + 꺼짐. v0.6 내용: v0.5에 HUD 디자인 변경 반영: 장치형 HUD 기본, FR-171 HUD 표시 방식 옵션, FR-172 손목 계기 올림/내림, NFR-001 「표시되고 있는 동안」 기준. v0.5 내용: v0.4에 2026-11-02 디자인 관련 사용자 결정 반영: 공개 목록 예약 자리 표시, M1부터 접근성 기반, 화면을 열어도 게임 진행 유지, 독립 레시피북, 다크 단일 테마. v0.4 내용: v0.3의 세션 참가 조건 변경 — 「초대 전용 / 친구 전용 / 공개」, 새 월드 생성·세션 열기 때 선택, 월드별 저장, 기본값 「친구 전용」 — 에 더해 2026-11-02 사용자 결정 반영: C-51 M1 범위 축소, C-52 성능 측정 기준, 인원 배율 적용 범위 등), `docs/PROJECT_STATUS.md` (2026-11-02 결정 기록·위험 목록), `CLAUDE.md` |
-| 후속 문서 | `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md` (ui-ux-designer), `src/` 소스 코드 (developer) |
+| 후속 문서 | `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md` (ui-ux-designer, v1.7부터 uGUI 기준), `src/` 소스 코드 (developer) |
 
 ### 1.1 용어 (SRS 1.3에 더해 설계에서 쓰는 말)
 
@@ -56,6 +56,7 @@
 | 0.10 | 2026-11-03 | architect | M1 묶음 3(M1-07~09) 착수 때 developer 제안을 사용자가 채택(2026-11-03), 참조 SRS v0.10, 상태 「승인」 유지. 클린 아키텍처 의존 규칙(3.4.1) 변경 없음. (1) **네트워크 메시지 정의·인코딩을 `Game.Application`의 `Protocol/`로**: DES-080 NetMessages를 어댑터(Net) → 애플리케이션으로 옮김(ID 유지). 메시지 형식(`MessageKind`, 3.7.2 표의 메시지)과 바이트 인코딩(`ByteWriter`/`ByteReader`, 양자화, 크기 상한 검사, `MessageCodec`)은 순수 C#. 포트 `INetServer`/`INetClient`는 FishNet 형식 없이 Protocol 메시지를 다룸. FishNet은 연결 관리·전송(FishySteamworks/Tugboat)·신뢰/비신뢰 채널·호스트 모드·아바타 NetworkObject에 계속 쓰고, 메시지는 바이트를 담는 Broadcast 한 종류 `PacketBroadcast`로만 등록. 이를 구현하는 **DES-121 FishNetPacketTransport**(`FishNetServer`/`FishNetClient`, Net 어댑터) 신설. 게이트웨이·복제 송수신·JoinHandshake(DES-081~083, 085)는 Net 어댑터에 두되 포트와 Protocol 메시지에만 의존(3.4.2, 3.6.2, 3.7.2, 3.7.3, 3.8.2, 3.9.2, D-23 신설). (2) **PlayerAvatar(DES-084)**: NetworkTransform 대신 소유자 ServerRpc(비신뢰) → 호스트 검사(이동 검사, 서버 쪽 스태미나 추정, `AvatarMoveValidator`는 `Game.Application`) → ObserversRpc로 다른 참가자에게 전달. 내 자세는 Application 포트 `ILocalPlayerPose`로 표현 어댑터(DES-086)에서 Net 어댑터로, 다른 참가자 자세는 `ClientWorldMirror`를 거쳐 표현 어댑터로(어댑터끼리 참조 금지)(3.7.3, 3.9.8 신설, 3.11.9, 3.11.12, 3.12.1, 3.12.5, D-24 신설, DES-052·072·084·086). (3) 새 시험 asmdef **`Game.Tests.Net`**(EditMode, `Game.Application`·`Game.Domain`·`Game.Adapters.Net`): 가짜 `INetServer`로 게이트웨이·JoinHandshake·복제 시험. 메시지 코덱 왕복 시험은 `Game.Tests.Application`(3.4.2, 3.8.2). (4) **스태미나(SRS v0.10)**: 0이 돼도 불이익 없음(달리기만 걷기 속도), `스태미나 회복 지연` 1초 확정. C-04는 스태미나 부분만 해소(3.7.6, DES-003, FR-024·FR-025 추적, M1-08, M2-02). (5) **게임패드 겹치는 버튼 할당 보류**: 채팅·핑·퀵슬롯 등 패드 할당은 추후 다시 정의, M1-08 기본 바인딩은 키보드·마우스 전체 + 패드는 겹치지 않는 기본 행동만(3.7.9, M1-08). (6) 3.7.2 자원 델타 상태 크기를 3.11.8 인코딩(인덱스 2 B + 상태 2 B = 4 B)에 맞춤(v0.9까지 3.7.2 표만 「상태 3B」로 달랐음). (7) M1-07에 Protocol 기반·DES-121을 앞당겨 넣고 M1-09에서 명령·복제 메시지를 더함. R-06 갱신, R-30·R-31 신설. 설계 요소 106 → **107개**, 작업 수 변화 없음 |
 | 0.11 | 2026-11-04 | architect | M1 구현 묶음 3(M1-07~M1-09) 결과의 사실 반영, 참조 SRS v0.10 그대로, 상태 「승인」 유지. 설계 방향·게임 런타임 asmdef 12개(Bootstrap 제외)의 참조 변경 없음. 실제 asmdef·`ArchitectureRulesTests`·코드를 읽어 대조함. (1) 3.4.2: `Game.Tests.Integration`에 `Game.Domain`·`Game.Adapters.Net` 추가, `Game.Bootstrap`은 「필요 시」 허용 범위 안에서 `Unity.InputSystem`을 실제로 참조(`InputActionAsset`을 받아 게임 흐름에 넘김), `Unity.Localization`은 허용만 하고 참조 안 함. `Game.Editor`는 FishNet·Net 어댑터를 참조하지 않고 FishNet 형식(`NetworkManager`, `NetworkObject`, `PlayerAvatar`)을 **이름으로 찾아 붙임(리플렉션)** — D-25 신설. (2) 3.4.1 규칙 8·3.4.3: Net 어댑터의 FishNet 형식 사용을 `Transport/`(DES-121)·`Avatar/`(DES-084) 폴더로 한정하는 소스 검사, Application·Domain·WorldGen 소스의 `using FishNet`/`using Steamworks`/`using UnityEngine` 금지 검사를 아키텍처 시험으로 강제. (3) 부트·네트워크 시작 순서: Boot 씬 NetworkManager는 꺼 둔 채 저장 → `TransportSelector.Apply`가 `TransportManager`를 직접 붙이고 전송 지정 → `GameBootstrap`이 켬 → 틱·시간 초과·연결 수 상한 적용(3.9.9 신설, 3.2.3, DES-100·101). World 씬은 Additive로 불러 Boot 씬을 유지. (4) 에디터 생성 파이프라인 `Game/Setup/Run All` 순서와 결과물(`Settings/GameInput.inputactions`, `Prefabs/PlayerAvatar.prefab` → `Assets/DefaultPrefabObjects.asset` 등록, `Scenes/World.unity`)(3.8.2). (5) 실행 옵션: `-host`/`-connect`는 전송을 안 주면 Tugboat, `-transport steam`과 함께 주면 옵션 오류를 기록하되 중단하지 않음, `-steamlobbytest`·`-autowalk`·`-autoquit N`·`-bootsmoke` 추가(3.7.4, DES-103). (6) 설정값: `NetworkTuning`의 `JoinTimeoutSeconds`·`MaxCommandsPerTick`·`MaxQueuedCommands`·`SnapshotBytesPerSecond`, `BalanceValues.Movement`의 `MoveTolerance`·`MoveSlackMeters`·`MoveStaminaGraceSeconds`·`MaxPoseDeltaSeconds`·`MaxVerticalSpeedMps`(모두 `ConfigValidator` 검사)를 3.11.12·3.11.13·3.12.1에 표로, 3.11.12 의사코드를 실제 `AvatarMoveValidator`에 맞춤(v0.10의 `MoveStaminaGrace`·`MoveSlack` → 실제 이름). (7) 3.7.10: 글자 크기는 `--text-scale` 배율이 아니라 단계 클래스가 바꾸는 `--fs-*` 변수, 색 토큰 실제 이름(`--color-*`)과 STORYBOARD 2.1 이름 대응표. (8) 측정·관찰: 한 PC 8프로세스 측정의 1% Low 28 FPS·예산 위반 로그(R-32), `PacketBroadcast` 송신 1건당 관리 힙 약 81 B(R-31 갱신), Steam 「친구 전용」 로비는 로비 검색 목록에 나오지 않음(R-33, 사용자 결정 대기), 빌드 번호가 `bundleVersion`을 `0.1.<빌드 번호>`로 덮어씀(R-34, 사용자 결정 대기). 설계 요소·작업 수 변화 없음 |
 | 0.12 | 2026-11-04 | architect | R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, 참조 SRS v0.11(NFR-058 게임 버전 규칙 추가, NFR 58개), 상태 「승인」 유지. 의존 규칙·asmdef 변경 없음. (1) **게임 버전 = SemVer 2.0.0**(사용자 결정): 사이클 = MINOR, `fix/` = PATCH, 지금 `0.1.0`, 배포한 번호 불변. 설계: 원본은 사람이 정하는 `PlayerSettings.bundleVersion`(핵심 + 사전 릴리스), `BuildCommands`는 핵심을 덮어쓰지 않고 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙였다 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `ReadBuildNumber`·`-buildNumber`·`GAME_BUILD_NUMBER`·`VersionPrefix` 폐지, `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 참가 검사는 게임 버전 **전체 문자열 일치**(출시·개발 같은 규칙, 출시 ↔ 개발·에디터 ↔ 플레이어는 거부). 숫자 인코딩(`주×10000 + …`) 폐지 → `JoinRequest.gameVersion` 문자열(≤ 64 B), `protocolVer` 1 → 2, `JoinRequest` 첫 필드 `protocolVer` 위치 고정 규칙, 로비 `kh_build` 값 = 전체 문자열, 월드 파일 헤더 `gameVer` u16 ×3, 표시 형식(출시 `v{Core}`, 개발·에디터 `v{Full}`). 새 절 3.7.12, **DES-037 GameVersion** 신설, D-26 신설, 고친 곳 3.5.2, 3.7.1, 3.7.2, 3.7.4, 3.8.2, 3.9.2, DES-031·112, 6장(FR-003, FR-145, NFR-058), 7장(M1-01, M1 묶음 3 마무리 작업, M1-13, M2-07, M10-06). R-34 해소, R-35 신설. (2) **R-33 해소**(사용자 확인: 친구 전용 로비가 로비 검색에 나오지 않는 것은 Steam 정상 동작): 공개 세션 목록(FR-145, M2-07)은 「공개」 세션만, SRS·설계 변경 없음(3.7.4, M2-07, 6장 FR-145). 설계 요소 107 → **108개**, 작업 수 변화 없음(M1 마무리 작업은 기존 M1-07·M1-01 (5)의 보완) |
+| 0.13 | 2026-11-04 | architect | **UI 방식 변경**(사용자 결정 2026-11-04: UI Toolkit → **uGUI(Canvas + TextMeshPro)**, 앞으로 만들 모든 UI도 uGUI. 이유: UI 오브젝트를 하이어라키에서 직접 만들고 관리하는 쪽이 유지보수에 나음), 참조 SRS v0.11 그대로, 상태 「승인」 유지. 요구사항 변경 없음. (1) **D-16을 D-27로 대체**(D-16은 기록으로 남김), D-27 신설. (2) **관리 원칙**: UI·씬·프리팹은 하이어라키·프리팹의 게임 오브젝트가 원본. 에디터 생성기는 「없을 때 처음 한 번 만들기 + 있으면 검사만」으로 바꾸고, 이미 있는 씬·프리팹을 통째로 다시 만들어 덮어쓰지 않음. 에이전트는 Unity MCP 도구(gameobject·component·prefab)로 개별 오브젝트를 고침. 화면마다 프리팹, 씬에는 프리팹 인스턴스(3.8.2 생성 파이프라인 표 재작성, D-25 근거 갱신). (3) **테마**: USS 변수 → ScriptableObject `UiTheme` + 적용 컴포넌트 `ThemedText`·`ThemedGraphic`·`ThemedSelectable`. 토큰 이름은 v0.12의 USS 이름에서 `--`만 뺀 것(`color-*` 20개, `fs-*` 5개 + 큰 제목 `fs-heading-lg` 신설), 글자 크기 3단계는 기준값 × 배율(0.9/1.0/1.25) 반올림으로 v0.12 값과 같게(3.7.10). (4) **캔버스 구성**: Screen Space Overlay, CanvasScaler 1920×1080·높이 기준(Match 1), 가운데 16:9 영역 `UiSafeArea16x9`, 정적·동적 캔버스 분리, 상호작용 없는 요소 Raycast Target 끔, 정렬 순서 띠(0 월드 표시 / 100 HUD / 200 창 / 300 경고 / 400 모달 / 500 시스템), 숨김 = Canvas·CanvasGroup·GraphicRaycaster를 함께 끔(ESC 메뉴 결함 재발 방지), 입력은 EventSystem + `InputSystemUIInputModule`, 닫기·탭 이동은 `UiInputRouter`, 비활성 버튼도 포커스를 받음(`interactable`을 끄지 않음), Layout Group·Content Size Fitter(3.7.10). (5) **손목 계기·월드 표시 재검토**: 계기 화면은 uGUI 프리팹을 UI 전용 캡처 카메라로 렌더 텍스처에 그리고(값이 바뀔 때만, 최대 10 Hz, HDRP 카메라 설정은 DES-114), 표시 면 (B)는 사다리꼴 메시 `UiWarpedRawImage`. 이름표·핑은 화면 좌표 투영을 유지, R-18 해소(3.4.4, 3.7.11, D-21). (6) **asmdef·패키지**: `com.unity.ugui` 2.0.0을 manifest에 명시(Unity 6에서 TextMeshPro 포함, 지금은 HDRP 의존으로만 설치됨), `Game.Adapters.Presentation`·`Game.Editor`·`Game.Tests.Infrastructure`·`Game.Tests.Integration`에 `UnityEngine.UI`·`Unity.TextMeshPro`, UI Toolkit(`UnityEngine.UIElements`) 사용 금지 소스 검사(3.4.1 규칙 9, 3.4.2, 3.4.3, D-03). (7) **시험**: USS 규칙 검사 → 프리팹·테마 규칙 검사(모든 TMP 글자의 `ThemedText`, `richText` 꺼짐, Raycast Target, 텍스트 키, 토큰 값 일치, 글꼴 글자 포함, 대비), 버튼은 `onClick.Invoke()`, PlayMode 화면 층 레이캐스트 시험(3.4.3, 7장). (8) 새 설계 요소 **DES-122 UiThemeKit**, DES-091·092·095·097·120 갱신, 7장 「M1 묶음 3 마무리 — UI uGUI 전환」 작업과 M1-08·M2-01·M2-11·M2-12 설명 갱신, R-18 해소·R-20·R-21·R-22·R-28 갱신, R-36~R-40 신설. 설계 요소 108 → **109개**, 작업 수 변화 없음(전환 작업은 M1 묶음 3 마무리 보완) |
 
 ---
 
@@ -69,7 +70,8 @@
 | test-engineer | 결정론 시험, 골든 해시, 성능 측정 방법(P1/P8), 시험용 진입점(CLI, 봇) | 3.11, 3.12, DES-108, DES-113 |
 | code-reviewer | 의존 방향 위반 검출, 호스트 권위 원칙 준수 여부 | 3.4 의존, 3.6 패턴 |
 | security-auditor | 참가자 요청 검증 경로, SteamID 확인 방식, 비밀번호·채팅 처리, 메시지 크기·빈도 제한 | 3.7 인터페이스, 3.9, DES-050·081·085, DES-080(메시지 디코더, v0.10)·084(아바타 검사) |
-| ui-ux-designer | 화면 목록과 화면이 받는 데이터, 입력 장치 전환, 다국어, 접근성 처리 위치 | 3.2 구성(S10), 3.7 내부 포트, DES-091~097 |
+| ui-ux-designer | 화면 목록과 화면이 받는 데이터, 입력 장치 전환, 다국어, 접근성 처리 위치, 테마 토큰 이름(v0.13: `UiTheme`), 화면 층 순서 | 3.2 구성(S10), 3.7 내부 포트, 3.7.10, DES-091~097, DES-122 |
+| 사용자(UI 유지보수, v0.13) | UI를 하이어라키·인스펙터에서 직접 고치고, 고친 내용이 생성 스크립트에 덮어써지지 않는지 | 3.7.10, 3.8.2 생성 파이프라인, D-27 |
 | 미래의 전용 서버 담당 | 서버 역할이 로컬 플레이어에 의존하지 않는지, 월드 파일 이식성 | 3.4, DES-052, DES-100 |
 
 ---
@@ -165,9 +167,9 @@ flowchart TB
 
 | 씬 | 역할 | 비고 |
 |---|---|---|
-| `Boot` | 컴포지션 루트 생성(DES-100), Steam 초기화, 설정·콘텐츠 로드, 충돌 감지·광과민성 경고 | 항상 첫 씬. v0.11(M1 실제): 루트 오브젝트 = `Bootstrap`(GameBootstrap), **꺼진 상태의 `NetworkManager`**(전송을 정한 뒤 켬, 3.9.9), 메뉴 카메라, SCR-001 화면, 개발용 로비 화면, `GameHud`. World 씬을 Additive로 불러도 Boot 씬은 그대로 남아 조립 루트 역할을 계속함(`DontDestroyOnLoad`를 쓰지 않음) |
+| `Boot` | 컴포지션 루트 생성(DES-100), Steam 초기화, 설정·콘텐츠 로드, 충돌 감지·광과민성 경고 | 항상 첫 씬. v0.11(M1 실제): 루트 오브젝트 = `Bootstrap`(GameBootstrap), **꺼진 상태의 `NetworkManager`**(전송을 정한 뒤 켬, 3.9.9), 메뉴 카메라, SCR-001 화면, 개발용 로비 화면, `GameHud`. World 씬을 Additive로 불러도 Boot 씬은 그대로 남아 조립 루트 역할을 계속함(`DontDestroyOnLoad`를 쓰지 않음). **v0.13(uGUI 전환 뒤)**: UI 루트 오브젝트는 모두 **프리팹 인스턴스** — `UiRoot`(`UiRoot` 컴포넌트 + 자식 `EventSystem`(EventSystem + `InputSystemUIInputModule`), 씬 전체에서 EventSystem은 이것 하나), `SteamRequiredScreen`, `DevLobbyScreen`, `GameHud`, `GameMenu`(ESC 메뉴, Hud에서 분리). 씬 파일이 원본이며 생성기는 씬이 없을 때만 만듦(3.8.2) |
 | `MainMenu` | 월드 만들기·불러오기·관리, 공개 세션 목록, 참가, 옵션 | M1에는 없음(개발용 로비 화면이 Boot 씬 안에 있음). M2에서 만듦 |
-| `World` | 런타임 생성 지형·자원, 고정 콘텐츠(마지막 등불, 장막의 근원) 프리팹 배치, 플레이 | 지형은 실행 중 생성(DES-089). 고정 콘텐츠는 `WorldLayout` 데이터가 가리키는 프리팹. v0.11(M1 실제): `WorldSceneBuilder`가 만든 개발용 장면 — 평평한 바닥(400 m), 햇빛, 기준 상자 8개, 1인칭 조작 장치 `PlayerRig`(CharacterController + 눈 높이 카메라 + `FirstPersonController`), 원격 플레이어 표시 `RemoteAvatarViews`. 접속이 끝나면 `GameFlow`가 Additive로 불러오고 나갈 때 내림. 지형 생성 표시는 M1-10부터 |
+| `World` | 런타임 생성 지형·자원, 고정 콘텐츠(마지막 등불, 장막의 근원) 프리팹 배치, 플레이 | 지형은 실행 중 생성(DES-089). 고정 콘텐츠는 `WorldLayout` 데이터가 가리키는 프리팹. v0.11(M1 실제): `WorldSceneBuilder`가 만든 개발용 장면 — 평평한 바닥(400 m), 햇빛, 기준 상자 8개, 1인칭 조작 장치 `PlayerRig`(CharacterController + 눈 높이 카메라 + `FirstPersonController`), 원격 플레이어 표시 `RemoteAvatarViews`. 접속이 끝나면 `GameFlow`가 Additive로 불러오고 나갈 때 내림. 지형 생성 표시는 M1-10부터. v0.13: UI 오브젝트(Canvas·EventSystem)를 두지 않음 — 게임 중 UI도 Boot 씬의 프리팹 인스턴스가 그림 |
 | `Bench` (개발 빌드 전용) | P1/P8 측정 장면 재현, 시험용 AI 60체 | DES-113 |
 
 ### 3.3 논리 관점
@@ -393,7 +395,7 @@ flowchart TB
     end
     subgraph L3["어댑터 (Interface Adapters)"]
         NET["Game.Adapters.Net (FishNet)"]
-        PRES["Game.Adapters.Presentation<br/>MonoBehaviour·UI·입력"]
+        PRES["Game.Adapters.Presentation<br/>MonoBehaviour·UI(uGUI·TMP)·입력"]
         PERS["Game.Adapters.Persistence<br/>월드 파일 코덱·저장소"]
     end
     subgraph L2["애플리케이션 (Use Cases)"]
@@ -427,10 +429,11 @@ flowchart TB
 6. 모든 게임 코드는 asmdef 안에 둡니다. `Assembly-CSharp`(기본 어셈블리)에는 코드를 두지 않습니다.
 7. **HDRP 어셈블리(`Unity.RenderPipelines.HighDefinition.Runtime`, `Unity.RenderPipelines.Core.Runtime`)는 `Game.Infra.Rendering`만 참조합니다**(3.4.4, 사용자 결정 2026-11-02).
 8. (v0.10, 사용자 결정 2026-11-03) 네트워크 메시지 형식과 바이트 인코딩은 `Game.Application`의 `Protocol/`(DES-080, 순수 C#)에 둡니다. Net 어댑터의 게이트웨이·복제 송수신·참가 절차(DES-081~083, 085)는 포트(`INetServer`/`INetClient`)와 Protocol 메시지에만 의존하고, FishNet 형식(`NetworkConnection`, Broadcast, `NetworkBehaviour`, `NetworkManager` 등)을 쓰는 코드는 DES-121(`FishNetServer`/`FishNetClient`/`PacketBroadcast`)과 DES-084(아바타 NetworkObject)로 한정합니다. 같은 어셈블리 안이라 컴파일러가 막지 못하므로 다음 두 가지로 확인합니다. v0.11(M1-07~09 실제): (a) **폴더 규칙 소스 검사**(아키텍처 시험 `NetAdapter_FishNetTypes_OnlyInTransportAndAvatarFolders`): `Adapters/Net/` 아래 `.cs` 중 `Transport/`(DES-121, `FishNetPacketTransport.cs`)와 `Avatar/`(DES-084, `PlayerAvatar.cs`) 밖의 파일은 주석이 아닌 줄에 `FishNet`이라는 글자가 있으면 실패합니다(`Gateway/`, `Join/`, `Replication/`, 어셈블리 정보 파일이 검사 대상). (b) **컴파일 확인**: `Game.Tests.Net`은 `FishNet.Runtime`을 참조하지 않고도 게이트웨이·참가 절차·복제 클래스를 쓰고 컴파일됩니다(공개 API·기반 클래스에 FishNet 형식이 있으면 컴파일 오류). 더해 Application·Domain·WorldGen 소스에는 `using FishNet`, `using Steamworks`, `using UnityEngine`이 없어야 합니다(아키텍처 시험 `ApplicationAndDomain_DoNotMentionFishNetOrSteamworks`, 규칙 2의 asmdef 검사와 별개로 소스 글자도 검사).
+9. (v0.13, 사용자 결정 2026-11-04, D-27) **UI 패키지(`UnityEngine.UI`, `Unity.TextMeshPro`)는 게임 런타임 어셈블리 중 `Game.Adapters.Presentation`만 참조합니다.** 그 밖에는 에디터 전용 `Game.Editor`와 UI를 시험하는 시험 어셈블리(`Game.Tests.Infrastructure`, `Game.Tests.Integration`)만 허용합니다. `Game.Bootstrap`은 표현 어댑터의 화면 컴포넌트(`GameHud`, `DevLobbyScreen` 등)를 직렬화 필드로 받을 뿐 uGUI·TMP 형식을 직접 쓰지 않습니다. **UI Toolkit(`UnityEngine.UIElements`)은 게임 코드에서 쓰지 않습니다**(엔진 내장 모듈이라 asmdef로 막을 수 없으므로 소스 글자 검사, 3.4.3). 개발용 성능 표시(IMGUI `OnGUI`, DES-108)는 개발 빌드 전용 도구라 예외입니다.
 
 #### 3.4.2 asmdef 목록
 
-v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-112)이 이 표와 실제 참조를 비교하므로, asmdef 참조를 바꿀 때는 이 표를 먼저 고칩니다. 참조 이름은 실제 어셈블리 이름(`FishNet.Runtime`, `FishySteamworks`, `com.rlabrecque.steamworks.net`)으로 적습니다. 게임 런타임 어셈블리는 아래 13개(`Game.Domain` ~ `Game.Bootstrap`)이고, 경로는 `Assets/_Game/Code/` 아래(3.8.2)입니다. v0.9: 아키텍처 시험은 시험 어셈블리(`Game.Tests.*`)의 목록과 참조도 이 표와 비교합니다(Test Runner·NUnit 참조는 공통이라 비교에서 뺌). 시험 asmdef 참조를 바꿀 때도 이 표를 먼저 고칩니다. v0.11: 이 표를 실제 `.asmdef` 21개와 `ArchitectureRulesTests`의 `Expected`·`BootstrapAllowed`·`ExpectedTestReferences`에 다시 대조했습니다(2026-11-04). `Game.Bootstrap`은 시험이 「허용 목록 안인지」만 보고, 나머지는 목록이 정확히 같은지 봅니다. `Game.Editor`의 참조는 시험 비교 대상이 아니지만 아래 행과 같습니다.
+v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-112)이 이 표와 실제 참조를 비교하므로, asmdef 참조를 바꿀 때는 이 표를 먼저 고칩니다. 참조 이름은 실제 어셈블리 이름(`FishNet.Runtime`, `FishySteamworks`, `com.rlabrecque.steamworks.net`)으로 적습니다. 게임 런타임 어셈블리는 아래 13개(`Game.Domain` ~ `Game.Bootstrap`)이고, 경로는 `Assets/_Game/Code/` 아래(3.8.2)입니다. v0.9: 아키텍처 시험은 시험 어셈블리(`Game.Tests.*`)의 목록과 참조도 이 표와 비교합니다(Test Runner·NUnit 참조는 공통이라 비교에서 뺌). 시험 asmdef 참조를 바꿀 때도 이 표를 먼저 고칩니다. v0.11: 이 표를 실제 `.asmdef` 21개와 `ArchitectureRulesTests`의 `Expected`·`BootstrapAllowed`·`ExpectedTestReferences`에 다시 대조했습니다(2026-11-04). `Game.Bootstrap`은 시험이 「허용 목록 안인지」만 보고, 나머지는 목록이 정확히 같은지 봅니다. `Game.Editor`의 참조는 시험 비교 대상이 아니지만 아래 행과 같습니다. **v0.13(uGUI 전환, D-27)**: 아래 표의 `UnityEngine.UI`·`Unity.TextMeshPro` 참조(Presentation, Editor, Tests.Infrastructure, Tests.Integration)는 「M1 묶음 3 마무리 — UI uGUI 전환」(7장)에서 실제 asmdef와 `ArchitectureRulesTests`의 `Expected`·`ExpectedTestReferences`에 함께 넣습니다. 두 어셈블리는 `com.unity.ugui` 2.0.0 패키지 안에 있고(`Runtime/UGUI/UnityEngine.UI.asmdef`, `Runtime/TMP/Unity.TextMeshPro.asmdef`), Unity 6에서는 별도 TextMeshPro 패키지(`com.unity.textmeshpro`)를 설치하지 않습니다.
 
 | asmdef | 레이어 | 참조 허용 | noEngineReferences | 비고 |
 |---|---|---|---|---|
@@ -439,7 +442,7 @@ v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-1
 | `Game.Application` | 애플리케이션 | `Game.Domain`, `Game.WorldGen` | true | 유스케이스, 명령 처리, 서버 시뮬레이션, 복제 모델, 포트. v0.10: `Protocol/` — 네트워크 메시지 형식(`MessageKind`, 3.7.2 표의 메시지, `AvatarPose`)과 바이트 인코딩(`ByteWriter`/`ByteReader`, 양자화, 크기 상한 검사, `MessageCodec`)(DES-080). 아바타 이동 검사기 `AvatarMoveValidator`(DES-052) |
 | `Game.Adapters.Persistence` | 어댑터 | `Game.Application`, `Game.Domain` | true | 월드 파일 코덱·저장소(System.IO). 경로는 생성자로 받음 |
 | `Game.Adapters.Net` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, `FishNet.Runtime` | false | v0.10: 포트 구현 `FishNetServer`/`FishNetClient` + 바이트 래퍼 Broadcast 1종 `PacketBroadcast`(DES-121), 게이트웨이·복제 송수신·JoinHandshake(DES-081~083, 085 — **포트와 Protocol 메시지에만 의존**, FishNet 형식을 공개 API·기반 클래스에 쓰지 않음), 플레이어 아바타 NetworkObject(DES-084, ServerRpc/ObserversRpc). 메시지 정의·직렬화는 `Game.Application/Protocol/`로 옮김 |
-| `Game.Adapters.Presentation` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, `Unity.InputSystem`, `Unity.Localization`. UI Toolkit은 엔진 내장 모듈이라 별도 참조 없음 (**HDRP 참조 금지**) | false | 뷰, UI 프리젠터, 입력, 조명 상태 계산, 오디오. 렌더링 적용은 `IRenderBackend`(이 어셈블리에 정의) 호출로만 |
+| `Game.Adapters.Presentation` | 어댑터 | `Game.Application`, `Game.Domain`, `Game.WorldGen`, `Unity.InputSystem`, `Unity.Localization`, **`UnityEngine.UI`, `Unity.TextMeshPro`**(v0.13, uGUI·TMP. 게임 런타임 어셈블리 중 여기만, 3.4.1 규칙 9) (**HDRP 참조 금지**, v0.13: UI Toolkit `UnityEngine.UIElements` 사용 금지) | false | 뷰, UI 프리젠터, 입력, 조명 상태 계산, 오디오. 렌더링 적용은 `IRenderBackend`(이 어셈블리에 정의) 호출로만. v0.13: UI 공통 기반 `UI/Common/`(테마 `UiTheme`·`Themed*` 컴포넌트·`UiScreen`·`UiRoot`·`UiInputRouter`, DES-122) |
 | `Game.Infra.Steam` | 인프라 | `Game.Application`, `Game.Domain`, `com.rlabrecque.steamworks.net` | false | `IPlatformServices`, `ICloudSync` 구현 |
 | `Game.Infra.Transport` | 인프라 | `Game.Adapters.Net`, `Game.Application`, `FishNet.Runtime`, `FishySteamworks` | false | 전송 선택(Steam/Tugboat), 네트워크 설정 적용 |
 | `Game.Infra.AiJobs` | 인프라 | `Game.Application`, `Game.Domain`, `Unity.Burst`, `Unity.Collections`, `Unity.Mathematics` | false | `IAiNavigationBackend` 구현(흐름장, 이동, 공간 해시). v0.8: `Unity.Jobs` 참조 삭제(Unity 6에서 Job System은 엔진 내장이라 별도 어셈블리 참조가 필요 없음) |
@@ -447,17 +450,17 @@ v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-1
 | `Game.Infra.Platform` | 인프라 | `Game.Application`, `Game.Domain` | false | 로그, 충돌 보고, 성능 측정, 사용자 설정 저장, 백그라운드 작업 |
 | `Game.Infra.Rendering` | 인프라 | `Game.Adapters.Presentation`, `Game.Application`, `Game.Domain`, `Unity.RenderPipelines.HighDefinition.Runtime`, `Unity.RenderPipelines.Core.Runtime` | false | **렌더 파이프라인 의존 코드 전부**: Volume 제어, 조명·태양 쿠키·광원 적용, 후처리(색각 보정·노출), 업스케일링, 셰이더 전역 변수 연결, 그래픽 프리셋·품질 단계 (DES-109, DES-114). v0.9: 프리셋은 `Game.Application`의 순수 `GraphicsPresetCatalog`로만 받음(`Game.Infra.Config` 참조 금지, 인프라끼리 참조 금지) |
 | `Game.Bootstrap` | 인프라(조립) | 위 게임 어셈블리 12개 전부, `FishNet.Runtime`, `com.rlabrecque.steamworks.net`, `FishySteamworks`(필요 시 `Unity.InputSystem`, `Unity.Localization`). HDRP 어셈블리는 직접 참조 금지(규칙 7). **v0.11 실제 참조**: 게임 어셈블리 12개 + `FishNet.Runtime`, `com.rlabrecque.steamworks.net`, `FishySteamworks`, **`Unity.InputSystem`**(「필요 시」 허용 범위 안. `GameBootstrap`이 Input Actions 애셋(`InputActionAsset`)을 직렬화 필드로 받아 `GameFlow`에 넘기기 때문). `Unity.Localization`은 허용만 하고 아직 참조하지 않음(M2-01에서 필요하면 추가, 표 변경 없음) | false | 컴포지션 루트, 씬 흐름, 개발 도구. v0.11: `Runtime/`(`GameFlow` 화면·씬 흐름, `SessionRuntime` 세션 조립, `RuntimeSupport` 빌드 번호·시계·로그 연결), `DevTools/`(실행 옵션, `SteamLobbySmoke`, 진단, Bench) |
-| `Game.Editor` | 에디터 도구 (v0.8) | `Game.Domain`, `Game.Application`, `Game.Adapters.Presentation`, `Game.Infra.Config`, `Game.Bootstrap` (v0.11 확인: **`Game.Adapters.Net`·`FishNet.Runtime` 참조 없음**) | false | **`includePlatforms: Editor`**(플레이어 빌드 제외). 빌드 명령 `BuildCommands`(전체 생성 메뉴 `Game/Setup/Run All` 포함, 3.8.2), 출시 빌드 산출물 검사 `BuildArtifactInspector`(3.4.3), 프로젝트 설정 `ProjectConfigurator`, 씬·애셋 생성 스크립트(`BootSceneBuilder`, `DataAssetBuilder`. v0.9: `BenchSceneBuilder`, 품질 단계·HDRP 애셋 생성 `GraphicsAssetBuilder` — HDRP 형식 없이 SerializedObject 속성 경로로 수정. v0.11: `InputActionsBuilder`, `WorldAndNetworkBuilders`(`AvatarPrefabBuilder`, `WorldSceneBuilder`)). v0.11: FishNet 형식(`FishNet.Managing.NetworkManager`, `FishNet.Object.NetworkObject`)과 Net 어댑터 형식(`Game.Adapters.Net.Avatar.PlayerAvatar`)은 `Type.GetType("형식, 어셈블리")`로 찾아 `AddComponent`(리플렉션)하고, 찾지 못하면 예외로 메뉴 실행을 실패시킴(D-25). 게임 어셈블리는 이 어셈블리를 참조하지 않음. 경로 `Assets/_Game/Code/Editor/` |
+| `Game.Editor` | 에디터 도구 (v0.8) | `Game.Domain`, `Game.Application`, `Game.Adapters.Presentation`, `Game.Infra.Config`, `Game.Bootstrap`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro`(테마 토큰 선택 드롭다운, 테마 다시 적용 메뉴, 씬이 없을 때 처음 만들기·검사) (v0.11 확인: **`Game.Adapters.Net`·`FishNet.Runtime` 참조 없음**. v0.13: `Unity.InputSystem`도 참조하지 않음 — EventSystem의 `InputSystemUIInputModule`은 프리팹에 들어 있고, 생성기가 붙여야 할 때만 D-25 방식(형식 이름)으로 붙임) | false | **`includePlatforms: Editor`**(플레이어 빌드 제외). 빌드 명령 `BuildCommands`(전체 생성 메뉴 `Game/Setup/Run All` 포함, 3.8.2), 출시 빌드 산출물 검사 `BuildArtifactInspector`(3.4.3), 프로젝트 설정 `ProjectConfigurator`, 씬·애셋 생성 스크립트(`BootSceneBuilder`, `DataAssetBuilder`. v0.9: `BenchSceneBuilder`, 품질 단계·HDRP 애셋 생성 `GraphicsAssetBuilder` — HDRP 형식 없이 SerializedObject 속성 경로로 수정. v0.11: `InputActionsBuilder`, `WorldAndNetworkBuilders`(`AvatarPrefabBuilder`, `WorldSceneBuilder`)). v0.11: FishNet 형식(`FishNet.Managing.NetworkManager`, `FishNet.Object.NetworkObject`)과 Net 어댑터 형식(`Game.Adapters.Net.Avatar.PlayerAvatar`)은 `Type.GetType("형식, 어셈블리")`로 찾아 `AddComponent`(리플렉션)하고, 찾지 못하면 예외로 메뉴 실행을 실패시킴(D-25). 게임 어셈블리는 이 어셈블리를 참조하지 않음. 경로 `Assets/_Game/Code/Editor/` |
 | `Game.Tests.Domain` | 시험(EditMode) | `Game.Domain` + Test Runner·NUnit | false | 도메인 규칙 시험. 경로 `Assets/Tests/EditMode/Domain/` |
 | `Game.Tests.Application` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.WorldGen` + Test Runner·NUnit | false | 유스케이스·명령·복제 모델 시험. v0.10: 메시지 코덱 왕복 시험(메시지마다 「쓰고 다시 읽으면 같은 값」, 고정 바이트 기대값, 크기 상한·잘린 입력 거부)과 `AvatarMoveValidator` 시험. 경로 `Assets/Tests/EditMode/Application/` |
 | `Game.Tests.Net` | 시험(EditMode) (v0.10 신설) | `Game.Application`, `Game.Domain`, `Game.Adapters.Net` + Test Runner·NUnit | false | 가짜 `INetServer`/`INetClient`로 게이트웨이(DES-081)·JoinHandshake(DES-085)·복제 송수신(DES-082, 083) 시험. FishNet 없이 돌아야 하므로 `FishNet.Runtime`을 참조하지 않음 — 시험 대상 클래스는 FishNet 형식을 공개 API·기반 클래스에 쓰지 않음(3.4.1 규칙 8). 경로 `Assets/Tests/EditMode/Net/` |
-| `Game.Tests.Infrastructure` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.Infra.Config`, `Game.Adapters.Presentation`, `Game.Infra.Transport`, `Game.Infra.Steam`, `Game.Infra.Platform`(v0.9), `Game.Bootstrap`, `Game.Editor`, `FishNet.Runtime` + Test Runner·NUnit | false | 설정 로더·전송 선택·Steam 확인·부트·빌드 도구 시험, v0.9: 로그·측정(진단)·그래픽 프리셋 데이터 시험. 경로 `Assets/Tests/EditMode/Infrastructure/` |
+| `Game.Tests.Infrastructure` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.Infra.Config`, `Game.Adapters.Presentation`, `Game.Infra.Transport`, `Game.Infra.Steam`, `Game.Infra.Platform`(v0.9), `Game.Bootstrap`, `Game.Editor`, `FishNet.Runtime`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro` + Test Runner·NUnit | false | 설정 로더·전송 선택·Steam 확인·부트·빌드 도구 시험, v0.9: 로그·측정(진단)·그래픽 프리셋 데이터 시험. v0.13: UI 프리팹·테마 규칙 검사(`UiPrefabRulesTests`, 3.4.3)와 화면 뷰 시험(프리팹을 불러 `Button.onClick.Invoke()`). 경로 `Assets/Tests/EditMode/Infrastructure/` |
 | `Game.Tests.Architecture` | 시험(EditMode) | Test Runner·NUnit만(리플렉션·asmdef 파일 읽기로 검사) | false | 이 표와 실제 참조 비교(v0.9: 시험 어셈블리 포함), 의존 방향, 렌더링 격리, Pipeline 패키지 격리(3.4.3), 프로젝트 설정 검사(DES-112). 경로 `Assets/Tests/EditMode/Architecture/` |
 | `Game.Tests.WorldGen` | 시험(EditMode) (v0.9 신설) | `Game.WorldGen`, `Game.Application` + Test Runner·NUnit | false | 결정론 수학, 생성기 V0, `-genhash` 도구, 골든 해시 시험(M1-04). 경로 `Assets/Tests/EditMode/WorldGen/` |
-| `Game.Tests.Integration` | 시험(PlayMode) | `Game.Application`, `Game.Domain`(v0.11), `Game.Adapters.Net`(v0.11), `Game.Adapters.Presentation`(v0.9), `Game.Infra.Platform`(v0.9), `Game.Infra.Rendering`(v0.9), `Game.Bootstrap`(v0.9), `Game.Infra.Transport`, `FishNet.Runtime`, `FishySteamworks` + Test Runner·NUnit | false | 루프백 호스트 + 클라이언트 통합 시험. v0.9: 그래픽·측정 플레이 모드 시험, Bench 씬 시험(M1-05, M1-06). v0.11: 실제 FishNet 경유 루프백 시험(`HostClientLoopbackPlayTests`)이 `SessionRuntime`(Bootstrap)·`FishNetClient`(Net 어댑터)·도메인 ID 형식을 직접 써서 `Game.Domain`·`Game.Adapters.Net` 추가, 전송 선택 시험(`TransportSelectorTests`). 경로 `Assets/Tests/PlayMode/Integration/` |
+| `Game.Tests.Integration` | 시험(PlayMode) | `Game.Application`, `Game.Domain`(v0.11), `Game.Adapters.Net`(v0.11), `Game.Adapters.Presentation`(v0.9), `Game.Infra.Platform`(v0.9), `Game.Infra.Rendering`(v0.9), `Game.Bootstrap`(v0.9), `Game.Infra.Transport`, `FishNet.Runtime`, `FishySteamworks`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro`(화면 층 레이캐스트·포커스 시험) + Test Runner·NUnit | false | 루프백 호스트 + 클라이언트 통합 시험. v0.9: 그래픽·측정 플레이 모드 시험, Bench 씬 시험(M1-05, M1-06). v0.11: 실제 FishNet 경유 루프백 시험(`HostClientLoopbackPlayTests`)이 `SessionRuntime`(Bootstrap)·`FishNetClient`(Net 어댑터)·도메인 ID 형식을 직접 써서 `Game.Domain`·`Game.Adapters.Net` 추가, 전송 선택 시험(`TransportSelectorTests`). v0.13: 화면 층 시험(`UiLayerPlayTests` — 로비·게임·게임 + ESC 메뉴 상태마다 보이는 버튼 가운데로 `EventSystem.RaycastAll`을 쏘아 맨 위 결과가 그 화면의 버튼인지, 키보드·패드 내비게이션이 맨 위 화면 밖으로 나가지 않는지). 경로 `Assets/Tests/PlayMode/Integration/` |
 
 - 시험 어셈블리는 모두 `defineConstraints: UNITY_INCLUDE_TESTS`, `overrideReferences: true` + `nunit.framework.dll`이고, EditMode 시험은 `includePlatforms: Editor`입니다. 시험 어셈블리는 7개(EditMode 6, PlayMode 1)입니다(v0.9: `Game.Tests.WorldGen`을 M1-04에서 만듦. v0.10: `Game.Tests.Net`을 M1-07에서 만듦). 아직 만들지 않은 계획 시험 어셈블리는 `Game.Tests.Persistence`(월드 파일 코덱, M3-08)이며, 만들 때 이 표에 행을 먼저 추가합니다.
-- 타사 어셈블리(게임 코드 아님, 아키텍처 시험의 게임 어셈블리 검사 대상 아님): FishNet은 `Assets/ThirdParty/FishNet/` 아래 자체 asmdef(`FishNet.Runtime`, `GameKit.Dependencies`, `Synapse`, `Unity.FishNet.CodeGen`, `MonoFN.Cecil`), FishySteamworks는 `Assets/ThirdParty/FishySteamworks/FishySteamworks.asmdef`, Steamworks.NET은 UPM 패키지(`com.rlabrecque.steamworks.net`).
+- 타사 어셈블리(게임 코드 아님, 아키텍처 시험의 게임 어셈블리 검사 대상 아님): (v0.13) uGUI·TextMeshPro는 UPM 내장 패키지 `com.unity.ugui` 2.0.0(`UnityEngine.UI`, `Unity.TextMeshPro`), TMP 기본 자원(TMP Essential Resources)은 `Assets/TextMesh Pro/`(3.8.2). FishNet은 `Assets/ThirdParty/FishNet/` 아래 자체 asmdef(`FishNet.Runtime`, `GameKit.Dependencies`, `Synapse`, `Unity.FishNet.CodeGen`, `MonoFN.Cecil`), FishySteamworks는 `Assets/ThirdParty/FishySteamworks/FishySteamworks.asmdef`, Steamworks.NET은 UPM 패키지(`com.rlabrecque.steamworks.net`).
 
 #### 3.4.3 의존 규칙의 강제 방법
 - **컴파일 단계**: asmdef 참조 목록에 없는 어셈블리는 쓸 수 없습니다. `noEngineReferences: true`이면 `UnityEngine` 네임스페이스를 쓰는 순간 컴파일 오류가 납니다. 미리 컴파일된 DLL(Steamworks.NET 등)은 `overrideReferences: true` + 명시 목록으로만 허용합니다.
@@ -469,6 +472,24 @@ v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-1
 - **코드 검사 기준**: 참가자 쪽 코드에서 `WorldState`를 직접 바꾸는 경로 0건(NFR-030). `WorldState` 변경 메서드는 `Game.Application` 내부(internal)로 두고, 서버 시뮬레이션과 명령 처리기만 호출합니다.
 - **렌더링 격리 검사**: 아키텍처 시험에서 `Game.Infra.Rendering` 외 어셈블리가 `Unity.RenderPipelines.*`를 참조하면 실패합니다.
 - **소스 글자 검사 (v0.11, M1-07~09에서 추가)**: 같은 어셈블리 안이라 asmdef로 막을 수 없는 규칙을 소스 파일을 읽어 검사합니다. (1) `Adapters/Net/`에서 FishNet 형식은 `Transport/`·`Avatar/` 폴더에서만(3.4.1 규칙 8). (2) `Application/`·`Domain/`·`WorldGen/` 소스에 `using FishNet`, `using Steamworks`, `using UnityEngine` 없음. 폴더를 옮기거나 새 폴더를 만들 때 이 검사가 함께 바뀌어야 하므로, Net 어댑터 폴더 구성을 바꿀 때는 3.8.2와 이 규칙을 먼저 고칩니다.
+- **UI 패키지 격리 (v0.13, D-27)**: (1) 아키텍처 시험이 `UnityEngine.UI`·`Unity.TextMeshPro`를 참조하는 `Game.*` 어셈블리가 `Game.Adapters.Presentation`, `Game.Editor`, `Game.Tests.Infrastructure`, `Game.Tests.Integration`뿐인지 확인합니다(3.4.1 규칙 9). (2) 소스 글자 검사: `Assets/_Game/Code/**`와 `Assets/Tests/**`의 `.cs`에 `UnityEngine.UIElements`가 없어야 합니다. (3) 애셋 검사: `Assets/_Game/` 아래에 `.uxml`·`.uss`·`.tss`·`PanelSettings` 애셋이 없어야 합니다(전환 뒤 UI 기술이 둘로 섞이지 않게).
+- **UI 프리팹·테마 규칙 검사 (v0.13, `UiPrefabRulesTests`, `Game.Tests.Infrastructure`)**: v0.12까지의 USS 규칙 검사(`UiAndInputRulesTests`의 USS 부분)를 대신합니다. 검사 대상은 `Assets/_Game/UI/Prefabs/` 아래 모든 프리팹과 `Boot.unity`의 UI 프리팹 인스턴스입니다. 항목은 3.7.10의 규칙과 1:1로 대응합니다.
+
+  | 검사 | 실패 조건 | 근거 |
+  |---|---|---|
+  | 글자 테마 | `TMP_Text`(TextMeshProUGUI)에 `ThemedText`가 없음, 크기·색 토큰 이름이 테마에 없음, 실제 `fontSize`·`color`가 「토큰 값(보통 단계)」과 다름(인스펙터에서 직접 바꾼 값), `enableAutoSizing`이 켜짐 | FR-129, NFR-056 |
+  | 리치 텍스트 | `TMP_Text.richText` 또는 `TMP_InputField.richText`가 켜짐. 동적 글자(`ThemedText.IsDynamic`)는 `parseCtrlCharacters`도 꺼짐 | NFR-050 |
+  | 텍스트 키 | `ThemedText`가 키도 없고 동적 표시도 아님, 또는 키가 한국어·영어 표 중 하나에 없음 | NFR-034, NFR-044 |
+  | 그래픽 테마 | `Image`·`RawImage`·사용자 지정 `Graphic`에 `ThemedGraphic`이 없음(아이콘 원본 색을 그대로 쓰는 경우는 `ThemedGraphic`의 `색 토큰 = 없음(흰색)`으로 명시), 실제 `color`가 토큰 값 × `alpha`와 다름. 글자가 올라가는 패널의 `alpha` < 0.72 | NFR-056, NFR-057, STORYBOARD 2.1 |
+  | 레이캐스트 | `raycastTarget`이 켜진 `Graphic`이 Selectable의 `targetGraphic`도 아니고 `UiRaycastBlocker`(모달 뒤 막)도 붙지 않음 | 성능, 3.7.10 (5) |
+  | 선택 요소 | Selectable의 `transition`이 None이 아님(색 블록에 색 값을 쓰지 않음), `ThemedSelectable`이 없음, 버튼이 `UiButton`이 아님, `navigation.mode`가 None(의도적으로 막는 경우는 `UiNavigationExempt` 표시) | NFR-002, NFR-004 |
+  | 화면 루트 | 화면 프리팹 루트에 `UiScreen`·`Canvas`(Screen Space Overlay)·`CanvasScaler`(Scale With Screen Size, 1920×1080, Match 1)·`CanvasGroup`·`GraphicRaycaster`가 없음, `sortingOrder`가 `UiScreen.Layer`의 띠 값과 다름, 하위 캔버스에 `CanvasScaler`가 있음 | 3.7.10 (4)·(5) |
+  | 테마 애셋 | 색 토큰 20개·글자 크기 토큰 6개·글꼴 토큰 3개 중 빠진 것, 배율이 0.9 / 1.0 / 1.25가 아님, 「작게」 계산값이 18 px 미만, 정해진 글자·배경 짝의 대비가 4.5 : 1 미만(큰 글자·아이콘·게이지 3 : 1) | FR-129, NFR-057, STORYBOARD 2.1·2.2 |
+  | 테마 참조 | `Themed*` 컴포넌트가 `Assets/_Game/UI/Theme/UiTheme.asset` 외의 테마를 가리킴(테마는 한 벌, I-12) | NFR-057 |
+  | 글꼴 | `UiGlyphs`의 모든 기호와 한국어·영어 문자열 표의 모든 글자가 글꼴 사슬(정적 아틀라스 + 대체 글꼴)에 있음 — 없으면 □로 보임 | NFR-044, R-37 |
+  | 씬 구성 | `Boot.unity`의 EventSystem이 정확히 하나이고 `InputSystemUIInputModule`을 씀(`StandaloneInputModule` 없음, Active Input Handling = Input System), `World.unity`·`Bench.unity`에 Canvas·EventSystem 없음, UI 프리팹 인스턴스에 **추가된 오브젝트·컴포넌트가 없음**(화면 배치는 프리팹에서 고침) | 3.7.10, 3.8.2 |
+
+  - 버튼 동작 시험은 프리팹을 불러 `Button.onClick.Invoke()`로 누르고 뷰 이벤트(`LeaveRequested` 등)를 확인합니다(UI Toolkit에서 리플렉션으로 `clicked`를 부르던 방식을 없앰). 「사용 불가」 버튼은 `ExecuteEvents.Execute(…, submitHandler)`로 눌러 `onClick`이 불리지 않고 사유 이벤트만 나오는지 봅니다.
 
 #### 3.4.4 렌더링 의존 코드 격리 (사용자 결정 2026-11-02, DES-114)
 
@@ -501,8 +522,9 @@ flowchart LR
 | 후처리 | 색각 보정 행렬, 섬광 완화(노출 변화 제한), 화면 흔들림은 카메라라 제외 | `ColorVisionMode`, 섬광 제한 켬/끔 |
 | 업스케일링·품질 | 품질 단계, 동적 해상도, DLSS/FSR 품질 모드, 프리셋 세부 값 | `GraphicsOptions`(프리셋, 해상도, 화면 모드, 업스케일 켬/끔·품질) |
 | 셰이더 연결 | 전역 셰이더 변수(장막 농도, 정화 마스크) 설정 | 위 값 |
-| 1인칭 손·손목 소품 그리기 (v0.4, **v0.5부터 구현 보류**) | 손목 표시 방식 (A) 3D 소품을 고를 때만 필요: 손·손목 소품이 벽에 파묻히지 않게 그리는 HDRP 사용자 지정 패스(깊이 덮어쓰기·별도 시야각), 렌더 텍스처를 소품 재질에 연결. 현재 기본 (B) 화면 공간 평면은 UI Toolkit 안에서 끝나 이 항목을 쓰지 않음. `IRenderBackend`에 메서드 자리만 두고 구현하지 않음(M6-11 결정 뒤) | `FirstPersonLayerState`(손 시야각, 손목 올림 정도 0~1), 렌더 텍스처 핸들 |
-| 시야 가장자리 위협 효과 (v0.4, v0.5 수정) | 월드 화면 쪽 **보조 색조**(약한 비네트·색 번짐, Volume 후처리)만. STORYBOARD v1.2는 위협 테두리·피격 호를 손목 계기보다 **위 레이어**에 두므로, 테두리·피격 호 본체는 UI Toolkit 레이어(DES-120)에서 그리고 HDRP와 무관함 | `ThreatEdgeState`(종류, 세기 0~1). 세기 변화는 DES-095 섬광 제한기를 거친 값만 받음(FR-131) |
+| 1인칭 손·손목 소품 그리기 (v0.4, **v0.5부터 구현 보류**) | 손목 표시 방식 (A) 3D 소품을 고를 때만 필요: 손·손목 소품이 벽에 파묻히지 않게 그리는 HDRP 사용자 지정 패스(깊이 덮어쓰기·별도 시야각), 렌더 텍스처를 소품 재질에 연결. 현재 기본 (B) 화면 공간 평면은 UI 오버레이(uGUI, v0.13)에서 끝나 이 항목을 쓰지 않음. `IRenderBackend`에 메서드 자리만 두고 구현하지 않음(M6-11 결정 뒤) | `FirstPersonLayerState`(손 시야각, 손목 올림 정도 0~1), 렌더 텍스처 핸들 |
+| 시야 가장자리 위협 효과 (v0.4, v0.5 수정) | 월드 화면 쪽 **보조 색조**(약한 비네트·색 번짐, Volume 후처리)만. STORYBOARD v1.2는 위협 테두리·피격 호를 손목 계기보다 **위 레이어**에 두므로, 테두리·피격 호 본체는 UI 층(v0.13: uGUI 경고 층 캔버스, 정렬 300, DES-120)에서 그리고 HDRP와 무관함 | `ThreatEdgeState`(종류, 세기 0~1). 세기 변화는 DES-095 섬광 제한기를 거친 값만 받음(FR-131) |
+| UI 캡처 카메라 (v0.13, M2-12부터) | 손목 계기 화면(uGUI 프리팹)을 렌더 텍스처에 그리는 **UI 전용 카메라**의 HDRP 설정: `HDAdditionalCameraData`의 사용자 지정 프레임 설정(조명·그림자·안개·볼륨·후처리·업스케일링 끔, 배경 투명), 값이 바뀔 때만 한 번 그리기 요청(`RenderPipeline.SubmitRenderRequest` 또는 `Camera.Render`, **6000.3·HDRP 17.3에서 확인 필요**, R-39). uGUI는 HDRP 형식을 몰라도 되도록 표현 어댑터는 카메라와 텍스처만 넘김 | `UiCaptureRequest`(카메라, 렌더 텍스처) |
 
 - 메시·머티리얼·셰이더 그래프 같은 **애셋**은 HDRP 전용이라 URP로 옮길 때 변환 작업이 따로 필요합니다(코드 영향과 별개). 애셋은 `Assets/_Game/Art/`, `Materials/`, `Settings/`(HDRP 애셋·Volume 프로필)에 모아 범위를 파악하기 쉽게 둡니다.
 - 재평가 시점: **M6 수직 슬라이스**(7장 M6-11). 성능 측정 결과, Unity 렌더 파이프라인 정책 변화, 6.7 LTS 상황을 보고 사용자가 HDRP 유지/URP 전환을 정합니다.
@@ -724,6 +746,9 @@ flowchart LR
 | 더블 버퍼 | 침식 계산, 흐름장 | 병렬 계산 결과가 실행 순서에 영향받지 않게 |
 | 데이터 지향 + Job | DES-105 | 적 이동·흐름장을 Burst 잡으로 메인 스레드 밖에서 |
 | 컴포지션 루트(수동 DI) | DES-100 | 외부 DI 라이브러리 없이 조립 한곳 |
+| 패시브 뷰(MVP) (v0.13 명시) | DES-091 화면마다 `…View`(일반 C# 클래스, 프리팹의 컴포넌트 참조를 받아 표시·이벤트만) + `…Screen`(MonoBehaviour, 프리팹 루트) | 화면 배치는 프리팹(하이어라키)이 원본, 로직은 뷰 클래스·애플리케이션 모델(`UiState`, `StaminaHudModel` 등)에 두어 프리팹을 고쳐도 코드가 바뀌지 않음 |
+| 디자인 토큰 + 적용 컴포넌트 (v0.13) | DES-122 `UiTheme` + `Themed*` | 색·글자 크기를 토큰 이름으로만 참조해 한곳(테마 애셋)에서 바꿈(NFR-056) |
+| 화면 스택 (v0.13) | DES-122 `UiRoot`의 `UiScreenStack` | 열린 화면 순서, 맨 위 화면만 입력(닫기·탭 이동)을 받음, 닫으면 이전 포커스 복원 |
 | 버전별 동결 구현 | DES-044 | 옛 생성기 버전을 코드째 보존(NFR-054) |
 
 ### 3.7 인터페이스 관점
@@ -951,52 +976,129 @@ record ActionCompleted(ActionType Type, PlayerId Player, ContentId Target, int A
 
 | 주제 | 설계 | 요소 |
 |---|---|---|
-| 입력 | Unity Input System. Input Actions 애셋 하나에 제어 체계 2개(`KeyboardMouse`, `Gamepad`). 재설정은 `PerformInteractiveRebinding`, 저장은 제어 체계별 바인딩 덮어쓰기 JSON을 따로(FR-117). 같은 체계 안 충돌 검사 후 「비우기/취소」. 마지막 입력 장치 감지(`InputUser.onChange`, 제어 체계 전환)로 `InputDeviceContext` 갱신 → 안내 아이콘 교체(FR-166, NFR-002). UI Toolkit 내비게이션으로 모든 메뉴를 게임패드로 이동. **v0.7: 기본 바인딩은 STORYBOARD 2.4의 기본 할당표(키보드·마우스 + Xbox 패드)를 그대로 따름. 안내 아이콘은 Xbox 계열을 먼저(M1), PlayStation 계열은 M2(C-28 해소)** — 아이콘 묶음은 장치 계열별 데이터라 추가해도 코드 변경 없음. **v0.10 (사용자 결정 2026-11-03)**: 게임패드에서 버튼이 겹치는 채팅·핑·퀵슬롯 등의 할당은 **추후 다시 정의(보류)**. M1-08 기본 바인딩은 키보드·마우스 전체 + 게임패드는 겹치지 않는 기본 행동(이동·시점·달리기·상호작용·공격 등)만 넣고, 보류 항목의 게임패드 바인딩은 비워 둡니다(그 Action이 있으면 키보드·마우스 바인딩만 둠). 나중에 정하면 Input Actions 애셋 데이터만 바꾸면 되고 코드는 바뀌지 않습니다. v0.4: 손목 계기 올림/내림 Action `ToggleWrist` 추가(키보드·게임패드 기본 할당은 결정 대기. 동작 방식은 `WristRaiseMode` 기본 토글 / 옵션 누르는 동안, C-58 해소) | DES-092 |
+| 입력 | Unity Input System. Input Actions 애셋 하나에 제어 체계 2개(`KeyboardMouse`, `Gamepad`). 재설정은 `PerformInteractiveRebinding`, 저장은 제어 체계별 바인딩 덮어쓰기 JSON을 따로(FR-117). 같은 체계 안 충돌 검사 후 「비우기/취소」. 마지막 입력 장치 감지(`InputUser.onChange`, 제어 체계 전환)로 `InputDeviceContext` 갱신 → 안내 아이콘 교체(FR-166, NFR-002). ~~UI Toolkit 내비게이션으로 모든 메뉴를 게임패드로 이동.~~ **v0.13(D-27)**: 메뉴 이동은 uGUI 내비게이션(Selectable `Navigation`, EventSystem 선택 요소)과 `InputSystemUIInputModule`(UI 동작 지도의 `Navigate`·`Submit`·`Point`·`Click`·`ScrollWheel`), 닫기(`Cancel`)·탭 이동(`TabPrev`/`TabNext`)은 `UiInputRouter`가 맨 위 화면에 전달(3.7.10 (6)). 키캡은 `KeycapView`가 장치 전환 이벤트로 교체. **v0.7: 기본 바인딩은 STORYBOARD 2.4의 기본 할당표(키보드·마우스 + Xbox 패드)를 그대로 따름. 안내 아이콘은 Xbox 계열을 먼저(M1), PlayStation 계열은 M2(C-28 해소)** — 아이콘 묶음은 장치 계열별 데이터라 추가해도 코드 변경 없음. **v0.10 (사용자 결정 2026-11-03)**: 게임패드에서 버튼이 겹치는 채팅·핑·퀵슬롯 등의 할당은 **추후 다시 정의(보류)**. M1-08 기본 바인딩은 키보드·마우스 전체 + 게임패드는 겹치지 않는 기본 행동(이동·시점·달리기·상호작용·공격 등)만 넣고, 보류 항목의 게임패드 바인딩은 비워 둡니다(그 Action이 있으면 키보드·마우스 바인딩만 둠). 나중에 정하면 Input Actions 애셋 데이터만 바꾸면 되고 코드는 바뀌지 않습니다. v0.4: 손목 계기 올림/내림 Action `ToggleWrist` 추가(키보드·게임패드 기본 할당은 결정 대기. 동작 방식은 `WristRaiseMode` 기본 토글 / 옵션 누르는 동안, C-58 해소) | DES-092 |
 | 게임패드 글자 입력 | `ITextInputService` → Steam 화면 키보드 | DES-102 |
 | 다국어 | Unity Localization 패키지 String Table(ko, en). 도메인·애플리케이션은 텍스트 키와 인자만 다루고, 문장 조립은 받는 PC의 언어로(알림도 키 + 인자로 전송). 빌드 전 검사: 모든 키가 두 언어에 있는지(누락 0건, NFR-044). 첫 실행 언어(C-48 해소): 사용자 설정에 언어가 없을 때 Localization 초기화 단계에서 `SteamApps.GetCurrentGameLanguage()`(Steam 언어)를 읽어 한국어면 한국어, 그 밖은 영어로 정하고 사용자 설정에 저장 | DES-093, DES-102 |
-| 사용자 입력 글자 | 채팅·월드 이름·Steam 이름은 리치 텍스트 해석 끔(UI Toolkit `enableRichText = false`), 제어 문자 제거는 호스트에서(NFR-050) | DES-034, DES-091 |
-| 글자 크기 | 루트 USS 클래스(`text-small/normal/large`)가 글자 크기 변수(v0.11 실제: `--fs-*`)를 바꿔 일괄 변경. **M1 UI부터** 모든 글자 크기는 이 변수로만 지정(3.7.10) | DES-095, DES-091 |
-| 색각 보정 | 월드 화면: HDRP 사용자 지정 후처리(색 변환 행렬, DES-114). UI: 색 토큰 + 모양·아이콘 병행 규칙으로 색 없이도 구분(FR-130 수용 기준), **M1 UI부터** 적용(3.7.10) | DES-095, DES-091 |
+| 사용자 입력 글자 | 채팅·월드 이름·Steam 이름은 리치 텍스트 해석 끔, 제어 문자 제거는 호스트에서(NFR-050). v0.13: **모든** TextMeshPro 글자(`TMP_Text.richText = false`)와 입력칸(`TMP_InputField.richText = false`)에서 끔 — 게임 문장도 태그를 쓰지 않으므로 예외 없음. 동적 글자(이름·채팅)는 `parseCtrlCharacters = false`도 함께. `ThemedText`가 켜질 때 강제하고 프리팹 규칙 검사가 확인(3.4.3) | DES-034, DES-091, DES-122 |
+| 글자 크기 | v0.13: 테마 애셋 `UiTheme`의 글자 크기 토큰(`fs-*`) × 단계 배율(작게 0.9 / 보통 1.0 / 크게 1.25)을 `ThemedText`가 적용하고, 단계를 바꾸면 `UiRoot`가 켜진 모든 `ThemedText`에 다시 적용. **M1 UI부터** 모든 글자 크기는 토큰으로만 지정(3.7.10). (v0.12까지: 루트 USS 클래스 `text-small/normal/large`가 `--fs-*` 변수를 바꿈) | DES-095, DES-091, DES-122 |
+| 색각 보정 | 월드 화면: HDRP 사용자 지정 후처리(색 변환 행렬, DES-114). UI: 색 토큰 + 모양·아이콘 병행 규칙으로 색 없이도 구분(FR-130 수용 기준), **M1 UI부터** 적용(3.7.10). v0.13: UI는 Screen Space Overlay라 HDRP 후처리를 거치지 않으므로 색각 보정 행렬이 UI에 걸리지 않음 — UI는 모양 구분 규칙으로만 대응(설계 의도와 같음) | DES-095, DES-091, DES-122 |
 | 흔들림·섬광 | 카메라 흔들림 세기 배율, 섬광 제한기(1초 창에서 큰 밝기 변화 3회 초과 연출을 완화) | DES-095 |
 | 그래픽 | 프리셋 데이터 → HDRP 품질 단계 + 세부 값, 세부 변경 시 「사용자 지정」. HDRP 호출은 `Game.Infra.Rendering`에서만(3.4.4) | DES-109, DES-114 |
 
-#### 3.7.10 UI 공통 기반 (v0.3, 디자인 결정 2026-11-02)
+#### 3.7.10 UI 공통 기반 (v0.3, 디자인 결정 2026-11-02. v0.13: uGUI 기준으로 다시 씀, 사용자 결정 2026-11-04, D-27)
+
+**v0.13 요약**: UI는 **uGUI(Canvas + TextMeshPro)** 로 만들고, **하이어라키·프리팹의 게임 오브젝트가 원본**입니다. 아래 결정 표의 (1)~(3)(글자 크기 단계, 색 토큰, 모양 구분 규칙)은 그대로 지키되, 구현 수단을 USS 변수에서 **테마 애셋 `UiTheme` + 적용 컴포넌트**(DES-122)로 바꿉니다. 결정 표 다음의 (1)~(9)가 uGUI 구성 규칙입니다. 결정 표 첫 행의 USS 설명은 v0.12까지의 기록입니다.
 
 | 결정 | 설계 | 요소 |
 |---|---|---|
-| **I-04 접근성 기반을 M1 UI부터** | 공통 USS 파일 하나(`UI/Common/Base.uss`)에 (1) **글자 크기 단계 변수**(v0.11 실제: `--fs-caption`, `--fs-body`, `--fs-button`, `--fs-heading`, `--fs-hud`. 글자 크기는 이 변수로만 지정, 고정 px 금지. 패널 루트에 단계 클래스 `text-small`(×0.9)/`text-normal`(×1.0, 기본)/`text-large`(×1.25) 중 하나를 붙이면 클래스가 변수 값을 바꾸고 하위 요소가 상속. v0.10까지 적었던 단일 배율 변수 `--text-scale`은 만들지 않았고, 단계마다 계산해 둔 px 값을 클래스에 직접 둠. 단계를 더하면 클래스 하나를 추가), (2) **색 토큰** 변수(`--color-*`, 아래 표 — 화면에서 색 값 직접 사용 금지), (3) **모양 구분 규칙**(동료·적·경고·핑 등 색으로 구분하는 정보는 반드시 아이콘·모양·글자 중 하나를 함께 씀)을 둡니다. M1의 개발용 최소 화면(로비·접속·HUD 스태미나·성능 표시)부터 이 기반 위에 만들어 M2-01(글자 크기 옵션)·M5-08(색각 보정)·M6-08(글자 크기 재검증)에서 화면을 고치지 않게 합니다. 규칙 위반(고정 글자 크기, 직접 색 값)은 USS 검사 시험과 코드 리뷰 항목으로 찾습니다 | DES-091, DES-095 |
+| **I-04 접근성 기반을 M1 UI부터** | **v0.13: 테마 애셋 `UiTheme`의 글자 크기 토큰·색 토큰과 `Themed*` 컴포넌트, 모양 구분 규칙(아래 (2)~(3)). 규칙 위반은 프리팹·테마 규칙 검사(3.4.3)와 코드 리뷰로 찾음.** (v0.12까지의 기록) 공통 USS 파일 하나(`UI/Common/Base.uss`)에 (1) **글자 크기 단계 변수**(v0.11 실제: `--fs-caption`, `--fs-body`, `--fs-button`, `--fs-heading`, `--fs-hud`. 글자 크기는 이 변수로만 지정, 고정 px 금지. 패널 루트에 단계 클래스 `text-small`(×0.9)/`text-normal`(×1.0, 기본)/`text-large`(×1.25) 중 하나를 붙이면 클래스가 변수 값을 바꾸고 하위 요소가 상속. v0.10까지 적었던 단일 배율 변수 `--text-scale`은 만들지 않았고, 단계마다 계산해 둔 px 값을 클래스에 직접 둠. 단계를 더하면 클래스 하나를 추가), (2) **색 토큰** 변수(`--color-*`, 아래 표 — 화면에서 색 값 직접 사용 금지), (3) **모양 구분 규칙**(동료·적·경고·핑 등 색으로 구분하는 정보는 반드시 아이콘·모양·글자 중 하나를 함께 씀)을 둡니다. M1의 개발용 최소 화면(로비·접속·HUD 스태미나·성능 표시)부터 이 기반 위에 만들어 M2-01(글자 크기 옵션)·M5-08(색각 보정)·M6-08(글자 크기 재검증)에서 화면을 고치지 않게 합니다. 규칙 위반(고정 글자 크기, 직접 색 값)은 USS 검사 시험과 코드 리뷰 항목으로 찾습니다 | DES-091, DES-095 |
 | **I-12 다크 단일 테마** | 색 토큰은 다크 테마 한 벌만 정의합니다. 테마 전환 구조(테마 선택 옵션, 토큰 세트 교체)는 만들지 않습니다. 색각 대응은 테마 교체가 아니라 모양 구분 규칙(UI)과 후처리(월드 화면)로 합니다 | DES-091 |
 | **I-07 화면을 열어도 게임은 멈추지 않음** | 3.10.7 | DES-091, DES-052 |
 | **디자인 결정 D-06 독립 레시피북** | 제작 화면은 키(게임패드 버튼)로 여는 독립 화면입니다(설계 근거 D-06 「서버 틱」과 다른, DESIGN_PROPOSAL의 결정 번호). 화면 열기는 `OpenRecipeBook(source)` 하나로 받습니다. **v0.6(C-11 해소, FR-173·FR-174)**: `source = Hotkey`(키로 열기)는 **열람 + 손 제작만** 가능하고 제작대가 필요한 항목은 「제작대 필요」로 표시합니다. `source = Station(entityId)`(제작대 상호작용)는 같은 화면을 팝업으로 열고 모든 항목을 제작할 수 있습니다. 판정은 확정 규칙 `CraftingStationRules`(3.7.6). `Craft` 명령에 제작대 id가 붙고 호스트가 거리·존재를 검증합니다 | DES-091, DES-058, DES-033 |
 
-**색 토큰 이름 (v0.11, M1-08 실제 `src/Assets/_Game/UI/Common/Base.uss`)**: 코드와 USS는 STORYBOARD 2.1의 짧은 이름(`--panel`, `--light` 등) 대신 이 절의 `--color-*` 이름을 씁니다. **값은 STORYBOARD 2.1의 색**을 그대로 씁니다. 색 값(rgb·rgba·#·색 이름)은 `Base.uss`의 `:root` 안에만 있고, 화면 USS·UXML은 `var(--color-*)`만 씁니다(USS 규칙 검사 시험 `UiAndInputRulesTests`). 디자인 문서와 이름이 달라 생기는 혼동은 아래 대응표로 풉니다.
+**(1) 색 토큰 (v0.13 확정 — `UiTheme` 애셋의 이름)**: 토큰 이름은 v0.11~v0.12의 USS 변수 이름(`--color-*`)에서 **`--`만 뺀 것**이고, STORYBOARD v1.7 2.1 대응표와 같은 이름입니다. **값은 STORYBOARD 2.1의 색**을 그대로 씁니다. 색 값은 `UiTheme.asset` 안에만 있고, 프리팹의 그래픽·글자는 토큰 이름으로만 참조합니다(실제 `Graphic.color` 값은 `Themed*` 컴포넌트가 토큰에서 계산해 넣은 결과이며, 인스펙터에서 직접 바꾸면 규칙 검사가 실패, 3.4.3). 코드에서 토큰을 바꿀 때는 문자열 대신 상수 클래스 `UiTokens`(예: `UiTokens.ColorDanger = "color-danger"`)를 씁니다.
 
-| USS 토큰 (실제) | STORYBOARD 2.1 | 값 | 쓰임 |
+| 토큰 (`UiTheme`) | v0.12 USS 이름 | STORYBOARD 2.1 | 값 | 쓰임 |
+|---|---|---|---|---|
+| `color-surface` | `--color-surface` | `--panel` | #14151A | 패널·모달 배경 |
+| `color-text` | `--color-text` | `--text` | #E8E4DC | 본문 글자, 상태 줄 글자(STORYBOARD v1.6) |
+| `color-text-dim` | `--color-text-dim` | `--text2` | #A9A59C | 보조 글자 |
+| `color-light` | `--color-light` | `--light` | #F2A53A | 빛: 선택·활성·진행 막대 |
+| `color-focus`, `color-primary` | `--color-focus`, `--color-primary` | `--light` | #F2A53A | 포커스 외곽선, 주 버튼 채움(같은 값, 쓰임별 이름) |
+| `color-warning` | `--color-warning` | (`--light`와 같은 값) | #F2A53A | 경고 상태 글자(기호와 함께) |
+| `color-danger`, `color-enemy` | `--color-danger`, `--color-enemy` | `--danger` | #E5594F | 위험·거부·오류 / 적 표시 |
+| `color-pure` | `--color-pure` | `--pure` | #6FD1B0 | 정화·성공·연결됨·「게임 진행 중」 배지 |
+| `color-ally` | `--color-ally` | (`--cold`와 같은 값) | #6DB8F0 | 동료 표시(◆ 기호·이름과 함께) |
+| `color-stamina` | `--color-stamina` | `--sp` | #A8D45A | 스태미나 |
+| `color-sand` | `--color-sand` | `--sand` | #D8CBB0 | 허기·갈증·피로도 |
+| `color-track` | `--color-track` | `--track` | #2C2E36 | 게이지 빈 부분 |
+| `color-disabled` | `--color-disabled` | `--disabled` | #6B6A66 | 비활성 글자 |
+| `color-bg` | `--color-bg` | (STORYBOARD v1.6 추가) | #0E1014 | 화면 바닥색 |
+| `color-backdrop` | `--color-backdrop` | (STORYBOARD v1.6 추가) | 검정, 알파 0.88 | 모달 뒤 어둡게 |
+| `color-surface-raised` | `--color-surface-raised` | (STORYBOARD v1.6 추가, `--track`과 같은 값) | #2C2E36 | 버튼·목록 행·입력칸 배경 |
+| `color-border` | `--color-border` | (STORYBOARD v1.6 추가) | #585C68 | 장식용 경계선 |
+| `color-primary-text` | `--color-primary-text` | `--panel`(주 버튼 글자) | #14151A | 주 버튼 위 어두운 글자 |
+
+- 합계 20개(같은 값을 쓰는 쓰임별 이름 포함). STORYBOARD 2.1의 환경 위협 색 `--toxic`·`--cold`·`--dark`는 해당 화면이 생길 때(M9a~c) `color-toxic`·`color-cold`·`color-dark`로 테마 애셋에 추가합니다(코드 변경 없이 데이터 추가 + `UiTokens` 상수 추가).
+- **대비 검사 짝**: 테마 애셋에 「글자 토큰 ↔ 바탕 토큰 ↔ 기준(4.5 또는 3.0)」 목록을 두고 시험이 WCAG 상대 휘도로 계산합니다. 기본 짝: `color-text`·`color-text-dim`·`color-light`·`color-danger`·`color-pure`·`color-ally`·`color-stamina`·`color-sand` ↔ `color-surface`·`color-bg`(4.5), `color-text` ↔ `color-surface-raised`(4.5), `color-primary-text` ↔ `color-primary`(4.5), `color-disabled` ↔ `color-surface`(3.0, 비활성 예외). `color-border`는 장식용이라 짝에 넣지 않습니다(STORYBOARD 2.1).
+
+**(2) 글자 크기 토큰과 단계 (v0.13 확정)**: 토큰 이름은 v0.12의 `--fs-*`에서 `--`를 뺀 것입니다. 테마 애셋은 **보통 단계 기준값(1080p px)** 과 **단계 배율**만 갖고, 실제 크기 = `round(기준값 × 배율)`(소수 .5는 올림, `MidpointRounding.AwayFromZero`)입니다. 이 계산은 v0.12 `Base.uss`의 단계별 값과 같습니다(전환 전후 화면 크기 동일).
+
+| 토큰 | STORYBOARD 2.2 이름(v1.7 예시) | 쓰임 | 보통(×1.0) | 작게(×0.9) | 크게(×1.25) |
+|---|---|---|---|---|---|
+| `fs-caption` | `fs-sub` | 보조 글자 | 20 | 18 | 25 |
+| `fs-body` | `fs-body` | 본문 | 24 | 22 | 30 |
+| `fs-button` | (없음, 구현 이름) | 버튼 글자 | 24 | 22 | 30 |
+| `fs-heading` | `fs-title` | 제목 | 30 | 27 | 38 |
+| `fs-heading-lg` (**v0.13 신설**) | `fs-title-lg` | 큰 제목(메인 메뉴 등, M2부터) | 40 | 36 | 50 |
+| `fs-hud` | `fs-hud` | HUD 숫자(굵게) | 22 | 20 | 28 |
+
+- 단계는 기존 열거형 `UiTextScale`(Small/Normal/Large)을 그대로 씁니다. 「작게」의 가장 작은 글자 18 px(STORYBOARD 2.2), 단계를 더하면 배율 한 줄을 추가합니다.
+- STORYBOARD v1.7의 예시 이름(`fs-sub`, `fs-title`, `fs-title-lg`)은 위 표의 구현 이름으로 맞춥니다(총괄이 STORYBOARD 수정, 보고서 참고).
+- **글꼴 토큰** `font-regular`(400), `font-semibold`(600), `font-bold`(700): Pretendard의 TMP 글꼴 애셋 3개를 가리킵니다. `ThemedText`는 `weight` 값으로 고르고, TMP의 가짜 굵게(`FontStyles.Bold`)는 쓰지 않습니다.
+
+**(3) 테마 컴포넌트 (DES-122)** — 모두 `Game.Adapters.Presentation/UI/Common/`, `[ExecuteAlways]`로 에디터에서도 결과가 보입니다(하이어라키에서 고칠 때 바로 확인).
+
+| 컴포넌트 | 붙이는 곳 | 인스펙터 필드 | 동작 |
 |---|---|---|---|
-| `--color-surface` | `--panel` | #14151A | 패널·모달 배경 |
-| `--color-text` | `--text` | #E8E4DC | 본문 글자 |
-| `--color-text-dim` | `--text2` | #A9A59C | 보조 글자 |
-| `--color-light` | `--light` | #F2A53A | 빛: 선택·활성·진행 막대 |
-| `--color-focus`, `--color-primary` | `--light` | #F2A53A | 포커스 테두리, 주 버튼 채움(같은 값, 쓰임별 이름) |
-| `--color-warning` | (`--light`와 같은 값) | #F2A53A | 경고 상태 글자(기호와 함께) |
-| `--color-danger`, `--color-enemy` | `--danger` | #E5594F | 위험·거부·오류 / 적 표시 |
-| `--color-pure` | `--pure` | #6FD1B0 | 정화·성공·연결됨·「게임 진행 중」 배지 |
-| `--color-ally` | (`--cold`와 같은 값) | #6DB8F0 | 동료 표시(◆ 기호·이름과 함께) |
-| `--color-stamina` | `--sp` | #A8D45A | 스태미나 |
-| `--color-sand` | `--sand` | #D8CBB0 | 허기·갈증·피로도 |
-| `--color-track` | `--track` | #2C2E36 | 게이지 빈 부분 |
-| `--color-disabled` | `--disabled` | #6B6A66 | 비활성 글자 |
-| `--color-bg` | (없음, 구현 추가) | #0E1014 | 화면 바닥색 |
-| `--color-backdrop` | (없음, 구현 추가) | 검정 88% | 모달 뒤 어둡게 |
-| `--color-surface-raised` | (없음, `--track`과 같은 값) | #2C2E36 | 버튼·목록 행 배경 |
-| `--color-border` | (없음, 구현 추가) | #585C68 | 테두리 |
-| `--color-primary-text` | `--panel`(주 버튼 글자) | #14151A | 주 버튼 위 어두운 글자 |
+| `UiTheme` (ScriptableObject) | `Assets/_Game/UI/Theme/UiTheme.asset` 한 벌 | 색 토큰 목록(이름, 색), 글자 크기 토큰 목록(이름, 기준 px), 단계 배율 3개, 글꼴 토큰 3개, 대비 검사 짝 | 이름 → 값 사전을 처음 읽을 때 한 번 만듦. 다크 단일 테마(I-12): 토큰 세트 교체·테마 선택 구조 없음 |
+| `ThemedText` | 모든 `TextMeshProUGUI` | 테마, 크기 토큰, 색 토큰, 굵기, **텍스트 키**(빈칸이면 `IsDynamic` 체크 필수) | 켜질 때·단계 변경·언어 변경 때 `fontSize`·`color`·`font`·글자를 적용. `richText = false`, `enableAutoSizing = false`, `raycastTarget = false`를 강제. 글자 내용을 코드가 넣는 동적 글자는 `SetDynamicText`(같은 값이면 무시)·TMP `SetText(형식, 숫자)`(할당 없음)를 씀 |
+| `ThemedGraphic` | 모든 `Image`·`RawImage`·사용자 지정 `Graphic` | 테마, 색 토큰(또는 「없음 = 흰색」), `alpha`(0~1, 불투명도 — 색 값이 아님) | 켜질 때 `color = 토큰 색 × alpha`. 상태에 따라 색을 바꿀 때는 `SetColorToken(UiTokens.…)` |
+| `ThemedSelectable` | 모든 Selectable(버튼·토글·슬라이더·드롭다운·입력칸·목록 행) | 변형(주/보조/위험/목록 행), 배경·테두리·글자·포커스 표시 오브젝트 참조 | 같은 오브젝트에서 포인터·선택 이벤트(`IPointerEnter/Exit/Down/Up`, `ISelect/IDeselect`)를 받아 STORYBOARD 2.5의 상태(기본·호버·포커스·눌림·사용 불가)를 토큰으로 그림. **포커스 = 3px `color-focus` 외곽선 + 왼쪽 ▶**(색에만 의존하지 않음). Selectable의 `transition`은 None(색 블록 미사용) |
+| `UiButton` (`Button` 상속) | 모든 버튼 | 사용 불가 여부, 사유 텍스트 키 | **사용 불가여도 `interactable`을 끄지 않음**(포커스를 받아 사유를 읽을 수 있게, STORYBOARD 2.5). 사용 불가면 점선 테두리 + 🔒 + `color-disabled` 글자로 그리고, 누르면 `onClick` 대신 `UnavailablePressed(사유 키)` 이벤트 → 도움말 줄에 사유 표시 |
+| `UiRaycastBlocker` | 모달 뒤 어둡게 막(`color-backdrop`) 등 아래 화면 입력을 막아야 하는 그래픽 | — | 「이 그래픽은 일부러 레이캐스트를 받음」 표시. 규칙 검사가 이 표시 없이 켜진 `raycastTarget`을 실패로 봄 |
+| `UiSafeArea16x9` | 화면 프리팹 루트 캔버스 바로 아래 `Content` | — | 크기 = (min(부모 폭, 부모 높이 × 16/9), 부모 높이), 가운데 정렬. 배경·막은 이 밖(캔버스 전체), HUD·창은 이 안 |
+| `KeycapView` | 키캡 자리 | Input Action 이름 | 현재 장치(마지막 입력 장치)의 할당을 아이콘(Xbox 세트, M2에 PlayStation) 또는 키 이름으로 보임. 장치 전환 이벤트에서 1초 안에 교체(FR-166). 할당 없음(패드 보류 행동)은 「미지정」. 리치 텍스트를 끄므로 문장 안에 키캡을 넣을 때는 글자와 키캡을 가로 레이아웃으로 나란히 둠 |
+| `UiArcGraphic` (`MaskableGraphic` 상속) | 스태미나 호(SCR-015 ⑱) 등 | 두께, 점선 조각 수 | `OnPopulateMesh`로 호를 그림(스프라이트 불필요). 25% 이하에서는 점선(모양 구분). 비율이 바뀔 때만 `SetVerticesDirty` |
 
-- STORYBOARD 2.1의 환경 위협 색 `--toxic`·`--cold`·`--dark`는 해당 화면이 생길 때(M9a~c) `--color-toxic`·`--color-cold`·`--color-dark`로 추가합니다. 「구현 추가」 토큰 4개의 값은 ui-ux-designer가 STORYBOARD에 반영할지 확인할 대상입니다(디자인 값 결정은 ui-ux-designer 담당).
+- 에디터 보조(`Game.Editor`): 토큰 이름 드롭다운(`UiTokenAttribute` 속성 그리기), 메뉴 `Game/UI/Apply Theme To Prefabs`(테마 값을 바꾼 뒤 모든 UI 프리팹의 `Themed*`가 계산 결과를 다시 써 넣음 — 구조는 건드리지 않고 색·크기 값만).
+
+**(4) 캔버스 구성**
+
+| 항목 | 규칙 |
+|---|---|
+| 렌더 모드 | 모든 화면 캔버스는 **Screen Space - Overlay**. HDRP 후처리·업스케일링 뒤에 그려져 흐려지지 않음. 예외는 손목 계기 내용 캔버스 하나(UI 캡처 카메라, 3.7.11) |
+| 크기 조절 | 화면 프리팹 루트 `CanvasScaler`: **Scale With Screen Size, 기준 1920×1080, Screen Match Mode = Match Width Or Height, Match = 1(높이 기준)**(STORYBOARD 2.3). 1440p ×1.333, 4K ×2.0. Reference Pixels Per Unit 100(기본). 하위 캔버스에는 `CanvasScaler`를 두지 않음 |
+| 16:9 영역 | 루트 아래 `Content`(`UiSafeArea16x9`)에 HUD·창을 둠. 21:9는 좌우에 배경만, 16:10은 높이 기준이라 폭이 줄어듦(좌우 여백 40px 유지는 화면 배치 규칙) |
+| 배치 수치 | 간격·최소 높이(56px)·가장자리 여백(40px) 같은 배치 수치는 1080p 기준 값으로 RectTransform·Layout 컴포넌트에 둡니다(토큰 대상은 색·글자 크기·글꼴). |
+| 레이아웃 | 글자가 커지거나 영어로 길어져도 잘리지 않도록 버튼·목록·대화상자는 `Horizontal/VerticalLayoutGroup` + `ContentSizeFitter`(또는 `LayoutElement` 최소 크기)로 내용에 맞춰 늘어나게 함(STORYBOARD 2.2). 줄바꿈 허용(`textWrappingMode` 켬), 이름류만 말줄임(`overflowMode = Ellipsis`). 긴 목록은 `ScrollRect` |
+| 정적·동적 분리 | 화면마다 루트 캔버스(정적) + 자주 바뀌는 요소용 **하위 캔버스(`Canvas` 컴포넌트만, 동적)**. 예: HUD의 스태미나 호·경고·연결 상태 줄은 `HudDynamic` 하위 캔버스, 십자선·명단 틀은 정적. 하위 캔버스 안에는 Layout Group을 두지 않음(매 프레임 레이아웃 재계산 방지). 값이 같으면 글자·정점을 다시 쓰지 않음 |
+| Raycast Target | 상호작용하지 않는 모든 `Graphic`·TMP 글자는 `raycastTarget = false`. 켜는 것은 Selectable의 `targetGraphic`과 `UiRaycastBlocker`뿐. TMP Settings의 「Enable Raycast Target」 기본값도 끔 |
+| 픽셀 맞춤 | `pixelPerfect` 끔(움직이는 HUD 비용) |
+
+**(5) 화면 층(정렬 순서)과 숨김 규칙** — `UiScreen.Layer` 값이 `Canvas.sortingOrder`를 정합니다(프리팹에서 `OnValidate`로 맞추고 규칙 검사로 확인).
+
+| 층 | `sortingOrder` | 화면 | 비고 |
+|---|---|---|---|
+| WorldMarkers | 0 | 이름표·핑·사망 위치·부활 지점(화면 좌표 투영, DES-097) | M2-09부터 |
+| Hud | 100 | `GameHud`(십자선, 스태미나 호, 명단·연결 상태(개발용), 일반 HUD 막대, 손목 계기 표시 면) | 상호작용 없음 → `GraphicRaycaster` 끔, `CanvasGroup.blocksRaycasts = false` |
+| Window | 200 | 개발용 로비·접속 중(M1), 메인 메뉴 계열(M2), `GameMenu`(ESC, SCR-016), 인벤토리·레시피북 등 게임 안 창 | 게임 안 창은 열리면 `UiState` Overlay(3.10.7) |
+| Alert | 300 | 피격 방향 호·위협 테두리·쓰러짐 전환(DES-120) | **창 위**에 보임(STORYBOARD 2.6) — 입력 없음 |
+| Modal | 400 | 확인 대화상자, 오류 모달, 토스트 | `UiRaycastBlocker` 막으로 아래 입력 차단 |
+| System | 500 | SCR-001 Steam 필요 안내, SCR-002 광과민성 경고 | 부트 단계 화면 |
+
+- **숨김 = 세 가지를 함께 끕니다**: `UiScreen.SetVisible(false)`는 `Canvas.enabled = false`, `GraphicRaycaster.enabled = false`, `CanvasGroup.interactable = false`·`blocksRaycasts = false`를 한 번에 합니다. `Canvas`만 끄면 Selectable이 살아 있어 키보드·패드 자동 내비게이션이 숨은 화면으로 넘어가고, 레이캐스터만 남으면 보이지 않는 전체 화면 막이 아래 화면 클릭을 가로챕니다(v0.12 때 ESC 메뉴 결함 — 로비 전체 화면 배경이 HUD 위를 덮음 — 의 재발 방지). 오브젝트 자체(`SetActive`)는 끄지 않아 참조와 레이아웃이 유지됩니다.
+- **전체 화면 막은 그 화면 프리팹 안에만** 둡니다(막이 화면 밖에 따로 떠 있지 않게). 게임 밖 화면(로비·메인 메뉴)은 게임에 들어가면 `GameFlow`가 숨기고, 나가면 HUD·게임 안 창을 숨깁니다.
+- **`UiScreenStack`(`UiRoot` 안)**: 보이는 Window·Modal·System 층 화면을 연 순서로 쌓습니다. 맨 위 화면만 닫기·탭 이동을 받고, 닫으면 아래 화면의 마지막 선택 요소로 포커스를 되돌립니다. 열 때 화면의 `FirstSelected`를 선택합니다. 시험: PlayMode `UiLayerPlayTests`(3.4.2).
+
+**(6) 입력과 내비게이션 (NFR-002, NFR-004, FR-166)**
+
+- **EventSystem은 Boot 씬에 하나**(`UiRoot` 프리팹의 자식)이고 입력 모듈은 **`InputSystemUIInputModule`**(프로젝트의 Active Input Handling = Input System만이라 `StandaloneInputModule`은 쓰지 않음). 모듈의 `actionsAsset`은 게임과 **같은 `GameInput.inputactions` 인스턴스**(복제하지 않음 — 재설정한 바인딩(FR-117)이 메뉴 조작에도 적용되게, `UiRoot`가 초기화 때 다시 확인). 모듈 동작 연결: `Navigate`·`Submit`·`Point`·`LeftClick`(= UI 지도 `Click`)·`ScrollWheel`. **`Cancel` 칸은 비워 둠**(닫기는 아래 라우터 한 곳에서만 처리해 두 번 닫힘 방지), `deselectOnBackgroundClick` 끔(패드로 바꿨을 때 선택이 남게).
+- **Input Actions UI 지도에 `Point`(마우스 위치)·`Click`(마우스 왼쪽)·`ScrollWheel`(마우스 휠)을 추가**합니다(`InputActionsBuilder`, `KeyboardMouse` 체계). 이미 있는 `Navigate`·`Submit`·`Cancel`·`TabPrev`/`TabNext`(키보드 Q/E, 패드 LB/RB)는 그대로입니다.
+- **`UiInputRouter`(`UiRoot` 안)**: UI 지도의 `Cancel`(Esc·Ⓑ)과 `TabPrev`/`TabNext`를 구독해 `UiScreenStack` 맨 위 화면의 `OnCancel()`·`OnTab(-1/+1)`을 부릅니다. 기본 `OnCancel`은 닫기(STORYBOARD 2.6 「닫기까지 한 번의 입력」). 게임 중 Esc·메뉴 버튼으로 ESC 메뉴를 **여는** 것은 Gameplay 지도의 `Menu` 동작이고, 창이 열리면 Gameplay 지도를 끄고 UI 지도를 켜므로 같은 키가 두 번 처리되지 않습니다(3.10.7). Gameplay로 돌아갈 때 `EventSystem.SetSelectedGameObject(null)`.
+- **내비게이션**: 기본은 Selectable `Navigation = Automatic`, STORYBOARD 「접근성」 항목에 순서 예외가 있는 화면은 `Explicit`. 숨은 화면은 `CanvasGroup.interactable = false`라 자동 내비게이션 후보에서 빠지므로 포커스가 창 밖으로 나가지 않습니다(STORYBOARD 2.7).
+- **포커스 표시**: 선택된 요소는 `ThemedSelectable`이 3px 외곽선 + ▶로 그립니다. 마지막 입력이 마우스이면 호버 모양을 우선하고, 키보드·패드 입력이 들어오면 현재 선택 요소에 포커스 모양을 보입니다(선택이 없으면 맨 위 화면의 `FirstSelected`를 선택).
+- **글자 입력칸**: `TMP_InputField`(리치 텍스트 끔). 게임패드로 선택하면 Steam 화면 키보드(`ITextInputService`, DES-102).
+
+**(7) 다국어 텍스트 키**: `ThemedText`의 텍스트 키는 지금 `ILocalizedText`(`TableLocalizedText`, `Localization/strings.ko.txt`·`strings.en.txt`)로 찾고, M2-01에서 같은 포트 뒤를 Unity Localization String Table로 바꿉니다(프리팹 변경 없음). 언어를 바꾸면 `UiRoot`가 켜진 모든 키 글자를 다시 채웁니다. 키 상수(`LobbyTextKeys`, `HudTextKeys` 등)는 코드가 동적으로 고르는 글자에 계속 씁니다. STORYBOARD 2.7 「스크린리더 라벨」(요소 이름 = 텍스트 키 규칙)은 오브젝트 이름 규칙으로 지킵니다.
+
+**(8) 글꼴 (STORYBOARD 2.2, R-37)**: Pretendard(OFL 1.1, 라이선스 원문 동봉) 3굵기를 TMP 글꼴 애셋으로 만듭니다. 사슬: **정적 SDF 아틀라스**(ASCII + KS X 1001 한글 2,350자 + 게임 문장에 쓰는 글자, 굵기별) → **동적 대체 글꼴**(Pretendard 원본, 그 밖의 한글 11,172자·Steam 이름·채팅용, 실행 중 아틀라스 추가) → **기호 대체 글꼴**(정적, `UiGlyphs` 기호 중 Pretendard에 없는 것, OFL 글꼴 부분 집합). 리치 텍스트를 끄므로 TMP 스프라이트 태그(`<sprite>`)로 아이콘을 넣지 않고, 아이콘은 기호 글꼴 또는 별도 `Image`로 그립니다. 글꼴 파일은 `Assets/_Game/UI/Fonts/`. TMP Settings(`Assets/TextMesh Pro/Resources/TMP Settings.asset`)의 기본 글꼴 = Pretendard Regular, 대체 목록 = 위 사슬. 어떤 문자가 사슬에 없으면 □로 보입니다(규칙 검사로 게임 문장은 0건, Steam 이름의 중국어·일본어·이모지 등은 R-37).
+
+**(9) 성능 규칙 (3.12.3 UI 0.8 ms)**: 매 프레임 갱신하는 UI 코드는 관리 힙 할당 0(문자열 연결·`string.Format`·LINQ 금지, TMP `SetText(형식, 값)`, 값이 바뀔 때만 갱신). 캔버스 다시 만들기(rebuild)는 동적 하위 캔버스 안에서만 일어나게 합니다. 측정 구간 `Client.UI`(3.12.4).
 
 #### 3.7.11 HUD 구조: 장치형 기본 + 일반 HUD 옵션 (v0.4, 사용자 결정 2026-11-02)
 
-두 HUD 방식은 **같은 HUD 뷰모델(DES-074)** 을 보고, 표시 방식(`IHudPresenter`)만 갈아 끼웁니다. 일반 HUD의 부품(상태 막대, 위협 표시, 버프 시간, 목표 한 줄, 동료 항목)은 UXML 템플릿으로 만들고, 장치형 HUD의 손목 계기 화면도 같은 템플릿을 씁니다.
+두 HUD 방식은 **같은 HUD 뷰모델(DES-074)** 을 보고, 표시 방식(`IHudPresenter`)만 갈아 끼웁니다. 일반 HUD의 부품(상태 막대, 위협 표시, 버프 시간, 목표 한 줄, 동료 항목)은 ~~UXML 템플릿~~ **v0.13: uGUI 부품 프리팹**(`UI/Prefabs/Hud/Parts/`, 예: `StatusBar.prefab`, `ThreatChip.prefab`, `BuffTimer.prefab`, `ObjectiveLine.prefab`, `AllyEntry.prefab`)으로 만들고, 장치형 HUD의 손목 계기 화면도 같은 부품 프리팹을 씁니다(부품을 고치면 두 HUD에 함께 반영 — 중첩 프리팹).
 
 ```mermaid
 flowchart LR
@@ -1005,7 +1107,7 @@ flowchart LR
     VM --> SW
     SW --> SCR["ScreenHud (DES-091)<br/>일반 HUD: 상시 표시"]
     SW --> DIE["DiegeticHud (DES-120)<br/>손목 계기·스태미나 호·등불 이름표·가장자리 효과"]
-    PARTS["공통 UXML 부품<br/>상태 막대, 위협, 버프 시간, 목표, 동료"] --> SCR
+    PARTS["공통 HUD 부품 프리팹 (uGUI, v0.13)<br/>상태 막대, 위협, 버프 시간, 목표, 동료"] --> SCR
     PARTS --> DIE
     DIE --> RB["IRenderBackend → DES-114<br/>월드 보조 색조 (손 그리기는 (A) 선택 시만)"]
 ```
@@ -1018,16 +1120,17 @@ flowchart LR
 | 동료 | 머리 위 등불 이름표(체력 단계) | 이름표 + 동료 목록(FR-160) |
 | 위협 | 시야 가장자리 효과 | 같은 효과 + 위협 아이콘 |
 
-- **손목 계기 그리기 방식**: 계기 화면 내용은 UI Toolkit 패널을 **렌더 텍스처**(`PanelSettings.targetTexture`, 512²~1024², 설정값)로 그립니다. 손목 화면은 보여 주기만 하고 입력을 받지 않으므로 월드 공간 입력 처리가 필요 없습니다. 패널은 값이 바뀔 때만(최대 10 Hz) 다시 그립니다. 일반 HUD와 같은 UXML·USS를 쓰므로 글자 크기 배율·색 토큰(NFR-056)이 그대로 적용됩니다.
+- **손목 계기 그리기 방식 (v0.13: uGUI 기준으로 고침)**: 계기 화면 내용은 uGUI 프리팹 `Hud/WristPanel.prefab`(위 부품 프리팹 + `Themed*`)을 **UI 전용 캡처 카메라**가 **렌더 텍스처**(512²~1024², 설정값)에 그립니다. 이 캔버스만 렌더 모드가 Screen Space - Camera(캡처 카메라 지정, 전용 레이어 `UiCapture`, 주 카메라는 이 레이어를 그리지 않음)입니다. uGUI 캔버스는 스스로 텍스처에 그리는 기능이 없어 카메라가 필요하며(UI Toolkit의 `PanelSettings.targetTexture`에 해당하는 기능이 없음), 캡처 카메라는 평소 꺼 두고 **값이 바뀔 때만(최대 10 Hz) 한 번 그리기 요청**을 합니다. HDRP 카메라 설정(사용자 지정 프레임 설정으로 조명·그림자·후처리·업스케일링 끔)과 그리기 요청은 `IRenderBackend`를 거쳐 DES-114에서만 합니다(3.4.4 「UI 캡처 카메라」). 손목 화면은 보여 주기만 하고 입력을 받지 않으므로 이 캔버스의 `GraphicRaycaster`는 없습니다. 일반 HUD와 같은 부품 프리팹·테마 토큰을 쓰므로 글자 크기 단계·색 토큰(NFR-056)이 그대로 적용됩니다.
 - **표시 면(`IWristSurface`) — 사용자 결정 2026-11-02: (B)로 시작**
-  - (B) **화면 공간 기울인 평면 — 기본 구현, M2에서 만듦**: 같은 렌더 텍스처를 화면 왼쪽 아래에 원근 기울임을 준 평면으로 그리고, 올림/내림은 평면 위치·각도 보간으로 합니다. UI Toolkit 자체 변형은 2D(회전·크기·이동)만 지원하므로, 평면은 UI Toolkit 사용자 지정 메시(`generateVisualContent`로 렌더 텍스처를 입힌 사다리꼴, 어색하면 격자로 나눔)로 그립니다. UI 오버레이에서 끝나므로 **HDRP에 의존하지 않고 업스케일링 뒤에 그려져 흐려지지 않습니다**.
+  - (B) **화면 공간 기울인 평면 — 기본 구현, M2에서 만듦**: 같은 렌더 텍스처를 화면 왼쪽 아래에 원근 기울임을 준 평면으로 그리고, 올림/내림은 평면 위치·각도 보간으로 합니다. v0.13: Screen Space Overlay 캔버스는 정사영이라 RectTransform 회전으로는 사다리꼴(원근)이 나오지 않으므로, HUD 캔버스 안의 **`UiWarpedRawImage`**(`RawImage` 상속, `OnPopulateMesh`로 렌더 텍스처를 입힌 사다리꼴, 어색하면 격자로 나눔)로 그립니다. UI 오버레이에서 끝나므로 **업스케일링 뒤에 그려져 흐려지지 않습니다**(캡처 카메라만 HDRP 설정이 필요).
   - (A) **3D 손목 소품 — 교체 지점만 남김, 구현하지 않음**: 손목 옛 등광 계기 메시 재질에 같은 렌더 텍스처를 붙이고 손 애니메이션으로 올림/내림. 1인칭 손 그리기 패스(DES-114)와 소품 아트가 필요합니다. **M6 수직 슬라이스에서 (A)로 올릴지 사용자가 결정**합니다(M6-11).
-  - 두 방식 모두 렌더 텍스처를 쓰므로 R-18(UI Toolkit 월드 공간 제약) 재검토는 필요 없습니다. 화면 내용·뷰모델이 같아 (A)로 바꿔도 표시 면 구현만 추가하면 됩니다.
-- 대안으로 UI Toolkit의 월드 공간 패널 기능, uGUI 월드 공간 캔버스를 검토했으나 렌더 텍스처 방식을 기본으로 합니다(D-21). Unity 6000.3의 UI Toolkit 월드 공간 지원 범위는 **확인 필요**이며, 기본안에는 필요 없습니다.
-- **레이어 순서(STORYBOARD v1.2)**: 월드 화면 → (월드 보조 색조, Volume) → 손목 계기 패널(불투명도 0.88 등 배치·수치는 STORYBOARD) → 피격 호·위협 테두리 → 다른 창. 손목 계기가 UI 오버레이이므로 계기 위에 그려야 하는 피격 호·위협 테두리는 UI Toolkit 요소로 그립니다(DES-120). HDRP를 쓰는 것은 월드 보조 색조(와 (A)를 고를 경우의 1인칭 손 그리기)뿐이며 `IRenderBackend`를 거쳐 DES-114에서만 다룹니다(3.4.4).
-- **크기 기준**: 화면 배치 수치(계기 왼쪽 아래 폭 430px, 글자 「크게」 540px, 중앙 약 600×440px 비움)는 1920×1080 기준 UI 좌표로 보고, PanelSettings를 「화면 크기에 맞춰 크기 조절」(기준 해상도 1920×1080)로 둡니다. 계기 렌더 텍스처는 화면에 그려질 크기 이상(「크게」 540px 폭을 감당하도록 기본 1024 폭, 4K에서는 2048)으로 잡아 확대 흐림을 막습니다(R-22).
+  - 두 방식 모두 렌더 텍스처를 쓰므로 화면 내용·뷰모델이 같고, (A)로 바꿔도 표시 면 구현만 추가하면 됩니다.
+  - **대체안(R-39, M2-12 첫 시작품에서 판단)**: 캡처 카메라의 비용이나 HDRP에서의 TMP 표시에 문제가 있으면, 렌더 텍스처 없이 계기 내용을 HUD 오버레이 캔버스에 직접 그리고 기울임은 RectTransform 회전(원근 없는 눌림)으로 줄입니다. 이 경우 (A)로 올릴 때 캡처 카메라를 다시 붙입니다. 바꿀 때는 사용자에게 화면을 보여 확인받습니다.
+- 대안으로 uGUI 월드 공간 캔버스(손목 소품 위)를 다시 검토했습니다. v0.13에서는 UI 기술이 같아져 「접근성 기반을 다시 만들어야 함」이라는 v0.4의 반대 이유는 사라졌지만, 월드 공간 캔버스는 HDRP 후처리·노출·업스케일링을 거쳐 글자가 흐려지고(R-22) 벽에 파묻히지 않게 하는 손 그리기 패스가 필요해, (B) 기본에는 렌더 텍스처 방식을 유지합니다(D-21).
+- **레이어 순서(STORYBOARD v1.2)**: 월드 화면 → (월드 보조 색조, Volume) → 손목 계기 표시 면(HUD 캔버스, 정렬 100, 불투명도 0.88 등 배치·수치는 STORYBOARD) → 피격 호·위협 테두리(경고 층 캔버스, 정렬 300 — 다른 창보다도 위, STORYBOARD 2.6) → 창(정렬 200)은 경고 층 아래. 피격 호·위협 테두리는 uGUI 요소(`UiArcGraphic`·`ThemedGraphic`)로 그립니다(DES-120). HDRP를 쓰는 것은 월드 보조 색조, 캡처 카메라 설정(와 (A)를 고를 경우의 1인칭 손 그리기)뿐이며 `IRenderBackend`를 거쳐 DES-114에서만 다룹니다(3.4.4).
+- **크기 기준**: 화면 배치 수치(계기 왼쪽 아래 폭 430px, 글자 「크게」 540px, 중앙 약 600×440px 비움)는 1920×1080 기준 UI 좌표로 보고, v0.13: 화면 캔버스의 `CanvasScaler`(1920×1080, 높이 기준, 3.7.10 (4))를 따릅니다. 손목 내용 캔버스는 렌더 텍스처 크기를 기준 해상도로 두는 고정 배치입니다. 계기 렌더 텍스처는 화면에 그려질 크기 이상(「크게」 540px 폭을 감당하도록 기본 1024 폭, 4K에서는 2048)으로 잡아 확대 흐림을 막습니다(R-22).
 - **자동 내림 시간(결정 대기, STORYBOARD v1.2)**: 토글로 올린 손목을 일정 시간 뒤 자동으로 내릴지는 설정값 `손목 자동 내림 시간`(0 = 자동으로 내리지 않음)으로 둡니다. 기본값은 결정 뒤 데이터로 정하며 구조 변경은 없습니다.
-- 머리 위 등불 이름표: 등불은 3D 소품·효과(DES-120), 이름 글자는 기존 화면 좌표 투영 이름표(DES-097)를 등불 위치에 붙입니다. 체력 단계(사용자 결정 2026-11-02): 살아 있는 동안 **4단계**(76% 이상 / 51~75% / 26~50% / 25% 이하) + **꺼짐**(쓰러짐). 단계 수는 설정값 `이름표 체력 단계 수`(기본 4)이고 경계는 균등 분할로 계산합니다.
+- 머리 위 등불 이름표: 등불은 3D 소품·효과(DES-120), 이름 글자는 기존 화면 좌표 투영 이름표(DES-097)를 등불 위치에 붙입니다(v0.13: 월드 표시 층 캔버스(정렬 0)에 미리 만들어 둔 이름표 오브젝트 풀을 `Camera.WorldToScreenPoint` 결과로 옮김, 이름 글자는 이름이 바뀔 때만 다시 씀). 체력 단계(사용자 결정 2026-11-02): 살아 있는 동안 **4단계**(76% 이상 / 51~75% / 26~50% / 25% 이하) + **꺼짐**(쓰러짐). 단계 수는 설정값 `이름표 체력 단계 수`(기본 4)이고 경계는 균등 분할로 계산합니다.
 - **NFR-001 「표시되고 있는 동안」**: 뷰모델은 표시 여부와 관계없이 항상 최신 값을 가집니다. 표시 중인 요소(손목을 올렸을 때의 수치, 일반 HUD 막대 등)는 값이 바뀐 뒤 0.5초 안에 갱신합니다.
 - **HUD 방식 전환(FR-171)**: 옵션에서 바꾸면 재시작 없이 `HudModeSwitcher`가 표시 방식을 교체합니다. 사용자 설정(NFR-047)에 저장하며 기본값은 장치형입니다.
 - **손목 올림/내림(FR-172)**: `ToggleWrist` 입력 → 올림 애니메이션 → 수치 전체 표시. 손목 올림은 창이 아니라 **HUD 상태**이므로 이동·시점 조작을 유지하고, 다른 창(인벤토리·레시피북 등)이 열리면 자동으로 내립니다. 올림 방식은 사용자 옵션 `WristRaiseMode`로 **기본 토글**, 옵션 「누르는 동안」입니다(C-58 해소). 올린 동안에도 **모든 행동이 가능**하며 행동 제한 규칙은 없습니다(C-59 해소, 확정 규칙). 서버 시뮬레이션·네트워크·시각은 계속 진행합니다(3.10.7). 손목 상태는 다른 플레이어에게 보이는 애니메이션으로만 공유할지 정하지 않았으므로, 이번 버전에서는 로컬 표시만 합니다.
@@ -1190,7 +1293,7 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  │  │  ├─ Net/                    Game.Adapters.Net.asmdef (Transport/ = FishNetServer·FishNetClient·PacketBroadcast(DES-121, `FishNetPacketTransport.cs`), Gateway/, Replication/, Avatar/(DES-084, `PlayerAvatar.cs`), Join/). v0.10: Messages/ 없음(메시지는 Application/Protocol/). v0.11: **FishNet 형식은 Transport/·Avatar/에서만**(3.4.1 규칙 8, 아키텍처 시험이 폴더 이름으로 검사)
       │  │  │  ├─ Presentation/           Game.Adapters.Presentation.asmdef
       │  │  │  │  ├─ Player/  World/(Terrain, Resources, Creatures, Lighting)  Interaction/
-      │  │  │  │  ├─ UI/                  Screens/, Hud/(Common/ 공통 부품, Screen/ 일반 HUD, Diegetic/ 손목 계기·스태미나 호·등불 이름표), Presenters/
+      │  │  │  │  ├─ UI/                  Common/(v0.13: UiTheme·UiTokens·Themed*·UiButton·UiScreen·UiRoot·UiScreenStack·UiInputRouter·UiSafeArea16x9·UiRaycastBlocker·KeycapView·UiArcGraphic·UiWarpedRawImage, UiGlyphs·텍스트 키 상수), Screens/(화면마다 …Screen 컴포넌트 + …View 클래스), Hud/(Common/ 공통 부품, Screen/ 일반 HUD, Diegetic/ 손목 계기·스태미나 호·등불 이름표), Presenters/
       │  │  │  │  ├─ Input/  Localization/  Audio/  Accessibility/
       │  │  │  └─ Persistence/            Game.Adapters.Persistence.asmdef (Codec/, Chunks/, Migrations/, Store/)
       │  │  ├─ Infrastructure/
@@ -1201,7 +1304,7 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  │  │  ├─ Platform/               Game.Infra.Platform.asmdef (Logging/, Crash/, Telemetry/, Settings/, Tasks/)
       │  │  │  └─ Rendering/              Game.Infra.Rendering.asmdef (HdrpRenderBackend, Graphics/, Upscaling/, PostProcess/) — HDRP 의존 코드는 여기만
       │  │  ├─ Bootstrap/                 Game.Bootstrap.asmdef (GameBootstrap = 컴포지션 루트, Runtime/(GameFlow, SessionRuntime, RuntimeSupport), DevTools/)
-      │  │  └─ Editor/                    Game.Editor.asmdef (에디터 전용: BuildCommands, BuildArtifactInspector, ProjectConfigurator, 씬·애셋 생성 스크립트 — v0.11: InputActionsBuilder, WorldAndNetworkBuilders(AvatarPrefabBuilder, WorldSceneBuilder) 추가)
+      │  │  └─ Editor/                    Game.Editor.asmdef (에디터 전용: BuildCommands, BuildArtifactInspector, ProjectConfigurator, 씬·애셋 생성 스크립트 — v0.11: InputActionsBuilder, WorldAndNetworkBuilders(AvatarPrefabBuilder, WorldSceneBuilder) 추가. v0.13: 생성기는 「없을 때만 만들기 + 검사」로 바뀜(아래 표), UiThemeBuilder(테마 애셋이 없을 때만), UI/(토큰 드롭다운 속성 그리기, Apply Theme To Prefabs 메뉴))
       │  ├─ Data/                         ScriptableObject 애셋 (코드 아님)
       │  │  ├─ Balance/                   부록 C.1 설정값 묶음
       │  │  ├─ Content/                   Items/, Resources/, Recipes/, Buildings/, Creatures/, Waves/, Crops/, Cooking/, Buffs/, Skills/, Objectives/, Achievements/
@@ -1209,15 +1312,25 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  │  ├─ WorldGen/Profiles/V1/      생성 프로필(생성기 버전에 묶여 동결)
       │  │  ├─ Graphics/                  그래픽 프리셋 4종 + 기준 프리셋 지정
       │  │  └─ Network/                   틱·관심 범위·AI 주기 튜닝
-      │  ├─ Localization/                 String Table(ko, en), 글꼴
+      │  ├─ Localization/                 String Table(ko, en). M1~: strings.ko.txt·strings.en.txt(텍스트 키 표, M2-01에서 String Table로). v0.13: 글꼴은 UI/Fonts/로
       │  ├─ Art/  Audio/  VFX/
       │  ├─ Prefabs/                      v0.11: PlayerAvatar.prefab (NetworkObject + PlayerAvatar, 모양 없음 — 표시는 표현 어댑터가 월드 사본으로 그림)
       │  ├─ Materials/                    v0.11: WorldGround, WorldProp, RemoteAvatar, BenchGround, BenchAgent (HDRP/Lit, 생성 스크립트가 만듦)
       │  ├─ Scenes/                       Boot, World(v0.11 M1 개발용 장면), Bench. 계획: MainMenu(M2)
-      │  ├─ UI/                           UXML, USS (화면 배치는 ui-ux-designer 결과를 따름). v0.11: Common/Base.uss(공통 기반, 3.7.10), Screens/(SteamRequired, DevLobby), Hud/(Hud.uxml·uss), PanelSettings.asset
+      │  ├─ UI/                           (v0.13, uGUI) 화면 배치는 ui-ux-designer 결과(STORYBOARD)를 따르고 **프리팹이 원본**
+      │  │  ├─ Theme/                     UiTheme.asset (색·글자 크기·글꼴 토큰 한 벌, 3.7.10)
+      │  │  ├─ Fonts/                     Pretendard TTF(3굵기)·TMP 글꼴 애셋(정적·동적)·기호 대체 글꼴, OFL 라이선스 원문
+      │  │  ├─ Icons/                     단색 아이콘 스프라이트, 입력 장치 아이콘 세트(Xbox, M2: PlayStation)
+      │  │  └─ Prefabs/
+      │  │     ├─ UiRoot.prefab           UiRoot(테마·글자 단계·화면 스택·입력 라우터) + 자식 EventSystem(InputSystemUIInputModule)
+      │  │     ├─ Common/                 공통 부품: Button_Primary·Button_Secondary·Button_Danger(UiButton + ThemedSelectable, 변형 프리팹), ListRow, Panel, Modal, Badge_Running, Gauge, Keycap, HelpLine
+      │  │     ├─ Screens/                SteamRequired(SCR-001), DevLobby(SCR-004 M1 최소판 + SCR-012 접속 중), GameMenu(SCR-016 ESC). M2부터: MainMenu, Options 등 화면마다 하나
+      │  │     └─ Hud/                    GameHud(SCR-015: 정적 루트 + HudDynamic 하위 캔버스), Parts/(HUD 공통 부품, M2-11), WristPanel(M2-12), HudAlerts(경고 층, M2-12), WorldMarkers(M2-09)
+      │  │  (v0.13 삭제: Common/Base.uss, Screens/*.uxml·uss, Hud/Hud.uxml·uss, PanelSettings.asset)
       │  └─ Settings/                     HDRP 애셋(품질 단계별), Volume 프로필, Input Actions(v0.11: GameInput.inputactions)
       ├─ DefaultPrefabObjects.asset       (v0.11) FishNet이 자동으로 만드는 생성 가능 프리팹 목록. PlayerAvatar.prefab이 등록됨. NetworkManager가 이 애셋을 SpawnablePrefabs로 씀. FishNet 기본 위치(`Assets/` 바로 아래)라 _Game/ 밖에 있음 — 옮기지 않음
-      ├─ UI Toolkit/UnityThemes/          (v0.11) Unity가 PanelSettings 생성 때 자동으로 만드는 기본 런타임 테마(UnityDefaultRuntimeTheme.tss). 손대지 않음
+      ├─ TextMesh Pro/                    (v0.13) TMP Essential Resources(셰이더, TMP Settings — `Resources/` 안에 있어야 함). TMP 기본 위치라 _Game/ 밖에 둠. Examples & Extras는 가져오지 않음
+      ├─ (삭제) UI Toolkit/UnityThemes/   v0.11에 PanelSettings가 자동으로 만든 기본 런타임 테마. v0.13 전환 때 .meta와 함께 삭제
       ├─ ThirdParty/
       │  ├─ FishNet/                      FishNet 4.7.4R (자체 asmdef: FishNet.Runtime, GameKit.Dependencies, Synapse, Unity.FishNet.CodeGen, MonoFN.Cecil)
       │  └─ FishySteamworks/              FishySteamworks 4.1.1 (FishySteamworks.asmdef)
@@ -1226,20 +1339,33 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
          └─ PlayMode/                     Integration/(Game.Tests.Integration, 루프백 호스트+클라이언트)
 ```
 
-**에디터 생성 파이프라인 (v0.11, M1-07·M1-08 실제)**: 씬·프리팹·애셋은 `Game.Editor`의 메뉴로 만들고 손으로 만들지 않습니다(다시 실행하면 같은 결과로 덮어씀). 전체를 한 번에 만드는 메뉴 `Game/Setup/Run All`(`BuildCommands.RunAll`)은 앞 단계의 결과물을 뒤 단계가 참조하므로 아래 순서로 호출합니다. 하나씩 실행하는 메뉴도 각각 있습니다(`Game/Setup/Create …`).
+**씬·프리팹 관리 원칙 (v0.13, 사용자 결정 2026-11-04, D-27)**: 결과물을 두 종류로 나눕니다.
 
-| 순서 | 생성기 | 결과물 | 비고 |
+| 종류 | 원본 | 대상 | 고치는 방법 |
 |---|---|---|---|
-| 1 | `ProjectConfigurator.Apply` | ProjectSettings(Force Text·Visible Meta Files, 회사·제품 이름, `bundleVersion`은 **비어 있을 때만** `0.1.0`(v0.12: 그 밖에는 바꾸지 않음, 3.7.12 (2)), IL2CPP·.NET Standard, 선형 색 공간, `enableFrameTimingStats`, `runInBackground`) | |
-| 2 | `DataAssetBuilder.CreateDefaults` | `Data/GameDataConfig.asset`, `Data/Balance/BalanceConfig.asset`, `Data/Network/NetworkTuningConfig.asset`, `Data/Graphics/GraphicsPresetConfig.asset` | 없는 애셋만 만들고(기존 값은 유지) 서로 연결, 콘텐츠 색인 갱신 |
-| 3 | `GraphicsAssetBuilder.CreateAll` | 품질 단계·HDRP 애셋(`Settings/HDRP *.asset`) | v0.9 |
-| 4 | `InputActionsBuilder.Create` | `Settings/GameInput.inputactions` (제어 체계 `KeyboardMouse`·`Gamepad`, 동작 지도 `Gameplay`·`UI`, STORYBOARD 2.4 기본 할당, 패드 겹침 항목은 비움 — 3.7.9) | v0.11 |
-| 5 | `AvatarPrefabBuilder.Create` | `Prefabs/PlayerAvatar.prefab` → FishNet 자동 생성기가 `Assets/DefaultPrefabObjects.asset`에 등록 | v0.11. FishNet 형식은 리플렉션으로 붙임(D-25) |
-| 6 | `WorldSceneBuilder.Create` | `Scenes/World.unity`, `Materials/World*.mat`·`RemoteAvatar.mat`, 빌드 설정에 World 추가 | v0.11. 열린 씬을 건드리지 않게 새 씬을 Additive로 열어 저장 후 닫음 |
-| 7 | `BootSceneBuilder.CreateBootScene` | `Scenes/Boot.unity`(꺼진 `NetworkManager` 포함, 3.9.9), `UI/PanelSettings.asset`, 빌드 설정 첫 씬 | 4·5의 결과물(Input Actions, 아바타 프리팹의 `NetworkObject`)을 `GameBootstrap`에 연결 |
-| 8 | `BenchSceneBuilder.CreateBenchScene` | `Scenes/Bench.unity`(개발 빌드에만 포함) | v0.9 |
+| **오브젝트 원본** | 하이어라키·프리팹의 게임 오브젝트(씬·프리팹 파일) | 모든 UI 프리팹, `Boot.unity`, `World.unity`, `Bench.unity`, `PlayerAvatar.prefab`, `UiTheme.asset`, 머티리얼, `Data/` 설정 애셋(값) | 사람은 하이어라키·인스펙터·프리팹 모드에서 직접 고칩니다. **에이전트는 Unity MCP 도구**(gameobject·component·prefab 도구, 열린 에디터 조작)로 **개별 오브젝트·컴포넌트를 추가·수정**하고 씬·프리팹을 저장합니다. 씬·프리팹 YAML을 손으로(텍스트로) 고치지 않습니다. 화면 배치·색·글자 크기 토큰은 **프리팹에서** 고치고, 씬에는 프리팹 인스턴스와 참조 연결만 둡니다(인스턴스에 오브젝트·컴포넌트를 추가하지 않음, 3.4.3 규칙 검사) |
+| **코드·데이터 원본** | 생성기 코드 또는 설정 데이터 | `ProjectSettings`(ProjectConfigurator), HDRP 품질 단계 애셋의 프리셋 값(GraphicsAssetBuilder, 프리셋 데이터가 원본), `GameInput.inputactions`(InputActionsBuilder, 시험이 생성 결과와 파일을 비교) | 생성기·데이터를 고치고 메뉴를 다시 실행합니다. 이 결과물은 에디터에서 직접 고치지 않습니다(다음 실행 때 덮어씀) |
 
-- 생성 결과물(`.unity`, `.prefab`, `.inputactions`, `.asset`)은 `.meta`와 함께 커밋합니다. 생성기 코드를 바꾸면 해당 메뉴를 다시 실행하고 결과물 변경도 같은 커밋에 넣습니다.
+- **오브젝트 원본 결과물의 생성기는 「없을 때만 처음 한 번 만들기 + 있으면 검사만」** 입니다. 파일이 이미 있으면 **절대 새로 만들어 덮어쓰지 않고**(`NewScene` + `SaveScene`로 같은 경로에 저장하는 v0.11 방식 폐지), 필요한 루트 오브젝트·컴포넌트·참조가 있는지 **검사만** 해서 빠진 것을 Console 오류로 알리고 `Run All`을 실패시킵니다(아무것도 바꾸지 않음). 빠진 것은 에이전트가 MCP 도구로, 또는 사람이 하이어라키에서 채웁니다. 「처음 한 번 만들기」는 새 PC에서 파일이 없을 때와 새 마일스톤의 새 씬·프리팹 첫 생성에만 쓰입니다.
+- 화면을 처음 만드는 방법: 새 UI 화면 프리팹은 developer가 MCP 도구로 공통 부품 프리팹을 조합해 만들거나(권장), 필요하면 그 화면 전용 「없을 때만 만드는」 생성 메뉴를 한 번 쓰고, 이후에는 프리팹이 원본입니다.
+- 검사 결과 확인: `Run All`을 실행한 뒤 `git status`에 오브젝트 원본 결과물(`.unity`, UI `.prefab`)의 변경이 없어야 합니다(생성기가 덮어쓰지 않는다는 확인).
+
+전체를 한 번에 실행하는 메뉴 `Game/Setup/Run All`(`BuildCommands.RunAll`)은 앞 단계의 결과물을 뒤 단계가 참조하므로 아래 순서로 호출합니다. 하나씩 실행하는 메뉴도 각각 있습니다(v0.13: 오브젝트 원본은 `Game/Setup/Ensure …` — 없을 때만 만들고 있으면 검사).
+
+| 순서 | 생성기 | 결과물 | v0.13 정책 | 비고 |
+|---|---|---|---|---|
+| 1 | `ProjectConfigurator.Apply` | ProjectSettings(Force Text·Visible Meta Files, 회사·제품 이름, `bundleVersion`은 **비어 있을 때만** `0.1.0`(v0.12: 그 밖에는 바꾸지 않음, 3.7.12 (2)), IL2CPP·.NET Standard, 선형 색 공간, `enableFrameTimingStats`, `runInBackground`, v0.13: Active Input Handling = Input System 확인) | 코드 원본(값 적용) | |
+| 2 | `DataAssetBuilder.CreateDefaults` | `Data/GameDataConfig.asset`, `Data/Balance/BalanceConfig.asset`, `Data/Network/NetworkTuningConfig.asset`, `Data/Graphics/GraphicsPresetConfig.asset` | 없을 때만(기존과 같음) | 없는 애셋만 만들고(기존 값은 유지) 서로 연결, 콘텐츠 색인 갱신 |
+| 3 | `GraphicsAssetBuilder.CreateAll` | 품질 단계·HDRP 애셋(`Settings/HDRP *.asset`) | 코드·데이터 원본(값 동기화) | v0.9 |
+| 4 | `InputActionsBuilder.Create` | `Settings/GameInput.inputactions` (제어 체계 `KeyboardMouse`·`Gamepad`, 동작 지도 `Gameplay`·`UI`, STORYBOARD 2.4 기본 할당, 패드 겹침 항목은 비움 — 3.7.9. v0.13: UI 지도에 `Point`·`Click`·`ScrollWheel` 추가) | 코드 원본(덮어씀) | v0.11 |
+| 5 | `UiThemeBuilder.Ensure` (v0.13) | `UI/Theme/UiTheme.asset`(3.7.10 표의 토큰·값) | **없을 때만** 만들고, 있으면 토큰이 빠졌는지 검사 | 만든 뒤에는 애셋이 원본(값은 인스펙터에서 고침) |
+| 6 | `AvatarPrefabBuilder.Ensure` (v0.13 이름 변경) | `Prefabs/PlayerAvatar.prefab` → FishNet 자동 생성기가 `Assets/DefaultPrefabObjects.asset`에 등록 | **없을 때만**, 있으면 `NetworkObject`·`PlayerAvatar` 검사 | v0.11. FishNet 형식은 리플렉션으로 붙임(D-25) |
+| 7 | `WorldSceneBuilder.Ensure` (v0.13 이름 변경) | `Scenes/World.unity`, `Materials/World*.mat`·`RemoteAvatar.mat`, 빌드 설정에 World 추가 | **없을 때만**, 있으면 `PlayerRig`·`RemoteAvatarViews`와 빌드 설정 등록 검사. 머티리얼도 없을 때만 | v0.11. 열린 씬을 건드리지 않게 새 씬을 Additive로 열어 저장 후 닫음(처음 만들 때만) |
+| 8 | `BootSceneBuilder.Ensure` (v0.13 이름 변경) | `Scenes/Boot.unity`(꺼진 `NetworkManager`, `Bootstrap`, `MenuCamera`, UI 프리팹 인스턴스 `UiRoot`·`SteamRequiredScreen`·`DevLobbyScreen`·`GameHud`·`GameMenu`), 빌드 설정 첫 씬 | **없을 때만** 만들고(UI는 `PrefabUtility.InstantiatePrefab`으로 인스턴스 배치 + `GameBootstrap` 참조 연결), 있으면 **검사만**: 위 루트 오브젝트, `NetworkManager` 꺼짐, `GameBootstrap` 직렬화 참조가 모두 비어 있지 않음, EventSystem 하나, 빌드 설정 첫 씬 | 4·6의 결과물(Input Actions, 아바타 프리팹의 `NetworkObject`)을 처음 만들 때 연결. v0.11의 `UI/PanelSettings.asset` 생성은 삭제 |
+| 9 | `BenchSceneBuilder.Ensure` (v0.13 이름 변경) | `Scenes/Bench.unity`(개발 빌드에만 포함) | **없을 때만**, 있으면 `BenchRunner` 검사 | v0.9. 측정 조건(생물 수 등)은 씬이 아니라 설정 데이터에서 읽으므로 씬을 다시 만들 필요가 없음 |
+
+- UI 프리팹(`UI/Prefabs/**`)은 `Run All`이 만들지 않습니다(항상 원본이 저장소에 있음). 프리팹 규칙 검사는 시험(`UiPrefabRulesTests`)이 합니다.
+- 결과물(`.unity`, `.prefab`, `.inputactions`, `.asset`)은 `.meta`와 함께 커밋합니다. 코드 원본 생성기를 바꾸면 해당 메뉴를 다시 실행하고 결과물 변경도 같은 커밋에 넣습니다. 오브젝트 원본을 MCP 도구로 고쳤으면 에이전트는 바꾼 오브젝트·컴포넌트 목록을 보고하고, 사용자는 그동안 에디터를 조작하지 않습니다(CLAUDE.md, 저장하지 않은 사용자 변경과 섞이지 않게).
 
 #### 3.8.3 이름 규칙
 - 네임스페이스는 어셈블리 이름과 같게 시작합니다(`Game.Domain.Items`).
@@ -1647,6 +1773,7 @@ stateDiagram-v2
 - `Time.timeScale`을 바꾸지 않습니다. 메뉴 연출이 필요하면 UI 자체 시간(비스케일 시간)을 씁니다.
 - 화면이 열려 있어도 플레이어 캐릭터는 월드에 남아 피해를 받고, 쓰러짐 등 상태 변화가 생기면 HUD 경고가 화면 위에 표시됩니다(배치는 STORYBOARD).
 - 화면을 연 상태에서 보내는 명령(예: 레시피북에서 제작, 보관함에서 꺼내기)은 다른 명령과 같은 검증 경로를 거칩니다.
+- (v0.13, uGUI) 화면 열기·닫기는 `UiScreenStack`(DES-122)이 하고, 게임 안 창(Window 층)이 하나라도 열려 있으면 `UiState`가 Overlay입니다. Overlay ↔ Gameplay 전환 때 Input Actions 지도(Gameplay ↔ UI)와 커서 잠금만 바꿉니다. 화면 숨김·층 규칙은 3.7.10 (5), 메뉴 연출(열림 애니메이션 등)은 비스케일 시간(`Time.unscaledDeltaTime`)을 씁니다.
 - **손목 계기 올림(FR-172, v0.4)** 도 같은 원칙입니다. 손목을 올린 상태는 `Gameplay` 안의 하위 상태로, 모든 행동이 가능하고(C-59 해소) 게임 진행은 멈추지 않습니다. `Overlay`(다른 창)로 들어가면 손목은 자동으로 내려갑니다.
 
 #### 3.10.8 용광로 (v0.6, FR-175~178)
@@ -2130,7 +2257,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 | | 미러 적용, 생물 보간, 자원 뷰 스트리밍 | 메인 | 1.2 ms | |
 | | 애니메이션(메인 부분) | 메인 | 0.7 ms | 화면 밖 생물은 애니메이션 갱신 안 함 |
 | | 물리(로컬 캐릭터, 상호작용 레이캐스트) | 메인 | 0.5 ms | 생물은 물리 사용 안 함 |
-| | UI(HUD, 이름표, 나침반) | 메인 | 0.8 ms | 손목 계기 렌더 텍스처는 값이 바뀔 때만 다시 그림(최대 10 Hz). 손 그리기 패스의 GPU 비용은 GPU 예산에 포함 |
+| | UI(HUD, 이름표, 나침반) | 메인 | 0.8 ms | 손목 계기 렌더 텍스처는 값이 바뀔 때만 다시 그림(최대 10 Hz). 손 그리기 패스의 GPU 비용은 GPU 예산에 포함. v0.13(uGUI): 캔버스 다시 만들기·레이아웃은 동적 하위 캔버스에서만, 매 프레임 UI 코드 할당 0(3.7.10 (9)), 손목 캡처 카메라(HDRP, 최대 10 Hz)의 메인 스레드 비용 포함 — M2-12에서 측정(R-39) |
 | | HDRP 메인 스레드(컬링, 렌더 그래프 준비) | 메인 | 4.0 ms | GPU Resident Drawer로 줄임 |
 | | 기타 스크립트·GC | 메인 | 0.5 ms | 틱 루프 할당 0 목표, 점진적 GC |
 | | **메인 스레드 합계** | | **≤ 11.2 ms** | 여유 5.5 ms(급격한 변화·측정 오차) |
@@ -2306,7 +2433,7 @@ v0.9 (M1-06 구현에서 확인한 사실):
 | DES-075 | FurnaceService | 유스케이스 + 시스템 | 애플리케이션 | 용광로 열기·닫기(구독), 칸 넣기·꺼내기(보관함과 같은 동시 조작 규칙), 완료 시각 최소 힙으로 가공 진행(서버 틱, 관심 범위 무관), `FurnaceView` 상태 변화 때만 발행, 저장·불러오기 때 남은 시간 변환, 가공 완료 경험치 이벤트(잠정). v0.6 신설 | FR-175~178, NFR-046 |
 | DES-080 | NetMessages (Protocol) | 모듈 | 애플리케이션 (v0.10: 어댑터(Net) → 애플리케이션, ID 유지) | `Game.Application/Protocol/`: `MessageKind`(u8), 3.7.2 표의 메시지 구조체(JoinRequest, JoinAccepted, JoinRejected, WorldReady, JoinComplete, Command, CommandResult, SnapshotChunk, TableDelta 등)와 `AvatarPose`, `ByteWriter`/`ByteReader`, 양자화, 메시지별 크기 상한 검사, `MessageCodec`(Encode / 예외 없는 TryDecode). 순수 C#(`noEngineReferences`), FishNet 형식 없음. 메시지마다 왕복 시험 + 고정 바이트 시험(`Game.Tests.Application`) | NFR-013, NFR-014, NFR-040, NFR-031 |
 
-### 4.4 어댑터 (DES-081~099, DES-120~121)
+### 4.4 어댑터 (DES-081~099, DES-120~122)
 
 DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부터 DES-081·082·083·085는 FishNet 형식 없이 포트(`INetServer`/`INetClient`)와 Protocol 메시지에만 의존하는 일반 C# 클래스이며(MonoBehaviour·NetworkBehaviour 아님), 조립 루트가 만들어 연결합니다.
 
@@ -2322,17 +2449,18 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES-088 | CreatureViews | 컴포넌트 | 어댑터(표현) | 생물 보간 표시, 애니메이터(화면 밖 정지), 피격 반응, 지역 변형 외형 | FR-076~081 |
 | DES-089 | TerrainViewBuilder | 컴포넌트 | 어댑터(표현) | 정수 높이 → Unity Terrain 36타일, 물 표면, 스플랫·디테일 | FR-168, NFR-052 |
 | DES-090 | LightingAtmosphere | 컴포넌트 | 어댑터(표현) | 낮·밤, 장막 아래 잿빛 조명, 정화 구역, 완전한 어둠, 광원(횃불·랜턴)의 **상태 계산**. 적용은 `IRenderBackend`(DES-114) 호출 | FR-033~036, FR-106 |
-| DES-091 | UI (UI Toolkit) | 컴포넌트 모음 | 어댑터(표현) | 화면·HUD 프리젠터(배치는 STORYBOARD), 사유 메시지, 리치 텍스트 끔. 공통 USS 기반(글자 크기 배율·색 토큰·모양 구분 규칙, M1부터), 다크 단일 테마, 화면을 열어도 게임 진행 유지(로컬 입력 경로만 전환), 독립 레시피북(`OpenRecipeBook(source)`, v0.6: `Hotkey` = 열람 + 손 제작, `Station` = 제작대 팝업) (3.7.10, 3.10.7), 용광로 화면(v0.6, 진행 막대는 시작 시각 + 가공 시간으로 로컬 계산). v0.4: 일반 HUD(`ScreenHud`), HUD 공통 UXML 부품, `HudModeSwitcher`(재시작 없이 전환) (3.7.11) | NFR-001~003, NFR-056, NFR-057, FR-052, FR-094, FR-128, FR-171 |
-| DES-092 | InputLayer | 컴포넌트 | 어댑터(표현) | Input Actions, 장치별 재설정·저장, 장치 전환 감지, 안내 아이콘 | NFR-002, NFR-004, FR-117, FR-166 |
+| DES-091 | UI (v0.13: uGUI + TextMeshPro, v0.12까지 UI Toolkit) | 컴포넌트 모음 + 프리팹 | 어댑터(표현) | 화면·HUD 프리젠터(배치는 STORYBOARD), 사유 메시지, 리치 텍스트 끔. 공통 기반(글자 크기 단계·색 토큰·모양 구분 규칙, M1부터 — v0.13: DES-122 테마 위에), 다크 단일 테마, 화면을 열어도 게임 진행 유지(로컬 입력 경로만 전환), 독립 레시피북(`OpenRecipeBook(source)`, v0.6: `Hotkey` = 열람 + 손 제작, `Station` = 제작대 팝업) (3.7.10, 3.10.7), 용광로 화면(v0.6, 진행 막대는 시작 시각 + 가공 시간으로 로컬 계산). v0.4: 일반 HUD(`ScreenHud`), HUD 공통 부품, `HudModeSwitcher`(재시작 없이 전환) (3.7.11). **v0.13**: 화면마다 프리팹(`UI/Prefabs/Screens/`, `Hud/`)이 원본이고 루트에 `UiScreen` + `…Screen` 컴포넌트, 표시 로직은 일반 C# `…View` 클래스(패시브 뷰). M1 화면: `SteamRequired`(SCR-001), `DevLobby`(SCR-004 최소판·SCR-012), `GameHud`(SCR-015 M1 범위), `GameMenu`(SCR-016, Hud에서 분리). 화면 층·숨김 규칙 3.7.10 (5) | NFR-001~003, NFR-056, NFR-057, FR-052, FR-094, FR-128, FR-171 |
+| DES-092 | InputLayer | 컴포넌트 | 어댑터(표현) | Input Actions, 장치별 재설정·저장, 장치 전환 감지, 안내 아이콘. v0.13: UI 입력은 EventSystem + `InputSystemUIInputModule`(게임과 같은 Input Actions 인스턴스), 닫기·탭 이동은 `UiInputRouter`(DES-122), 키캡 `KeycapView`(장치 전환 시 1초 안 교체), UI 지도에 `Point`·`Click`·`ScrollWheel` 추가(3.7.10 (6)) | NFR-002, NFR-004, FR-117, FR-166 |
 | DES-093 | LocalizationLayer | 컴포넌트 | 어댑터(표현) | String Table 조회, 텍스트 키·인자 조립, 언어 전환(재시작 없음), 누락 키 검사. 첫 실행 언어 = Steam 언어(한국어면 한국어, 그 밖 영어, C-48) | NFR-034, NFR-044, FR-157 |
 | DES-094 | AudioLayer | 컴포넌트 | 어댑터(표현) | Audio Mixer 5그룹 볼륨, 중요 소리 자막 이벤트 | FR-119, FR-129 |
-| DES-095 | Accessibility | 컴포넌트 | 어댑터(표현) | 글자 크기(배율 변수 적용), 색각 보정 모드, 흔들림 배율, 섬광 제한 판단, 광과민성 경고. 후처리 적용은 DES-114 | FR-129~132, NFR-056 |
+| DES-095 | Accessibility | 컴포넌트 | 어댑터(표현) | 글자 크기(v0.13: 단계를 정해 `UiRoot`에 넘기면 DES-122가 모든 글자에 적용. v0.12까지 USS 배율 변수), 색각 보정 모드, 흔들림 배율, 섬광 제한 판단, 광과민성 경고. 후처리 적용은 DES-114 | FR-129~132, NFR-056 |
 | DES-096 | InteractionAndPlacement | 컴포넌트 | 어댑터(표현) | 조준 대상 판정·안내, 건축 미리보기(배치 가능 표시) | NFR-002, FR-057, FR-058 |
-| DES-097 | HudWorldMarkers | 컴포넌트 | 어댑터(표현) | 나침반, 지도, 이름표(화면 좌표 투영. 장치형 HUD에서는 등불 소품 위치에 붙임), 핑·사망 위치·부활 지점 표시 | FR-124~126, FR-141, FR-159 |
+| DES-097 | HudWorldMarkers | 컴포넌트 | 어댑터(표현) | 나침반, 지도, 이름표(화면 좌표 투영. 장치형 HUD에서는 등불 소품 위치에 붙임), 핑·사망 위치·부활 지점 표시. v0.13: 월드 표시 층 캔버스(정렬 0, `UI/Prefabs/Hud/WorldMarkers.prefab`)에 표식 오브젝트 풀을 두고 화면 좌표로 옮김(월드 공간 캔버스는 쓰지 않음 — 후처리·업스케일링·깊이 영향, R-18 해소) | FR-124~126, FR-141, FR-159 |
 | DES-098 | WorldFileCodec | 모듈 | 어댑터(저장) | 헤더·청크 인코딩, 본문 해시, 청크별 형식 변환, 저장 금지 항목 검사. v0.6: `FURN` 청크 | NFR-022~025, NFR-037, NFR-042, FR-177 |
 | DES-099 | WorldSaveStore | 모듈 | 어댑터(저장) | 월드 폴더, 원자적 저장, 백업 회전·복원, 이름 변경·복제·삭제 | FR-018~020, FR-022, FR-150~152, NFR-024, NFR-026, NFR-036 |
-| DES-120 | DiegeticHud | 컴포넌트 | 어댑터(표현) | 장치형 HUD(기본): 왼쪽 손목 옛 등광 계기와 올림/내림, 계기 화면(UI Toolkit 패널 → 렌더 텍스처), 표시 면 `IWristSurface`(기본 구현 (B) 화면 공간 기울인 평면 = UI Toolkit 사용자 지정 메시. (A) 3D 손목 소품은 교체 지점만, M6-11에서 결정), 올림 방식 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능, 다른 창이 열리면 자동 내림, 십자선 둘레 스태미나 호, 머리 위 등불 이름표 소품(체력 4단계 + 꺼짐), 피격 호·위협 테두리(UI 레이어, 계기 위), `손목 자동 내림 시간` 설정값(기본값 결정 대기). 월드 보조 색조만 `IRenderBackend`(DES-114). 어댑터 대역(080~099)이 차서 120번 사용. v0.4 신설 | NFR-001, FR-159, FR-171, FR-172, FR-104~106 |
+| DES-120 | DiegeticHud | 컴포넌트 | 어댑터(표현) | 장치형 HUD(기본): 왼쪽 손목 옛 등광 계기와 올림/내림, 계기 화면(v0.13: uGUI 프리팹 `WristPanel` → UI 캡처 카메라 → 렌더 텍스처. v0.12까지 UI Toolkit 패널), 표시 면 `IWristSurface`(기본 구현 (B) 화면 공간 기울인 평면 = v0.13: `UiWarpedRawImage` 사다리꼴 메시, v0.12까지 UI Toolkit 사용자 지정 메시. 캡처 문제 시 대체안 3.7.11·R-39. (A) 3D 손목 소품은 교체 지점만, M6-11에서 결정), 올림 방식 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능, 다른 창이 열리면 자동 내림, 십자선 둘레 스태미나 호, 머리 위 등불 이름표 소품(체력 4단계 + 꺼짐), 피격 호·위협 테두리(UI 레이어, 계기 위), `손목 자동 내림 시간` 설정값(기본값 결정 대기). 월드 보조 색조만 `IRenderBackend`(DES-114). 어댑터 대역(080~099)이 차서 120번 사용. v0.4 신설 | NFR-001, FR-159, FR-171, FR-172, FR-104~106 |
 | DES-121 | FishNetPacketTransport | 모듈 + 컴포넌트 | 어댑터(Net) | v0.10 신설. `FishNetServer`(`INetServer` 구현)·`FishNetClient`(`INetClient` 구현)와 바이트 래퍼 Broadcast 1종 `PacketBroadcast`. FishNet `ServerManager`/`ClientManager`에 `PacketBroadcast`만 등록, 연결 시작·종료 이벤트와 원격 ID(FishySteamworks SteamID / Tugboat 개발 ID)를 포트 이벤트로 넘김, 보낼 때 `MessageCodec.Encode` → 채널(신뢰/비신뢰)로 전송, 받을 때 `TryDecode` 실패는 버리고 로그, 송수신 버퍼 재사용. 게이트웨이·복제·참가 절차에서 FishNet 형식을 쓰는 곳은 여기뿐(DES-084 아바타 RPC 제외). v0.11: 위치 `Adapters/Net/Transport/FishNetPacketTransport.cs`(폴더 규칙 3.4.1 규칙 8). 호스트 본인 연결은 로컬 플레이어 ID를 원격 ID로 씀. 에디터 측정에서 송신 1건당 관리 힙 약 81 B 할당이 남음(R-31) | NFR-031, NFR-040, NFR-013, NFR-014, FR-005 |
+| DES-122 | UiThemeKit | 데이터 + 컴포넌트 모음 | 어댑터(표현) | v0.13 신설(D-27). uGUI 공통 기반: 테마 애셋 `UiTheme`(ScriptableObject, `UI/Theme/UiTheme.asset` 한 벌 — 색 토큰 20개, 글자 크기 토큰 6개, 단계 배율 0.9/1.0/1.25, 글꼴 토큰 3개, 대비 검사 짝), 토큰 상수 `UiTokens`, 적용 컴포넌트 `ThemedText`(크기·색·굵기·텍스트 키, `richText`·자동 크기·레이캐스트 끔 강제)·`ThemedGraphic`·`ThemedSelectable`(STORYBOARD 2.5 상태, 포커스 3px 외곽선 + ▶), `UiButton`(사용 불가여도 포커스를 받고 사유 이벤트), `UiScreen`(층별 정렬 순서, 숨김 = Canvas·GraphicRaycaster·CanvasGroup 함께 끔), `UiRoot`(글자 단계·언어 다시 적용, `UiScreenStack`, `UiInputRouter` — Esc·Ⓑ 닫기, Q/E·LB/RB 탭 이동), `UiSafeArea16x9`, `UiRaycastBlocker`, `KeycapView`, `UiArcGraphic`, `UiWarpedRawImage`. 에디터 보조(토큰 드롭다운, Apply Theme To Prefabs)는 `Game.Editor`. 규칙 검사 `UiPrefabRulesTests`(3.4.3) | FR-129, FR-130, FR-166, NFR-002, NFR-004, NFR-050, NFR-056, NFR-057 |
 
 ### 4.5 인프라 (DES-100~113)
 
@@ -2350,11 +2478,11 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES-109 | GraphicsService | 모듈 | 인프라(`Game.Infra.Rendering`) | HDRP 품질 단계·프리셋·세부 설정, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」. v0.9: 프리셋은 순수 `GraphicsPresetCatalog`로 받음(애셋 `GraphicsPresetConfig`는 `Game.Infra.Config`), LOD 편향은 `GraphicsAssetBuilder`가 HDRP 애셋에 구워 넣음(3.12.7) | FR-120, FR-121, NFR-005, NFR-010~012, NFR-028 |
 | DES-110 | LocalSettingsStore | 모듈 | 인프라 | settings.json 읽기·쓰기(형식 버전). v0.7: 호스트 차단 목록 `bans.json`(`IBanListStore` 구현, 모든 월드 공통, C-46) | NFR-047, FR-148 |
 | DES-111 | BackgroundRunner | 모듈 | 인프라 | 생성·저장 직렬화·압축을 메인 스레드 밖에서, 결과는 메인 스레드로 | NFR-018~020, NFR-052 |
-| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 게임 버전(v0.12: SemVer, 3.7.12), 패키지 버전 고정, asmdef 규칙 시험(3.4.2 표 비교, Pipeline 패키지 격리 3.4.3), Unity Smart Merge 설정(v0.8: `git mergetool` 방식, M1-01 (4)). v0.8: 에디터 전용 어셈블리 `Game.Editor`의 빌드 명령(`BuildCommands`)·출시 빌드 산출물 검사(`BuildArtifactInspector`, Pipeline 런타임 어셈블리 0건 확인)·프로젝트 설정 적용을 이 요소에 포함. v0.11(실제, **빌드 번호 규칙은 사용자 결정 대기**, R-34): `BuildCommands`가 빌드할 때마다 `ReadBuildNumber()`(명령줄 `-buildNumber`, 없으면 환경 변수 `GAME_BUILD_NUMBER`, 둘 다 없으면 0)로 `PlayerSettings.bundleVersion`을 `VersionPrefix("0.1").빌드 번호`로 **덮어씀**(예: 손으로 0.1.2로 바꿔 두어도 번호 없이 빌드하면 0.1.0). 런타임 `BuildInfo.Number`는 이 문자열을 `주×10000 + 부×100 + 끝자리`로 바꿔 `JoinRequest.buildVer`·로비 `kh_build`·세션 규칙의 버전 비교에 씀. **v0.12(사용자 결정 2026-11-04, R-34 해소, D-26)**: 위 덮어쓰기와 숫자 인코딩을 폐지. 원본은 사람이 정하는 `bundleVersion`(SemVer 핵심 `MAJOR.MINOR.PATCH[-pre]`)이고, `BuildCommands`는 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC yyyyMMddHHmmss>.<커밋 7자>[.dirty]`를 붙였다가 `finally`에서 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `-buildNumber`·`GAME_BUILD_NUMBER` 폐지. `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 런타임 `BuildInfo.Version`(`GameVersion`, DES-037)이 `JoinRequest.gameVersion`·`kh_build`·화면 표시에 쓰임(3.7.12) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049, NFR-058 |
+| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 게임 버전(v0.12: SemVer, 3.7.12), 패키지 버전 고정, asmdef 규칙 시험(3.4.2 표 비교, Pipeline 패키지 격리 3.4.3), Unity Smart Merge 설정(v0.8: `git mergetool` 방식, M1-01 (4)). v0.8: 에디터 전용 어셈블리 `Game.Editor`의 빌드 명령(`BuildCommands`)·출시 빌드 산출물 검사(`BuildArtifactInspector`, Pipeline 런타임 어셈블리 0건 확인)·프로젝트 설정 적용을 이 요소에 포함. v0.11(실제, **빌드 번호 규칙은 사용자 결정 대기**, R-34): `BuildCommands`가 빌드할 때마다 `ReadBuildNumber()`(명령줄 `-buildNumber`, 없으면 환경 변수 `GAME_BUILD_NUMBER`, 둘 다 없으면 0)로 `PlayerSettings.bundleVersion`을 `VersionPrefix("0.1").빌드 번호`로 **덮어씀**(예: 손으로 0.1.2로 바꿔 두어도 번호 없이 빌드하면 0.1.0). 런타임 `BuildInfo.Number`는 이 문자열을 `주×10000 + 부×100 + 끝자리`로 바꿔 `JoinRequest.buildVer`·로비 `kh_build`·세션 규칙의 버전 비교에 씀. **v0.12(사용자 결정 2026-11-04, R-34 해소, D-26)**: 위 덮어쓰기와 숫자 인코딩을 폐지. 원본은 사람이 정하는 `bundleVersion`(SemVer 핵심 `MAJOR.MINOR.PATCH[-pre]`)이고, `BuildCommands`는 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC yyyyMMddHHmmss>.<커밋 7자>[.dirty]`를 붙였다가 `finally`에서 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `-buildNumber`·`GAME_BUILD_NUMBER` 폐지. `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 런타임 `BuildInfo.Version`(`GameVersion`, DES-037)이 `JoinRequest.gameVersion`·`kh_build`·화면 표시에 쓰임(3.7.12). **v0.13**: 씬·프리팹 생성기는 「없을 때만 처음 만들기 + 있으면 검사만」(3.8.2), 아키텍처 시험에 UI 패키지 격리·UI Toolkit 사용 금지 검사 추가(3.4.3) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049, NFR-058 |
 | DES-113 | TestAndBenchHarness | 도구 | 인프라 | 골든 해시, `-genhash`(다른 PC 비교)·`-genhash-compare`(결과 파일 비교, v0.7), `-genvalidate`(NFR-055), Bench 씬(P1/P8), 봇 | NFR-021, NFR-051, NFR-053, NFR-055 |
 | DES-114 | RenderBackend (HDRP) | 모듈(어댑터 인터페이스 구현) | 인프라(`Game.Infra.Rendering`) | `IRenderBackend` 구현. Volume 혼합, 태양·광원·정화 마스크 쿠키 적용, 후처리(색각 보정·섬광 완화), 셰이더 전역 변수. v0.4: 위협 시 월드 보조 색조(Volume. 테두리·피격 호 본체는 UI 레이어, v0.5). 1인칭 손·손목 소품 그리기 패스는 메서드 자리만(손목 표시 (A) 선택 시 구현, v0.5). HDRP 의존 코드가 모이는 유일한 곳(3.4.4). v0.2 신설 | FR-033~036, FR-106, FR-130, FR-131, FR-172, NFR-028 |
 
-설계 요소 합계: **108개** (도메인 37, 월드 생성 8, 애플리케이션 27, 어댑터 21, 인프라 15). v0.4에서 DES-074, DES-120, v0.6에서 DES-036, DES-075 추가. v0.10: DES-080을 어댑터 → 애플리케이션으로 옮기고(ID 유지) DES-121 추가. v0.11: 새 요소 없음(에디터 생성 스크립트는 DES-112, 부트 순서는 DES-100·101 설명에 포함). v0.12: DES-037 GameVersion 추가.
+설계 요소 합계: **109개** (도메인 37, 월드 생성 8, 애플리케이션 27, 어댑터 22, 인프라 15). v0.4에서 DES-074, DES-120, v0.6에서 DES-036, DES-075 추가. v0.10: DES-080을 어댑터 → 애플리케이션으로 옮기고(ID 유지) DES-121 추가. v0.11: 새 요소 없음(에디터 생성 스크립트는 DES-112, 부트 순서는 DES-100·101 설명에 포함). v0.12: DES-037 GameVersion 추가. v0.13: DES-122 UiThemeKit 추가.
 
 ---
 
@@ -2390,6 +2518,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | Test Framework | **1.6.0** | EditMode·PlayMode 시험 실행 확인 | |
 | Burst / Collections / Mathematics | **1.8.31 / 2.7.1 / 1.3.3** | `manifest.json`에 고정 | Job System은 엔진 내장이라 별도 패키지·어셈블리 참조 없음(3.4.2) |
 | Localization | **1.5.8** | `manifest.json`에 고정 | String Table 연결은 M2-01 |
+| uGUI + TextMeshPro (`com.unity.ugui`) (v0.13) | **2.0.0** (내장 패키지) | 6000.3.27f2에 이미 설치되어 있음 — 단 `manifest.json`에는 없고 HDRP Core(`com.unity.render-pipelines.core` 17.3.0)의 의존으로만 들어와 있음(`packages-lock.json` depth 2). 패키지 안에 `UnityEngine.UI`와 `Unity.TextMeshPro` 어셈블리가 함께 있음(Unity 6에서 TextMeshPro가 uGUI 패키지로 합쳐짐) | **`manifest.json`에 `"com.unity.ugui": "2.0.0"`을 직접 적어 고정**(NFR-049, 렌더 파이프라인을 바꿔도 UI 패키지가 빠지지 않게). 옛 `com.unity.textmeshpro` 패키지는 설치하지 않음. TMP Essential Resources는 `Assets/TextMesh Pro/`에 가져옴(Examples & Extras 제외). 내장 모듈 `com.unity.modules.uielements`는 Input System·Localization 등 에디터 도구가 쓰므로 **지우지 않음**(게임 코드에서만 사용 금지, 3.4.1 규칙 9) |
 | Unity Pipeline (`com.unity.pipeline`) | **0.9.1-exp.1** (실험 버전) | Unity 공식 CLI 1.0.0-beta.15와 에디터 조작 MCP가 이 패키지로 **열린 에디터와 통신**(D-22). **에디터 전용 패키지가 아님**을 확인 | **허용(사용자 결정 2026-11-03)**, 단 3.4.3의 안전장치 3가지(런타임 기호 금지, `Game.*` 참조 금지, 출시 빌드 산출물 검사)를 지킴. 출시 IL2CPP 빌드에서 Pipeline 런타임 어셈블리 0건 확인. 실험 버전이라 올릴 때 3.4.3 검사를 다시 통과해야 함(R-29) |
 
 - 스크립팅 백엔드: 출시·측정 빌드 IL2CPP, 에디터 Mono. 생성 결정론은 둘 모두에서 골든 해시가 같아야 통과(D-08).
@@ -2462,7 +2591,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 - 이유: 이번 버전은 「코드 수정 없이 데이터 수정 + 빌드」가 요구(NFR-033). 에디터에서 참조 무결성(아이템 키 존재 등)을 바로 검사할 수 있는 ScriptableObject가 실수가 적음. 빌드 없이 바꾸는 요구는 없음(필요 없는 확장성).
 - 미정 규칙은 「정해지면 갈아 끼울 자리」만 두고 구현은 하나씩만. 마일스톤 전에 정해지면 잠정 구현 없이 바로 확정 구현.
 
-### D-16 UI: UI Toolkit
+### D-16 UI: UI Toolkit — **v0.13에서 D-27로 대체**(사용자 결정 2026-11-04). 아래는 v0.1~v0.12의 기록입니다.
 - 결정: 메뉴·HUD 모두 UI Toolkit(UXML/USS).
 - 대안: uGUI + TextMeshPro.
 - 이유: USS 변수로 글자 크기 배율과 색 토큰을 한곳에서 관리하기 쉬움(FR-129, FR-130, NFR-056), 리치 텍스트 끄기가 간단(NFR-050), Unity 6에서 런타임·게임패드 내비게이션 지원. 단점: 월드 공간 UI(이름표 등)는 화면 좌표로 투영해 그리는 방식으로 구현해야 함. 손목 계기는 렌더 텍스처 방식이라 이 제약과 무관(D-21).
@@ -2492,6 +2621,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 - 대안: (a) 두 HUD를 따로 구현, (b) 손목 계기를 UI Toolkit 월드 공간 패널로, (c) uGUI 월드 공간 캔버스로, (d) 손목 화면을 셰이더·3D 메시(바늘·눈금)만으로 표현.
 - 이유: (a)는 정보 항목이 늘 때마다 두 곳을 고쳐야 함. (b)는 6000.3에서의 지원 범위가 확인되지 않았고, 손목 화면은 입력을 받지 않아 월드 공간 입력 처리가 필요 없음. (c)는 UI 기술이 둘로 나뉘고 USS 접근성 기반(NFR-056)을 다시 만들어야 함. (d)는 글자 크기 배율·다국어를 적용하기 어려움. 렌더 텍스처 방식은 같은 USS·다국어·글자 배율을 그대로 쓰고, 텍스처 연결은 파이프라인과 무관함(손 그리기 패스만 DES-114).
 - 장점: 정보 항목 추가 시 뷰모델·부품 한 곳만 고침, R-18(UI Toolkit 월드 공간 제약)의 영향을 받지 않음. 단점: 렌더 텍스처가 3D 표면에 그려지므로 업스케일링·시야각·손목 각도에 따라 글자가 흐릴 수 있음(R-22) → 텍스처 해상도와 손목 계기의 최소 글자 크기를 설정값으로 두고 M2-12에서 확인.
+- **v0.13 재검토(D-27, uGUI 전환)**: 뷰모델 공유·`IHudPresenter` 교체·`IWristSurface`·(B) 시작 결정은 그대로입니다. 바뀐 것: (1) 계기 화면 = uGUI 프리팹 `WristPanel`을 **UI 전용 캡처 카메라**로 렌더 텍스처에 그림(uGUI에는 UI Toolkit `PanelSettings.targetTexture` 같은 직접 텍스처 출력이 없음). 카메라의 HDRP 설정은 DES-114. (2) (B) 표시 면 = `UiWarpedRawImage`(uGUI 사용자 지정 메시). (3) 대안 (c) uGUI 월드 공간 캔버스의 반대 이유 중 「UI 기술이 둘로 나뉨」은 사라졌으나, 후처리·업스케일링에 의한 흐림(R-22)과 손 그리기 패스 필요는 남아 기본안을 바꾸지 않음. (4) 캡처 카메라 방식의 비용·표시 문제는 R-39로 관리하고, 문제 시 「오버레이 직접 그리기 + 원근 없는 기울임」 대체안을 사용자 확인 뒤 씀(3.7.11). 단점 추가: 표시 면 하나를 위해 HDRP 카메라 하나가 더 생김(최대 10 Hz).
 
 ### D-22 개발 실행 방식: 에디터를 열어 둔 채 Unity CLI로 조작 (v0.8, 사용자 결정 2026-11-03. v0.9: 플레이어 빌드도 열린 에디터에서)
 - 결정: 개발 중에는 Unity 에디터를 열어 둡니다. 에이전트(developer, test-engineer 등)는 batchmode 에디터를 따로 띄우지 않고, Unity CLI(1.0.0-beta.15)가 Unity Pipeline 패키지(D-03)를 통해 **열린 에디터를 조작**합니다. 명령은 `src/`에서 실행합니다.
@@ -2530,13 +2660,22 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 - 결정: `Game.Editor`는 `Game.Adapters.Net`과 `FishNet.Runtime`을 참조하지 않습니다(3.4.2). Boot 씬의 `NetworkManager`, 아바타 프리팹의 `NetworkObject`·`PlayerAvatar`처럼 생성 스크립트가 붙여야 하는 FishNet·Net 어댑터 형식은 `Type.GetType("형식 전체 이름, 어셈블리 이름")`으로 찾아 `AddComponent(Type)`로 붙이고, 직렬화 필드 연결은 `SerializedObject` 속성 이름으로 합니다(`WorldAndNetworkBuilders.ReflectionComponents`, `BootSceneBuilder`). 형식을 찾지 못하면 예외를 던져 메뉴 실행을 실패시킵니다(조용히 빈 씬을 만들지 않음).
 - 대안: (a) `Game.Editor`가 `Game.Adapters.Net`·`FishNet.Runtime`을 참조하고 형식을 직접 씀, (b) 프리팹·씬을 사람이 에디터에서 만들어 두고 생성 스크립트를 쓰지 않음, (c) Net 어댑터 안에 에디터 전용 하위 asmdef(`Game.Adapters.Net.Editor`)를 따로 둠.
 - 이유: (1) FishNet 의존 위치를 3.4.1 규칙 3의 세 어셈블리(Net 어댑터, Transport, Bootstrap)로 그대로 유지합니다. (a)는 에디터 전용이라 플레이어 빌드에는 영향이 없지만, FishNet 의존 어셈블리가 하나 더 늘어 R-06(FishNet 교체 시 고칠 곳)의 범위가 넓어지고 아키텍처 시험의 FishNet 허용 목록도 바뀌어야 합니다. (2) 생성기가 FishNet에 기대는 곳은 형식 이름 세 개뿐이고 메서드 호출이 없어 리플렉션 비용·복잡도가 작습니다(빌드 결과·런타임 성능과 무관). (3) (b)는 씬·프리팹을 코드로 다시 만들 수 있다는 원칙(3.8.2 생성 파이프라인)에 어긋나고, (c)는 asmdef 하나와 표·시험 항목이 늘어 지금 규모에 비해 과합니다.
-- 장점: 의존 규칙 변화 없음, 생성 결과 재현 가능. 단점: 형식·필드 이름을 문자열로 쓰므로 이름을 바꾸면 컴파일러가 잡지 못하고 메뉴를 실행해야 드러남 → 형식을 못 찾으면 예외, `Game/Setup/Run All` 실행을 Do 단계 묶음마다 확인 항목에 넣고, FishNet 버전을 올릴 때(NFR-049) 생성 메뉴를 다시 실행해 확인합니다.
+- **v0.13 갱신(D-27)**: 「씬·프리팹을 코드로 다시 만들 수 있다」는 원칙은 사용자 결정으로 바뀌었습니다 — 씬·프리팹은 하이어라키·프리팹의 오브젝트가 원본이고, 생성기는 없을 때만 처음 만듭니다(3.8.2). 그래서 이유 (3)의 (b) 반대 근거는 더 이상 쓰지 않습니다. 리플렉션 방식 자체(이유 (1)·(2))는 그대로 유지합니다 — 처음 만들기와 검사 단계에서 FishNet 형식(`NetworkManager`, `NetworkObject`)과, v0.13부터 Input System 형식(`InputSystemUIInputModule`)을 형식 이름으로 찾습니다.
+- 장점: 의존 규칙 변화 없음, 생성 결과 재현 가능(v0.13: 처음 만들 때). 단점: 형식·필드 이름을 문자열로 쓰므로 이름을 바꾸면 컴파일러가 잡지 못하고 메뉴를 실행해야 드러남 → 형식을 못 찾으면 예외, `Game/Setup/Run All` 실행을 Do 단계 묶음마다 확인 항목에 넣고, FishNet 버전을 올릴 때(NFR-049) 생성 메뉴를 다시 실행해 확인합니다.
 
 ### D-26 게임 버전 = SemVer, 참가는 「같은 빌드」만 (v0.12, 사용자 결정 2026-11-04, R-34 해소)
 - 결정: (1) 게임 버전은 SemVer 2.0.0이고 사이클 태그와 같은 번호를 씁니다(사이클 = MINOR, `fix/` = PATCH, 지금 `0.1.0`). 이 부분은 사용자 결정입니다. 아래 (2)~(5)는 설계 결정입니다. (2) 원본은 사람이 정하는 `PlayerSettings.bundleVersion`(핵심 + 사전 릴리스) 하나이고, 빌드 스크립트는 빌드하는 동안만 빌드 메타데이터 `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙였다가 되돌립니다. (3) 참가 검사는 프로토콜·ContentHash·생성기 버전에 더해 **게임 버전 전체 문자열(메타데이터 포함) 일치**를 요구하며, 출시·개발 빌드에 같은 규칙을 씁니다. (4) 프로토콜 필드는 숫자 인코딩 대신 길이 접두 문자열(≤ 64 B)이고 `protocolVer`를 2로 올리며, `JoinRequest`의 첫 필드 `protocolVer`는 위치를 고정합니다. (5) 값 객체 `GameVersion`(DES-037)을 도메인에 둡니다(3.7.12).
 - 대안: 메타데이터 위치 — (a) 빌드할 때 `bundleVersion`에 붙였다 되돌림(선택), (b) 빌드 정보를 별도 파일(StreamingAssets 등)로 만들어 런타임에 읽음, (c) 메타데이터 없이 핵심 번호만. 참가 규칙 — (d) 전체 문자열 일치(선택), (e) 출시는 핵심 + 사전 릴리스만, 개발은 메타데이터까지(규칙 둘), (f) SemVer 우선순위처럼 메타데이터 무시. 필드 형식 — (g) 문자열(선택), (h) MAJOR·MINOR·PATCH u16 ×3 + 사전 릴리스·메타데이터 문자열.
 - 이유: (a)는 런타임이 `Application.version` 하나만 읽으면 되어 출처가 하나로 유지되고, 빌드 뒤 `ProjectSettings.asset`이 바뀌지 않습니다. (b)는 파일이 빠지거나 바뀌면 버전이 둘로 갈라지고, (c)는 R-34의 「다른 빌드끼리 일치로 통과」를 풀지 못합니다. (d)를 고른 이유: 결정론 동기화(D-05, D-08)는 같은 코드가 필요한데 개발 중에는 코드가 바뀌어도 `protocolVer`·ContentHash가 그대로일 수 있고, 출시 빌드는 배포한 번호가 불변이라 (d)와 (e)의 결과가 정상 배포에서 같습니다 — 규칙 하나가 구현·시험이 단순하고, 같은 번호로 잘못 다시 만든 출시 빌드까지 걸러 더 안전합니다. (f)는 SemVer의 메타데이터 무시가 우선순위 규칙이지 호환 판정 규칙이 아니어서 맞지 않습니다. (g)는 비교가 서수 문자열 비교 하나로 끝나고, 우선순위 비교를 쓰는 곳이 없어 (h)의 자리별 값이 필요 없습니다(참고용 월드 파일 헤더만 자리별 u16).
 - 장점: 자리 넘침·덮어쓰기 문제 해소, 사이클 태그·화면 표시·로그·오류 보고가 같은 번호, 옛 빌드 참가자가 다음 프로토콜 변경부터는 시간 초과 대신 「게임 버전 불일치」를 봄. 단점: 개발 빌드는 다시 빌드할 때마다 서로 접속할 수 없고, 에디터 ↔ 플레이어 접속도 거부됨(같은 빌드 폴더를 복사해 시험), 사람이 사이클 시작 때 번호를 올려야 함(출시 빌드는 태그 검사로 막지만 개발 빌드는 이전 번호로 남을 수 있음) → R-35.
+
+### D-27 UI: uGUI + TextMeshPro, 오브젝트가 원본 (v0.13, 사용자 결정 2026-11-04, D-16 대체)
+- 결정: (1) **메뉴·HUD·앞으로 만들 모든 UI는 uGUI(Canvas + TextMeshPro)** 로 만듭니다(사용자 결정). (2) **UI는 하이어라키·프리팹의 게임 오브젝트가 원본**입니다. 화면마다 프리팹(`Assets/_Game/UI/Prefabs/…`)을 두고 씬에는 프리팹 인스턴스만 놓습니다. 에디터 생성기는 없을 때 처음 한 번 만드는 용도로만 쓰고 이미 있는 씬·프리팹을 다시 만들어 덮어쓰지 않으며, 에이전트는 Unity MCP 도구로 개별 오브젝트를 고칩니다(사용자 결정의 핵심, 3.8.2). 아래 (3)~(6)은 설계 결정입니다. (3) 색·글자 크기·글꼴은 ScriptableObject 테마 `UiTheme`의 토큰(이름은 v0.12 USS 변수에서 `--`만 뺌)과 적용 컴포넌트 `Themed*`로 지정합니다(DES-122, 3.7.10). (4) 모든 화면 캔버스는 Screen Space - Overlay, CanvasScaler 1920×1080·높이 기준, 층별 정렬 순서와 「숨김 = Canvas·레이캐스터·CanvasGroup 함께 끔」 규칙을 씁니다. (5) 입력은 EventSystem + `InputSystemUIInputModule`, 닫기·탭 이동은 `UiInputRouter`. (6) 규칙은 프리팹·테마 규칙 검사 시험으로 강제합니다(3.4.3).
+- 대안: (a) UI Toolkit 유지(D-16), (b) UI Toolkit 유지 + UI Builder로 UXML을 시각적으로 편집, (c) 혼용(메뉴 UI Toolkit, HUD·월드 표시 uGUI). 테마 방식 — (d) 테마 애셋 + 적용 컴포넌트(선택), (e) uGUI 기본 색 블록·프리팹 변형만으로 값 관리, (f) 화면 코드에서 색·크기를 직접 설정. 생성기 정책 — (g) 없을 때만 만들기 + 검사(선택), (h) v0.11처럼 매번 다시 만들기, (i) 생성기 삭제.
+- 이유: (a)·(b)는 UI 요소가 하이어라키의 게임 오브젝트가 아니라 UXML 파일 안의 요소라 하이어라키·인스펙터에서 직접 관리하려는 사용자 목표와 맞지 않습니다(사용자 결정). (c)는 기술이 둘로 나뉘어 접근성 기반(NFR-056)·시험을 두 벌 유지해야 합니다. (e)는 색 블록·프리팹마다 색 값이 흩어져 한 곳에서 바꿀 수 없고(FR-130, NFR-056 「토큰 교체로 후속 기능 가능」), 글자 크기 단계(FR-129)를 일괄 적용할 수단이 없습니다. (f)는 화면 코드가 디자인 값을 갖게 되어 하이어라키에서 고친 내용과 어긋납니다. (d)는 USS 변수와 같은 「토큰 한 곳 + 이름 참조」 구조를 uGUI에 옮긴 것이라 STORYBOARD·기존 토큰 이름을 그대로 쓰고, 에디터에서도 결과가 보입니다. (h)는 사용자가 고친 내용을 지우므로 결정 (2)와 충돌하고, (i)는 새 PC·새 씬을 처음 만들 때와 구성 검사 수단을 잃습니다.
+- 요구사항 유지: 글자 크기 단계(FR-129, 3단계·배율 동일), 색 토큰·모양 구분·대비(FR-130, NFR-056, NFR-057), 리치 텍스트 끔(NFR-050 — TMP `richText = false`를 모든 글자에), 키보드·마우스만 또는 게임패드만으로 모든 화면 사용(NFR-002, NFR-004 — Selectable 내비게이션, 비활성 버튼도 포커스), 장치 전환 키캡 교체(FR-166 — `KeycapView`), 다국어 텍스트 키(NFR-034, NFR-044 — `ThemedText` 텍스트 키, M2-01 String Table), 화면을 열어도 게임 진행(3.10.7 — 변경 없음).
+- 장점: 사용자가 하이어라키·인스펙터·프리팹 모드에서 UI를 직접 보고 고침, 버튼 동작 시험이 `Button.onClick.Invoke()`로 간단해짐(UI Toolkit에서 리플렉션으로 `clicked`를 부르던 문제 해소), 월드 공간·3D 표현을 같은 기술로 할 수 있는 여지(R-18 해소), Unity 자료·예제가 많음.
+- 단점과 대응: (1) 이미 만든 화면을 다시 만드는 비용 → 동작은 그대로 두는 전환 작업으로 한정(7장, R-36). (2) TMP 한글 글꼴 아틀라스 크기·글자 누락 → 정적 + 동적 + 기호 대체 사슬과 글꼴 규칙 검사(3.7.10 (8), R-37). (3) 생성기로 되돌릴 수 없고 병합 충돌이 늘어남 → 화면별 프리팹, 자주 커밋, 규칙 검사(R-38). (4) 손목 계기 렌더 텍스처에 HDRP 캡처 카메라가 필요 → DES-114에 격리, M2-12 시작품으로 확인(D-21 재검토, R-39). (5) 캔버스 다시 만들기·레이아웃·할당으로 인한 성능 함정 → 정적·동적 캔버스 분리와 갱신 규칙(3.7.10 (9), R-40). (6) uGUI 기본 상태 전환(색 블록)을 쓰지 않으므로 `ThemedSelectable`을 직접 만들어야 함 → 공통 부품 프리팹(버튼 3변형, 목록 행)으로 한 번 만들고 재사용.
 
 ---
 
@@ -2674,8 +2813,8 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | FR-126 | DES-032, DES-069, DES-097 | |
 | FR-127 | DES-069, DES-034 | |
 | FR-128 | DES-069, DES-091 | |
-| FR-129 | DES-095, DES-094 | |
-| FR-130 | DES-095, DES-114 | |
+| FR-129 | DES-095, DES-094, DES-122 | v0.13: 글자 크기 토큰 × 단계 배율(3.7.10 (2)) |
+| FR-130 | DES-095, DES-114, DES-122 | v0.13: UI 색 토큰·모양 구분 규칙은 `UiTheme`·`Themed*`(3.7.10 (1)·(3)) |
 | FR-131 | DES-095, DES-114 | |
 | FR-132 | DES-095, DES-073 | |
 | FR-133 | DES-005, DES-059 | |
@@ -2711,7 +2850,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | FR-163 | DES-108 | |
 | FR-164 | DES-070, DES-102 | |
 | FR-165 | DES-070, DES-102 | |
-| FR-166 | DES-092 | |
+| FR-166 | DES-092, DES-122 | v0.13: `KeycapView`(3.7.10 (3)·(6)) |
 | FR-167 | DES-041, DES-030 | |
 | FR-168 | DES-043, DES-042, DES-047, DES-089 | |
 | FR-169 | DES-040, DES-044, DES-046, DES-072, DES-085 | |
@@ -2731,9 +2870,9 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | NFR | DES ID | 비고 |
 |---|---|---|
 | NFR-001 | DES-003, DES-091, DES-066, DES-074, DES-120 | 환경 위협은 현재 상태 + 대응 버프 남은 시간만 표시, 누적 게이지 없음(SRS v0.5). 0.5초 갱신은 「표시되고 있는 동안」 기준(SRS v0.6, 3.7.11) |
-| NFR-002 | DES-092, DES-096 | |
+| NFR-002 | DES-092, DES-096, DES-122 | v0.13: uGUI 내비게이션·`UiInputRouter`(3.7.10 (6)) |
 | NFR-003 | DES-001, DES-050, DES-091 | 3.7.5 사유 코드 |
-| NFR-004 | DES-092, DES-102 | 화면 키보드 |
+| NFR-004 | DES-092, DES-102, DES-122 | 화면 키보드. v0.13: 사용 불가 버튼도 포커스(`UiButton`) |
 | NFR-005 | DES-109, DES-108 | |
 | NFR-006 | DES-102, DES-100 | Steam 실행 필수, 없으면 SCR-001(v0.7) |
 | NFR-007 | DES-106 | |
@@ -2779,14 +2918,14 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | NFR-047 | DES-110, DES-073 | |
 | NFR-048 | DES-108 | 3.12.8 |
 | NFR-049 | DES-101, DES-112 | |
-| NFR-050 | DES-034, DES-069, DES-091 | |
+| NFR-050 | DES-034, DES-069, DES-091, DES-122 | v0.13: 모든 TMP 글자·입력칸 `richText = false`(규칙 검사 3.4.3) |
 | NFR-051 | DES-113 | |
 | NFR-052 | DES-043, DES-047, DES-111 | |
 | NFR-053 | DES-040, DES-046, DES-113 | v0.7: 다른 CPU 교차 검증은 M6-10(M6 전에는 `-genhash` 결과 수집으로 선택 실시) |
 | NFR-054 | DES-044, DES-046 | |
 | NFR-055 | DES-045, DES-113 | |
-| NFR-056 | DES-091, DES-095 | UI 접근성 기반(글자 크기 배율, 색 토큰, 색만으로 구분하지 않는 규칙)을 M1 첫 UI부터(3.7.10, SRS v0.5) |
-| NFR-057 | DES-091 | 다크 단일 테마, 라이트 테마·테마 전환 구조 없음(3.7.10, SRS v0.5) |
+| NFR-056 | DES-091, DES-095, DES-122 | UI 접근성 기반(글자 크기 배율, 색 토큰, 색만으로 구분하지 않는 규칙)을 M1 첫 UI부터(3.7.10, SRS v0.5). v0.13: uGUI 테마 애셋 + 적용 컴포넌트 |
+| NFR-057 | DES-091, DES-122 | 다크 단일 테마, 라이트 테마·테마 전환 구조 없음(3.7.10, SRS v0.5). v0.13: `UiTheme` 한 벌, 대비 검사 짝 |
 | NFR-058 | DES-037, DES-112, DES-031, DES-080, DES-100 | (v0.12, SRS v0.11) 게임 버전 SemVer, 단일 출처 `bundleVersion`, 빌드 메타데이터, 참가 시 버전 확인, 표시 형식(3.7.12, D-26) |
 
 설계 요소와 연결되지 않은 FR/NFR: **없음** (FR 179개, NFR 58개 모두 연결).
@@ -2799,11 +2938,12 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 - 「결정 필요」는 그 작업을 시작하기 전에 사용자에게 받아야 할 SRS 부록 C 항목입니다. 결정이 늦으면 잠정 구현(3.7.6)으로 진행하고 기록합니다.
 - 마일스톤 마지막 작업은 항상 「완료 빌드 + 그 마일스톤 FR 시험 + 아키텍처 시험」입니다(NFR-043).
 - **실행 방식 (v0.8, D-22)**: 컴파일·EditMode·PlayMode 시험·Console 확인은 열린 에디터에 Unity CLI(`unity recompile`, `unity command test run ...`, `unity command console get`)로 합니다. batchmode 에디터 실행(`unity build`, `unity test`, `Unity.exe -batchmode`)은 쓰지 않습니다. v0.9: **플레이어 빌드(IL2CPP)도 열린 에디터에서** `unity command build run`으로 만들고(`BuildCommands` 경로, 산출물 검사 포함), 빌드한 플레이어를 `-batchmode -nographics`로 따로 실행하는 것은 허용합니다. 사용자에게 에디터를 닫아 달라고 요청하는 것은 **성능 측정 중**(에디터가 같은 CPU·GPU를 써서 결과가 흐려짐, 3.12.4)뿐입니다. M1은 해당 작업(M1-04, M1-12, M1-13)의 설명에 빌드·실행 순서를 적었고, M2 이후에도 같은 규칙을 적용합니다(각 마일스톤 완료 빌드, IL2CPP 결정론 교차가 들어간 M3-03·M4-09, 출시 작업 M3-15·M10-06, 측정 작업 M6-10은 측정 중 에디터 닫음). 빌드는 시간이 걸리므로 한 번에 몰아서 합니다.
+- **UI 작업 공통 규칙 (v0.13, D-27)**: M2 이후 모든 화면·HUD 작업은 (1) uGUI 프리팹(`Assets/_Game/UI/Prefabs/`)을 공통 부품 프리팹으로 조합해 MCP 도구로 만들고 프리팹을 원본으로 둠, (2) 글자·그래픽·선택 요소에 `Themed*` 컴포넌트와 토큰(3.7.10), (3) 화면 루트에 `UiScreen`(층·정렬 순서·`FirstSelected`), (4) 씬에는 프리팹 인스턴스와 참조만, (5) `UiPrefabRulesTests` 통과와 버튼 `onClick.Invoke()` 시험, (6) 생성기로 기존 씬·프리팹을 덮어쓰지 않음(3.8.2)을 지킵니다.
 - **버전 고정 (v0.8)**: 패키지 버전은 D-03 표 그대로 둡니다. 특히 `com.unity.modules.physics2d`(FishNet 컴파일 조건)와 `com.unity.modules.nvidia`·`com.unity.modules.amd`(DLSS·FSR2 컴파일 조건, v0.9)를 지우지 않고, `com.unity.pipeline`을 올리면 3.4.3 격리 검사를 다시 통과해야 합니다.
 
 ### M1 기반 — 기술 검증과 그에 필요한 최소 기능만 (C-51 확정, 사용자 결정 2026-11-02)
 
-M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생성·초대·참가, 이동, 측정 도구). 세션 관리 세부(참가 조건 선택, 공개 목록, 비밀번호, 강퇴, 차단), 채팅, 옵션·다국어·입력 재설정 기반, 광과민성 경고, 이름표, 리치 프레즌스, 충돌 보고는 **M2로 옮겼습니다**(M2-01, M2-07~M2-10). M1의 최소 화면은 개발용이며, 글자는 처음부터 텍스트 키로 써 두고 M2-01에서 String Table에 연결합니다. **M1의 모든 UI는 처음부터 공통 USS 기반(글자 크기 배율 변수, 다크 단일 테마 색 토큰, 모양 구분 규칙, 3.7.10)으로 만들고**, 화면을 열어도 게임 진행은 멈추지 않게 합니다(3.10.7).
+M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생성·초대·참가, 이동, 측정 도구). 세션 관리 세부(참가 조건 선택, 공개 목록, 비밀번호, 강퇴, 차단), 채팅, 옵션·다국어·입력 재설정 기반, 광과민성 경고, 이름표, 리치 프레즌스, 충돌 보고는 **M2로 옮겼습니다**(M2-01, M2-07~M2-10). M1의 최소 화면은 개발용이며, 글자는 처음부터 텍스트 키로 써 두고 M2-01에서 String Table에 연결합니다. **M1의 모든 UI는 처음부터 공통 기반(글자 크기 단계, 다크 단일 테마 색 토큰, 모양 구분 규칙, 3.7.10)으로 만들고**, 화면을 열어도 게임 진행은 멈추지 않게 합니다(3.10.7). v0.13: 공통 기반의 구현은 USS에서 **uGUI 테마(`UiTheme` + `Themed*`, DES-122)** 로 바뀌었고, 이미 만든 M1 화면은 아래 「M1 묶음 3 마무리 — UI uGUI 전환」에서 옮깁니다. **M2 이후의 모든 UI 작업은 uGUI 프리팹(`UI/Prefabs/`) + 테마 컴포넌트로 만들고, 프리팹이 원본**입니다(3.8.2).
 
 | 순서 | 작업 | 관련 DES | 관련 FR/NFR | 선행 작업 |
 |---|---|---|---|---|
@@ -2814,7 +2954,7 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 | M1-05 | 측정 기반: 서버·클라이언트 ProfilerMarker, PerfTelemetry(서버 처리 예산 감시, 개발용 성능 표시, CSV), Bench 씬, 기본 파일 로그(민감 정보 제외. 보관 개수·충돌 보고는 M2-10). v0.8(D-22): 표식·기록기·CSV 형식은 열린 에디터에서 EditMode·PlayMode 시험으로 확인하고, 측정 빌드(IL2CPP)는 만들지 않음. 측정 빌드는 M1-12에서 한 번에 만듦(빌드 횟수를 줄임). v0.9: 구간 측정은 Stopwatch 기본·ProfilerMarker 보조, `enableFrameTimingStats = true`, 성능 표시는 IMGUI(F3, 개발 빌드 전용)(3.12.4) | DES-108, DES-113, DES-107 | FR-163, NFR-021, NFR-042 | M1-01 |
 | M1-06 | 그래픽 기반: `IRenderBackend`·HdrpRenderBackend 골격, HDRP 품질 단계 4개, 프리셋 데이터, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」 지정(C-52 확정). 옵션 화면은 M2-01. v0.8(D-22): 품질 단계·업스케일러 동작은 먼저 열린 에디터(플레이 모드)에서 확인하고, 플레이어 빌드에서의 최종 확인(R-19)은 M1-12 측정 빌드 때 함께 함(이 작업만을 위해 따로 빌드하지 않음). v0.9: 내장 모듈 `com.unity.modules.nvidia`·`amd` 추가(D-03), LOD 편향은 `GraphicsAssetBuilder`가 HDRP 애셋에 구워 넣음(프리셋 값 변경 시 메뉴 재실행), `GraphicsPresetConfig`는 `Game.Infra.Config`·Rendering은 `GraphicsPresetCatalog`만 받음(3.12.7) | DES-109, DES-114 | FR-120(데이터), FR-121(업스케일링), NFR-005, NFR-028 | M1-01 |
 | M1-07 | **8인 Steam 접속(최소)**: 로비 생성(M1은 참가 조건 「친구 전용」 고정)·검색(`kh_game` 필터)·참가·초대, 최대 인원 8, JoinHandshake(버전·ContentHash·로비 멤버·원격 SteamID), 나가기·연결 끊김 처리. **v0.10 (D-23)**: 참가 절차가 처음으로 메시지를 쓰므로 여기서 먼저 만듦 — (1) `Game.Application/Protocol/` 기반: `MessageKind`, `ByteWriter`/`ByteReader`, 크기 상한, `MessageCodec`, 참가 메시지(JoinRequest, JoinAccepted, JoinRejected, WorldReady, JoinComplete)와 왕복·고정 바이트 시험(`Game.Tests.Application`). (2) `NetChannel`, `INetServer`/`INetClient` 시그니처를 Protocol 메시지 기준으로. (3) DES-121 `FishNetServer`/`FishNetClient` + `PacketBroadcast`. (4) JoinHandshake를 포트·메시지에만 의존하는 일반 클래스로. (5) 시험 asmdef `Game.Tests.Net`을 3.4.2 표대로 만들고(아키텍처 시험 `ExpectedTestReferences`도 같은 값) 가짜 `INetServer`로 JoinHandshake 시험 | DES-054, DES-085, DES-102, DES-031, DES-072, DES-080, DES-051, DES-121, DES-112 | FR-001~005, FR-011(퇴장), NFR-009, NFR-031, NFR-038, NFR-039, NFR-040 | M1-02, M1-03 |
-| M1-08 | 1인칭 이동·달리기·스태미나(**v0.10 SRS v0.10**: 0이 돼도 불이익 없음 — 달리기만 걷기 속도, `스태미나 회복 지연` 1초 확정. 확정 규칙이라 `IZeroVitalPenaltyRule`을 거치지 않음). Input Actions 기본 바인딩 = STORYBOARD 2.4 기본 할당표 중 **키보드·마우스 전체 + 게임패드는 겹치지 않는 기본 행동(이동·시점·달리기·상호작용·공격 등)만**(v0.10, 사용자 결정 2026-11-03: 패드의 채팅·핑·퀵슬롯 등 겹치는 버튼 할당은 추후 다시 정의, 보류 — 패드 바인딩을 비워 둠). 안내 아이콘은 Xbox 계열만(C-28). PlayerAvatar(클라이언트 계산 + 호스트 검사, **v0.10 D-24**: NetworkTransform 대신 소유자 ServerRpc(비신뢰, `AvatarPose` 바이트) → `AvatarMoveValidator`(이동 검사, 서버 쪽 스태미나 추정, `Game.Application`) → ObserversRpc, 거부 시 TargetRpc 보정. 내 자세는 `ILocalPlayerPose`, 다른 참가자 자세는 `ClientWorldMirror`로 표시. `AvatarPose` 코덱 왕복 시험과 `AvatarMoveValidator` 시험은 `Game.Tests.Application`), **UI 공통 기반 `Base.uss`(글자 크기 배율·다크 테마 색 토큰·모양 구분 규칙)와 USS 규칙 검사 시험**, 그 위에 HUD 스태미나·로비/접속 화면, UI 상태(Gameplay/Overlay)는 입력 경로만 전환 | DES-086, DES-084, DES-002, DES-003, DES-052, DES-051, DES-072, DES-080, DES-091, DES-092, DES-095 | FR-023~025, NFR-001(스태미나), NFR-030, NFR-056, NFR-057 | M1-07 |
+| M1-08 | 1인칭 이동·달리기·스태미나(**v0.10 SRS v0.10**: 0이 돼도 불이익 없음 — 달리기만 걷기 속도, `스태미나 회복 지연` 1초 확정. 확정 규칙이라 `IZeroVitalPenaltyRule`을 거치지 않음). Input Actions 기본 바인딩 = STORYBOARD 2.4 기본 할당표 중 **키보드·마우스 전체 + 게임패드는 겹치지 않는 기본 행동(이동·시점·달리기·상호작용·공격 등)만**(v0.10, 사용자 결정 2026-11-03: 패드의 채팅·핑·퀵슬롯 등 겹치는 버튼 할당은 추후 다시 정의, 보류 — 패드 바인딩을 비워 둠). 안내 아이콘은 Xbox 계열만(C-28). PlayerAvatar(클라이언트 계산 + 호스트 검사, **v0.10 D-24**: NetworkTransform 대신 소유자 ServerRpc(비신뢰, `AvatarPose` 바이트) → `AvatarMoveValidator`(이동 검사, 서버 쪽 스태미나 추정, `Game.Application`) → ObserversRpc, 거부 시 TargetRpc 보정. 내 자세는 `ILocalPlayerPose`, 다른 참가자 자세는 `ClientWorldMirror`로 표시. `AvatarPose` 코덱 왕복 시험과 `AvatarMoveValidator` 시험은 `Game.Tests.Application`), **UI 공통 기반 `Base.uss`(글자 크기 배율·다크 테마 색 토큰·모양 구분 규칙)와 USS 규칙 검사 시험**, 그 위에 HUD 스태미나·로비/접속 화면, UI 상태(Gameplay/Overlay)는 입력 경로만 전환. **v0.13: 이 작업의 UI 부분(`Base.uss`, UXML 화면, USS 규칙 검사)은 「M1 묶음 3 마무리 — UI uGUI 전환」으로 uGUI 테마·프리팹·프리팹 규칙 검사로 바뀜**(완료된 작업의 결과물 교체, D-27) | DES-086, DES-084, DES-002, DES-003, DES-052, DES-051, DES-072, DES-080, DES-091, DES-092, DES-095 | FR-023~025, NFR-001(스태미나), NFR-030, NFR-056, NFR-057 | M1-07 |
 | M1-09 | 명령·복제 기반: CommandDispatcher, RequestGuard, ServerCommandGateway, ServerWorld 틱, ReplicatedTable, ReplicationPublisher/Receiver, ClientWorldMirror. **v0.10 (D-23)**: M1-07의 Protocol 기반에 Command, CommandResult, SnapshotChunk, TableDelta(자원 항목 = 인덱스 2 B + 상태 2 B, 3.11.8), CreatureSpawn/Despawn/Snapshot(양자화) 메시지를 더하고 각각 왕복·고정 바이트 시험(`Game.Tests.Application`). 게이트웨이·복제 송수신은 포트와 Protocol 메시지에만 의존하고(FishNet 형식 없음), 가짜 `INetServer`로 크기·빈도·값 범위 검사와 스냅샷 + 델타 = 호스트 상태를 시험(`Game.Tests.Net`). FishNet 경유 확인은 PlayMode 루프백 시험(`Game.Tests.Integration`) | DES-050, DES-052, DES-053, DES-080~083, DES-121, DES-072 | FR-007(구조), FR-008, NFR-013, NFR-030, NFR-040, NFR-041 | M1-07 |
 | M1-10 | **자원 2만 개 동기화**: V0 월드 로컬 생성, 시험용 타격 명령(호스트 검증), 자원 델타, 중도 참가(시드 → 생성 → 요약값 → 스냅샷 → 델타), ResourceViewStreamer, 「5,000개 변경」 상태 만드는 개발 도구 | DES-008, DES-057, DES-087, DES-089, DES-072 | FR-009, NFR-016, NFR-018 | M1-04, M1-09 |
 | M1-11 | **시험용 AI 60체 부하**: AiJobsBackend(보행 격자·흐름장·조향·공간 해시), AiScheduler(10 Hz 분산, LOD), 생물 복제(관심 범위 등급), CreatureViews(보간) | DES-105, DES-062, DES-082, DES-088, DES-019 | NFR-011, NFR-017 | M1-09 |
@@ -2823,12 +2963,24 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 
 - **v0.11 M1-07~M1-09 결과(2026-11-04)**: 구현 완료. EditMode 476/476, PlayMode 16/16 통과. Tugboat 8인 접속과 9번째 참가자 인원 초과 거부, Steam 호스트 경로(`-transport steam -host`) 확인. 실제와 다르게 적혀 있던 곳을 3.2.3, 3.4.1~3.4.3, 3.7.2, 3.7.4, 3.7.10, 3.8.2, 3.9.9, 3.10.1, 3.11.12~13, 3.12.1, 3.12.4~5, DES-084·100·101·103·112·121, D-25에 맞춤. 남은 사용자 결정: R-33(친구 전용 로비와 공개 목록), R-34(빌드 번호 규칙) — **v0.12에서 둘 다 해소**(사용자 결정 2026-11-04). M1-12 착수 때 볼 것: R-31(송신 할당 약 81 B/건), R-32(한 PC 8프로세스 1% Low 28 FPS 해석). 생성 메뉴 `Game/Setup/Run All`은 Do 묶음마다 다시 실행해 확인(D-25)
 - **v0.12 M1 묶음 3 마무리 — 게임 버전 규칙 (D-26, 3.7.12, NFR-058, DES-037·DES-031·DES-080·DES-112)**: M1-07·M1-01 (5)에 대한 보완 작업으로, M1-10에 들어가기 전에 끝냅니다. 순서: (1) `GameVersion` 값 객체와 `Game.Tests.Domain` 시험 → (2) `SessionRules`·`JoinFacts`의 버전을 문자열로, `JoinRequest.gameVersion`(≤ 64 B)·`ProtocolVersion` 2·`protocolVer` 먼저 읽기 규칙, `HostWorldInfo`·`ClientHandshakeInfo`·`LobbyMetaBuilder`(`kh_build` = `Full`) → 코덱 고정 바이트·세션 시험 갱신 → (3) `BuildInfo.Version`(에디터 `+editor`, 해석 실패 = 설정 오류), 부트 로그 첫 줄, DevLobby 화면 버전 한 줄(`ToDisplayString`) → (4) `BuildCommands`(메타데이터 붙임·`finally` 되돌림·출시 태그 검사·`ReadBuildNumber`/`-buildNumber`/`GAME_BUILD_NUMBER` 폐지)·`ProjectConfigurator`(비어 있을 때만 `0.1.0`, `VersionPrefix` 폐지) → (5) 확인: `unity recompile`, EditMode·PlayMode 시험, 열린 에디터에서 개발 빌드 1회(`unity command build run`) 뒤 `[Build] 게임 버전=0.1.0+dev.…` 로그와 `bundleVersion`이 `0.1.0`으로 돌아왔는지(`git status`에 `ProjectSettings.asset` 변경 없음), 빌드한 플레이어 `-bootsmoke` 로그의 버전 줄, 같은 빌드 폴더 두 프로세스 Tugboat 접속 통과·에디터 재생 ↔ 플레이어 접속 「게임 버전 불일치」 거부. 출시 빌드 확인은 M1-13에서 함께 함(빌드 횟수를 줄임)
+- **v0.13 M1 묶음 3 마무리 — UI uGUI 전환 (D-27, 3.7.10, 3.8.2, DES-091·092·095·122·112·100, FR-129·FR-130·FR-166, NFR-002·004·050·056·057)**: M1-08 UI 결과물의 교체 작업으로, **M1-10에 들어가기 전에 끝냅니다**(작업 수 변화 없음). **범위: 기능·화면 동작은 그대로**(SCR-001 Steam 필요, 개발용 로비·접속 중, HUD 스태미나 호·경고·명단·연결 상태, ESC 메뉴의 친구 초대·세션 나가기·닫기와 안내 문구·「● 게임 진행 중」 배지, 글자 크기·색 값 동일). 새 화면·새 기능은 넣지 않습니다. 순서:
+  1. **패키지·자원**: `manifest.json`에 `"com.unity.ugui": "2.0.0"` 추가(D-03) → TMP Essential Resources 가져오기(`Assets/TextMesh Pro/`) → TMP Settings: 기본 글꼴, 「Enable Raycast Target」 끔. 사용자 작업: Pretendard(Regular·SemiBold·Bold) TTF와 OFL 라이선스 파일을 `Assets/_Game/UI/Fonts/`에 넣기(공식 배포처, 출시 전 라이선스 최종 확인) — 받기 전에는 TMP 기본 글꼴로 진행하고 글꼴 검사만 「대기」로 둠.
+  2. **asmdef·아키텍처 시험**: 3.4.2 표대로 `UnityEngine.UI`·`Unity.TextMeshPro`를 `Game.Adapters.Presentation`·`Game.Editor`·`Game.Tests.Infrastructure`·`Game.Tests.Integration`에 추가, `ArchitectureRulesTests`의 `Expected`·`ExpectedTestReferences` 갱신, UI 패키지 격리·`UnityEngine.UIElements` 금지·`.uxml/.uss/PanelSettings` 없음 검사 추가(3.4.3).
+  3. **테마 기반(DES-122)**: `UiTheme`(ScriptableObject)·`UiTokens`·`ThemedText`·`ThemedGraphic`·`ThemedSelectable`·`UiButton`·`UiScreen`·`UiRoot`(`UiScreenStack`, `UiInputRouter`, 글자 단계·언어 다시 적용)·`UiSafeArea16x9`·`UiRaycastBlocker`·`KeycapView`(M1은 Xbox·키보드 표시만)·`UiArcGraphic`, 에디터 토큰 드롭다운·`Apply Theme To Prefabs`, `UiThemeBuilder.Ensure`로 `UI/Theme/UiTheme.asset` 생성(값 = v0.12 `Base.uss`, 3.7.10 표). 순수 계산(글자 크기 반올림, 대비 계산)은 EditMode 시험.
+  4. **입력**: `InputActionsBuilder`의 UI 지도에 `Point`·`Click`·`ScrollWheel` 추가 후 다시 실행.
+  5. **프리팹 만들기(MCP 도구로 개별 오브젝트 조합)**: `UiRoot.prefab`(EventSystem + `InputSystemUIInputModule`, 3.7.10 (6)), 공통 부품(`Common/` 버튼 3변형·패널·모달·목록 행·배지), 화면 `Screens/SteamRequired`·`Screens/DevLobby`·`Screens/GameMenu`, `Hud/GameHud`(정적 루트 + `HudDynamic` 하위 캔버스). 배치·수치는 현재 UXML·USS 값과 STORYBOARD SCR-001·004·012·015·016을 따르고, 층·정렬 순서·숨김 규칙은 3.7.10 (4)·(5).
+  6. **뷰 코드 교체**: `SteamRequiredView/Screen`, `DevLobbyView/Screen`, `GameHudView/GameHud`, `GameMenu`(Hud에서 분리)를 uGUI 참조로 다시 작성하되 **공개 API·이벤트는 유지**(`LeaveRequested`, `InviteRequested`, `OpenMenu`, `CloseMenu`, `SetMenuNotice`, `SetNetStatus` 등). `GameFlow`·`GameBootstrap`은 직렬화 참조 형식 교체와 `UiRoot` 초기화(테마·글자 단계·`ILocalizedText`·Input Actions 전달)만. 옛 정적 클래스 `UiTheme`(USS 적용 도우미)와 `StaminaArcElement` 삭제.
+  7. **Boot 씬 고치기(다시 만들지 않음)**: 열린 에디터에서 MCP 도구로 `UIDocument` 오브젝트 3개(`SteamRequiredScreen`, `DevLobbyScreen`, `GameHud`)를 지우고 같은 이름의 프리팹 인스턴스와 `UiRoot`·`GameMenu` 인스턴스를 놓은 뒤 `GameBootstrap` 참조를 연결·저장. `Bootstrap`·`NetworkManager`(꺼짐)·`MenuCamera`는 그대로 둠.
+  8. **생성기 정책 변경(3.8.2 표)**: `BootSceneBuilder`·`WorldSceneBuilder`·`AvatarPrefabBuilder`·`BenchSceneBuilder`를 「없을 때만 만들기 + 있으면 검사만」으로 바꾸고 `PanelSettings` 생성 코드 삭제, `UiThemeBuilder.Ensure`를 `Run All` 5단계로.
+  9. **삭제**: `UI/Common/Base.uss`, `UI/Screens/*.uxml·*.uss`, `UI/Hud/Hud.uxml·Hud.uss`, `UI/PanelSettings.asset`, `Assets/UI Toolkit/` 폴더(모두 `.meta`와 함께).
+  10. **시험**: `UiAndInputRulesTests`의 USS 부분 → `UiPrefabRulesTests`(3.4.3 표 전체, 입력 규칙 부분은 유지), `SteamRequiredScreenTests`·`GameMenuAndLobbyViewTests` → 프리팹을 불러 `onClick.Invoke()`로 같은 동작 확인(ESC 메뉴 친구 초대 불가 안내 문구 포함), 테마 시험(토큰 20 + 6 + 3개, 단계별 글자 크기 = v0.12 값, 대비), PlayMode `UiLayerPlayTests`(로비·게임·게임 + ESC 메뉴에서 맨 위 레이캐스트 결과, 내비게이션이 화면 밖으로 나가지 않음 — ESC 결함 회귀 시험).
+  11. **확인**: `unity recompile`, EditMode·PlayMode 전체 통과, `Game/Setup/Run All` 실행 뒤 `git status`에 `Boot.unity`·UI 프리팹 변경 없음(덮어쓰지 않음 확인), `.meta` 누락 0, 열린 에디터에서 개발 빌드 1회(`unity command build run`) 뒤 플레이어에서 한글·기호가 □ 없이 보이는지 `-bootsmoke` 화면 캡처로 확인(TMP 셰이더·글꼴이 빌드에 들어갔는지). 사용자 작업 목록(글꼴 파일 넣기, 에디터에서 다듬을 배치)과 **수동 플레이 시험 요청**(키보드·마우스: 로비 방 열기, 상태 문구 글자색, ESC 메뉴 열기·닫기(Esc)·친구 초대 안내·세션 나가기, 키보드 방향키로 버튼 이동과 포커스 표시, 화면 비율 16:9·21:9 창 모드. Xbox 패드는 사용자 결정대로 나중에 한꺼번에)을 보고.
 
 ### M2 생존 상태 + M1에서 옮긴 부가 기능
 
 | 순서 | 작업 | 관련 DES | 관련 FR/NFR | 선행 작업 |
 |---|---|---|---|---|
-| M2-01 | (M1에서 이동) 다국어·입력·옵션 기반: Localization(ko/en, 누락 키 검사, M1 화면 텍스트 키 연결), Input System 2개 체계·장치 전환·안내 아이콘, SettingsService·LocalSettingsStore, 감도·반전·시야각·언어·그래픽 옵션 화면, 첫 실행 언어 = Steam 언어(C-48), PlayStation 계열 안내 아이콘 추가(C-28) | DES-093, DES-092, DES-073, DES-110, DES-109 | FR-118, FR-120, FR-121, FR-157, FR-166, NFR-004, NFR-044, NFR-047 | M1-13 |
+| M2-01 | (M1에서 이동) 다국어·입력·옵션 기반: Localization(ko/en, 누락 키 검사, M1 화면 텍스트 키 연결 — v0.13: `ILocalizedText` 뒤를 String Table로 바꾸고 `ThemedText` 텍스트 키는 그대로, 프리팹 변경 없음), Input System 2개 체계·장치 전환·안내 아이콘(v0.13: `KeycapView` 아이콘 세트 데이터), SettingsService·LocalSettingsStore, 감도·반전·시야각·언어·그래픽 옵션 화면(v0.13: uGUI 프리팹 `Screens/Options`, 글자 크기 단계는 `UiRoot`에 적용), 첫 실행 언어 = Steam 언어(C-48), PlayStation 계열 안내 아이콘 추가(C-28) | DES-093, DES-092, DES-073, DES-110, DES-109 | FR-118, FR-120, FR-121, FR-157, FR-166, NFR-004, NFR-044, NFR-047 | M1-13 |
 | M2-02 | 체력·허기·갈증·피로도, SurvivalSystems 틱, 0 불이익(IZeroVitalPenaltyRule — 허기·갈증·피로도만. 스태미나는 M1-08에서 확정 규칙으로 끝남, v0.10), 본인 상태 복제, HUD (결정 필요: C-04 중 허기·갈증·피로도·혹한 부분(스태미나 부분은 해소), C-37 남은 부분. 피로도 감소 속도 0으로 시험) | DES-003, DES-060, DES-033, DES-091 | FR-026~029, NFR-001 | M1-13 |
 | M2-03 | 쓰러짐·소생·사망·부활(IDeathRule, IDownedDamageRule) (결정 필요: C-05 남은 부분, C-45) | DES-004, DES-060, DES-033 | FR-030, FR-031, FR-142, FR-143 | M2-02 |
 | M2-04 | 낮/밤: WorldClock·시각 동기화, 장막 아래 조명·밤 가시 거리, 시작 정화 구역 햇빛 선적용(HDRP 적용은 DES-114) | DES-014, DES-090, DES-114, DES-015 | FR-033, FR-034, FR-035(시작 구역) | M1-13 |
@@ -2836,10 +2988,10 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 | M2-06 | 동료 상태 목록 | DES-091, DES-084 | FR-160 | M2-03 |
 | M2-07 | (M1에서 이동) 세션 관리: 참가 조건 선택(초대 전용/친구 전용/공개, 세션 열기 때 선택, 세션 중 변경 → 로비 유형·프레즌스 갱신. 월드 파일 저장은 M3-12), 공개 세션 목록(참가 조건 「공개」 세션만 — Steam이 친구 전용 로비를 검색 결과에 넣지 않는 것은 정상 동작이며 친구 전용 세션은 친구 목록·초대로 참가(R-33 해소, 사용자 확인 2026-11-04, SRS FR-145 그대로). 접속 인원·예약 자리 수 `7/8 · 예약 1` 표시. M2에서는 `kh_resv` 필드와 표시만, 값은 M3-12 전까지 0. 버전 일치 표시는 `kh_proto`·`kh_build`를 내 버전과 비교(3.7.12 (5)·(6))), 비밀번호(저장 안 함, 시도 제한), 강퇴, 차단(호스트의 모든 월드 공통, `bans.json`·`IBanListStore`, C-46 해소) | DES-031, DES-054, DES-102, DES-030 | FR-003, FR-144~148 | M1-13 |
 | M2-08 | (M1에서 이동) 텍스트 채팅·알림 기록, 텍스트 검증 | DES-069, DES-034, DES-091 | FR-127, FR-128, NFR-042, NFR-050 | M2-01 |
-| M2-09 | (M1에서 이동) 광과민성 경고, 동료 이름표, 리치 프레즌스(메뉴·인원) | DES-095, DES-097, DES-070, DES-102 | FR-132, FR-159, FR-165 | M2-01, M2-07 |
+| M2-09 | (M1에서 이동) 광과민성 경고(v0.13: 시스템 층 프리팹), 동료 이름표(v0.13: 월드 표시 층 `Hud/WorldMarkers`, 화면 좌표 투영), 리치 프레즌스(메뉴·인원) | DES-095, DES-097, DES-070, DES-102 | FR-132, FR-159, FR-165 | M2-01, M2-07 |
 | M2-10 | (M1에서 이동) 로그 보관 개수·회전, 충돌 보고(로컬 압축 파일 생성·폴더 열기까지만, 외부 전송 없음, C-43 해소) | DES-107 | FR-158, NFR-045, NFR-042 | M1-13 |
-| M2-11 | (v0.4) HUD 뷰모델과 일반 HUD: HudViewModel, 공통 UXML 부품(상태 막대·위협·버프 시간·목표 자리·동료 항목), ScreenHud, HUD 표시 방식 옵션과 재시작 없는 전환(M2-02·M2-06의 HUD 표시를 이 구조로 정리) | DES-074, DES-091, DES-073, DES-110 | FR-171, NFR-001, FR-160 | M2-01, M2-02, M2-06 |
-| M2-12 | (v0.4, v0.5 축소) 장치형 HUD: 계기 화면 렌더 텍스처, 표시 면 `IWristSurface` 인터페이스와 **(B) 화면 공간 기울인 평면 구현만**(UI Toolkit 사용자 지정 메시, 올림/내림은 위치·각도 보간), `ToggleWrist` Action(기본 할당 결정 대기)과 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능·다른 창이 열리면 자동 내림, 십자선 스태미나 호, 머리 위 등불 이름표(체력 4단계 + 꺼짐, 설정값), 피격 호·위협 테두리(UI 레이어, 계기 위)와 월드 보조 색조 골격(M2는 저체력·쓰러짐, 지역 위협은 M9a~c에서 연결)과 섬광 제한 적용, `손목 자동 내림 시간` 설정값, 손목 글자 가독성 확인(글자 크기 「크게」 포함). **제외**: (A)용 손 애니메이션·1인칭 손 그리기 패스·손목 소품 아트(M6-11 결정 뒤) | DES-120, DES-092, DES-114, DES-095, DES-097 | FR-172, FR-171, FR-159, NFR-001, FR-131 | M2-11, M2-09 |
+| M2-11 | (v0.4) HUD 뷰모델과 일반 HUD: HudViewModel, 공통 HUD 부품(v0.13: uGUI 부품 프리팹 `Hud/Parts/` — 상태 막대·위협·버프 시간·목표 자리·동료 항목), ScreenHud, HUD 표시 방식 옵션과 재시작 없는 전환(M2-02·M2-06의 HUD 표시를 이 구조로 정리) | DES-074, DES-091, DES-073, DES-110 | FR-171, NFR-001, FR-160 | M2-01, M2-02, M2-06 |
+| M2-12 | (v0.4, v0.5 축소) 장치형 HUD: **v0.13: 첫 작업으로 UI 캡처 카메라 시작품(비용 `Client.UI`·TMP 표시 확인, R-39 — 문제 시 3.7.11 대체안을 사용자에게 보여 결정)**, 계기 화면 렌더 텍스처(uGUI 프리팹 `Hud/WristPanel` → 캡처 카메라, HDRP 설정은 DES-114), 표시 면 `IWristSurface` 인터페이스와 **(B) 화면 공간 기울인 평면 구현만**(v0.13: `UiWarpedRawImage`, 올림/내림은 위치·각도 보간), 경고 층 프리팹 `Hud/HudAlerts`(정렬 300), `ToggleWrist` Action(기본 할당 결정 대기)과 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능·다른 창이 열리면 자동 내림, 십자선 스태미나 호, 머리 위 등불 이름표(체력 4단계 + 꺼짐, 설정값), 피격 호·위협 테두리(UI 레이어, 계기 위)와 월드 보조 색조 골격(M2는 저체력·쓰러짐, 지역 위협은 M9a~c에서 연결)과 섬광 제한 적용, `손목 자동 내림 시간` 설정값, 손목 글자 가독성 확인(글자 크기 「크게」 포함). **제외**: (A)용 손 애니메이션·1인칭 손 그리기 패스·손목 소품 아트(M6-11 결정 뒤) | DES-120, DES-092, DES-114, DES-095, DES-097 | FR-172, FR-171, FR-159, NFR-001, FR-131 | M2-11, M2-09 |
 | M2-13 | M2 완료 빌드·시험 | DES-113 | NFR-043 | M2-01~M2-12 |
 
 ### M3 채집·인벤토리·저장
@@ -3002,17 +3154,17 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-15 | 관심 범위 때문에 먼 곳의 생물이 일부 참가자에게 보이지 않음이 FR-008과 충돌해 보일 수 있음 | 해석 차이 | 낮음 | 확정(2026-11-02): 「관심 범위(기본 300 m) 안에서 같게」(3.11.9). 해석 차이 위험 해소 |
 | R-16 | GC 순간 정지로 프레임 튐 | 1% Low 저하 | 중간 | 틱 루프 할당 0 목표, 풀·구조체 배열, 점진적 GC, 측정 CSV에 GC 할당량 기록 |
 | R-17 | 「초대 전용」 세션의 재접속을 로비 없이 직접 연결로 처리하는 방식이 FishySteamworks에서 동작하지 않을 가능성 | FR-115 구현 방식 변경 | 낮음~중간 | M3-12에서 확인. 대안: 호스트가 끊긴 플레이어에게 자동 초대(`InviteUserToLobby`) |
-| R-18 | UI Toolkit의 월드 공간 표시(이름표·핑) 제약 | UI 구현 지연 | 낮음 | 화면 좌표 투영 방식, 필요 시 해당 요소만 uGUI 병용. v0.4: 손목 계기는 렌더 텍스처 방식이라 이 제약과 무관하고, 등불 이름표 글자는 기존 투영 방식을 그대로 씀 → 위험 수준 변화 없음 |
+| R-18 | UI Toolkit의 월드 공간 표시(이름표·핑) 제약 | UI 구현 지연 | ~~낮음~~ 없음 | 화면 좌표 투영 방식, 필요 시 해당 요소만 uGUI 병용. v0.4: 손목 계기는 렌더 텍스처 방식이라 이 제약과 무관하고, 등불 이름표 글자는 기존 투영 방식을 그대로 씀 → 위험 수준 변화 없음. **v0.13 상태: 해소** — UI를 uGUI로 바꿔(D-27) UI Toolkit 제약이 없어짐. 이름표·핑은 월드 표시 층 오버레이 캔버스에 화면 좌표 투영으로 그리는 방식을 유지(월드 공간 캔버스는 후처리·업스케일링·깊이에 영향을 받아 쓰지 않음, DES-097). 손목 계기의 새 위험은 R-39 |
 | R-19 | (v0.2 신규) 업스케일링이 판정 기본 경로가 되면서, 측정 PC의 GPU 종류에 따라 DLSS(NVIDIA)와 FSR(그 밖)의 GPU 비용·화질이 달라 결과 비교가 어려움. HDRP 17.3에서 DLSS·FSR 품질 모드 지원 방식(필요 패키지, DX12 요구 등)도 확인 필요 | 측정 재현성 저하, M1-06 지연 | 중간 | M1-06에서 두 방식 동작 확인을 먼저 함. 측정 보고서에 PC별 GPU·업스케일러 기록(3.12.4). 권장 사양 기준(RTX 3060)은 DLSS로 판정하고 FSR 결과는 함께 보고. v0.9: 필요 패키지 확인됨 — 내장 모듈 `com.unity.modules.nvidia`·`com.unity.modules.amd`가 있어야 DLSS·FSR2 코드가 컴파일됨(D-03). 플레이어 빌드에서의 동작 확인은 M1-12 |
-| R-20 | (v0.2 신규) 다국어·입력 재설정 기반이 M2로 옮겨져, M1에서 만든 최소 화면·입력 처리를 M2에서 다시 손봐야 함 | 소규모 재작업 | 낮음 | M1부터 화면 글자는 텍스트 키, 입력은 Input Actions로만 작성(M1 머리말 규칙) |
-| R-21 | (v0.4 신규) 장치형 HUD 추가로 M2 작업량 증가(작업 13개). M1에서 옮겨 온 부가 기능과 겹침 | M2 일정 지연 | **중간**(v0.5 재평가: 중간~높음 → 중간) | v0.5에서 (B) 화면 공간 평면으로 시작해 손목 3D 소품 아트·손 애니메이션·1인칭 손 그리기 패스가 M2에서 빠짐. 남은 위험은 UI 사용자 지정 메시·렌더 텍스처 구현과 M2 작업 수(13개) 자체. 일반 HUD(M2-11)를 먼저 끝내 다른 기능 시험이 장치형 HUD에 묶이지 않게 함. 지연 시 M2-12의 등불 이름표·가장자리 효과를 M5(전투)로 미루는 안을 사용자에게 제시 |
-| R-22 | (v0.4 신규) 손목 계기 글자의 가독성: 기울인 평면은 원근으로 글자가 눌려 보이고, 렌더 텍스처 확대·축소로 흐릴 수 있음. 글자 크기 「크게」(FR-129)에서 잘림 가능. (A) 3D 소품으로 올리면 업스케일링·시야각·모션 블러 영향이 더해짐 | 정보 전달 실패, 접근성 저하 | **낮음~중간**(v0.5: (B)는 UI 오버레이라 업스케일링 영향 없음) | 텍스처 해상도·최소 글자 크기·기울임 각도를 설정값으로, 올렸을 때 기울임을 줄여 정면에 가깝게, M2-12에서 확인. 해결이 안 되면 사용자가 일반 HUD로 바꿀 수 있음(FR-171). (A) 전환 시 M6-11에서 다시 평가 |
+| R-20 | (v0.2 신규) 다국어·입력 재설정 기반이 M2로 옮겨져, M1에서 만든 최소 화면·입력 처리를 M2에서 다시 손봐야 함 | 소규모 재작업 | 낮음 | M1부터 화면 글자는 텍스트 키, 입력은 Input Actions로만 작성(M1 머리말 규칙). v0.13: uGUI 전환으로 M1 화면을 어차피 다시 만드므로, 전환 작업에서 `ThemedText` 텍스트 키·`KeycapView`·`UiInputRouter`·글자 단계 적용(`UiRoot`)을 먼저 넣어 M2-01은 포트 뒤(String Table)와 옵션 화면만 추가하게 함. 전환 자체의 비용은 R-36 |
+| R-21 | (v0.4 신규) 장치형 HUD 추가로 M2 작업량 증가(작업 13개). M1에서 옮겨 온 부가 기능과 겹침 | M2 일정 지연 | **중간**(v0.5 재평가: 중간~높음 → 중간) | v0.5에서 (B) 화면 공간 평면으로 시작해 손목 3D 소품 아트·손 애니메이션·1인칭 손 그리기 패스가 M2에서 빠짐. 남은 위험은 UI 사용자 지정 메시·렌더 텍스처 구현과 M2 작업 수(13개) 자체. v0.13: 렌더 텍스처에 HDRP 캡처 카메라가 필요해져 M2-12 첫 작업으로 시작품 확인을 넣음(R-39). 일반 HUD(M2-11)를 먼저 끝내 다른 기능 시험이 장치형 HUD에 묶이지 않게 함. 지연 시 M2-12의 등불 이름표·가장자리 효과를 M5(전투)로 미루는 안을 사용자에게 제시 |
+| R-22 | (v0.4 신규) 손목 계기 글자의 가독성: 기울인 평면은 원근으로 글자가 눌려 보이고, 렌더 텍스처 확대·축소로 흐릴 수 있음. 글자 크기 「크게」(FR-129)에서 잘림 가능. (A) 3D 소품으로 올리면 업스케일링·시야각·모션 블러 영향이 더해짐 | 정보 전달 실패, 접근성 저하 | **낮음~중간**(v0.5: (B)는 UI 오버레이라 업스케일링 영향 없음) | 텍스처 해상도·최소 글자 크기·기울임 각도를 설정값으로, 올렸을 때 기울임을 줄여 정면에 가깝게, M2-12에서 확인. 해결이 안 되면 사용자가 일반 HUD로 바꿀 수 있음(FR-171). (A) 전환 시 M6-11에서 다시 평가. v0.13: 캡처 카메라는 후처리·업스케일링을 끄고 그리며 TMP SDF라 확대에 강함. 캡처 카메라 방식 자체의 위험은 R-39 |
 | R-23 | (v0.4 신규) 위협 시 월드 보조 색조(와 (A)를 고를 경우의 1인칭 손 그리기 패스)가 HDRP 전용 기능에 기대 URP 전환 시 다시 만들어야 함 | 전환 비용 증가 | 낮음 | v0.5: (B) 기본이라 손 그리기 패스는 아직 만들지 않음. 위협 테두리·피격 호 본체도 UI 레이어로 옮겨(STORYBOARD v1.2 레이어 순서) HDRP 코드는 보조 색조뿐. DES-114에만 두는 격리 원칙 유지(3.4.4). M6-11에서 렌더 파이프라인과 손목 방식을 함께 결정 |
 | R-24 | (v0.6 신규) M4 작업량 증가(9 → 13개): 제작대·레시피북 진입, 석탄 광맥 생성 변경, 용광로·연료·가공·숯이 기존 도구 등급·내구도·건축·보관함·침대·횃불과 한 마일스톤에 몰림. 미정 항목도 7개(C-60~C-66) | M4 일정 지연 | **중간~높음** | 용광로는 보관함(M4-06)의 동시 조작 규칙·구독 방식을 재사용하고, 가공 규칙은 순수 C#(DES-036)로 먼저 EditMode 시험. C-60~C-66은 모두 잠정 구현·설정값으로 진행해 결정 대기로 멈추지 않게 함. 지연 시 숯(M4-12)을 M5로 미루는 안을 사용자에게 제시(나무로도 가공 가능해 진행이 막히지 않음) |
 | R-26 | (v0.7 신규) 다른 CPU(Intel·AMD) 결정론 교차 검증이 M6-10으로 늦어짐. M6에서 불일치가 나오면 M3~M6에 만든 생성 규칙·시험 월드·골든 해시·측정 기준 시드를 다시 만들어야 하고, 그동안의 다중 접속 시험(같은 PC Tugboat)은 이 문제를 드러내지 못함 | M3~M6 생성 결과 재작업, M6 지연 | 중간 | 결정론 규칙(3.11.1)을 코드 리뷰 체크 항목으로 두고(실수·`Dictionary` 순회·문화권 API 금지 검사), 이 PC의 Mono·IL2CPP 교차를 매 생성 변경마다 실시. 다른 PC를 빌릴 수 있으면 M3-15·M4-13 시점에 `-genhash` 결과 파일 비교를 선택 실시해 조기 발견. 불일치 시 부분 요약값(지역·타일)으로 위치를 좁힘. 생성기는 0.x라 고쳐도 버전 보존 부담은 없음 |
 | R-27 | (v0.7 신규) M1 성능 측정을 이 PC 1대 + 봇 7개로 하면 봇 프로세스가 호스트와 CPU·메모리를 나눠 써 호스트 FPS가 실제보다 나쁘게, Steam 릴레이 지연·실제 참가자 렌더링 부하는 반영되지 않음. M1 결과가 M6 실측과 크게 다를 수 있음 | M1 판단 오류(과대·과소 대응), M6에서 성능 문제 늦게 발견 | 중간 | M1 판정은 서버 처리 예산·대역폭·중도 참가·메모리처럼 봇 영향이 작은 지표로 하고 FPS는 참고값. 봇은 `-batchmode -nographics`, 봇 CPU 점유를 기록. 다른 PC를 쓸 수 있으면 봇을 옮겨 재측정(선택). M6-10 실측 결과로 다시 판단 |
 | R-25 | (v0.6 신규) 석탄 광맥 추가로 생성 결과가 바뀌어 M3에서 만든 시험 월드·골든 해시·측정 기준 시드 결과가 달라짐. 검증 조건에 석탄이 들어가 재생성 빈도가 늘 수 있음 | 시험 재작업, 생성 시간 증가 | 낮음~중간 | 생성기 0.x라 버전 보존 불필요(3.11.7). M4-09에서 골든 해시·결정론(이 PC)·`-genvalidate`(재생성 비율, NFR-052 생성 시간) 다시 측정. 석탄 최소 수량은 `지역별 진행 재료 최소 수량` 설정값으로 조정 |
-| R-28 | (v0.8 신규) Unity Smart Merge의 `git mergetool` 방식이 실제 씬·프리팹 충돌에서 아직 검증되지 않음. 병합 드라이버 방식은 실패가 확인됨(확장자 없는 임시 파일). `.gitattributes`의 `merge=unityyamlmerge` 지정은 남아 있어, 누군가 CLAUDE.md 안내대로 `merge.unityyamlmerge.driver`를 등록하면 다시 실패 방식이 켜짐 | 씬·프리팹 병합 실패·손상, 수작업 병합 | 낮음~중간(혼자 개발이라 충돌 자체가 드묾) | 저장소 로컬 설정은 `git mergetool` 방식만(M1-01 (4), `docs/dev/SMART_MERGE_SETUP.md`), 드라이버는 등록하지 않음. **상태: 확인 대기** — 첫 실제 충돌 때 `git mergetool` 결과를 Unity에서 열어 확인하고 기록. 실패하면 충돌한 YAML 파일을 한쪽 버전으로 고르고 에디터에서 다시 작업 |
+| R-28 | (v0.8 신규) Unity Smart Merge의 `git mergetool` 방식이 실제 씬·프리팹 충돌에서 아직 검증되지 않음. 병합 드라이버 방식은 실패가 확인됨(확장자 없는 임시 파일). `.gitattributes`의 `merge=unityyamlmerge` 지정은 남아 있어, 누군가 CLAUDE.md 안내대로 `merge.unityyamlmerge.driver`를 등록하면 다시 실패 방식이 켜짐 | 씬·프리팹 병합 실패·손상, 수작업 병합 | 낮음~중간(혼자 개발이라 충돌 자체가 드묾) | 저장소 로컬 설정은 `git mergetool` 방식만(M1-01 (4), `docs/dev/SMART_MERGE_SETUP.md`), 드라이버는 등록하지 않음. **상태: 확인 대기** — 첫 실제 충돌 때 `git mergetool` 결과를 Unity에서 열어 확인하고 기록. 실패하면 충돌한 YAML 파일을 한쪽 버전으로 고르고 에디터에서 다시 작업. v0.13: 씬·프리팹이 원본이 되어(D-27) 생성기로 다시 만들어 충돌을 피하는 길이 없어지므로 이 위험의 영향이 커짐 → 화면별 프리팹으로 파일을 나누고 자주 커밋(R-38) |
 | R-29 | (v0.8 신규) 개발 실행이 실험 버전 패키지(`com.unity.pipeline` 0.9.1-exp.1)와 베타 CLI(1.0.0-beta.15)에 기대고, 이 패키지는 에디터 전용이 아님. 버전이 바뀌면 런타임 어셈블리 구성이 달라지거나 CLI 동작이 바뀔 수 있음. 열린 에디터 상태(열린 씬·플레이 모드)가 시험 결과에 영향을 줄 수 있음 | 출시 빌드에 개발 도구 코드가 섞임(보안·크기), 개발 흐름 중단 | 중간 | 안전장치 3가지(3.4.3)와 출시 빌드 산출물 검사로 매 출시 빌드마다 0건 확인, 패키지 버전 고정(D-03)·올릴 때 격리 검사 재통과. CLI가 동작하지 않으면 CLAUDE.md 기본 방식(에디터를 닫고 batchmode)으로 바로 돌아갈 수 있음(빌드·시험 명령은 `Game.Editor`와 Test Framework에 있어 CLI와 무관). 마일스톤 완료 시험은 에디터를 새로 연 깨끗한 상태에서 실행. Check 단계 보안 점검(security-auditor) 대상 |
 | R-30 | (v0.10 신규) 메시지 ↔ 바이트 변환을 직접 작성(D-23)하면서 쓰기·읽기 불일치, 경계값(최대 길이·음수·NaN 양자화) 처리 누락, 잘못된 입력을 받은 디코더의 예외·과다 할당이 생길 수 있음. 쓰기·읽기가 같은 잘못을 함께 하면 왕복 시험만으로는 못 잡음 | 동기화 오류, 참가자가 보낸 비정상 바이트로 호스트 오류(NFR-040) | 중간 | 메시지마다 왕복 시험 + **고정 바이트 기대값** 시험 + 잘린 입력·상한 초과·모르는 종류 거부 시험(`Game.Tests.Application`), `TryDecode`는 예외를 던지지 않고 길이 접두 값은 읽기 전에 상한 확인, `MessageKind` 값은 뒤에만 추가·프로토콜 변경 시 `protocolVer` 올림(3.7.2). 디코더는 Check 단계 보안 점검(security-auditor) 대상 |
 | R-31 | (v0.10 신규) FishNet Broadcast 하나에 바이트를 담는 한 겹(DES-121)과 RPC 아바타 동기화(D-24)로 (1) 메시지당 머리말·복사가 늘고, (2) 바이트 배열 송수신에서 틱마다 GC 할당이 생길 수 있음. FishNet 4.7.4R의 Broadcast가 `ArraySegment<byte>` 같은 할당 없는 바이트 필드를 어떻게 직렬화하는지 **확인 필요**. (3) 서버 쪽 스태미나 추정이 클라이언트 값과 어긋나 정상 달리기가 `move_rejected`로 되돌려질 수 있음 | 대역폭 소폭 증가(3.12.5: 약 17 → 18 KB/s), 1% Low 저하(R-16), 정상 플레이어 위치 튐 | **중간**(v0.11: 낮음~중간 → 중간) | M1-07에서 `PacketBroadcast` 바이트 필드 방식(할당 여부)을 먼저 확인하고, 할당이 생기면 FishNet `Writer`/`Reader`를 직접 쓰는 사용자 지정 직렬화나 풀 버퍼로 바꿈(변경은 DES-121 안에서 끝남). M1-12 측정 CSV에 GC 할당량·송수신량을 기록해 3.12.5 추정과 비교. 스태미나 추정은 허용 오차·`MoveStaminaGraceSeconds`(3.11.12) 설정값으로 조정하고 `move_rejected` 로그로 오탐 확인. **v0.11 갱신(M1-07~09)**: (2)가 실제로 확인됨 — 에디터에서 `PacketBroadcast` 송신 1건당 관리 힙 **약 81 B** 할당(0이 아님). 8인 세션에서 틱마다 아바타 중계·복제 송신이 수십 건이면 초당 수백 KB 수준이 될 수 있어 점진적 GC 부담(R-16)으로 이어질 수 있음. M1-12에서 플레이어 빌드 값과 초당 할당량을 재고, 판정 기준(틱 루프 할당 0 목표)을 넘으면 DES-121 안에서 풀 버퍼·FishNet `Writer` 직접 사용으로 바꿈 |
@@ -3020,4 +3172,9 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-33 | (v0.11 신규) Steam 「친구 전용」(FriendsOnly) 로비는 Steam 로비 검색(`RequestLobbyList`) 목록에 나오지 않음(Steam 정상 동작, `-steamlobbytest`로 확인). M1은 참가 조건이 「친구 전용」 고정이라 참가는 초대·친구 목록 참가로만 됨. M2의 공개 세션 목록(FR-145, M2-07)은 검색 결과라 **「친구 전용」 세션이 목록에 보이지 않음** — 친구에게도 목록에 보여야 하는지는 SRS·사용자 결정이 필요함 | 사용자 기대와 다른 목록 동작, M2-07 설계 변경 가능 | ~~중간~~ 없음 | **상태: 해소(사용자 확인 2026-11-04: 정상 동작)**. 친구 전용 로비가 로비 검색에 나오지 않는 것은 Steam의 정상 동작이며 문제가 아님. 공개 세션 목록(FR-145, M2-07)은 SRS 그대로 참가 조건 「공개」 세션만 보여 주고, 친구 전용 세션은 Steam 친구 목록의 「게임 참가」·초대로 참가((a)안, SCR-010 ⑥ 안내 문구와 같음). SRS·설계 변경 없음. `-steamlobbytest`는 친구 전용 로비 0개를 계속 통과 조건으로 씀 |
 | R-34 | (v0.11 신규) 빌드 번호 규칙 미정. `BuildCommands`가 빌드마다 `bundleVersion`을 `0.1.<빌드 번호>`로 덮어써(번호를 안 주면 0) 손으로 고친 버전이 사라지고, 번호 없이 만든 빌드는 모두 같은 `kh_build`·`buildVer`가 되어 버전이 다른 빌드끼리 「버전 일치」로 보일 수 있음. 런타임 번호 계산(`주×10000 + 부×100 + 끝자리`)은 끝자리가 100 이상이면 다음 부 버전과 겹침(예: 0.1.100 = 0.2.0). git 태그 규칙(사이클마다 `v0.x.0`, `fix/`는 끝자리)과 끝자리 의미도 다름 | 버전 불일치 참가 검사(FR-145, `JoinRequest`) 무력화, 버전 혼동 | ~~중간~~ 낮음(남는 위험은 R-35) | **상태: 해소(설계 확정, 사용자 결정 2026-11-04)** — 게임 버전 = SemVer 2.0.0, 사이클 태그와 같은 번호(D-26, 3.7.12). 덮어쓰기 폐지(원본 = 사람이 정하는 `bundleVersion` 핵심, 빌드 정보는 `+` 메타데이터로만), 참가 검사는 전체 문자열 일치(번호 없이 만든 빌드끼리 통과하는 문제 해결), 숫자 인코딩 폐지 → 문자열 필드(자리 넘침 해결), git 태그 규칙과 끝자리 의미 일치. 구현은 M1 묶음 3 마무리 작업(7장)에서 developer가 함 |
 | R-35 | (v0.12 신규) 게임 버전 규칙(D-26)의 남는 위험: (1) 개발 빌드는 다시 빌드할 때마다 서로 접속할 수 없고 에디터 재생 ↔ 빌드한 플레이어 접속도 거부되어 개발 시험이 번거로울 수 있음, (2) 사이클 시작 때 사람이 `bundleVersion`을 올리는 것을 잊으면 개발 빌드가 이전 번호로 남음(출시 빌드는 태그 검사로 막힘), (3) 빌드 중 에디터가 강제 종료되면 `bundleVersion`에 메타데이터가 남은 채 저장될 수 있음, (4) git이 없거나 실패하면 커밋이 `nogit`이 됨, (5) 프로토콜 1인 기존 빌드와 2인 새 빌드가 섞이면 「버전 불일치」 대신 참가 시간 초과로 끝남(`protocolVer` 위치 고정 규칙이 v0.12부터라), (6) Unity가 `bundleVersion`의 `+`를 플랫폼 버전 정보에 쓸 때 문제를 일으킬 가능성(Windows 플레이어에서는 **확인 필요**, M1 묶음 3 마무리 개발 빌드에서 확인) | 개발 시험 지연, 버전 표시 혼동, 일회성 접속 실패 | 낮음 | (1) 여러 프로세스·여러 PC 시험은 한 번 만든 빌드 폴더를 복사해 씀(M1-12 봇, M6-10), 에디터 쪽 시험은 PlayMode 루프백으로. 불편이 크면 개발 빌드 전용으로 메타데이터를 빼고 비교하는 실행 옵션을 그때 검토(사용자 결정). (2) 사이클의 첫 Do 작업에서 번호를 올리는 규칙(3.7.12 (1))을 developer 호출 때 총괄이 넣어 주고, 출시 빌드는 태그 검사로 막음. (3) 다음 빌드가 `+` 뒤를 떼어 내고 경고, 커밋 전 `git status`로 `ProjectSettings.asset` 변경 확인. (4) 빌드 경고 + 시각으로 산출물 구분은 유지. (5) 개발 빌드끼리라 모두 새로 빌드하면 끝남(일회성). (6) 문제가 나면 메타데이터를 별도 파일로 옮기는 대안 (b)(D-26)로 바꿈(변경은 `BuildCommands`·`BuildInfo` 안에서 끝남) |
+| R-36 | (v0.13 신규) UI 방식 전환(D-27) 비용: 이미 만든 3개 화면 + HUD·ESC 메뉴를 uGUI 프리팹으로 다시 만들고, 뷰 클래스·시험(`GameMenuAndLobbyViewTests`, `SteamRequiredScreenTests`, `UiAndInputRulesTests`의 USS 부분)·`BootSceneBuilder`를 고쳐야 함. M1-10 착수가 늦어지고, 다시 만드는 동안 이미 고친 결함(ESC 메뉴 무반응, 상태 문구 글자색)이 되살아날 수 있음 | M1 일정 지연, 회귀 | 중간 | 전환은 「기능·화면 동작은 그대로」로 범위를 묶고(새 기능 없음), 뷰 클래스의 공개 API·이벤트(`LeaveRequested`, `InviteRequested`, `OpenMenu` 등)를 유지해 `GameFlow`·`GameBootstrap` 변경을 참조 형식 교체로 한정. 고친 결함은 시험으로 고정(PlayMode 화면 층 레이캐스트 시험 = ESC 결함, 테마 시험의 상태 줄 `color-text` = 글자색). 전환 직후 사용자 수동 시험(로비·ESC 메뉴·버튼·키보드 이동) 요청. 앞으로의 화면(M2~)은 처음부터 uGUI라 추가 전환 비용 없음 |
+| R-37 | (v0.13 신규) TextMeshPro 한글 글꼴: (1) 정적 SDF 아틀라스(3굵기 × 한글 2,350자 + 영문·기호)가 굵기마다 2048²~4096² 알파 텍스처라 빌드·메모리가 수~수십 MB 늘 수 있음(값은 **추정**, 전환 때 측정), (2) 동적 대체 글꼴은 처음 보는 글자를 실행 중 아틀라스에 추가하면서 순간 정지·할당이 생길 수 있음(채팅·이름), (3) Steam 이름의 중국어·일본어·이모지 등 사슬에 없는 글자는 □로 보임, (4) `UiGlyphs` 기호(⚠ ✔ ▶ ◆ ★ ● 🔒 ☣ ❄ ◐ 등) 일부가 Pretendard에 없을 수 있음(**확인 필요**) | 빌드 크기·메모리 증가, 1% Low 저하, 이름 표시 결함 | 중간 | (1) 정적 아틀라스는 게임 문장에 실제로 쓰는 글자 + KS X 1001로 한정하고 크기를 측정해 3.12.8 메모리 표에 기록, 필요하면 SemiBold를 동적으로 돌림. (2) 동적 아틀라스는 다중 아틀라스 켬, 접속 때 참가자 이름을 미리 넣기(`TryAddCharacters`). (3) 그 밖의 문자 체계 대체 글꼴(예: Noto Sans CJK)을 넣을지는 **크기와 표시 범위의 교환이라 사용자 결정 대상**(기본: 넣지 않음, □ 표시). (4) 기호는 OFL 기호 글꼴 부분 집합을 대체로 두고 규칙 검사(3.4.3 「글꼴」)가 빠진 글자를 찾음. 아이콘은 장기적으로 단색 아이콘 스프라이트(`Image`)로 |
+| R-38 | (v0.13 신규) 「오브젝트가 원본」 원칙(D-27)의 부작용: (1) 생성기로 다시 만들 수 없어 프리팹·씬이 잘못 고쳐지면 git 이력으로만 되돌릴 수 있음, (2) 사용자가 에디터에서 고치는 동안 에이전트가 MCP 도구로 같은 씬·프리팹을 고치면 저장하지 않은 변경이 섞이거나 사라짐, (3) 프리팹·씬 YAML 병합 충돌이 늘어 R-28(Smart Merge 미검증)의 영향이 커짐, (4) 씬 인스턴스에 덮어쓴 값이 쌓여 프리팹과 화면이 달라짐 | UI 손상·작업 손실, 병합 실패 | 중간 | (1) 사용자가 승인한 결과물 단위로 자주 커밋(CLAUDE.md 커밋 시점), 생성기의 검사 단계와 `UiPrefabRulesTests`가 빠진 구성 요소를 바로 알림. (2) 에이전트 작업 중 사용자는 에디터를 조작하지 않음(CLAUDE.md), 에이전트는 작업 전 열린 씬의 저장 안 된 변경 여부를 확인하고 바꾼 오브젝트 목록을 보고. (3) 화면마다 프리팹을 나눠 한 파일의 충돌 범위를 줄이고, 씬에는 인스턴스와 참조만 둠. (4) 인스턴스에 추가된 오브젝트·컴포넌트 0건 규칙 검사, 배치는 프리팹 모드에서만 고침 |
+| R-39 | (v0.13 신규) 손목 계기(M2-12)를 uGUI로 렌더 텍스처에 그리려면 HDRP UI 캡처 카메라가 필요함: HDRP 카메라 한 대의 메인 스레드·GPU 비용, Screen Space - Camera 캔버스의 TMP 표시·노출·색 공간 처리, 「필요할 때만 한 번 그리기」 API(`RenderPipeline.SubmitRenderRequest`/`Camera.Render`)의 HDRP 17.3 동작이 **확인 필요** | M2-12 지연, UI 예산(0.8 ms) 초과, 계기 글자 흐림·색 차이 | 중간 | M2-12 첫 작업으로 시작품을 만들어 비용(`Client.UI`)과 표시를 확인. HDRP 설정은 DES-114 한 곳에 둠. 문제가 있으면 3.7.11 대체안(오버레이 직접 그리기 + 원근 없는 기울임)을 사용자에게 화면으로 보여 결정. 사용자는 언제든 일반 HUD로 바꿀 수 있음(FR-171) |
+| R-40 | (v0.13 신규) uGUI 성능 함정: 캔버스 하나 안의 요소가 바뀌면 그 캔버스 전체 메시를 다시 만들고, Layout Group·Content Size Fitter가 매 프레임 레이아웃을 다시 계산하며, 문자열 조립이 GC 할당을 만듦. 인벤토리 격자·채팅·이름표 7개·목록 화면이 늘어나는 M3~M7에서 UI 예산 0.8 ms를 넘을 수 있음 | 1% Low 저하(R-16) | 낮음~중간 | 정적·동적 캔버스 분리, 동적 캔버스에는 Layout Group 금지, 값이 바뀔 때만 갱신, TMP `SetText(형식, 값)`, 상호작용 없는 요소 Raycast Target 끔(3.7.10 (4)·(9)). 측정 구간 `Client.UI`를 M1-12·M6-10 CSV에 기록하고 넘으면 화면별로 캔버스를 더 나눔. 긴 목록은 보이는 행만 재사용하는 방식을 그 화면 작업에서 검토 |
 
