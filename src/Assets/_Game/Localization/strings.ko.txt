@@ -8,3 +8,71 @@ steam.required.retry	다시 확인
 steam.required.quit	종료
 steam.required.checking	확인 중…
 steam.required.retry_failed	아직 Steam에 연결되지 않았습니다
+
+# M1 개발용 로비·접속 화면 (SCR-004 최소판, SCR-012)
+lobby.title	꺼진 하늘 · 개발용 로비
+lobby.desc	M1 개발용 화면입니다. 친구 전용 방을 열거나, Steam 친구 초대·「게임 참가」로 들어오세요.
+lobby.host	방 열기 (친구 전용)
+lobby.refresh	방 목록 새로 고침
+lobby.invite	친구 초대
+lobby.leave	나가기
+lobby.status.ready	준비됨
+lobby.status.opening	방을 여는 중…
+lobby.status.open	방이 열렸습니다 (접속 {0}/{1})
+lobby.status.failed	⚠ 방을 열지 못했습니다. Steam 연결을 확인하세요
+lobby.status.dev_host	개발용 직접 연결 방을 열었습니다 (접속 {0}/{1})
+lobby.list.loading	목록을 불러오는 중…
+lobby.list.empty	지금 열려 있는 공개 세션이 없습니다. 친구 방은 Steam 친구 목록의 「게임 참가」로 들어가세요
+lobby.list.error	목록을 불러오지 못했습니다. Steam 연결을 확인하세요
+lobby.join	참가
+lobby.row	{0} · {1} · {2}/{3}
+connect.title	참가 중
+connect.step.host	호스트에 연결
+connect.step.info	월드 정보 받기
+connect.step.world	월드 만들기
+connect.step.apply	변경 사항 적용
+connect.cancel	취소
+connect.ok	확인
+join.fail.noresponse.title	호스트에 연결하지 못했습니다
+join.fail.noresponse.cause	호스트가 응답하지 않습니다
+join.fail.noresponse.fix	호스트가 게임 중인지, 인터넷 연결이 정상인지 확인하고 다시 시도하세요
+join.fail.full.title	인원 초과
+join.fail.full.cause	세션이 가득 찼거나 자리 예약 중입니다
+join.fail.full.fix	잠시 후 다시 시도하거나 호스트에게 문의하세요
+join.fail.version.title	게임 버전 불일치
+join.fail.version.cause	호스트와 게임 버전이 다릅니다
+join.fail.version.fix	Steam에서 게임을 업데이트한 뒤 다시 시도하세요
+join.fail.password.title	비밀번호 불일치
+join.fail.password.cause	입력한 비밀번호가 맞지 않습니다
+join.fail.password.fix	호스트에게 비밀번호를 확인하세요
+join.fail.attempts.title	잠시 후 다시 시도하세요
+join.fail.attempts.cause	1분 안에 너무 많이 틀렸습니다
+join.fail.attempts.fix	1분 뒤에 다시 입력하세요
+join.fail.banned.title	참가할 수 없습니다
+join.fail.banned.cause	호스트가 이 계정의 참가를 막았습니다
+join.fail.banned.fix	호스트에게 직접 문의하세요
+join.fail.access.title	참가 조건이 맞지 않습니다
+join.fail.access.cause	이 방은 초대받은 사람이나 친구만 참가할 수 있습니다
+join.fail.access.fix	호스트에게 초대를 요청하세요
+join.fail.gen_mismatch.title	월드 생성 오류
+join.fail.gen_mismatch.cause	이 PC에서 만든 월드가 호스트와 다릅니다
+join.fail.gen_mismatch.fix	게임을 다시 시작해 참가하세요. 계속되면 「오류 보고 파일 만들기」를 사용하세요
+join.fail.lost.title	연결이 끊겼습니다
+join.fail.lost.cause	호스트와의 연결이 끊겼습니다
+join.fail.lost.fix	호스트가 게임 중인지 확인하고 다시 참가하세요
+join.fail.generic.title	참가하지 못했습니다
+join.fail.generic.cause	호스트가 참가 요청을 받아들이지 않았습니다
+join.fail.generic.fix	잠시 후 다시 시도하세요
+
+# 게임 HUD (SCR-015 M1 범위)
+hud.roster.title	접속자 {0}/{1}
+hud.roster.host	호스트
+hud.stamina.low	스태미나 부족
+hud.net.status	{0}
+hud.menu.title	게임 메뉴
+hud.menu.desc	메뉴를 열어도 게임은 멈추지 않습니다.
+hud.menu.leave	세션 나가기
+hud.menu.close	닫기
+hud.menu.running	게임 진행 중
+hud.menu.invite	친구 초대
+hud.menu.invite_unavailable	⚠ 지금은 친구 초대 창을 열 수 없습니다 (Steam 오버레이가 꺼져 있거나 방이 Steam 방이 아닙니다)
