@@ -29,9 +29,27 @@ namespace Game.Editor
         private static readonly Color AgentColor = new Color(0.85f, 0.35f, 0.25f);
         private static readonly Color GroundColor = new Color(0.25f, 0.28f, 0.25f);
 
-        /// <summary>Bench 장면을 (다시) 만든다.</summary>
-        [MenuItem("Game/Setup/Create Bench Scene")]
-        public static void CreateBenchScene()
+        /// <summary>Bench 장면이 없으면 만들고, 있으면 BenchRunner 가 있는지 검사만 한다(덮어쓰지 않음).</summary>
+        [MenuItem("Game/Setup/Ensure Bench Scene")]
+        public static void Ensure()
+        {
+            if (!System.IO.File.Exists(BenchScenePath))
+            {
+                CreateNew();
+                return;
+            }
+            SetupChecks.InspectScene(BenchScenePath, "Bench 장면", (scene, problems) =>
+            {
+                GameObject runner = SetupChecks.FindRoot(scene, "BenchRunner");
+                if (runner == null || runner.GetComponent<BenchRunner>() == null)
+                {
+                    problems.Add("루트 오브젝트 'BenchRunner'(BenchRunner)가 없습니다.");
+                }
+            });
+        }
+
+        /// <summary>Bench 장면을 처음 한 번 만든다.</summary>
+        private static void CreateNew()
         {
             DataAssetBuilder.EnsureFolder("Assets/_Game/Scenes");
             DataAssetBuilder.EnsureFolder("Assets/_Game/Materials");

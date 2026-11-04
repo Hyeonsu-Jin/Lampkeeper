@@ -6,7 +6,9 @@
         "Game.Domain",
         "Game.WorldGen",
         "Unity.InputSystem",
-        "Unity.Localization"
+        "Unity.Localization",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

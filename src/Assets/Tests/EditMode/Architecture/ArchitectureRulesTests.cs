@@ -47,6 +47,8 @@ namespace Game.Tests.Architecture
         private const string RenderPipelinePrefix = "Unity.RenderPipelines";
         private const string PipelinePackageName = "com.unity.pipeline";
         private const string PipelineAssemblyPrefix = "Unity.Pipeline";
+        private const string UguiRuntime = "UnityEngine.UI";
+        private const string TmpRuntime = "Unity.TextMeshPro";
 
         // 사용자 결정 2026-11-03: 런타임 기능이 없는 속성 정의 어셈블리만 플레이어에 들어가도 좋다.
         private const string PipelineAllowedRuntimeAssembly = "Unity.Pipeline.Attributes";
@@ -60,7 +62,7 @@ namespace Game.Tests.Architecture
             [App] = (new[] { Domain, WorldGen }, true),
             [Persistence] = (new[] { App, Domain }, true),
             [Net] = (new[] { App, Domain, WorldGen, FishNet }, false),
-            [Presentation] = (new[] { App, Domain, WorldGen, "Unity.InputSystem", "Unity.Localization" }, false),
+            [Presentation] = (new[] { App, Domain, WorldGen, "Unity.InputSystem", "Unity.Localization", UguiRuntime, TmpRuntime }, false),
             [Steam] = (new[] { App, Domain, SteamworksNet }, false),
             [Transport] = (new[] { Net, App, FishNet, FishySteamworks }, false),
             [AiJobs] = (new[] { App, Domain, "Unity.Burst", "Unity.Collections", "Unity.Mathematics" }, false),
@@ -181,11 +183,11 @@ namespace Game.Tests.Architecture
         {
             ["Game.Tests.Domain"] = new[] { Domain },
             ["Game.Tests.Application"] = new[] { App, Domain, WorldGen },
-            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, Bootstrap, EditorTools, FishNet },
+            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, Bootstrap, EditorTools, FishNet, UguiRuntime, TmpRuntime },
             ["Game.Tests.Architecture"] = new string[0],
             ["Game.Tests.WorldGen"] = new[] { WorldGen, App },
             ["Game.Tests.Net"] = new[] { App, Domain, Net },
-            ["Game.Tests.Integration"] = new[] { App, Domain, Net, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks },
+            ["Game.Tests.Integration"] = new[] { App, Domain, Net, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks, UguiRuntime, TmpRuntime },
         };
 
         [Test]
@@ -346,6 +348,50 @@ namespace Game.Tests.Architecture
             foreach (AsmdefInfo asm in RuntimeGameAsmdefs().Where(a => a.References.Contains(FishySteamworks)))
             {
                 CollectionAssert.Contains(allowed, asm.Name, asm.Name + "이(가) FishySteamworks를 참조합니다.");
+            }
+        }
+
+        // =========================================================
+        // 5-1) UI 패키지 격리 (SDD 3.4.1 규칙 9, D-27)
+        // =========================================================
+        [Test]
+        public void UguiAndTextMeshPro_OnlyPresentationAmongGameRuntimeAssemblies()
+        {
+            foreach (AsmdefInfo asm in RuntimeGameAsmdefs().Where(a => a.Name != Presentation))
+            {
+                CollectionAssert.DoesNotContain(asm.References, UguiRuntime, asm.Name + "이(가) UnityEngine.UI를 참조합니다.");
+                CollectionAssert.DoesNotContain(asm.References, TmpRuntime, asm.Name + "이(가) Unity.TextMeshPro를 참조합니다.");
+            }
+            CollectionAssert.Contains(Get(Presentation).References, UguiRuntime);
+            CollectionAssert.Contains(Get(Presentation).References, TmpRuntime);
+        }
+
+        [Test]
+        public void GameCode_DoesNotUseUiToolkit_AndNoUxmlUssPanelSettingsExist()
+        {
+            // 엔진 내장 모듈이라 asmdef 로 막을 수 없으므로 소스 글자와 파일 종류를 검사한다.
+            var offenders = new List<string>();
+            foreach (string folder in new[] { Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code"), Path.Combine(AsmdefModel.AssetsFolder, "Tests") })
+            {
+                foreach (string file in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
+                {
+                    if (Path.GetFileName(file) == "ArchitectureRulesTests.cs")
+                    {
+                        continue; // 이 시험 자신은 검사 글자를 문자열로 가진다
+                    }
+                    string text = File.ReadAllText(file);
+                    if (text.Contains("UnityEngine." + "UIElements") || text.Contains("UnityEditor." + "UIElements"))
+                    {
+                        offenders.Add(file.Replace('\\', '/'));
+                    }
+                }
+            }
+            CollectionAssert.IsEmpty(offenders, "코드가 UI Toolkit을 씁니다(D-27):\n" + string.Join("\n", offenders));
+
+            foreach (string pattern in new[] { "*.uxml", "*.uss", "*.tss", "PanelSettings*.asset" })
+            {
+                CollectionAssert.IsEmpty(Directory.GetFiles(Path.Combine(AsmdefModel.AssetsFolder, "_Game"), pattern, SearchOption.AllDirectories),
+                    "UI Toolkit 자산이 남아 있습니다: " + pattern);
             }
         }
 

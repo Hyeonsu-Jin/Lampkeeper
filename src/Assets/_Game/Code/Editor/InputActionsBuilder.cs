@@ -133,6 +133,15 @@ namespace Game.Editor
             AddButton(actions, bindings, "Cancel", "<Keyboard>/escape", "<Gamepad>/buttonEast");
             AddButton(actions, bindings, "TabPrev", "<Keyboard>/q", "<Gamepad>/leftShoulder");
             AddButton(actions, bindings, "TabNext", "<Keyboard>/e", "<Gamepad>/rightShoulder");
+
+            // v0.13 (uGUI, D-27): InputSystemUIInputModule이 쓰는 마우스 입력. 패드에는 대응이 없다.
+            actions.Add(new ActionSpec { Name = "Point", Type = "PassThrough", ControlType = "Vector2" });
+            Add(bindings, "Point", "<Mouse>/position", KeyboardMouseScheme);
+            // 포인터 관련 동작은 입력 모듈이 여러 포인터를 구분하도록 PassThrough 형식이어야 한다.
+            actions.Add(new ActionSpec { Name = "Click", Type = "PassThrough", ControlType = "Button" });
+            Add(bindings, "Click", "<Mouse>/leftButton", KeyboardMouseScheme);
+            actions.Add(new ActionSpec { Name = "ScrollWheel", Type = "PassThrough", ControlType = "Vector2" });
+            Add(bindings, "ScrollWheel", "<Mouse>/scroll", KeyboardMouseScheme);
         }
 
         private static void AddButton(List<ActionSpec> actions, List<BindingSpec> bindings, string name, string keyboardMouse, string gamepad)

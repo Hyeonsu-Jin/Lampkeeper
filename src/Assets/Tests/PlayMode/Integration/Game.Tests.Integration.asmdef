@@ -13,7 +13,9 @@
         "Game.Infra.Rendering",
         "Game.Infra.Transport",
         "FishNet.Runtime",
-        "FishySteamworks"
+        "FishySteamworks",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

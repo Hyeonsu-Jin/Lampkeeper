@@ -1,157 +1,154 @@
 // =============================================================
 // 파일: SteamRequiredScreenTests.cs
-// 역할: SCR-001(Steam 실행 필요 안내) 화면 시험: UXML 요소, 상태별 표시, 버튼 이벤트,
-//       한국어·영어 텍스트 키 누락, Boot 씬 연결.
+// 역할: SCR-001(Steam 실행 필요 안내) 화면 시험: 프리팹 요소, 상태별 표시, 버튼 이벤트(onClick.Invoke),
+//       한국어·영어 텍스트 키 누락, 글자 공급자 대체 동작, Boot 씬 연결.
 // 레이어: test (EditMode, Game.Tests.Infrastructure)
-// 관련: NFR-006, NFR-034, NFR-044 / STORYBOARD SCR-001 ①~⑤
+// 관련: NFR-006, NFR-034, NFR-044 / STORYBOARD SCR-001 ①~⑤ / SDD 3.4.3 (v0.13: uGUI 프리팹 기준)
 // =============================================================
 using System.Collections.Generic;
 using Game.Adapters.Presentation.Localization;
 using Game.Adapters.Presentation.UI.Common;
 using Game.Adapters.Presentation.UI.Screens;
 using Game.Application.Localization;
-using Game.Application.Ports;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 
 namespace Game.Tests.Infrastructure
 {
     public class SteamRequiredScreenTests
     {
-        private const string UxmlPath = "Assets/_Game/UI/Screens/SteamRequired.uxml";
-        private const string BaseUssPath = "Assets/_Game/UI/Common/Base.uss";
-        private const string KoPath = "Assets/_Game/Localization/strings.ko.txt";
-        private const string EnPath = "Assets/_Game/Localization/strings.en.txt";
+        private SteamRequiredScreen _screen;
 
-        /// <summary>키를 그대로 "T(키)" 로 돌려주는 가짜 글자 공급자.</summary>
-        private sealed class EchoText : ILocalizedText
+        [SetUp]
+        public void SetUp()
         {
-            public string Get(string key) => "T(" + key + ")";
-            public string Get(string key, params object[] args) => Get(key);
+            UiTestSupport.UseEchoText();
+            _screen = UiTestSupport.Instantiate<SteamRequiredScreen>(UiTestSupport.SteamRequiredPrefab);
         }
 
-        private static VisualElement Instantiate()
+        [TearDown]
+        public void TearDown()
         {
-            var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(UxmlPath);
-            Assert.IsNotNull(uxml, "SteamRequired.uxml 없음");
-            return uxml.Instantiate();
-        }
-
-        private static TextTable Load(string path)
-        {
-            var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
-            Assert.IsNotNull(asset, path);
-            var errors = new List<string>();
-            TextTable table = TextTable.Parse(asset.text, errors);
-            Assert.IsEmpty(errors, string.Join("\n", errors));
-            return table;
+            if (_screen != null)
+            {
+                Object.DestroyImmediate(_screen.gameObject);
+            }
+            UiTestSupport.Reset();
         }
 
         [Test]
-        public void Uxml_HasAllElements_AndRetryComesBeforeQuit()
+        public void Prefab_HasAllElements_AndRetryComesBeforeQuit()
         {
-            VisualElement root = Instantiate();
-            Assert.IsNotNull(root.Q<Label>("title"));
-            Assert.IsNotNull(root.Q<Label>("desc"));
-            Assert.IsNotNull(root.Q<Label>("status"));
-            Button retry = root.Q<Button>("retry");
-            Button quit = root.Q<Button>("quit");
-            Assert.IsNotNull(retry);
-            Assert.IsNotNull(quit);
-
-            // 포커스 순서 ③ -> ⑤ : 같은 부모 안에서 문서 순서가 이 순서여야 한다.
-            Assert.AreEqual(retry.parent, quit.parent);
-            Assert.Less(retry.parent.IndexOf(retry), retry.parent.IndexOf(quit));
+            Assert.IsNotNull(_screen.RetryButton, "③ [다시 확인]");
+            Assert.IsNotNull(_screen.QuitButton, "⑤ [종료]");
+            Assert.IsNotNull(_screen.StatusText, "② 아래 실패 문구");
+            // 키보드·게임패드 이동 순서는 ③ -> ⑤ (하이어라키 순서와 같다).
+            Assert.Less(_screen.RetryButton.transform.GetSiblingIndex(), _screen.QuitButton.transform.GetSiblingIndex());
+            Assert.AreEqual(UiScreenLayer.System, _screen.Layer, "SCR-001 은 System 층");
         }
 
         [Test]
-        public void Uxml_ReferencesScreenStyleSheet()
+        public void Screen_FillsTexts_FromKeys()
         {
-            VisualElement root = Instantiate();
-            Assert.GreaterOrEqual(root.styleSheets.count, 1, "화면 USS가 UXML에 연결되어야 한다.");
+            _screen.Show();
+            var texts = new List<string>();
+            foreach (ThemedText text in _screen.GetComponentsInChildren<ThemedText>(true))
+            {
+                texts.Add(text.Tmp.text);
+            }
+            CollectionAssert.Contains(texts, "T(" + SteamRequiredTextKeys.Title + ")");
+            CollectionAssert.Contains(texts, "T(" + SteamRequiredTextKeys.Description + ")");
+            CollectionAssert.Contains(texts, "T(" + SteamRequiredTextKeys.Retry + ")");
+            CollectionAssert.Contains(texts, "T(" + SteamRequiredTextKeys.Quit + ")");
         }
 
         [Test]
-        public void View_FillsTexts_FromKeys()
+        public void DefaultState_HidesStatus_EnablesRetry()
         {
-            VisualElement root = Instantiate();
-            var view = new SteamRequiredView(root, new EchoText());
-
-            Assert.AreEqual("T(steam.required.title)", root.Q<Label>("title").text);
-            Assert.AreEqual("T(steam.required.desc)", root.Q<Label>("desc").text);
-            Assert.AreEqual("T(steam.required.retry)", root.Q<Button>("retry").text);
-            Assert.AreEqual("T(steam.required.quit)", root.Q<Button>("quit").text);
-            Assert.AreEqual(SteamRequiredState.Default, view.State);
+            _screen.Show();
+            Assert.AreEqual(SteamRequiredState.Default, _screen.State);
+            Assert.IsFalse(_screen.StatusText.gameObject.activeSelf);
+            Assert.IsFalse(_screen.RetryButton.IsUnavailable);
+            Assert.IsTrue(_screen.IsShown);
         }
 
         [Test]
-        public void View_DefaultState_HidesStatus_EnablesRetry()
+        public void CheckingState_MakesRetryUnavailable_ShowsCheckingText_AndKeepsInteractable()
         {
-            VisualElement root = Instantiate();
-            new SteamRequiredView(root, new EchoText());
-
-            Assert.IsTrue(root.Q<Label>("status").ClassListContains(SteamRequiredView.HiddenClass));
-            Assert.IsTrue(root.Q<Button>("retry").enabledSelf);
+            _screen.Show();
+            _screen.ShowChecking();
+            Assert.AreEqual(SteamRequiredState.Checking, _screen.State);
+            Assert.IsTrue(_screen.RetryButton.IsUnavailable, "확인 중에는 중복 입력을 막는다");
+            Assert.IsTrue(_screen.RetryButton.interactable, "사용 불가여도 interactable 은 끄지 않는다(포커스 유지)");
+            Assert.AreEqual("T(" + SteamRequiredTextKeys.Checking + ")", _screen.RetryLabel.Tmp.text);
         }
 
         [Test]
-        public void View_CheckingState_DisablesRetry_ShowsCheckingText()
+        public void FailedState_ShowsRetryFailedMessage_AndRestoresRetry()
         {
-            VisualElement root = Instantiate();
-            var view = new SteamRequiredView(root, new EchoText());
-            view.SetState(SteamRequiredState.Checking);
-
-            Assert.IsFalse(root.Q<Button>("retry").enabledSelf);
-            Assert.AreEqual("T(steam.required.checking)", root.Q<Button>("retry").text);
+            _screen.Show();
+            _screen.ShowChecking();
+            _screen.ShowRetryFailed();
+            Assert.AreEqual(SteamRequiredState.Failed, _screen.State);
+            Assert.IsTrue(_screen.StatusText.gameObject.activeSelf);
+            Assert.AreEqual("T(" + SteamRequiredTextKeys.RetryFailed + ")", _screen.StatusText.Tmp.text);
+            Assert.IsFalse(_screen.RetryButton.IsUnavailable);
+            Assert.AreEqual("T(" + SteamRequiredTextKeys.Retry + ")", _screen.RetryLabel.Tmp.text);
         }
 
         [Test]
-        public void View_FailedState_ShowsRetryFailedMessage_AndRestoresRetry()
+        public void Buttons_RaiseEvents_ThroughOnClick()
         {
-            VisualElement root = Instantiate();
-            var view = new SteamRequiredView(root, new EchoText());
-            view.SetState(SteamRequiredState.Checking);
-            view.SetState(SteamRequiredState.Failed);
-
-            Label status = root.Q<Label>("status");
-            Assert.IsFalse(status.ClassListContains(SteamRequiredView.HiddenClass));
-            Assert.AreEqual("T(steam.required.retry_failed)", status.text);
-            Assert.IsTrue(root.Q<Button>("retry").enabledSelf);
-            Assert.AreEqual("T(steam.required.retry)", root.Q<Button>("retry").text);
-        }
-
-        [Test]
-        public void View_ButtonsRaiseEvents()
-        {
-            VisualElement root = Instantiate();
-            var view = new SteamRequiredView(root, new EchoText());
+            _screen.Show();
             int retries = 0, quits = 0;
-            view.RetryRequested += () => retries++;
-            view.QuitRequested += () => quits++;
+            _screen.RetryRequested += () => retries++;
+            _screen.QuitRequested += () => quits++;
 
-            view.RequestRetry();
-            view.RequestQuit();
-            view.SetState(SteamRequiredState.Checking);
-            view.RequestRetry(); // 확인 중에는 중복 입력을 무시한다.
+            _screen.RetryButton.onClick.Invoke();
+            _screen.QuitButton.onClick.Invoke();
             Assert.AreEqual(1, retries);
             Assert.AreEqual(1, quits);
+
+            // 확인 중에는 재시도를 무시한다.
+            _screen.ShowChecking();
+            _screen.RetryButton.onClick.Invoke();
+            Assert.AreEqual(1, retries);
         }
 
         [Test]
-        public void View_MissingElement_ThrowsClearError()
+        public void Cancel_DoesNotCloseTheScreen()
         {
-            Assert.Throws<System.InvalidOperationException>(() => new SteamRequiredView(new VisualElement(), new EchoText()));
+            _screen.Show();
+            _screen.OnCancel();
+            Assert.IsTrue(_screen.IsVisible, "SCR-001 은 Esc 로 닫히지 않는다");
+        }
+
+        [Test]
+        public void Hide_TurnsOffCanvasRaycasterAndGroupTogether()
+        {
+            // ESC 메뉴 결함 재발 방지: 숨김은 세 가지를 함께 끈다.
+            _screen.Show();
+            var canvas = _screen.GetComponent<Canvas>();
+            var raycaster = _screen.GetComponent<UnityEngine.UI.GraphicRaycaster>();
+            var group = _screen.GetComponent<CanvasGroup>();
+            Assert.IsTrue(canvas.enabled && raycaster.enabled && group.blocksRaycasts && group.interactable);
+
+            _screen.Hide();
+            Assert.IsFalse(canvas.enabled);
+            Assert.IsFalse(raycaster.enabled);
+            Assert.IsFalse(group.blocksRaycasts);
+            Assert.IsFalse(group.interactable);
         }
 
         [Test]
         public void TextTables_ContainAllScreenKeys_InBothLanguages()
         {
             // [NFR-044] 누락 0건
-            TextTable ko = Load(KoPath);
-            TextTable en = Load(EnPath);
+            TextTable ko = UiTestSupport.LoadTable(UiTestSupport.KoPath);
+            TextTable en = UiTestSupport.LoadTable(UiTestSupport.EnPath);
             foreach (string key in SteamRequiredTextKeys.All)
             {
                 Assert.IsTrue(ko.TryGet(key, out string kv) && kv.Length > 0, "ko 누락: " + key);
@@ -162,8 +159,8 @@ namespace Game.Tests.Infrastructure
         [Test]
         public void TextTables_HaveIdenticalKeySets()
         {
-            var ko = new HashSet<string>(Load(KoPath).Keys);
-            var en = new HashSet<string>(Load(EnPath).Keys);
+            var ko = new HashSet<string>(UiTestSupport.LoadTable(UiTestSupport.KoPath).Keys);
+            var en = new HashSet<string>(UiTestSupport.LoadTable(UiTestSupport.EnPath).Keys);
             Assert.IsTrue(ko.SetEquals(en), "ko/en 키 집합이 다릅니다.");
         }
 
@@ -188,34 +185,22 @@ namespace Game.Tests.Infrastructure
         }
 
         [Test]
-        public void UiTheme_AppliesBaseStyle_AndSwitchesTextScaleClass()
+        public void TextScaleChange_ReappliesFontSizes_AcrossAllThemedTexts()
         {
-            var baseUss = AssetDatabase.LoadAssetAtPath<StyleSheet>(BaseUssPath);
-            Assert.IsNotNull(baseUss);
-            var panelRoot = new VisualElement();
+            _screen.Show();
+            ThemedText title = null;
+            foreach (ThemedText text in _screen.GetComponentsInChildren<ThemedText>(true))
+            {
+                if (text.TextKey == SteamRequiredTextKeys.Title) { title = text; }
+            }
+            Assert.IsNotNull(title);
+            UiTheme theme = title.Theme;
+            Assert.AreEqual(theme.GetFontSize(title.SizeToken, UiTextScale.Normal), Mathf.RoundToInt(title.Tmp.fontSize));
 
-            UiTheme.Apply(panelRoot, baseUss, UiTextScale.Large);
-            Assert.IsTrue(panelRoot.ClassListContains(UiTheme.TextLargeClass));
-            Assert.IsTrue(panelRoot.styleSheets.Contains(baseUss));
-
-            UiTheme.SetTextScale(panelRoot, UiTextScale.Small);
-            Assert.IsTrue(panelRoot.ClassListContains(UiTheme.TextSmallClass));
-            Assert.IsFalse(panelRoot.ClassListContains(UiTheme.TextLargeClass));
-
-            // 같은 스타일을 두 번 붙이지 않는다.
-            UiTheme.Apply(panelRoot, baseUss, UiTextScale.Normal);
-            Assert.AreEqual(1, panelRoot.styleSheets.count);
-        }
-
-        [Test]
-        public void ScreenUss_UsesOnlyTokens_NoDirectColorsOrPixelFontSizes()
-        {
-            // SDD 3.7.10: 화면 USS에서 색 값을 직접 쓰지 않고, 글자 크기는 변수로만 지정한다.
-            string screenUss = System.IO.File.ReadAllText("Assets/_Game/UI/Screens/SteamRequired.uss");
-            StringAssert.DoesNotContain("rgb(", screenUss);
-            StringAssert.DoesNotContain("rgba(", screenUss);
-            StringAssert.DoesNotContain("#", screenUss.Replace("/*", string.Empty));
-            StringAssert.DoesNotContain("font-size", screenUss);
+            UiContext.SetTextScale(UiTextScale.Large);
+            Assert.AreEqual(theme.GetFontSize(title.SizeToken, UiTextScale.Large), Mathf.RoundToInt(title.Tmp.fontSize));
+            UiContext.SetTextScale(UiTextScale.Small);
+            Assert.AreEqual(theme.GetFontSize(title.SizeToken, UiTextScale.Small), Mathf.RoundToInt(title.Tmp.fontSize));
         }
 
         [Test]
@@ -224,30 +209,24 @@ namespace Game.Tests.Infrastructure
             Assert.AreEqual(Game.Editor.BootSceneBuilder.BootScenePath, EditorBuildSettings.scenes[0].path);
             Assert.IsTrue(EditorBuildSettings.scenes[0].enabled);
 
-            UnityEngine.SceneManagement.Scene scene = EditorSceneManager.OpenScene(Game.Editor.BootSceneBuilder.BootScenePath, OpenSceneMode.Additive);
+            Scene scene = SceneManager.GetSceneByPath(Game.Editor.BootSceneBuilder.BootScenePath);
+            bool openedHere = !scene.isLoaded;
+            if (openedHere)
+            {
+                scene = EditorSceneManager.OpenScene(Game.Editor.BootSceneBuilder.BootScenePath, OpenSceneMode.Additive);
+            }
             try
             {
-                var bootstrap = Object.FindFirstObjectByType<Game.Bootstrap.GameBootstrap>(FindObjectsInactive.Include);
-                var screen = Object.FindFirstObjectByType<SteamRequiredScreen>(FindObjectsInactive.Include);
-                Assert.IsNotNull(bootstrap, "Bootstrap 오브젝트 없음");
-                Assert.IsNotNull(screen, "SteamRequiredScreen 오브젝트 없음");
-                Assert.IsFalse(screen.gameObject.activeSelf, "SCR-001은 평소 꺼져 있어야 한다.");
-
-                var so = new SerializedObject(bootstrap);
-                foreach (string field in new[] { "_dataConfig", "_koreanStrings", "_englishStrings", "_steamRequiredScreen" })
-                {
-                    Assert.IsNotNull(so.FindProperty(field).objectReferenceValue, "Bootstrap." + field + " 연결 누락");
-                }
-                var screenSo = new SerializedObject(screen);
-                Assert.IsNotNull(screenSo.FindProperty("_baseStyle").objectReferenceValue, "SteamRequiredScreen._baseStyle 연결 누락");
-
-                var document = screen.GetComponent<UIDocument>();
-                Assert.IsNotNull(document.visualTreeAsset);
-                Assert.IsNotNull(document.panelSettings);
+                var problems = new List<string>();
+                Game.Editor.BootSceneBuilder.CheckBootScene(scene, problems);
+                CollectionAssert.IsEmpty(problems, string.Join("\n", problems));
             }
             finally
             {
-                EditorSceneManager.CloseScene(scene, true);
+                if (openedHere)
+                {
+                    EditorSceneManager.CloseScene(scene, true);
+                }
             }
         }
     }

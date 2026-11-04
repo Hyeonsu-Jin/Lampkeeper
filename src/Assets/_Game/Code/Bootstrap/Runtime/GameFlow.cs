@@ -36,8 +36,10 @@ namespace Game.Bootstrap.Runtime
     {
         public SessionRuntimeDeps Runtime;
         public ILocalizedText Text;
+        public UiRoot UiRoot;
         public DevLobbyScreen LobbyScreen;
         public GameHud Hud;
+        public GameMenu Menu;
         public InputActionAsset InputAsset;
         public MonoBehaviour CoroutineHost;
         public string WorldSceneName;
@@ -57,15 +59,15 @@ namespace Game.Bootstrap.Runtime
 
         private readonly GameFlowDeps _deps;
         private readonly UiState _uiState = new UiState();
-        private DevLobbyView _lobby;
-        private GameHudView _hud;
+        private DevLobbyScreen _lobby;
+        private GameHud _hud;
+        private GameMenu _menu;
         private GameInput _input;
         private SessionRuntime _runtime;
         private FirstPersonController _controller;
         private RemoteAvatarViews _remoteViews;
         private bool _inGame;
         private bool _worldLoading;
-        private int _menuOpenedFrame = -1;
         private LobbyListState _listState = LobbyListState.Idle;
         private double _nextStatusLog;
 
@@ -86,10 +88,14 @@ namespace Game.Bootstrap.Runtime
             _lobby = _deps.LobbyScreen.Build(_deps.Text);
             // [NFR-058] 출시 빌드 v{핵심}, 개발·에디터 v{전체}
             _lobby.SetVersion(BuildInfo.Version?.ToDisplayString());
-            _hud = _deps.Hud.Build(_deps.Text, _uiState, _deps.Runtime.Config.Balance.Session.MaxPlayers);
+            _hud = _deps.Hud.Build(_deps.Text, _deps.Runtime.Config.Balance.Session.MaxPlayers);
             _deps.Hud.SetVisible(false);
+            _menu = _deps.Menu.Build(_deps.Text, _uiState);
             _input = new GameInput(_deps.InputAsset);
-            _input.DisableAll();
+            // UI 입력 모듈과 닫기 라우터를 게임이 쓰는 같은 Input Actions 인스턴스에 연결한다(재설정한 바인딩이 메뉴에도 적용, FR-117).
+            _deps.UiRoot.BindInput(_input.Asset);
+            // 게임 밖(로비) 화면은 UI 동작 지도로 조작한다.
+            _input.Apply(UiMode.Overlay);
 
             _lobby.HostRequested += OnHostRequested;
             _lobby.RefreshRequested += OnRefreshRequested;
@@ -103,13 +109,13 @@ namespace Game.Bootstrap.Runtime
             _lobby.JoinRequested += OnJoinListed;
             _lobby.CancelRequested += OnLeaveRequested;
             _lobby.FailureAcknowledged += () => _lobby.ShowLobby();
-            _hud.LeaveRequested += OnLeaveRequested;
-            _hud.InviteRequested += () =>
+            _menu.LeaveRequested += OnLeaveRequested;
+            _menu.InviteRequested += () =>
             {
                 // 초대 창을 못 열면(Tugboat, 로비 없음, 오버레이 꺼짐) 아무 반응 없이 끝나지 않고 안내를 보인다.
                 if (!TryOpenInvite())
                 {
-                    _hud.SetMenuNotice(_deps.Text.Get(HudTextKeys.InviteUnavailable));
+                    _menu.SetMenuNotice(_deps.Text.Get(HudTextKeys.InviteUnavailable));
                 }
             };
             _uiState.ModeChanged += ApplyUiMode;
@@ -150,15 +156,10 @@ namespace Game.Bootstrap.Runtime
             _hud.Tick(_controller.Stamina.Ratio, _controller.Stamina.Ratio >= 1f, Time.unscaledDeltaTime, _runtime.Mirror);
             _hud.SetNetStatus(_deps.Text.Get(HudTextKeys.NetStatus, BuildStatus()));
 
-            // Gameplay: Esc → 게임 메뉴(Overlay). Overlay: Esc/B → 닫기. 열자마자 같은 프레임에 닫히지 않게 한다.
+            // Gameplay: Esc → 게임 메뉴(Overlay). Overlay 에서 Esc/Ⓑ 로 닫는 것은 UiInputRouter 가 메뉴의 OnCancel 로 전달한다.
             if (_uiState.Mode == UiMode.Gameplay && _input.Menu.WasPressedThisFrame())
             {
-                _menuOpenedFrame = Time.frameCount;
-                _hud.OpenMenu();
-            }
-            else if (_uiState.Mode == UiMode.Overlay && Time.frameCount != _menuOpenedFrame && _input.UiCancel.WasPressedThisFrame())
-            {
-                _hud.CloseMenu();
+                _menu.OpenMenu();
             }
         }
 
@@ -411,7 +412,7 @@ namespace Game.Bootstrap.Runtime
             }
             _inGame = false;
             _uiState.CloseAll();
-            _input.DisableAll();
+            _input.Apply(UiMode.Overlay); // 로비 화면은 UI 동작 지도로 조작한다
             if (_deps.MenuCamera != null)
             {
                 _deps.MenuCamera.enabled = true;
@@ -436,6 +437,10 @@ namespace Game.Bootstrap.Runtime
                 return;
             }
             _input.Apply(mode);
+            if (mode == UiMode.Gameplay)
+            {
+                _deps.UiRoot.ClearSelection(); // 게임으로 돌아갈 때 UI 선택을 비운다
+            }
             if (_controller != null)
             {
                 _controller.InputEnabled = mode == UiMode.Gameplay;

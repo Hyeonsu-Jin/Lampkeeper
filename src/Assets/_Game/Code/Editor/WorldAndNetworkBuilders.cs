@@ -37,9 +37,36 @@ namespace Game.Editor
     {
         public const string PrefabPath = "Assets/_Game/Prefabs/PlayerAvatar.prefab";
 
-        /// <summary>프리팹을 (다시) 만든다.</summary>
-        [MenuItem("Game/Setup/Create Avatar Prefab")]
-        public static void Create()
+        /// <summary>프리팹이 없으면 만들고, 있으면 NetworkObject·PlayerAvatar 가 붙어 있는지 검사만 한다(덮어쓰지 않음).</summary>
+        [MenuItem("Game/Setup/Ensure Avatar Prefab")]
+        public static void Ensure()
+        {
+            if (!System.IO.File.Exists(PrefabPath))
+            {
+                CreateNew();
+                return;
+            }
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabPath);
+            var problems = new System.Collections.Generic.List<string>();
+            if (prefab == null)
+            {
+                problems.Add("프리팹을 불러오지 못했습니다.");
+            }
+            else
+            {
+                var names = new System.Collections.Generic.HashSet<string>();
+                foreach (Component component in prefab.GetComponents<Component>())
+                {
+                    if (component != null) { names.Add(component.GetType().FullName); }
+                }
+                if (!names.Contains("FishNet.Object.NetworkObject")) { problems.Add("NetworkObject 컴포넌트가 없습니다."); }
+                if (!names.Contains("Game.Adapters.Net.Avatar.PlayerAvatar")) { problems.Add("PlayerAvatar 컴포넌트가 없습니다."); }
+            }
+            SetupChecks.ThrowIfAny("PlayerAvatar 프리팹", problems);
+        }
+
+        /// <summary>프리팹을 처음 한 번 만든다.</summary>
+        private static void CreateNew()
         {
             DataAssetBuilder.EnsureFolder("Assets/_Game/Prefabs");
             var go = new GameObject("PlayerAvatar");
@@ -77,9 +104,41 @@ namespace Game.Editor
         private const float CapsuleRadiusMeters = 0.35f;
         private const float GroundSizeMeters = 400f;
 
-        /// <summary>World 씬을 (다시) 만든다.</summary>
-        [MenuItem("Game/Setup/Create World Scene")]
-        public static void Create()
+        /// <summary>World 씬이 없으면 만들고, 있으면 PlayerRig·RemoteAvatarViews 와 빌드 설정 등록을 검사만 한다(덮어쓰지 않음).</summary>
+        [MenuItem("Game/Setup/Ensure World Scene")]
+        public static void Ensure()
+        {
+            if (!System.IO.File.Exists(WorldScenePath))
+            {
+                CreateNew();
+                return;
+            }
+            SetupChecks.InspectScene(WorldScenePath, "World 씬", (scene, problems) =>
+            {
+                GameObject rig = SetupChecks.FindRoot(scene, "PlayerRig");
+                if (rig == null || rig.GetComponent<FirstPersonController>() == null)
+                {
+                    problems.Add("루트 오브젝트 'PlayerRig'(FirstPersonController)가 없습니다.");
+                }
+                GameObject views = SetupChecks.FindRoot(scene, "RemoteAvatarViews");
+                if (views == null || views.GetComponent<RemoteAvatarViews>() == null)
+                {
+                    problems.Add("루트 오브젝트 'RemoteAvatarViews'(RemoteAvatarViews)가 없습니다.");
+                }
+                bool registered = false;
+                foreach (EditorBuildSettingsScene entry in EditorBuildSettings.scenes)
+                {
+                    if (entry.path == WorldScenePath) { registered = entry.enabled; }
+                }
+                if (!registered)
+                {
+                    problems.Add("빌드 설정(Scenes In Build)에 World 씬이 등록되어 있지 않습니다.");
+                }
+            });
+        }
+
+        /// <summary>World 씬을 처음 한 번 만든다.</summary>
+        private static void CreateNew()
         {
             DataAssetBuilder.EnsureFolder("Assets/_Game/Scenes");
             DataAssetBuilder.EnsureFolder("Assets/_Game/Materials");

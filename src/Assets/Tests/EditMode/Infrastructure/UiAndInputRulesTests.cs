@@ -1,8 +1,8 @@
 // =============================================================
 // 파일: UiAndInputRulesTests.cs
-// 역할: (1) USS 규칙 검사: 화면 USS·UXML·UI 코드에 색 값·고정 글자 크기를 직접 쓰지 않았는지, Base.uss의 접근성 기반(색 토큰, 글자 크기 3단계,
-//       모양 구분 짝, 다크 단일 테마)이 갖춰졌는지. (2) Input Actions 애셋이 STORYBOARD 2.4 기본 할당표와 같은지.
-//       (3) 빌드 번호 해석. (4) 텍스트 표(ko/en) 키 일치.
+// 역할: (1) Input Actions 애셋이 STORYBOARD 2.4 기본 할당표와 같은지(v0.13: UI 지도의 마우스 입력 포함).
+//       (2) 빌드 번호 해석. (3) 텍스트 표(ko/en) 키 일치.
+//       (v0.13: USS 규칙 검사는 uGUI 전환으로 UiPrefabRulesTests 로 대체됐다.)
 // 레이어: test (EditMode, Game.Tests.Infrastructure)
 // 관련: FR-117, FR-129, FR-130, FR-166, NFR-034, NFR-044, NFR-056, NFR-057, DES-091, DES-092, DES-095 / SDD 3.7.9, 3.7.10 / STORYBOARD 2.1, 2.2, 2.4, 2.7
 // =============================================================
@@ -18,178 +18,6 @@ using UnityEngine;
 
 namespace Game.Tests.Infrastructure
 {
-    public class UssRulesTests
-    {
-        private static string UiFolder => Path.Combine(UnityEngine.Application.dataPath, "_Game", "UI");
-        private static string BaseUssPath => Path.Combine(UiFolder, "Common", "Base.uss");
-
-        private static IEnumerable<string> ScreenUssFiles() =>
-            Directory.GetFiles(UiFolder, "*.uss", SearchOption.AllDirectories)
-                .Where(p => !string.Equals(Path.GetFullPath(p), Path.GetFullPath(BaseUssPath), StringComparison.OrdinalIgnoreCase));
-
-        /// <summary>USS 속성 선언(속성 이름, 값)을 모두 뽑는다. 주석은 지운다.</summary>
-        private static IEnumerable<(string Property, string Value, string File)> Declarations(string path)
-        {
-            string text = Regex.Replace(File.ReadAllText(path), @"/\*.*?\*/", string.Empty, RegexOptions.Singleline);
-            foreach (Match m in Regex.Matches(text, @"([a-zA-Z\-]+)\s*:\s*([^;{}]+);"))
-            {
-                yield return (m.Groups[1].Value.Trim(), m.Groups[2].Value.Trim(), Path.GetFileName(path));
-            }
-        }
-
-        private static readonly Regex ColorLiteral = new Regex(@"(^|[\s,(])(#[0-9a-fA-F]{3,8}\b|rgb\(|rgba\(|hsl\(|hsla\()", RegexOptions.IgnoreCase);
-        private static readonly string[] ColorProperties =
-        {
-            "color", "background-color", "border-color", "border-top-color", "border-right-color", "border-bottom-color", "border-left-color",
-            "-unity-background-image-tint-color", "-unity-text-outline-color", "text-shadow",
-        };
-        private static readonly string[] NamedColors = { "white", "black", "red", "green", "blue", "yellow", "gray", "grey", "orange", "cyan", "magenta", "transparent" };
-
-        [Test]
-        public void ScreenUss_UseNoColorLiterals_OnlyTokens()
-        {
-            // [NFR-056] 화면에서 색 값 직접 사용 금지: 색은 var(--color-*) 토큰만.
-            foreach (string file in ScreenUssFiles())
-            {
-                foreach ((string property, string value, string name) in Declarations(file))
-                {
-                    Assert.IsFalse(ColorLiteral.IsMatch(value), name + ": '" + property + ": " + value + "' 색 값을 직접 썼습니다.");
-                    if (ColorProperties.Contains(property))
-                    {
-                        Assert.IsTrue(value.StartsWith("var(--color-", StringComparison.Ordinal) || value == "initial" || value == "inherit",
-                            name + ": '" + property + ": " + value + "' 색 속성은 var(--color-*) 토큰이어야 합니다.");
-                        Assert.IsFalse(NamedColors.Contains(value), name + ": 색 이름 직접 사용 금지");
-                    }
-                }
-            }
-        }
-
-        [Test]
-        public void ScreenUss_FontSizesComeFromVariables_NoFixedPixels()
-        {
-            // [FR-129, NFR-056] 글자 크기는 배율 변수(--fs-*)로만 지정한다. 고정 px 금지.
-            foreach (string file in ScreenUssFiles())
-            {
-                foreach ((string property, string value, string name) in Declarations(file))
-                {
-                    if (property == "font-size")
-                    {
-                        Assert.IsTrue(value.StartsWith("var(--fs-", StringComparison.Ordinal), name + ": 'font-size: " + value + "' 는 var(--fs-*) 여야 합니다.");
-                    }
-                }
-            }
-        }
-
-        [Test]
-        public void Uxml_HasNoInlineColorOrFontSizeStyles()
-        {
-            foreach (string file in Directory.GetFiles(UiFolder, "*.uxml", SearchOption.AllDirectories))
-            {
-                string text = File.ReadAllText(file);
-                foreach (Match m in Regex.Matches(text, "style=\"([^\"]*)\""))
-                {
-                    string style = m.Groups[1].Value;
-                    StringAssert.DoesNotContain("color", style, Path.GetFileName(file) + ": 인라인 색");
-                    StringAssert.DoesNotContain("font-size", style, Path.GetFileName(file) + ": 인라인 글자 크기");
-                }
-                Assert.IsFalse(ColorLiteral.IsMatch(Regex.Replace(text, "project://database[^\"]*", string.Empty)), Path.GetFileName(file) + ": 색 값 직접 사용");
-            }
-        }
-
-        [Test]
-        public void PresentationUiCode_HasNoColorLiterals()
-        {
-            string folder = Path.Combine(UnityEngine.Application.dataPath, "_Game", "Code", "Adapters", "Presentation", "UI");
-            var pattern = new Regex(@"new Color(32)?\(|Color\.(white|black|red|green|blue|yellow|gray|grey|cyan|magenta)\b|StyleColor\(|style\.(color|backgroundColor)\s*=");
-            foreach (string file in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
-            {
-                Assert.IsFalse(pattern.IsMatch(File.ReadAllText(file)), Path.GetFileName(file) + ": UI 코드에 색 값을 직접 쓰지 않는다(토큰만, USS 사용자 지정 속성으로 읽기).");
-            }
-        }
-
-        [Test]
-        public void BaseUss_DefinesTokens_ForTheStoryboardPalette()
-        {
-            string text = File.ReadAllText(BaseUssPath);
-            string[] required =
-            {
-                "--color-bg", "--color-surface", "--color-text", "--color-text-dim", "--color-ally", "--color-enemy", "--color-warning", "--color-danger",
-                "--color-light", "--color-pure", "--color-stamina", "--color-track", "--color-disabled", "--color-focus", "--color-primary",
-            };
-            foreach (string token in required)
-            {
-                StringAssert.Contains(token + ":", text, "색 토큰 누락: " + token);
-            }
-        }
-
-        [Test]
-        public void BaseUss_ColorLiterals_OnlyInsideRootTokenBlock()
-        {
-            string text = Regex.Replace(File.ReadAllText(BaseUssPath), @"/\*.*?\*/", string.Empty, RegexOptions.Singleline);
-            Match root = Regex.Match(text, @":root\s*\{[^}]*\}");
-            Assert.IsTrue(root.Success, ":root 토큰 블록이 있어야 합니다.");
-            string outside = text.Remove(root.Index, root.Length);
-            Assert.IsFalse(ColorLiteral.IsMatch(outside), "Base.uss도 :root 밖에서는 색 값을 직접 쓰지 않는다.");
-        }
-
-        [Test]
-        public void BaseUss_HasThreeTextSizeSteps_WithEveryVariable_AndSmallestIsAtLeast18px()
-        {
-            string text = Regex.Replace(File.ReadAllText(BaseUssPath), @"/\*.*?\*/", string.Empty, RegexOptions.Singleline);
-            string[] vars = { "--fs-caption", "--fs-body", "--fs-button", "--fs-heading", "--fs-hud" };
-            foreach (string cls in new[] { ".text-small", ".text-normal", ".text-large" })
-            {
-                Match block = Regex.Match(text, Regex.Escape(cls) + @"\s*\{([^}]*)\}");
-                Assert.IsTrue(block.Success, cls + " 클래스 누락");
-                foreach (string variable in vars)
-                {
-                    StringAssert.Contains(variable + ":", block.Groups[1].Value, cls + "에 " + variable + " 누락");
-                }
-            }
-            // STORYBOARD 2.2: 가장 작은 글자가 「작게」에서도 18px 이상
-            Match small = Regex.Match(text, @"\.text-small\s*\{([^}]*)\}");
-            foreach (Match m in Regex.Matches(small.Groups[1].Value, @"--fs-[a-z]+:\s*(\d+)px"))
-            {
-                Assert.GreaterOrEqual(int.Parse(m.Groups[1].Value), 18, "작게 단계의 글자는 18px 이상");
-            }
-            // 크게는 보통보다 커야 하고 작게는 작아야 한다.
-            int Body(string cls) => int.Parse(Regex.Match(Regex.Match(text, Regex.Escape(cls) + @"\s*\{([^}]*)\}").Groups[1].Value, @"--fs-body:\s*(\d+)px").Groups[1].Value);
-            Assert.Less(Body(".text-small"), Body(".text-normal"));
-            Assert.Less(Body(".text-normal"), Body(".text-large"));
-        }
-
-        [Test]
-        public void BaseUss_IsDarkSingleTheme_NoThemeSwitching()
-        {
-            // [I-12] 테마 전환 구조(라이트 토큰, 테마 선택 클래스)를 만들지 않는다.
-            string text = File.ReadAllText(BaseUssPath).ToLowerInvariant();
-            StringAssert.DoesNotContain(".theme-", text);
-            StringAssert.DoesNotContain("light-theme", text);
-            StringAssert.DoesNotContain("theme-light", text);
-        }
-
-        [Test]
-        public void BaseUss_EveryColorStatusClass_HasAShapeCompanion()
-        {
-            // [FR-130] 색으로 구분하는 상태(.status--X)는 모양·기호 짝(.status-icon--X)이 있어야 한다.
-            string text = File.ReadAllText(BaseUssPath);
-            var statuses = Regex.Matches(text, @"\.status--([a-z]+)").Cast<Match>().Select(m => m.Groups[1].Value).Distinct().ToList();
-            Assert.IsNotEmpty(statuses);
-            foreach (string status in statuses)
-            {
-                StringAssert.Contains(".status-icon--" + status, text, ".status--" + status + " 의 모양 짝 누락");
-            }
-        }
-
-        [Test]
-        public void ButtonsHaveMinimumHeight56_AndFocusIsShownByThickBorder()
-        {
-            string text = File.ReadAllText(BaseUssPath);
-            StringAssert.Contains("min-height: 56px", text, "STORYBOARD 2.3: 목록 행·버튼 최소 높이 56px");
-            Assert.IsTrue(Regex.IsMatch(text, @"\.btn:focus\s*\{[^}]*border-width:\s*4px"), "포커스는 굵은 테두리로(색에만 의존하지 않음)");
-        }
-    }
-
     public class InputActionsAssetTests
     {
         private static string AssetFile => Path.Combine(UnityEngine.Application.dataPath, "_Game", "Settings", "GameInput.inputactions");
@@ -293,6 +121,8 @@ namespace Game.Tests.Infrastructure
             {
                 "Navigate = <Keyboard>/upArrow", "Navigate = <Keyboard>/downArrow", "Navigate = <Keyboard>/leftArrow", "Navigate = <Keyboard>/rightArrow",
                 "Submit = <Keyboard>/enter", "Cancel = <Keyboard>/escape", "TabPrev = <Keyboard>/q", "TabNext = <Keyboard>/e",
+                // v0.13 (uGUI): InputSystemUIInputModule 이 쓰는 마우스 입력
+                "Point = <Mouse>/position", "Click = <Mouse>/leftButton", "ScrollWheel = <Mouse>/scroll",
             };
             var expectedPad = new HashSet<string>
             {

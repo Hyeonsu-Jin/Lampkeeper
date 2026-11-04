@@ -1,28 +1,43 @@
 // =============================================================
 // 파일: SteamRequiredScreen.cs
-// 역할: SCR-001을 씬에 올리는 MonoBehaviour. UIDocument의 요소 트리에 공통 스타일을 붙이고 SteamRequiredView를 만든다.
+// 역할: SCR-001(Steam 실행 필요 안내) 화면. uGUI 프리팹(Screens/SteamRequired)의 글자·버튼을 연결하고 상태별 표시를 바꾼다.
 // 레이어: adapters (Game.Adapters.Presentation)
-// 관련: NFR-006, DES-091, STORYBOARD SCR-001 / SDD 3.7.10, 3.10.7
+// 관련: NFR-006(Steam 실행 필수), NFR-034, DES-091, DES-122 / STORYBOARD SCR-001 ①~⑤ / SDD 3.7.10, D-27
 //
-// 이 컴포넌트가 붙은 GameObject에는 UIDocument(SteamRequired.uxml + PanelSettings)가 있어야 한다.
-// 평소에는 비활성으로 두고, 부트가 Steam 확인에 실패하면 Show로 켠다.
+// 요소 번호 (STORYBOARD SCR-001)
+//   ① 제목(_title)   ② 설명(_description) + 실패 문구(_status)
+//   ③ [다시 확인](_retry, 주 버튼, 기본 포커스)   ⑤ [종료](_quit)   ④ 비어 있음(번호 재사용 안 함)
+// 상태: 기본 / 재확인 중(③ 사용 불가 + 로딩 문구) / 오류(② 아래 실패 문구)
+// 이 화면이 떠 있는 동안 메인 메뉴·옵션은 열 수 없다(다른 화면으로 가는 길을 만들지 않는다). Esc 로 닫히지 않는다.
 // =============================================================
 using System;
 using Game.Adapters.Presentation.UI.Common;
-using Game.Application.Ports;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Game.Adapters.Presentation.UI.Screens
 {
-    /// <summary>SCR-001 화면 컴포넌트.</summary>
-    [RequireComponent(typeof(UIDocument))]
-    public sealed class SteamRequiredScreen : MonoBehaviour
+    /// <summary>SCR-001 표시 상태.</summary>
+    public enum SteamRequiredState
     {
-        [Tooltip("공통 USS(색 토큰, 글자 크기 변수). UI/Common/Base.uss")]
-        [SerializeField] private StyleSheet _baseStyle;
+        /// <summary>처음 표시된 기본 상태.</summary>
+        Default = 0,
 
-        private SteamRequiredView _view;
+        /// <summary>③ 눌러서 Steam 상태를 다시 조회하는 중.</summary>
+        Checking = 1,
+
+        /// <summary>재확인에 실패해 ② 아래에 실패 문구를 보이는 상태.</summary>
+        Failed = 2,
+    }
+
+    /// <summary>SCR-001 화면 컴포넌트(화면 프리팹 루트에 붙는다).</summary>
+    public sealed class SteamRequiredScreen : UiScreen
+    {
+        [SerializeField] private ThemedText _title;
+        [SerializeField] private ThemedText _description;
+        [SerializeField] private ThemedText _status;
+        [SerializeField] private UiButton _retry;
+        [SerializeField] private ThemedText _retryLabel;
+        [SerializeField] private UiButton _quit;
 
         /// <summary>③ [다시 확인]을 눌렀을 때.</summary>
         public event Action RetryRequested;
@@ -30,67 +45,115 @@ namespace Game.Adapters.Presentation.UI.Screens
         /// <summary>⑤ [종료]를 눌렀을 때.</summary>
         public event Action QuitRequested;
 
+        /// <summary>현재 표시 상태.</summary>
+        public SteamRequiredState State { get; private set; }
+
         /// <summary>화면이 떠 있는지.</summary>
-        public bool IsShown => gameObject.activeSelf && _view != null;
+        public bool IsShown => IsVisible;
 
-        /// <summary>현재 표시 상태. 화면이 아직 없으면 Default.</summary>
-        public SteamRequiredState State => _view != null ? _view.State : SteamRequiredState.Default;
+        public UiButton RetryButton => _retry;
+        public UiButton QuitButton => _quit;
+        public ThemedText StatusText => _status;
+        public ThemedText RetryLabel => _retryLabel;
 
-        /// <summary>
-        /// 화면을 켠다.
-        /// </summary>
-        /// <param name="text">글자 공급자</param>
-        /// <param name="scale">글자 크기 단계(M2-01 옵션 전에는 보통)</param>
-        /// <exception cref="InvalidOperationException">UIDocument에 UXML이 없을 때</exception>
-        public void Show(ILocalizedText text, UiTextScale scale = UiTextScale.Normal)
+        private bool _wired;
+
+        protected override void Awake()
         {
-            gameObject.SetActive(true);
+            base.Awake();
+            Wire();
+        }
 
-            var document = GetComponent<UIDocument>();
-            VisualElement root = document.rootVisualElement;
-            if (root == null || root.childCount == 0)
+        /// <summary>버튼 동작을 한 번만 연결한다(편집 모드 시험에서는 Awake 가 불리지 않으므로 Show 에서도 부른다).</summary>
+        private void Wire()
+        {
+            if (_wired)
             {
-                throw new InvalidOperationException("SteamRequiredScreen의 UIDocument에 SteamRequired.uxml이 연결되지 않았습니다.");
+                return;
             }
+            _wired = true;
+            _retry.onClick.AddListener(RequestRetry);
+            _quit.onClick.AddListener(RequestQuit);
+            ApplyState(SteamRequiredState.Default);
+        }
 
-            if (_baseStyle == null)
-            {
-                Debug.LogWarning("[SCR-001] Base.uss가 연결되지 않아 공통 스타일 없이 표시합니다.");
-            }
-            UiTheme.Apply(root, _baseStyle, scale);
-
-            if (_view == null)
-            {
-                _view = new SteamRequiredView(root, text);
-                _view.RetryRequested += () => RetryRequested?.Invoke();
-                _view.QuitRequested += () => QuitRequested?.Invoke();
-            }
-            _view.SetState(SteamRequiredState.Default);
-            _view.FocusDefault();
+        /// <summary>화면을 켠다. 글자는 UiRoot 가 정한 글자 공급자를 따른다.</summary>
+        public void Show()
+        {
+            Wire();
+            ApplyState(SteamRequiredState.Default);
+            SetVisible(true);
         }
 
         /// <summary>③ 눌린 뒤 결과를 기다리는 상태로 바꾼다.</summary>
         public void ShowChecking()
         {
-            _view?.SetState(SteamRequiredState.Checking);
+            ApplyState(SteamRequiredState.Checking);
         }
 
         /// <summary>재확인에 실패했음을 ② 아래에 보인다.</summary>
         public void ShowRetryFailed()
         {
-            if (_view == null)
-            {
-                return;
-            }
-            _view.SetState(SteamRequiredState.Failed);
-            _view.FocusDefault();
+            ApplyState(SteamRequiredState.Failed);
+            SelectFirst();
         }
 
         /// <summary>화면을 닫는다(재확인에 성공했을 때).</summary>
         public void Hide()
         {
-            gameObject.SetActive(false);
-            _view = null;
+            SetVisible(false);
+        }
+
+        /// <summary>③ [다시 확인] 동작. 확인 중에는 중복 입력을 무시한다. 버튼 클릭과 시험이 같은 경로를 쓴다.</summary>
+        public void RequestRetry()
+        {
+            if (State == SteamRequiredState.Checking)
+            {
+                return;
+            }
+            RetryRequested?.Invoke();
+        }
+
+        /// <summary>⑤ [종료] 동작.</summary>
+        public void RequestQuit()
+        {
+            QuitRequested?.Invoke();
+        }
+
+        /// <summary>SCR-001 은 닫을 수 없다(오프라인 플레이 없음). Esc 를 무시한다.</summary>
+        public override void OnCancel()
+        {
+        }
+
+        /// <summary>상태에 맞게 문구와 버튼을 바꾼다.</summary>
+        private void ApplyState(SteamRequiredState state)
+        {
+            State = state;
+            switch (state)
+            {
+                case SteamRequiredState.Checking:
+                    // 재확인 중에는 중복 입력을 막는다. 문구로도 알려 색이나 점에만 의존하지 않는다.
+                    _retry.SetUnavailable(true);
+                    _retryLabel.SetTextKey(SteamRequiredTextKeys.Checking);
+                    SetStatusVisible(false);
+                    break;
+                case SteamRequiredState.Failed:
+                    _retry.SetUnavailable(false);
+                    _retryLabel.SetTextKey(SteamRequiredTextKeys.Retry);
+                    SetStatusVisible(true);
+                    break;
+                default:
+                    _retry.SetUnavailable(false);
+                    _retryLabel.SetTextKey(SteamRequiredTextKeys.Retry);
+                    SetStatusVisible(false);
+                    break;
+            }
+        }
+
+        private void SetStatusVisible(bool visible)
+        {
+            // 숨길 때는 오브젝트를 꺼서 레이아웃에서 빠지게 한다(빈 줄이 남지 않음).
+            _status.gameObject.SetActive(visible);
         }
     }
 }

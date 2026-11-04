@@ -30,7 +30,10 @@ namespace Game.Editor
         /// <summary>git 명령 하나의 시간 제한(밀리초). [SDD 3.7.12 (2)]</summary>
         private const int GitTimeoutMilliseconds = 5000;
 
-        /// <summary>프로젝트 설정 + 데이터 애셋 + Boot 씬을 한 번에 만든다.</summary>
+        /// <summary>
+        /// 프로젝트 설정·데이터·입력 애셋은 코드가 원본이라 다시 만들고, 씬·프리팹·테마 애셋은 「없을 때만 만들고 있으면 검사만」 한다.
+        /// 빠진 것이 있으면 예외로 실패한다. 실행 뒤 git status 에 .unity / UI .prefab 변경이 없어야 한다(SDD 3.8.2).
+        /// </summary>
         [MenuItem("Game/Setup/Run All")]
         public static void RunAll()
         {
@@ -38,10 +41,11 @@ namespace Game.Editor
             DataAssetBuilder.CreateDefaults();
             GraphicsAssetBuilder.CreateAll();
             InputActionsBuilder.Create();
-            AvatarPrefabBuilder.Create();
-            WorldSceneBuilder.Create();
-            BootSceneBuilder.CreateBootScene();
-            BenchSceneBuilder.CreateBenchScene();
+            UiThemeBuilder.Ensure();
+            AvatarPrefabBuilder.Ensure();
+            WorldSceneBuilder.Ensure();
+            BootSceneBuilder.Ensure();
+            BenchSceneBuilder.Ensure();
         }
 
         /// <summary>Windows x64 개발 빌드(IL2CPP).</summary>

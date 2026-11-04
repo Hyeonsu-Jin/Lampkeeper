@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game.Adapters.Presentation.Localization;
+using Game.Adapters.Presentation.UI.Common;
 using Game.Adapters.Presentation.UI.Hud;
 using Game.Adapters.Presentation.UI.Screens;
 using Game.Application.Boot;
@@ -51,10 +52,12 @@ namespace Game.Bootstrap
         [SerializeField] private TextAsset _koreanStrings;
         [SerializeField] private TextAsset _englishStrings;
 
-        [Header("화면")]
+        [Header("화면(uGUI 프리팹 인스턴스)")]
+        [SerializeField] private UiRoot _uiRoot;
         [SerializeField] private SteamRequiredScreen _steamRequiredScreen;
         [SerializeField] private DevLobbyScreen _lobbyScreen;
         [SerializeField] private GameHud _hud;
+        [SerializeField] private GameMenu _gameMenu;
 
         [Header("네트워크·입력(M1-07, M1-08)")]
         [Tooltip("FishNet NetworkManager. SpawnablePrefabs(DefaultPrefabObjects)가 지정되어 있어야 한다.")]
@@ -138,6 +141,11 @@ namespace Game.Bootstrap
             _graphics?.ApplyStartupSettings(null, perfOptions.Upscale);
 
             _text = CreateLocalizedText();
+            // 화면 글자를 채우기 전에 UI 에 글자 공급자를 알린다(SCR-001 도 이 값을 쓴다).
+            if (_uiRoot != null)
+            {
+                _uiRoot.Initialize(_text);
+            }
             _platform = new SteamPlatformService(BuildFlags.IsDevelopment);
             _checkPlatformReady = new CheckPlatformReady(_platform);
 
@@ -285,7 +293,7 @@ namespace Game.Bootstrap
             {
                 return;
             }
-            if (_networkManager == null || _lobbyScreen == null || _hud == null || _inputActions == null || _avatarPrefab == null)
+            if (_networkManager == null || _uiRoot == null || _lobbyScreen == null || _hud == null || _gameMenu == null || _inputActions == null || _avatarPrefab == null)
             {
                 Debug.LogError(LogTag + "네트워크·화면 연결이 비어 있어 게임 흐름을 시작하지 못했습니다(Boot 씬 설정 확인).");
                 return;
@@ -322,8 +330,10 @@ namespace Game.Bootstrap
                     IsDevelopmentBuild = BuildFlags.IsDevelopment,
                 },
                 Text = _text,
+                UiRoot = _uiRoot,
                 LobbyScreen = _lobbyScreen,
                 Hud = _hud,
+                Menu = _gameMenu,
                 InputAsset = _inputActions,
                 CoroutineHost = this,
                 WorldSceneName = _worldSceneName,
@@ -360,7 +370,7 @@ namespace Game.Bootstrap
             _steamRequiredScreen.QuitRequested -= OnQuitRequested;
             _steamRequiredScreen.RetryRequested += OnRetryRequested;
             _steamRequiredScreen.QuitRequested += OnQuitRequested;
-            _steamRequiredScreen.Show(_text);
+            _steamRequiredScreen.Show();
         }
 
         /// <summary>③ [다시 확인]: 한 프레임 "확인 중"을 보인 뒤 다시 판정한다.</summary>
