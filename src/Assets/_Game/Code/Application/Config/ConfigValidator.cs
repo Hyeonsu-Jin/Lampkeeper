@@ -77,6 +77,10 @@ namespace Game.Application.Config
                 "Network.CreatureSnapshot*Hz", "먼 <= 중간 <= 가까운 순서이고 1 이상이어야 합니다.");
             Require(issues, network.ClockSyncSeconds > 0f, "Network.ClockSyncSeconds", "0보다 커야 합니다.");
             Require(issues, network.InterestRangeMeters > 0f, "Network.InterestRangeMeters", "0보다 커야 합니다.");
+            Require(issues, network.JoinTimeoutSeconds > 0f, "Network.JoinTimeoutSeconds", "0보다 커야 합니다.");
+            Require(issues, network.MaxCommandsPerTick >= 1, "Network.MaxCommandsPerTick", "1 이상이어야 합니다.");
+            Require(issues, network.MaxQueuedCommands >= network.MaxCommandsPerTick, "Network.MaxQueuedCommands", "MaxCommandsPerTick 이상이어야 합니다.");
+            Require(issues, network.SnapshotBytesPerSecond > 0, "Network.SnapshotBytesPerSecond", "0보다 커야 합니다.");
         }
 
         // ---------------------------------------------------------
@@ -88,6 +92,11 @@ namespace Game.Application.Config
             Require(issues, b.Movement.WalkSpeedMps > 0f, "Balance.Movement.WalkSpeedMps", "0보다 커야 합니다.");
             Require(issues, b.Movement.RunSpeedMps >= b.Movement.WalkSpeedMps, "Balance.Movement.RunSpeedMps", "걷기 속도 이상이어야 합니다.");
             Require(issues, b.Movement.InteractionDistanceMeters > 0f, "Balance.Movement.InteractionDistanceMeters", "0보다 커야 합니다.");
+            Require(issues, b.Movement.MoveTolerance >= 1f, "Balance.Movement.MoveTolerance", "1 이상이어야 합니다.");
+            Require(issues, b.Movement.MoveSlackMeters >= 0f, "Balance.Movement.MoveSlackMeters", "0 이상이어야 합니다.");
+            Require(issues, b.Movement.MoveStaminaGraceSeconds >= 0f, "Balance.Movement.MoveStaminaGraceSeconds", "0 이상이어야 합니다.");
+            Require(issues, b.Movement.MaxPoseDeltaSeconds > 0f, "Balance.Movement.MaxPoseDeltaSeconds", "0보다 커야 합니다.");
+            Require(issues, b.Movement.MaxVerticalSpeedMps > 0f, "Balance.Movement.MaxVerticalSpeedMps", "0보다 커야 합니다.");
 
             // [FR-024, FR-025] 스태미나
             Require(issues, b.Stamina.Max > 0f, "Balance.Stamina.Max", "0보다 커야 합니다.");
