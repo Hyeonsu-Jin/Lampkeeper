@@ -184,7 +184,8 @@ namespace Game.Tests.Architecture
             ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, Bootstrap, EditorTools, FishNet },
             ["Game.Tests.Architecture"] = new string[0],
             ["Game.Tests.WorldGen"] = new[] { WorldGen, App },
-            ["Game.Tests.Integration"] = new[] { App, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks },
+            ["Game.Tests.Net"] = new[] { App, Domain, Net },
+            ["Game.Tests.Integration"] = new[] { App, Domain, Net, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks },
         };
 
         [Test]
@@ -518,6 +519,43 @@ namespace Game.Tests.Architecture
             string assets = AsmdefModel.AssetsFolder;
             StringAssert.Contains("\"version\": \"4.7.4\"", File.ReadAllText(Path.Combine(assets, "ThirdParty", "FishNet", "package.json")), "FishNet 4.7.4R");
             StringAssert.Contains("\"version\": \"4.1.1\"", File.ReadAllText(Path.Combine(assets, "ThirdParty", "FishySteamworks", "package.json")), "FishySteamworks 4.1.1");
+        }
+
+        [Test]
+        public void NetAdapter_FishNetTypes_OnlyInTransportAndAvatarFolders()
+        {
+            // [SDD 3.4.1 규칙 8] FishNet 형식을 쓰는 코드는 Transport/(DES-121)와 Avatar/(DES-084)뿐이다.
+            // 게이트웨이·참가 절차·복제는 포트와 Protocol 메시지에만 의존해야 FishNet 없이 시험된다.
+            string netFolder = Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code", "Adapters", "Net");
+            int checkedFiles = 0;
+            foreach (string file in Directory.GetFiles(netFolder, "*.cs", SearchOption.AllDirectories))
+            {
+                string relative = file.Substring(netFolder.Length + 1).Replace('\\', '/');
+                if (relative.StartsWith("Transport/", StringComparison.Ordinal) || relative.StartsWith("Avatar/", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+                checkedFiles++;
+                string code = string.Join(" ", File.ReadAllLines(file).Where(l => !l.TrimStart().StartsWith("//", StringComparison.Ordinal)));
+                StringAssert.DoesNotContain("FishNet", code, relative + ": Transport/·Avatar/ 밖에서 FishNet 형식을 쓰면 안 됩니다.");
+            }
+            Assert.Greater(checkedFiles, 3, "검사 대상 파일을 찾지 못했습니다.");
+        }
+
+        [Test]
+        public void ApplicationAndDomain_DoNotMentionFishNetOrSteamworks()
+        {
+            foreach (string layer in new[] { "Application", "Domain", "WorldGen" })
+            {
+                string folder = Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code", layer);
+                foreach (string file in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
+                {
+                    string text = File.ReadAllText(file);
+                    StringAssert.DoesNotContain("using FishNet", text, file);
+                    StringAssert.DoesNotContain("using Steamworks", text, file);
+                    StringAssert.DoesNotContain("using UnityEngine", text, file);
+                }
+            }
         }
 
         [Test]

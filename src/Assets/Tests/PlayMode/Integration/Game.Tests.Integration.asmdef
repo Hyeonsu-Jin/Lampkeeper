@@ -5,6 +5,8 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Game.Application",
+        "Game.Domain",
+        "Game.Adapters.Net",
         "Game.Adapters.Presentation",
         "Game.Infra.Platform",
         "Game.Bootstrap",
