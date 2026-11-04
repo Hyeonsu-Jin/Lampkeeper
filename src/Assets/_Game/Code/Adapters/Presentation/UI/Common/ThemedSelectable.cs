@@ -1,12 +1,12 @@
 // =============================================================
 // 파일: ThemedSelectable.cs
 // 역할: Selectable(버튼·목록 행 등)의 상태별 모양을 토큰으로 그린다. Selectable 의 색 전환(transition)은 쓰지 않는다(None).
-//       포커스 = 3px 굵은 외곽선 + 왼쪽 ▶ (색에만 의존하지 않음).
+//       포커스 = 3px 굵은 외곽선 + 왼쪽 > 표시 (색에만 의존하지 않음).
 // 레이어: adapters (Game.Adapters.Presentation)
 // 관련: NFR-004, NFR-056, FR-129, FR-130, DES-122 / SDD 3.7.10 (3), STORYBOARD 2.5 (기본·호버·포커스·눌림·사용 불가)
 //
 // 구조(프리팹): 뿌리 Image = 테두리(상태에 따라 색이 바뀜), 자식 Fill = 테두리 안쪽 3px 안으로 들어간 배경, 자식 Label,
-//   자식 FocusMarker(▶). 포커스일 때 테두리 색이 color-focus 가 되고 ▶ 가 보인다.
+//   자식 FocusMarker(>). 포커스일 때 테두리 색이 color-focus 가 되고 > 가 보인다.
 // =============================================================
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -155,7 +155,7 @@ namespace Game.Adapters.Presentation.UI.Common
             {
                 _focusMarker.SetActive(_selected);
             }
-            // 주 버튼은 바탕이 포커스 색(빛)과 같으므로 ▶ 가 묻히지 않게 어두운 글자색을 쓴다.
+            // 주 버튼은 바탕이 포커스 색(빛)과 같으므로 > 가 묻히지 않게 어두운 글자색을 쓴다.
             if (_focusMarker != null)
             {
                 ThemedText marker = _focusMarker.GetComponent<ThemedText>();

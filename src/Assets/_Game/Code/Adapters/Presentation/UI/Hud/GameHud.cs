@@ -59,7 +59,7 @@ namespace Game.Adapters.Presentation.UI.Hud
             _text = text ?? throw new ArgumentNullException(nameof(text));
             _maxPlayers = maxPlayers;
             // 경고 문구는 값이 바뀔 때만 만든다(매 프레임 문자열 연결 방지).
-            _warnText = UiGlyphs.Warning + " " + _text.Get(HudTextKeys.StaminaLow);
+            _warnText = _text.Get(HudTextKeys.StaminaLow);
             _staminaWarn.SetDynamicText(_warnText);
             _staminaWarn.gameObject.SetActive(false);
             _warnShown = false;
@@ -126,8 +126,8 @@ namespace Game.Adapters.Presentation.UI.Hud
             foreach (uint slot in _slots)
             {
                 mirror.Roster.TryGet(slot, out RosterEntry entry);
-                // 동료는 색이 아니라 ◆ 기호와 이름으로 구분한다. 호스트는 ★ 표시. (플레이어별 색 없음)
-                _builder.Append(entry.IsHost ? UiGlyphs.Host : UiGlyphs.Ally).Append(' ').Append(entry.Name);
+                // 동료는 색이 아니라 이름으로 구분한다. 호스트는 (호스트) 글자. (플레이어별 색 없음)
+                _builder.Append(entry.Name);
                 if (entry.IsHost)
                 {
                     _builder.Append(" (").Append(_text.Get(HudTextKeys.RosterHostTag)).Append(')');

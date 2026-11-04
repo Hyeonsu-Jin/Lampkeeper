@@ -2,7 +2,7 @@
 # 규칙: 키는 소문자·숫자·밑줄·점. 글자 안의 \n 은 줄바꿈. 영어 표(strings.en.txt)에도 같은 키가 있어야 한다(NFR-044).
 
 # SCR-001 Steam 실행 필요 안내
-steam.required.title	⚠ Steam이 실행 중이 아닙니다
+steam.required.title	Steam이 실행 중이 아닙니다
 steam.required.desc	Steam을 실행하고 로그인한 뒤 [다시 확인]을 누르세요.\n이 게임은 Steam이 실행 중이어야 시작할 수 있습니다.
 steam.required.retry	다시 확인
 steam.required.quit	종료
@@ -19,7 +19,7 @@ lobby.leave	나가기
 lobby.status.ready	준비됨
 lobby.status.opening	방을 여는 중…
 lobby.status.open	방이 열렸습니다 (접속 {0}/{1})
-lobby.status.failed	⚠ 방을 열지 못했습니다. Steam 연결을 확인하세요
+lobby.status.failed	방을 열지 못했습니다. Steam 연결을 확인하세요
 lobby.status.dev_host	개발용 직접 연결 방을 열었습니다 (접속 {0}/{1})
 lobby.list.loading	목록을 불러오는 중…
 lobby.list.empty	지금 열려 있는 공개 세션이 없습니다. 친구 방은 Steam 친구 목록의 「게임 참가」로 들어가세요
@@ -31,6 +31,9 @@ connect.step.host	호스트에 연결
 connect.step.info	월드 정보 받기
 connect.step.world	월드 만들기
 connect.step.apply	변경 사항 적용
+connect.state.done	완료
+connect.state.active	진행 중
+connect.state.pending	대기
 connect.cancel	취소
 connect.ok	확인
 join.fail.noresponse.title	호스트에 연결하지 못했습니다
@@ -75,4 +78,4 @@ hud.menu.leave	세션 나가기
 hud.menu.close	닫기
 hud.menu.running	게임 진행 중
 hud.menu.invite	친구 초대
-hud.menu.invite_unavailable	⚠ 지금은 친구 초대 창을 열 수 없습니다 (Steam 오버레이가 꺼져 있거나 방이 Steam 방이 아닙니다)
+hud.menu.invite_unavailable	지금은 친구 초대 창을 열 수 없습니다 (Steam 오버레이가 꺼져 있거나 방이 Steam 방이 아닙니다)

@@ -302,7 +302,6 @@ namespace Game.Tests.Infrastructure
             var missing = new HashSet<char>();
             foreach (string text in new[]
                      {
-                         UiGlyphs.Warning, UiGlyphs.Ok, UiGlyphs.Active, UiGlyphs.Pending, UiGlyphs.Ally, UiGlyphs.Host, UiGlyphs.Running,
                          System.IO.File.ReadAllText(UiTestSupport.KoPath), System.IO.File.ReadAllText(UiTestSupport.EnPath),
                      })
             {

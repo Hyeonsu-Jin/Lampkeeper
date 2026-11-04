@@ -6,7 +6,7 @@
 // 관련: FR-001~004, FR-009, NFR-003, NFR-018, NFR-034, NFR-056, DES-091, DES-122 / STORYBOARD SCR-004(M1 최소), SCR-010(목록 형식), SCR-012 / SDD D-27
 //
 // M1 화면은 개발용이며 글자는 처음부터 텍스트 키로 쓴다(M2-01에서 String Table로 연결). 색·글자 크기는 테마 토큰만 쓴다.
-// 상태 표시는 ✔▶○ 기호와 글자를 함께 쓴다(색에만 의존하지 않음).
+// 상태 표시는 (완료)/(진행 중)/(대기) 글자로 한다(색에만 의존하지 않음).
 // =============================================================
 using System;
 using System.Collections.Generic;
@@ -149,7 +149,7 @@ namespace Game.Adapters.Presentation.UI.Screens
         public void ShowFailure(string keyPrefix)
         {
             Show(_failPanel);
-            _failTitle.SetDynamicText(UiGlyphs.Warning + " " + _text.Get(keyPrefix + ".title"));
+            _failTitle.SetDynamicText(_text.Get(keyPrefix + ".title"));
             _failCause.SetDynamicText(_text.Get(keyPrefix + ".cause"));
             _failFix.SetDynamicText(_text.Get(keyPrefix + ".fix"));
             Select(_failOk);
@@ -223,7 +223,7 @@ namespace Game.Adapters.Presentation.UI.Screens
             {
                 case LobbyListState.Loading: _listState.SetDynamicText(_text.Get(LobbyTextKeys.ListLoading)); break;
                 case LobbyListState.Empty: _listState.SetDynamicText(_text.Get(LobbyTextKeys.ListEmpty)); break;
-                case LobbyListState.Error: _listState.SetDynamicText(UiGlyphs.Warning + " " + _text.Get(LobbyTextKeys.ListError)); break;
+                case LobbyListState.Error: _listState.SetDynamicText(_text.Get(LobbyTextKeys.ListError)); break;
                 default: _listState.SetDynamicText(string.Empty); break;
             }
             if (state != LobbyListState.Loaded || lobbies == null)
@@ -245,8 +245,9 @@ namespace Game.Adapters.Presentation.UI.Screens
 
         private string StepText(StepStatus status, string key)
         {
-            string glyph = status == StepStatus.Done ? UiGlyphs.Ok : status == StepStatus.Active ? UiGlyphs.Active : UiGlyphs.Pending;
-            return glyph + " " + _text.Get(key);
+            // 색에만 의존하지 않도록 상태를 글자로 덧붙인다.
+            string state = status == StepStatus.Done ? LobbyTextKeys.StateDone : status == StepStatus.Active ? LobbyTextKeys.StateActive : LobbyTextKeys.StatePending;
+            return _text.Get(key) + " (" + _text.Get(state) + ")";
         }
 
         private void Show(GameObject panel)

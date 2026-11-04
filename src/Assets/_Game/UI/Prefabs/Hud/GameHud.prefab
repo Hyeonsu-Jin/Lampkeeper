@@ -204,7 +204,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u26A0 \uC2A4\uD0DC\uBBF8\uB098 \uBD80\uC871"
+  m_text: "\uC2A4\uD0DC\uBBF8\uB098 \uBD80\uC871"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -566,8 +566,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC5F0\uACB0 \uC0C1\uD0DC"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
+  m_sharedMaterial: {fileID: -1737286409956379215, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -720,10 +720,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u2605 \uC774\uB984"
+  m_text: "\uC774\uB984"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
+  m_sharedMaterial: {fileID: -1737286409956379215, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -878,8 +878,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC811\uC18D\uC790 1/8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8bb0b67915617104fad89adc7546d84b, type: 2}
+  m_sharedMaterial: {fileID: -3967319896832283524, guid: 8bb0b67915617104fad89adc7546d84b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

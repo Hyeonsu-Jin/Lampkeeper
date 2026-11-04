@@ -100,8 +100,8 @@ namespace Game.Tests.Infrastructure
             try
             {
                 menu.Build(new EchoText(), new UiState());
-                // 색(color-pure)만이 아니라 ● 기호와 글자를 함께 쓴다(모양 구분 규칙).
-                Assert.AreEqual(UiGlyphs.Running + " T(" + HudTextKeys.GameRunning + ")", menu.Badge.Tmp.text);
+                // 색(color-pure)만이 아니라 글자를 함께 쓴다(모양 구분 규칙).
+                Assert.AreEqual("T(" + HudTextKeys.GameRunning + ")", menu.Badge.Tmp.text);
             }
             finally
             {
@@ -251,11 +251,10 @@ namespace Game.Tests.Infrastructure
                 Assert.IsFalse(hud.Arc.IsLow);
                 Assert.IsFalse(hud.StaminaWarn.gameObject.activeSelf);
 
-                hud.Tick(0.2f, false, 0.016f, null); // 25% 이하 → 점선 + 경고 기호 + 글자
+                hud.Tick(0.2f, false, 0.016f, null); // 25% 이하 → 점선 + 글자
                 Assert.IsTrue(hud.Arc.IsLow);
                 Assert.IsTrue(hud.StaminaWarn.gameObject.activeSelf);
-                StringAssert.Contains(UiGlyphs.Warning, hud.StaminaWarn.Tmp.text);
-                StringAssert.Contains("T(" + HudTextKeys.StaminaLow + ")", hud.StaminaWarn.Tmp.text);
+                                StringAssert.Contains("T(" + HudTextKeys.StaminaLow + ")", hud.StaminaWarn.Tmp.text);
             }
             finally
             {

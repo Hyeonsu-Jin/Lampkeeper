@@ -2,7 +2,7 @@
 # Rules: keys are lowercase letters, digits, underscore, dot. \n in text is a line break. Every key must also exist in strings.ko.txt (NFR-044).
 
 # SCR-001 Steam required notice
-steam.required.title	⚠ Steam is not running
+steam.required.title	Steam is not running
 steam.required.desc	Start Steam and sign in, then press [Retry].\nThis game can only start while Steam is running.
 steam.required.retry	Retry
 steam.required.quit	Quit
@@ -19,7 +19,7 @@ lobby.leave	Leave
 lobby.status.ready	Ready
 lobby.status.opening	Opening room…
 lobby.status.open	Room is open ({0}/{1} connected)
-lobby.status.failed	⚠ Could not open the room. Check your Steam connection
+lobby.status.failed	Could not open the room. Check your Steam connection
 lobby.status.dev_host	Opened a direct-connection dev room ({0}/{1} connected)
 lobby.list.loading	Loading list…
 lobby.list.empty	No public sessions are open right now. Join a friend's room from the Steam friends list with "Join Game"
@@ -31,6 +31,9 @@ connect.step.host	Connect to host
 connect.step.info	Receive world info
 connect.step.world	Build world
 connect.step.apply	Apply changes
+connect.state.done	Done
+connect.state.active	In progress
+connect.state.pending	Waiting
 connect.cancel	Cancel
 connect.ok	OK
 join.fail.noresponse.title	Could not connect to the host
@@ -75,4 +78,4 @@ hud.menu.leave	Leave session
 hud.menu.close	Close
 hud.menu.running	Game running
 hud.menu.invite	Invite friends
-hud.menu.invite_unavailable	⚠ Cannot open the invite window now (Steam overlay is off or this is not a Steam room)
+hud.menu.invite_unavailable	Cannot open the invite window now (Steam overlay is off or this is not a Steam room)

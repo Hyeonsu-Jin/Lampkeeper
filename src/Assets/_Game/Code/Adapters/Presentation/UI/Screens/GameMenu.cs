@@ -1,6 +1,6 @@
 // =============================================================
 // 파일: GameMenu.cs
-// 역할: ESC 게임 메뉴(SCR-016). [친구 초대] [세션 나가기] [닫기(계속하기)]와 안내 줄, 「● 게임 진행 중」 배지.
+// 역할: ESC 게임 메뉴(SCR-016). [친구 초대] [세션 나가기] [닫기(계속하기)]와 안내 줄, 「게임 진행 중」 배지.
 //       v0.13 부터 HUD 에서 분리된 독립 화면 프리팹(Screens/GameMenu)이다.
 // 레이어: adapters (Game.Adapters.Presentation)
 // 관련: FR-011(나가기), I-07(화면을 열어도 게임은 멈추지 않음), NFR-004, DES-091, DES-122 / STORYBOARD SCR-016 / SDD 3.7.10 (5), 3.10.7
@@ -75,7 +75,7 @@ namespace Game.Adapters.Presentation.UI.Screens
             _text = text ?? throw new ArgumentNullException(nameof(text));
             _uiState = uiState ?? throw new ArgumentNullException(nameof(uiState));
             Wire();
-            _badge.SetDynamicText(UiGlyphs.Running + " " + _text.Get(HudTextKeys.GameRunning));
+            _badge.SetDynamicText(_text.Get(HudTextKeys.GameRunning));
             _description.SetDynamicText(_text.Get(HudTextKeys.MenuDesc));
             _uiState.ModeChanged += _ => RefreshVisibility();
             RefreshVisibility();

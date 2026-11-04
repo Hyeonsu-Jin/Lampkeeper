@@ -1,26 +1,14 @@
 // =============================================================
 // 파일: UiGlyphsAndKeys.cs
-// 역할: 화면 공통 기호(모양 구분 규칙)와 M1 화면의 텍스트 키 상수.
+// 역할: M1 화면의 텍스트 키 상수(UI 기호는 쓰지 않는다. 글꼴에 없는 글자가 □로 보이기 때문).
 // 레이어: adapters (Game.Adapters.Presentation)
 // 관련: FR-130(색만으로 구분 금지), NFR-034, NFR-044, NFR-056 / SDD 3.7.10, STORYBOARD 2.7, 2.8
 //
-// 색으로 구분하는 상태는 색 + 기호 + 글자를 함께 쓴다. 기호는 이 파일의 상수만 쓴다.
+// 색으로 구분하는 상태는 색 + 글자를 함께 쓴다(기호 없음).
 // 글자는 키로만 다루고, 실제 문장은 strings.ko.txt / strings.en.txt에 있다(M2-01에서 String Table로 이동).
 // =============================================================
 namespace Game.Adapters.Presentation.UI.Common
 {
-    /// <summary>모양 구분 규칙용 기호.</summary>
-    public static class UiGlyphs
-    {
-        public const string Warning = "⚠";
-        public const string Ok = "✔";
-        public const string Active = "▶";
-        public const string Pending = "○";
-        public const string Ally = "◆";
-        public const string Host = "★";
-        public const string Running = "●";
-    }
-
     /// <summary>개발용 로비·접속 화면(SCR-004 M1 최소판, SCR-012)의 텍스트 키.</summary>
     public static class LobbyTextKeys
     {
@@ -46,6 +34,9 @@ namespace Game.Adapters.Presentation.UI.Common
         public const string StepInfo = "connect.step.info";
         public const string StepWorld = "connect.step.world";
         public const string StepApply = "connect.step.apply";
+        public const string StateDone = "connect.state.done";
+        public const string StateActive = "connect.state.active";
+        public const string StatePending = "connect.state.pending";
         public const string Cancel = "connect.cancel";
         public const string Ok = "connect.ok";
     }

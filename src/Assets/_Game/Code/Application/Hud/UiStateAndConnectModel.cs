@@ -80,7 +80,7 @@ namespace Game.Application.Hud
         }
     }
 
-    /// <summary>참가 단계 표시 상태(SCR-012 ①: ✔ 완료 / ▶ 진행 / ○ 대기).</summary>
+    /// <summary>참가 단계 표시 상태(SCR-012 ①: 완료 / 진행 / 대기).</summary>
     public enum StepStatus : byte
     {
         Pending = 0,

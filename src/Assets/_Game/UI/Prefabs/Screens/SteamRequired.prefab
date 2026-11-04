@@ -70,8 +70,8 @@ MonoBehaviour:
     \uD655\uC778]\uC744 \uB204\uB974\uC138\uC694.\\n\uC774 \uAC8C\uC784\uC740 Steam\uC774
     \uC2E4\uD589 \uC911\uC774\uC5B4\uC57C \uC2DC\uC791\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
+  m_sharedMaterial: {fileID: -1737286409956379215, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -273,10 +273,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u26A0 Steam\uC774 \uC2E4\uD589 \uC911\uC774 \uC544\uB2D9\uB2C8\uB2E4"
+  m_text: "Steam\uC774 \uC2E4\uD589 \uC911\uC774 \uC544\uB2D9\uB2C8\uB2E4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8bb0b67915617104fad89adc7546d84b, type: 2}
+  m_sharedMaterial: {fileID: -3967319896832283524, guid: 8bb0b67915617104fad89adc7546d84b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
