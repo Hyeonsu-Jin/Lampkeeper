@@ -19,6 +19,18 @@ namespace Game.Bootstrap.DevTools
         /// </summary>
         public const string BootSmokeFlag = "-bootsmoke";
 
+        /// <summary>실제 Steam 로비(생성·메타데이터·검색·참가)를 계정 하나로 점검하고 종료하는 옵션(개발 빌드 전용). 종료 코드 0 = 통과.</summary>
+        public const string SteamLobbyTestFlag = "-steamlobbytest";
+
+        /// <summary>입력 없이 자동으로 걷는 옵션(개발 빌드 전용, 화면 없는 다중 프로세스 시험용).</summary>
+        public const string AutoWalkFlag = "-autowalk";
+
+        /// <summary>N초 뒤 스스로 종료하는 옵션(개발 빌드 전용): -autoquit N</summary>
+        public const string AutoQuitFlag = "-autoquit";
+
+        /// <summary>게임 버전 문자열을 강제로 바꾸는 옵션(개발 빌드 전용): -gameversion 0.1.0+dev.x. 버전이 다른 참가자의 거부 시험용(SDD R-35).</summary>
+        public const string GameVersionFlag = "-gameversion";
+
         /// <summary>종료 코드: 메인 메뉴로 진행 가능.</summary>
         public const int ExitContinue = 0;
         /// <summary>종료 코드: 설정(ConfigLoader) 오류.</summary>
@@ -28,6 +40,21 @@ namespace Game.Bootstrap.DevTools
 
         /// <summary>현재 프로세스의 명령줄 인자.</summary>
         public static IReadOnlyList<string> GetArgs() => Environment.GetCommandLineArgs();
+
+        /// <summary>플래그 다음 인자를 값으로 읽는다(대소문자 무시). 없으면 false.</summary>
+        public static bool TryGetValue(IReadOnlyList<string> args, string flag, out string value)
+        {
+            for (int i = 0; i < args.Count - 1; i++)
+            {
+                if (string.Equals(args[i], flag, StringComparison.OrdinalIgnoreCase))
+                {
+                    value = args[i + 1];
+                    return true;
+                }
+            }
+            value = null;
+            return false;
+        }
 
         /// <summary>플래그가 있는지(대소문자 무시).</summary>
         public static bool HasFlag(IReadOnlyList<string> args, string flag)

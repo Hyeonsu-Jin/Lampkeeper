@@ -6,6 +6,7 @@
 // 관련: DES-100(CompositionRoot·SceneFlow), NFR-006, SCR-001 / SDD 3.2.3 Unity 씬 구성, 3.8.2 Scenes/
 // =============================================================
 using Game.Adapters.Presentation.UI.Screens;
+using Game.Adapters.Presentation.UI.Hud;
 using Game.Bootstrap;
 using Game.Infra.Config;
 using UnityEditor;
@@ -25,6 +26,9 @@ namespace Game.Editor
 
         private const string BaseUssPath = "Assets/_Game/UI/Common/Base.uss";
         private const string SteamRequiredUxmlPath = "Assets/_Game/UI/Screens/SteamRequired.uxml";
+        private const string DevLobbyUxmlPath = "Assets/_Game/UI/Screens/DevLobby.uxml";
+        private const string HudUxmlPath = "Assets/_Game/UI/Hud/Hud.uxml";
+        private const string LobbySortingLabel = "lobby";
         private const string KoreanStringsPath = "Assets/_Game/Localization/strings.ko.txt";
         private const string EnglishStringsPath = "Assets/_Game/Localization/strings.en.txt";
         private const string DefaultThemeName = "UnityDefaultRuntimeTheme";
@@ -48,7 +52,11 @@ namespace Game.Editor
             var uxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(SteamRequiredUxmlPath);
             var ko = AssetDatabase.LoadAssetAtPath<TextAsset>(KoreanStringsPath);
             var en = AssetDatabase.LoadAssetAtPath<TextAsset>(EnglishStringsPath);
-            if (dataConfig == null || baseUss == null || uxml == null || ko == null || en == null)
+            var lobbyUxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(DevLobbyUxmlPath);
+            var hudUxml = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(HudUxmlPath);
+            var inputAsset = AssetDatabase.LoadAssetAtPath<Object>(InputActionsBuilder.AssetPath);
+            var avatarPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AvatarPrefabBuilder.PrefabPath);
+            if (dataConfig == null || baseUss == null || uxml == null || ko == null || en == null || lobbyUxml == null || hudUxml == null || inputAsset == null || avatarPrefab == null)
             {
                 throw new System.InvalidOperationException("Boot 씬에 필요한 애셋이 없습니다. 설정 애셋(Create Default Config Assets)과 UI/Localization 파일을 확인하세요.");
             }
@@ -62,12 +70,50 @@ namespace Game.Editor
             SetReference(screen, "_baseStyle", baseUss);
             screenObject.SetActive(false);
 
+            // 메뉴 화면 뒤를 그리는 카메라(게임 중에는 꺼진다).
+            var menuCameraObject = new GameObject("MenuCamera");
+            var menuCamera = menuCameraObject.AddComponent<Camera>();
+            menuCamera.clearFlags = CameraClearFlags.SolidColor;
+            menuCamera.backgroundColor = Color.black;
+            menuCamera.cullingMask = 0;
+            menuCamera.depth = -10f;
+
+            // 개발용 로비·접속 화면(항상 켜 둔다. 표시·숨김은 화면 안에서 한다).
+            var lobbyObject = new GameObject("DevLobbyScreen");
+            var lobbyDocument = lobbyObject.AddComponent<UIDocument>();
+            lobbyDocument.panelSettings = panelSettings;
+            lobbyDocument.visualTreeAsset = lobbyUxml;
+            lobbyDocument.sortingOrder = 10;
+            var lobbyScreen = lobbyObject.AddComponent<DevLobbyScreen>();
+            SetReference(lobbyScreen, "_baseStyle", baseUss);
+
+            // 게임 HUD(SCR-015 M1 범위).
+            var hudObject = new GameObject("GameHud");
+            var hudDocument = hudObject.AddComponent<UIDocument>();
+            hudDocument.panelSettings = panelSettings;
+            hudDocument.visualTreeAsset = hudUxml;
+            hudDocument.sortingOrder = 5;
+            var hud = hudObject.AddComponent<GameHud>();
+            SetReference(hud, "_baseStyle", baseUss);
+
+            // FishNet NetworkManager. 에디터에서 붙이면 SpawnablePrefabs(DefaultPrefabObjects)가 자동으로 지정된다.
+            // Game.Editor는 FishNet을 참조하지 않으므로 형식을 이름으로 찾는다.
+            var networkObject = new GameObject("NetworkManager");
+            Component networkManager = ReflectionComponents.Add(networkObject, "FishNet.Managing.NetworkManager", "FishNet.Runtime");
+            networkObject.SetActive(false); // 전송을 정한 뒤 GameBootstrap이 켠다(FishNet은 깨어날 때 전송을 초기화)
+
             var bootObject = new GameObject("Bootstrap");
             var bootstrap = bootObject.AddComponent<GameBootstrap>();
             SetReference(bootstrap, "_dataConfig", dataConfig);
             SetReference(bootstrap, "_koreanStrings", ko);
             SetReference(bootstrap, "_englishStrings", en);
             SetReference(bootstrap, "_steamRequiredScreen", screen);
+            SetReference(bootstrap, "_lobbyScreen", lobbyScreen);
+            SetReference(bootstrap, "_menuCamera", menuCamera);
+            SetReference(bootstrap, "_hud", hud);
+            SetReference(bootstrap, "_networkManager", networkManager);
+            SetReference(bootstrap, "_avatarPrefab", avatarPrefab.GetComponent(System.Type.GetType("FishNet.Object.NetworkObject, FishNet.Runtime")));
+            SetReference(bootstrap, "_inputActions", inputAsset);
 
             EditorSceneManager.SaveScene(scene, BootScenePath);
             RegisterInBuildSettings(BootScenePath);

@@ -10,6 +10,7 @@
 // =============================================================
 using System;
 using FishNet.Managing;
+using FishNet.Managing.Transporting;
 using FishNet.Transporting.Tugboat;
 using Game.Application.Boot;
 using Game.Application.Config;
@@ -39,6 +40,11 @@ namespace Game.Infra.Transport
     /// </summary>
     public sealed class TransportSelector
     {
+        /// <summary>전송이 받는 연결 수에 더하는 여유(거부 메시지를 보내 주기 위한 자리).</summary>
+        public const int TransportConnectionMargin = 2;
+
+        private const string PeerToPeerFieldName = "_peerToPeer";
+
         private readonly NetworkManager _networkManager;
         private readonly bool _isDevelopmentBuild;
 
@@ -69,12 +75,24 @@ namespace Game.Infra.Transport
                     break;
                 case TransportKind.Steam:
                     component = GetOrAdd<FishySteamworksTransport>();
+                    EnablePeerToPeer(component);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(requested), kind, "알 수 없는 전송 종류");
             }
 
-            _networkManager.TransportManager.Transport = component;
+            // NetworkManager가 아직 꺼져 있으면(Awake 전) TransportManager 속성이 비어 있으므로 같은 오브젝트의 컴포넌트를 직접 쓴다.
+            // 전송은 NetworkManager가 깨어나기 전에 정해 둬야 FishNet이 초기화 때 그 전송을 연결한다(깨어난 뒤에 바꾸면 이벤트가 이어지지 않는다).
+            TransportManager transportManager = _networkManager.TransportManager != null
+                ? _networkManager.TransportManager
+                : _networkManager.GetComponent<TransportManager>();
+            if (transportManager == null)
+            {
+                // 꺼진 NetworkManager는 아직 보조 관리자 컴포넌트를 만들지 않았다. FishNet은 깨어날 때 같은 오브젝트의 기존 컴포넌트를 재사용하므로
+                // 전송을 미리 걸어 둘 TransportManager를 먼저 붙인다.
+                transportManager = _networkManager.gameObject.AddComponent<TransportManager>();
+            }
+            transportManager.Transport = component;
             return new SelectedTransport(kind, component);
         }
 
@@ -98,10 +116,36 @@ namespace Game.Infra.Transport
             active.Component.SetTimeout(disconnectTimeoutSeconds, false);
         }
 
+        /// <summary>
+        /// 전송의 연결 수 상한을 정한다. 세션 규칙(최대 인원)이 먼저 거부 사유를 알려 줄 수 있도록 여유를 둔다.
+        /// [NFR-038] 최대 인원 + 여유 연결까지는 전송이 받고, 초과분은 JoinRejected(인원 초과)로 돌려보낸다.
+        /// </summary>
+        /// <param name="maxPlayers">세션 최대 인원</param>
+        /// <param name="active">Apply가 돌려준 선택 결과</param>
+        public void ApplyConnectionLimit(int maxPlayers, SelectedTransport active)
+        {
+            active.Component.SetMaximumClients(maxPlayers + TransportConnectionMargin);
+        }
+
         private T GetOrAdd<T>() where T : FishNetTransport
         {
             T component = _networkManager.GetComponent<T>();
             return component != null ? component : _networkManager.gameObject.AddComponent<T>();
+        }
+
+        /// <summary>
+        /// FishySteamworks를 Steam ID 주소(P2P, 릴레이) 방식으로 쓴다. 이 값은 FishySteamworks가 공개 설정 함수를 주지 않는 직렬화 필드라
+        /// 리플렉션으로 켠다(서드파티 소스를 고치지 않기 위함). 필드가 없어지면(버전 변경) 예외로 알려 조용히 실패하지 않게 한다.
+        /// </summary>
+        private static void EnablePeerToPeer(FishNetTransport component)
+        {
+            System.Reflection.FieldInfo field = typeof(FishySteamworksTransport).GetField(PeerToPeerFieldName,
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (field == null)
+            {
+                throw new InvalidOperationException("FishySteamworks에 '" + PeerToPeerFieldName + "' 필드가 없습니다(버전 변경 확인).");
+            }
+            field.SetValue(component, true);
         }
     }
 }
