@@ -115,6 +115,14 @@ namespace Game.Editor
                 }
                 Debug.Log("[Build] Unity Pipeline 런타임 어셈블리 없음(검사: Managed 폴더, global-metadata.dat)");
 
+                // [NFR-044, R-37] Pretendard(SIL OFL 1.1) 라이선스 원문을 실행 파일 옆에 동봉한다(OFL 재배포 조건).
+                string oflSource = Path.Combine(projectRoot, "Assets", "_Game", "UI", "Fonts", "Pretendard-OFL.txt");
+                if (!File.Exists(oflSource))
+                {
+                    throw new InvalidOperationException("Pretendard 라이선스 원문을 찾지 못했습니다: " + oflSource);
+                }
+                File.Copy(oflSource, Path.Combine(folder, "Pretendard-OFL.txt"), true);
+
                 // 개발 빌드만 App ID 480 파일을 실행 파일 옆에 둔다(NFR-009).
                 string appIdTarget = Path.Combine(folder, SteamAppIdFile);
                 if (development)

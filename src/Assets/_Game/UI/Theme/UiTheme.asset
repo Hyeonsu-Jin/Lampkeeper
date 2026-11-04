@@ -72,11 +72,11 @@ MonoBehaviour:
   - 1.25
   _fonts:
   - Name: font-regular
-    Font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    Font: {fileID: 11400000, guid: 346a8741c705e324d8ddc8db440343af, type: 2}
   - Name: font-semibold
-    Font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    Font: {fileID: 11400000, guid: a10dbf00164fcb941a33f78d4e7f79b4, type: 2}
   - Name: font-bold
-    Font: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    Font: {fileID: 11400000, guid: 8bb0b67915617104fad89adc7546d84b, type: 2}
   _contrastPairs:
   - TextToken: color-text
     BackgroundToken: color-surface
