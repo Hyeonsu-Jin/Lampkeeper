@@ -111,6 +111,8 @@ LightingData.asset filter=lfs diff=lfs merge=lfs -text -eol
 # -------------------------------------------------------------
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.otf filter=lfs diff=lfs merge=lfs -text
+# TMP 글꼴 애셋: 아틀라스 텍스처가 들어 있어 파일 하나가 수십 MB (2026-11-04)
+src/Assets/_Game/UI/Fonts/*.asset filter=lfs diff=lfs merge=lfs -text
 
 # -------------------------------------------------------------
 # Git LFS: 네이티브 플러그인과 압축 파일
