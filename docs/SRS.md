@@ -141,7 +141,7 @@
 - Steamworks 문서(로비, 친구 초대, Steam Datagram Relay, Steam Cloud) — 외부 인터페이스 참조
 - Unity 6 / HDRP 문서 — 설계 제약 참조
 - Semantic Versioning 2.0.0 (https://semver.org) — 게임 버전 표기 규칙(NFR-058)
-- 후속 문서: `docs/SDD.md`(architect), `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md`(ui-ux-designer)
+- 후속 문서: `docs/SDD/`(architect), `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md`(ui-ux-designer)
 
 ### 1.5 문서 개요
 - 2장: 제품 전체 관점, 기능 요약, 사용자, 제약, 가정, 마일스톤별 요구사항 배분

@@ -5,7 +5,7 @@
 - 문서 버전: 0.1 (시안, 사용자 결정 대기)
 - 작성일: 2026-11-02
 - 작성: ui-ux-designer (시안 모드)
-- 참조 문서: `docs/SRS.md` v0.4 (승인), `docs/SDD.md` v0.2 (승인), `docs/PROJECT_STATUS.md` 결정 기록
+- 참조 문서: `docs/SRS.md` v0.4 (승인), `docs/SDD/` v0.2 (승인), `docs/PROJECT_STATUS.md` 결정 기록
 - 상태: **결정 대기**. 이 문서는 선택지를 보여 주는 문서이며, 구현 기준이 아닙니다. 사용자가 고른 안만 `docs/STORYBOARD.md`(확정 모드)에 옮겨 적습니다.
 - 와이어프레임(브라우저에서 바로 열림, 외부 자료 없음): `docs/wireframes/hud-ABC.html`, `docs/wireframes/defense-ABC.html`, `docs/wireframes/cooking-ABC.html` (7장)
 
