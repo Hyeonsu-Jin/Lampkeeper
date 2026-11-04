@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 진행 중, 묶음 2 완료 · cycle/1-mvp push)
-- 다음에 할 일: (M1 묶음 1 완료·push 8eed7fa, 2026-11-03 재개 · 에디터 열어 둔 채 진행) → SDD v0.8 갱신 완료(2026-11-03) → M1 묶음 2(M1-04~M1-06) 완료(2026-11-03, cycle/1-mvp 브랜치 신설 후 커밋 24e771b·c66df83·e5a66f4·6cf1f1b, push 2026-11-03) → architect로 SDD 3.4.2 시험 asmdef 참조 갱신 → 묶음 3(M1-07~09) → 묶음 4(M1-10~13). 사용자 GUI 확인 완료(2026-11-03: Console 오류 없음, Steam 끈 상태 SCR-001 정상, MCP 연결 정상)
+- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 · 2026-11-04 커밋·push)
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작) M1 묶음 3 커밋 bf016ae·b97e9f2·411787f·bcfd9a0·31b5322·5c1a63b·86041f4·f3fc57a + docs 커밋, push(2026-11-04) → 다음 SDD 갱신 때 개발 전용 옵션 `-gameversion` 반영 → **M1 묶음 4(M1-10 자원 2만 개 동기화, M1-11 시험용 AI 60체 부하, M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개), M1-13 M1 완료 빌드·FR 시험·아키텍처 시험)** → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -12,7 +12,7 @@
 | 사이클 | 단계 | 상태 (대기/진행 중/완료/승인됨) | 날짜 | 산출물 |
 |---|---|---|---|---|
 | 1 | Plan | 승인됨 | 2026-11-03 | docs/SRS.md v0.8 (승인), docs/SDD.md v0.6 (승인), docs/DESIGN_PROPOSAL.md, docs/wireframes/ (hud, defense, cooking), docs/STORYBOARD.md v1.3 |
-| 1 | Do | 진행 중 (M1 묶음 1·2 완료: M1-01~M1-06) | 2026-11-03 | src/ (HDRP 17.3.0 프로젝트, asmdef 13+, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0, Boot 씬·SCR-001, 설정 데이터), docs/dev/SMART_MERGE_SETUP.md |
+| 1 | Do | 진행 중 (M1 묶음 1·2·3 완료: M1-01~M1-09) | 2026-11-03 | src/ (HDRP 17.3.0 프로젝트, asmdef 13+, FishNet 4.7.4R·FishySteamworks 4.1.1·Steamworks.NET 2025.165.0, Boot 씬·SCR-001, 설정 데이터), docs/dev/SMART_MERGE_SETUP.md |
 | 1 | Check | 대기 | - | - |
 | 1 | Act | 대기 | - | - |
 
@@ -89,6 +89,22 @@
 | 2026-11-03 | SDD v0.8 갱신 (architect): D-03 실제 고정 버전, 3.4.2 asmdef 표(Unity.Jobs 참조 삭제, Game.Editor·시험 asmdef 추가), 3.4.3 Pipeline 안전장치, M1-01 (4) mergetool 방식, D-22 에디터 열어 둔 채 개발 방식 신설, 위험 R-28(mergetool 미검증)·R-29(실험 패키지·베타 CLI 의존) 신설. 상태 「승인」 유지 | 묶음 1 결과 사실 반영 |
 | 2026-11-03 | 에디터 앞으로 가져오기(`unity command editor focus`, `unity recompile --focus`)를 필요할 때만 허용: PlayMode 시험·재생 모드 확인, 뷰 캡처, 그래픽·성능 측정 직전, 또는 에디터가 뒤에 있거나 최소화되어 명령이 30초 넘게 멈출 때. 단순 컴파일·EditMode 시험에는 쓰지 않음. 에이전트는 가져온 횟수와 이유를 보고. 뒤에 있어도 돌도록 `editor set_auto_tick` 100ms(유지) 설정 | 사용자 결정 (최소화·비활성 상태에서 작업이 멈추는 문제) |
 | 2026-11-03 | M1 묶음 2 결과(developer): M1-04 결정론 V0 + 골든 해시(golden-seed-1 Full f4797ecf0e9e888a 등 3시드×2크기), 열린 에디터에서 IL2CPP 개발 빌드(184초) 후 Mono와 해시·타일 요약 전부 일치, 병렬 수 1~16 반복 일치 · M1-05 PerfTelemetry(Stopwatch 기본, ProfilerMarker 보조)·CSV·F3 성능 표시·Bench 씬·파일 로그 가림 · M1-06 HDRP 품질 4단계·프리셋(기준 「높음」)·DLSS/FSR2 품질 모드(이 PC는 DLSS 확인), manifest에 com.unity.modules.nvidia·amd 추가 · 총괄 재확인: 컴파일 0, EditMode 282/282, PlayMode 10/10, .meta 누락 0 | developer 보고 + 총괄 검증 |
+| 2026-11-03 | CLAUDE.md 갱신(사용자 승인, 총괄 수정): 「에디터와 명령줄 실행」을 에디터 열어 둔 채 Unity CLI로 조작하는 방식으로 교체(명령 표, batchmode 금지, auto_tick, 필요할 때만 focus), Do 1단계·Check 2단계의 「에디터 닫기」 안내를 「열려 있고 연결됐는지 확인」으로, Smart Merge 절을 git mergetool 방식으로 교체(merge 드라이버 등록 금지 명시). 명령이 실제 설정과 같은 값을 만드는지 임시 저장소로 확인 | 사용자 결정 (SDD v0.8 D-22·M1-01 (4)와 일치시킴) |
+| 2026-11-03 | CLAUDE.md 2차 갱신(사용자 승인, 총괄 수정): Unity 프로젝트 위치를 저장소 루트 → `src/`로, git 관리 범위에 `docs/` 포함·제외 목록에 `.mcp.json` 추가, Plan 커밋 시점과 `docs` 타입 설명·Plan 커밋 예시를 docs 커밋 기준으로, 산출물 표의 코드·시험 경로를 `src/Assets/_Game/`·`src/Assets/Tests/`로 | 사용자 결정 (실제 저장소 구조와 일치시킴) |
+| 2026-11-03 | 네트워크 메시지 정의·바이트 인코딩을 Game.Application/Protocol(순수 C#)에 둠. FishNet은 연결 관리·전송·채널·바이트 전달·호스트 모드·플레이어 아바타에 계속 사용, 메시지는 바이트를 담는 PacketBroadcast 한 종류로 등록. 게이트웨이·JoinHandshake·복제는 Net 어댑터에서 포트에만 의존. 시험 asmdef Game.Tests.Net 신설 | 사용자 결정 (developer 제안 채택: FishNet 없이 시험, 대역폭 직접 제어) |
+| 2026-11-03 | 게임패드 채팅·핑·퀵슬롯 등 겹치는 입력 버튼 할당은 추후 다시 정의, 보류 (키보드·마우스 할당은 유지) | 사용자 결정 |
+| 2026-11-03 | 스태미나 0이 돼도 불이익 없음(달리기만 걷기 속도) · 스태미나 회복 지연 1초 확정(소모 행동을 멈춘 뒤 1초 뒤 회복 시작). C-04는 스태미나 부분만 해소, 허기·갈증·피로도·혹한은 미결 | 사용자 결정 |
+| 2026-11-03 | 문서 갱신: SRS v0.10(FR-024·025 스태미나 확정, FR-117·NFR-004·FR-166 패드 보류, C-04 일부 해소, C-67 신설 「게임패드 채팅·핑·퀵슬롯 할당 보류, 늦어도 M2 채팅 착수 전」) · SDD v0.10(DES-080을 애플리케이션으로, DES-121 FishNetPacketTransport 신설 → 설계 요소 107개, 아바타는 ServerRpc→호스트 검사→ObserversRpc(D-24), Game.Tests.Net(참조 Application·Domain·Adapters.Net), 자원 델타 항목 4 B로 통일, 설정값 MoveStaminaGrace 0.5초, R-30·R-31 신설) · STORYBOARD v1.5(2.4 패드 퀵슬롯·핑·채팅 보류, SCR-014·015·030 반영, 스태미나 C-04 문구 정리) | 사용자 결정 반영 (requirements-analyst, architect, ui-ux-designer) |
+| 2026-11-03 | 입력 설정은 SDD 원래 방식대로 Input System `.inputactions` 파일 에셋으로 (developer가 제안한 C# 표 + 런타임 생성 안은 채택하지 않음). 에디터 입력 설정 창에서 보고 고칠 수 있게. 보류된 패드 바인딩(C-67)은 파일에서 비워 둠 | 사용자 결정 |
+| 2026-11-04 | (취소됨, 같은 날 사용자 요청) 사용자 취침 중 무인 진행: 묶음 3이 끝나면 총괄이 결과 확인(컴파일·시험·.meta)·진행 기록 갱신·보고서 작성 후 에디터 씬 저장, Unity 에디터 종료, PC 종료(shutdown /s /t 120). 커밋·push는 하지 않고 사용자 승인 대기로 남김 | 사용자 요청 → 취소: 사용자가 직접 지켜보고 끄기로 함 |
+| 2026-11-04 | M1 묶음 3 결과(developer 2회, 1회차는 사용량 한도로 중지 후 새 developer가 마무리): Protocol 코덱·메시지 12종·AvatarPose 20 B, 포트, 세션·명령·복제·ServerWorld 30 Hz, FishNetPacketTransport·JoinHandshake·게이트웨이, SteamLobbyService, GameInput.inputactions(패드 C-67 보류 비움), 1인칭 이동·스태미나(불이익 없음·지연 1초)·HUD·개발용 로비, World 씬·PlayerAvatar 프리팹. 총괄 재확인: 컴파일 0, Console 오류 0, .meta 누락 0. HDRenderPipelineGlobalSettings.asset 변경은 HDRP 17.3 폐기 필드 자동 정리(값 변화 없음). 이번부터 에디터 조작은 Unity MCP 도구 우선 | developer 보고 + 총괄 검증 |
+| 2026-11-04 | SDD v0.11 (architect): 3.2.3 Boot·World 씬 구성, 3.4.2 asmdef 실제값(Game.Tests.Integration에 Domain·Adapters.Net), 3.7.4 실행 옵션, 3.7.10 USS 토큰 대응표(--color-*, --fs-*), 3.8.2 에디터 생성 파이프라인 8단계, 3.9.9 부트·네트워크 시작 순서 신설, 3.11.12 이동 검사 설정값, D-25(에디터 생성기의 FishNet 리플렉션), R-31 갱신·R-32~R-34 신설. 설계 요소 107개 유지 | 묶음 3 구현 사실 반영 |
+| 2026-11-04 | 사용자 수동 시험(키보드·마우스): 달리기 정상, 스태미나 부족 시 알림 후 달리기 불가 정상. **결함: ESC 메뉴의 친구 초대·세션 나가기 버튼 무반응** → developer 수정. 로비 상태 문구(「준비됨」) 글자색을 흰색으로. Xbox 패드 시험은 나중에 한꺼번에(당분간 키보드·마우스로만 시험). ESC 메뉴 수정 후 다시 시험 | 사용자 시험·결정 |
+| 2026-11-04 | 버전 규칙 = 시맨틱 버저닝(SemVer 2.0.0): MAJOR.MINOR.PATCH, 출시 전 0.y.z(0.1.0 시작), 공개 출시 1.0.0, 배포 버전 불변, 사전 릴리스 -alpha.1·-rc.1, 빌드 정보 +… . 사이클 태그 규칙(v0.1.0 MINOR, fix v0.1.1 PATCH)과 일치. 현재 0.1.0 | 사용자 결정 (R-34 해소) |
+| 2026-11-04 | 친구 전용 방이 방 검색에 안 나오는 것은 정상 동작(문제 아님). M2 공개 세션 목록은 「공개」 방만 표시(FR-145 그대로), SRS에 설명 추가 | 사용자 결정 (R-33 해소) |
+| 2026-11-04 | 문서 갱신: SRS v0.11(NFR-058 게임 버전 SemVer 신설 → NFR 58개, FR-003 버전 불일치 거부, FR-145 친구 전용 방 미표시는 정상, FR-158, C-68 「메인 메뉴 버전 상시 표시」 미결) · SDD v0.12(3.7.12 게임 버전 규칙, DES-037 GameVersion 신설 → 108개, D-26, bundleVersion 단일 출처·빌드 중에만 +메타데이터, 참가 검사는 전체 문자열 일치, JoinRequest.gameVersion 문자열·protocolVer 2, R-33·R-34 해소, R-35 신설) · STORYBOARD v1.6(상태 문구 --color-text #E8E4DC, 색 토큰 대응표·토큰 4개 추가, SCR-016 친구 초대·세션 나가기 반응) · developer: ESC 메뉴 무반응 원인(로비 전체 화면 배경이 HUD 위를 덮음) 수정, 친구 초대 불가 시 안내 문구, 상태 문구 밝은 글자색. 총괄 재확인 EditMode 481/481 | 사용자 결정 반영 + 결함 수정 |
+| 2026-11-04 | SemVer 구현(developer): Domain GameVersion 값 객체, 참가 검사에 게임 버전 전체 문자열 비교, JoinRequest.gameVersion·ProtocolVersion 2, BuildCommands가 빌드 중에만 +dev.<UTC>.<커밋>[.dirty] 붙였다 복구, ReadBuildNumber 폐지, DevLobby에 버전 표시. 개발 빌드 확인: 플레이어 버전 0.1.0+dev.20261104054926.417edbb.dirty, Windows에서 + 문제 없음(R-35 6번 해소), 같은 빌드 접속 통과·다른 메타데이터 VersionMismatch 거부. 개발 전용 옵션 -gameversion 추가(SDD 미반영 → 다음 SDD 갱신 때 반영). 총괄 재확인: EditMode 541/541, PlayMode 16/16, .meta 누락 0, bundleVersion 0.1.0 | developer 보고 + 총괄 검증 |
+| 2026-11-04 | 사용자 재시험(키보드·마우스, 에디터): 방 열기 정상, ESC 메뉴 닫기·세션 나가기 정상, 나간 뒤 로비 화면 정상, 친구 초대는 안내 문구 「지금은 친구 초대 창을 열 수 없습니다 (Steam 오버레이가 꺼져 있거나 방이 Steam 방이 아닙니다)」 표시(에디터에서 예상된 동작), 로비 글자·버전 표시 정상 → ESC 메뉴 결함 해소 확인. 남은 수동 시험: Steam으로 실행한 빌드에서 실제 초대 창, 친구 계정 2PC 참가, Xbox 패드(나중에 한꺼번에) | 사용자 시험 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -145,7 +161,15 @@
 | FSR2 경로(AMD·Intel GPU)는 실기기 없이 선택 규칙 단위 시험만 | developer (M1-06) | 다른 GPU에서 업스케일러 실패 늦게 발견 | 쓸 수 없으면 끄고 이유 기록하도록 구현. 다른 GPU 확인은 M6-10 |
 | Bench 씬의 서버 틱은 가짜 작업이라 서버 처리 예산 판정 불가 | developer (M1-05) | M1-12 전까지 서버 예산 판단 못 함 | M1-09·M1-11·M1-12에서 실제 작업으로 교체 |
 | HDRP가 lodBias를 애셋 값으로 덮어써서 프리셋 LOD 값은 GraphicsAssetBuilder가 애셋에 구워 넣음 | developer (M1-06) | 프리셋 값을 바꾸고 메뉴를 다시 실행하지 않으면 반영 안 됨 | M2-01 옵션 화면 작업 때 다시 확인 |
-| SDD 3.4.2 표와 시험 asmdef 참조가 다름 (Game.Tests.WorldGen 신설, Infrastructure·Integration 참조 추가) | developer (M1 묶음 2) | 문서와 실제 불일치 | architect로 SDD 갱신 |
+| SDD 3.4.2 표와 시험 asmdef 참조가 다름 (Game.Tests.WorldGen 신설, Infrastructure·Integration 참조 추가) | developer (M1 묶음 2) | 문서와 실제 불일치 | 해소: SDD v0.9 (2026-11-03) |
+| `unity command build run`은 Unity 기본 빌드라 BuildCommands의 산출물 검사·steam_appid.txt 복사·Bench 포함이 빠질 수 있음. 출시 빌드(BuildWindowsRelease)는 열린 에디터에서 아직 미시험 | architect (SDD v0.9) | 출시 빌드에 Pipeline 런타임이 섞이거나 Steam 초기화 실패를 늦게 발견 | 빌드는 BuildCommands 메뉴(invoke_menu/script run)로, Console [Build] 기록 확인. M1-13에서 출시 빌드 재확인 |
+| 프로토콜 변환 코드를 직접 작성하면서 생기는 결함(쓰기·읽기 불일치, 경계값, 잘못된 입력에서 디코더 예외) (SDD R-30) | architect (SDD v0.10) | 동기화 오류·접속 끊김·악성 패킷 취약 | 왕복·고정 바이트·거부 시험, 예외 없는 TryDecode, Check 보안 점검 대상 |
+| 바이트 래퍼·RPC 방식 비용(머리말·복사·GC 할당), 서버 쪽 스태미나 추정 불일치로 정상 달리기 되돌림 (SDD R-31) | architect (SDD v0.10) | 대역폭·프레임 저하, 조작감 저하 | M1-07에서 FishNet Broadcast 바이트 필드 할당 확인, MoveStaminaGrace 0.5초, M1 로그로 조정 |
+| 스태미나 0일 때 공격 허용 여부 미정 (SRS·SDD 모두 명시 없음, 「불이익 없음」이면 허용으로 읽힘) | 총괄 (문서 대조) | 공격 구현 마일스톤에서 해석 갈림 | 공격 구현 전 사용자 확인 |
+| 한 PC 8프로세스 측정에서 화면 없는 클라이언트 1% Low 28 FPS·예산 위반 로그 | developer (M1 묶음 3) | M1 성능 판정 왜곡 | M1-12 대체 측정에서 봇 CPU 점유와 함께 별도 해석 |
+| 에디터 HUD(월드 진입 후 스태미나 호) 미확인: MCP 클릭 시뮬레이션이 UI Toolkit 버튼에 전달 안 됨. 로비 「준비됨」 글자 대비 낮아 보임 | developer (M1 묶음 3) | UI 결함 늦게 발견 | 사용자 수동 확인, 필요 시 Base.uss 색 토큰 조정 |
+| Steam 「친구 전용」 로비는 로비 검색 목록에 나오지 않음(Steam 정상 동작) | developer (M1-07) | 없음 | 해소: 사용자 확인 2026-11-04, 정상 동작이며 공개 목록은 「공개」 방만 |
+| 게임 버전 엄격 일치로 개발 빌드는 다시 빌드할 때마다 서로 접속 불가, 에디터 ↔ 플레이어 접속도 거부 · 사이클 시작 때 MINOR 올리기 누락 가능 · Windows 플레이어에서 bundleVersion의 + 처리 미확인 (SDD R-35) | architect (SDD v0.12) | 개발 중 다중 접속 시험 불편, 버전 번호 오류 | 다중 프로세스 시험은 같은 빌드 폴더 복사 사용. **총괄 규칙: 새 사이클의 첫 Do 작업에서 MINOR를 올림(사이클 2는 0.2.0)**. + 처리는 마무리 개발 빌드에서 확인 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -158,6 +182,8 @@
 | 1 (SRS v0.8 / SDD v0.6 / STORYBOARD v1.3) | 179 | 57 | - | - | - | - |
 | 1 (Do M1 묶음 1) | 179 | 57 | EditMode 157 + PlayMode 5 (개발자 단위·아키텍처 시험) | 100% (162/162) | 0 | - |
 | 1 (Do M1 묶음 2) | 179 | 57 | EditMode 282 + PlayMode 10 (개발자 단위·아키텍처 시험) | 100% (292/292) | 0 | - |
+| 1 (Do M1 묶음 3) | 179 | 57 | EditMode 476 + PlayMode 16 (개발자 단위·통합·아키텍처 시험) | 100% (492/492) | 0 | - |
+| 1 (Do M1 묶음 3 마무리: ESC 결함·SemVer) | 179 | 58 | EditMode 541 + PlayMode 16 | 100% (557/557) | 1 (ESC 메뉴 버튼 무반응, 수정됨) | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
