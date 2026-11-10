@@ -78,6 +78,8 @@ namespace Game.Application.Session
         private readonly float _timeoutSeconds;
         private JoinPath _path;
         private double _stateEnteredAt;
+        private System.Threading.Tasks.Task<ulong> _prepareTask;
+        private JoinAccepted _prepareAccepted;
 
         /// <param name="client">전송 포트</param>
         /// <param name="mirror">월드 사본(나갈 때 비움)</param>
@@ -112,8 +114,17 @@ namespace Game.Application.Session
         /// <summary>호스트가 알려 준 월드 정보(허가 뒤).</summary>
         public JoinAccepted World { get; private set; }
 
-        /// <summary>월드 준비 처리기(M1-10에서 교체).</summary>
+        /// <summary>월드 준비 처리기(시드로 월드를 만들고 요약값을 돌려준다. M1-10).</summary>
         public WorldPrepareHandler PrepareWorld { get; set; }
+
+        /// <summary>
+        /// true이면 월드 준비를 백그라운드 스레드에서 돌리고 <see cref="Tick"/>에서 끝났는지 본다(몇 초 걸리는 생성이 화면을 멈추지 않게, SDD 3.9.2).
+        /// 이때 PrepareWorld는 UnityEngine·화면 상태를 건드리지 않는 코드여야 한다. 기본 false(그 자리에서 바로 실행, 시험용).
+        /// </summary>
+        public bool PrepareInBackground { get; set; }
+
+        /// <summary>월드 준비가 끝나 요약값이 호스트와 같다고 확인된 직후, 화면 스레드에서 부른다(받은 월드를 사본에 연결하는 곳).</summary>
+        public Action<JoinAccepted, ulong> WorldPrepared { get; set; }
 
         /// <summary>상태가 바뀜.</summary>
         public event Action<ClientSessionState> StateChanged;
@@ -135,6 +146,7 @@ namespace Game.Application.Session
             Failure = ClientFailure.None;
             RejectReason = JoinRejectReason.None;
             LocalSlot = -1;
+            _prepareTask = null; // 이전 시도의 월드 준비 결과는 버린다
             _mirror.Reset();
             SetState(ClientSessionState.Connecting);
             if (!_client.Connect(address, port))
@@ -153,6 +165,7 @@ namespace Game.Application.Session
                 return;
             }
             Failure = ClientFailure.LeftByUser;
+            _prepareTask = null;
             SetState(ClientSessionState.Idle); // 먼저 Idle로 바꿔야 끊김 알림이 실패로 처리되지 않는다
             _client.Disconnect();
             _mirror.Reset();
@@ -161,6 +174,7 @@ namespace Game.Application.Session
         /// <summary>매 프레임 불러 단계별 시간 제한을 본다. [NFR-039]</summary>
         public void Tick()
         {
+            PollPrepare();
             bool waiting = State == ClientSessionState.Connecting || State == ClientSessionState.Syncing;
             if (waiting && _clock.RealtimeSeconds - _stateEnteredAt > _timeoutSeconds)
             {
@@ -237,6 +251,15 @@ namespace Game.Application.Session
             World = accepted;
             SetState(ClientSessionState.Generating);
 
+            if (PrepareInBackground)
+            {
+                // 백그라운드에서 만들고 Tick이 끝을 확인한다. 그 사이 화면은 계속 돌고, 호스트는 WorldReady를 기다린다.
+                WorldPrepareHandler handler = PrepareWorld;
+                _prepareAccepted = accepted;
+                _prepareTask = System.Threading.Tasks.Task.Run(() => handler(accepted));
+                return;
+            }
+
             ulong computed;
             try
             {
@@ -249,7 +272,33 @@ namespace Game.Application.Session
                 End(ClientFailure.WorldMismatch);
                 return;
             }
+            FinishPrepare(accepted, computed);
+        }
 
+        /// <summary>백그라운드 월드 준비가 끝났는지 본다. 끝났으면 화면 스레드에서 이어서 처리한다.</summary>
+        private void PollPrepare()
+        {
+            System.Threading.Tasks.Task<ulong> task = _prepareTask;
+            if (task == null || !task.IsCompleted)
+            {
+                return;
+            }
+            _prepareTask = null;
+            if (State != ClientSessionState.Generating)
+            {
+                return; // 만드는 동안 나가거나 끊겼다. 결과는 버린다.
+            }
+            if (task.IsFaulted || task.IsCanceled)
+            {
+                _log.Error("join", "월드 준비 실패: " + task.Exception);
+                End(ClientFailure.WorldMismatch);
+                return;
+            }
+            FinishPrepare(_prepareAccepted, task.Result);
+        }
+
+        private void FinishPrepare(JoinAccepted accepted, ulong computed)
+        {
             // [FR-169] 요약값이 호스트 기대값과 다르면 월드 생성 불일치로 접속을 끝낸다(기대값 0은 월드 없음 = 비교 생략).
             if (accepted.ExpectedWorldHash != 0UL && computed != accepted.ExpectedWorldHash)
             {
@@ -257,6 +306,7 @@ namespace Game.Application.Session
                 End(ClientFailure.WorldMismatch);
                 return;
             }
+            WorldPrepared?.Invoke(accepted, computed);
             SetState(ClientSessionState.Syncing);
             _client.SendDefault(new WorldReady(computed));
         }
@@ -268,6 +318,7 @@ namespace Game.Application.Session
                 return;
             }
             Failure = failure;
+            _prepareTask = null;
             SetState(ClientSessionState.Ended); // 먼저 Ended로 바꿔 끊김 알림이 다시 처리되지 않게 한다
             if (_client.State != NetClientState.Stopped)
             {

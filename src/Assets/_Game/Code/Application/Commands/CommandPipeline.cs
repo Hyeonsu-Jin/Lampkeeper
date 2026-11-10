@@ -22,6 +22,9 @@ namespace Game.Application.Commands
 
         /// <summary>핑(월드 위치 표시). M1에서는 파이프라인 시험용 명령으로 쓴다. 실제 핑 UI는 M5.</summary>
         Ping = 1,
+
+        /// <summary>자원 타격(M1 시험용: 호스트 검증 + 자원 델타). 본문 배치는 Gathering/HitResourceCommand.</summary>
+        HitResource = 2,
     }
 
     /// <summary>값 범위 검사 기준. 월드 한 변의 절반(m) 같은 값.</summary>
@@ -310,6 +313,18 @@ namespace Game.Application.Commands
                     message = new CommandMessage((byte)CommandKind.Ping, ping.RequestId, writer.ToArray());
                     return true;
                 }
+                case Gathering.HitResourceCommand hit:
+                {
+                    var writer = new ByteWriter(8);
+                    writer.WriteU16(hit.ResourceIndex);
+                    writer.WriteU8(hit.HandSlot);
+                    if (writer.Failed)
+                    {
+                        return false;
+                    }
+                    message = new CommandMessage((byte)CommandKind.HitResource, hit.RequestId, writer.ToArray());
+                    return true;
+                }
                 default:
                     return false;
             }
@@ -334,6 +349,19 @@ namespace Game.Application.Commands
                         return false;
                     }
                     command = new PingCommand(message.RequestId, new Vec3f(x, y, z));
+                    return true;
+                }
+                case CommandKind.HitResource:
+                {
+                    var reader = new ByteReader(message.Payload);
+                    ushort index = reader.ReadU16();
+                    byte handSlot = reader.ReadU8();
+                    if (!reader.IsCleanEnd)
+                    {
+                        rejection = new Rejection(ReasonCode.InvalidValue);
+                        return false;
+                    }
+                    command = new Gathering.HitResourceCommand(message.RequestId, index, handSlot);
                     return true;
                 }
                 default:

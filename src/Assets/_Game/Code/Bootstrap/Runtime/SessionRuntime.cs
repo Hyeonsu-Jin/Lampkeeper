@@ -19,13 +19,16 @@ using Game.Adapters.Net.Transport;
 using Game.Application.Boot;
 using Game.Application.Commands;
 using Game.Application.Config;
+using Game.Application.Gathering;
 using Game.Application.Ports;
 using Game.Application.Protocol;
 using Game.Application.Replication;
 using Game.Application.Server;
 using Game.Application.Session;
+using Game.Application.WorldSync;
 using Game.Domain.Common;
 using Game.Domain.Session;
+using Game.WorldGen.Common;
 
 namespace Game.Bootstrap.Runtime
 {
@@ -42,6 +45,12 @@ namespace Game.Bootstrap.Runtime
         public IPerfProbe Perf;
         public NetworkObject AvatarPrefab;
         public bool IsDevelopmentBuild;
+
+        /// <summary>월드 생성 규모. 기본 Full(자원 약 2만 개). Small은 시험·벤치용이며 호스트와 참가자가 같아야 한다.</summary>
+        public WorldScale WorldScale = WorldScale.Full;
+
+        /// <summary>월드 캐시. 같은 PC의 호스트 서버와 호스트 클라이언트가 월드를 한 번만 만들게 한다. null이면 세션이 새로 만든다.</summary>
+        public LocalWorldProvider Worlds;
     }
 
     /// <summary>세션 실행 구성. 세션마다 새로 만들고 <see cref="Dispose"/>로 정리한다.</summary>
@@ -49,8 +58,12 @@ namespace Game.Bootstrap.Runtime
     {
         private const string LogCategory = "session";
 
+        /// <summary>참가자가 월드를 만드는 동안 호스트가 더 기다려 주는 시간(초). SDD 3.12.6 월드 생성 예산 25초 + 여유.</summary>
+        private const double WorldGenerationAllowanceSeconds = 30d;
+
         private readonly SessionRuntimeDeps _deps;
         private readonly bool _isHost;
+        private readonly LocalWorldProvider _worlds;
         private FishNetServer _server;
         private ServerCommandGateway _gateway;
         private AvatarSpawner _spawner;
@@ -77,6 +90,15 @@ namespace Game.Bootstrap.Runtime
             };
             Session = new ClientSession(ClientTransport, Mirror, Pose, info, deps.Clock, deps.Log, deps.Config.Network.JoinTimeoutSeconds);
             Receiver = new ClientReplicationReceiver(ClientTransport, Mirror, deps.Log);
+
+            // [FR-009, FR-169] 허가를 받으면 시드로 월드를 로컬에서 만들고(백그라운드), 요약값이 같으면 사본에 연결한다.
+            // 호스트 PC에서는 호스트 서버가 이미 만든 월드를 캐시에서 바로 받는다.
+            _worlds = deps.Worlds ?? new LocalWorldProvider();
+            WorldScale scale = deps.WorldScale;
+            LocalWorldProvider worlds = _worlds;
+            Session.PrepareInBackground = true;
+            Session.PrepareWorld = accepted => worlds.GetOrGenerate(accepted.Seed, accepted.GeneratorVersion, scale).Hash;
+            Session.WorldPrepared = (accepted, hash) => Mirror.AttachLocal(worlds.GetOrGenerate(accepted.Seed, accepted.GeneratorVersion, scale));
         }
 
         public ClientSession Session { get; }
@@ -182,7 +204,19 @@ namespace Game.Bootstrap.Runtime
             var guard = new RequestGuard(settings.RequestsPerSecondLimit, new CommandLimits(ProtocolConstants.PositionHalfRangeMeters));
             var dispatcher = new CommandDispatcher(guard, _deps.Log);
             dispatcher.Register<PingCommand>(CommandKind.Ping, new PingCommandHandler());
+            HitResourceCommandHandler.Install(dispatcher, guard, HarvestSettings.FromConfig(config.Balance));
             World = new ServerWorld(settings, dispatcher, _deps.Clock, _deps.Perf, _deps.Log);
+
+            // [FR-009, FR-169] 호스트도 시드로 월드를 로컬에서 만들어 요약값을 정한다(참가자에게 기대 요약값으로 알려 준다).
+            // 시드 글자에서 시드 값을 정한다. 몇 초 걸리므로 호스트 시작 전에 끝낸다(로딩 표시는 화면 쪽 몫).
+            if (world.Seed == 0UL)
+            {
+                world.Seed = SeedCodec.TryParse(world.SeedText, out ulong parsed) == SeedParseError.None ? parsed : SeedCodec.SeedFromText("DEFAULT");
+            }
+            LocalWorld local = _worlds.GetOrGenerate(world.Seed, world.GeneratorVersion, _deps.WorldScale);
+            world.ExpectedWorldHash = local.Hash;
+            World.AttachWorld(local);
+            _deps.Log.Info(LogCategory, "월드 생성 " + local.BuildMilliseconds + " ms, 자원 " + local.ResourceCount + "개, 요약값 " + local.Hash.ToString("x16"));
 
             world.GameVersion = BuildInfo.Version.Full;
             world.ContentHash = config.ContentHash.Value;
@@ -196,6 +230,7 @@ namespace Game.Bootstrap.Runtime
             var publisher = new ReplicationPublisher(_server, World, config.Network, _deps.Perf, _deps.Log);
             var join = new JoinHandshake(_server, HostSession, World, publisher, _deps.Clock, _deps.Log,
                 config.Network.JoinTimeoutSeconds, id => _deps.Identity.ResolveName(id), _deps.Identity.LocalPlayerId);
+            join.WorldGenerationAllowanceSeconds = WorldGenerationAllowanceSeconds;
             _gateway = new ServerCommandGateway(_server, join, World, _deps.Log);
 
             // 서버 틱(30 Hz)은 FishNet TimeManager가 알려 준다.

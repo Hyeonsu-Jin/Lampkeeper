@@ -13,11 +13,14 @@ using System;
 using System.Collections.Generic;
 using Game.Application.Commands;
 using Game.Application.Config;
+using Game.Application.Gathering;
 using Game.Application.Perf;
 using Game.Application.Ports;
 using Game.Application.Protocol;
 using Game.Application.Replication;
+using Game.Application.WorldSync;
 using Game.Domain.Common;
+using Game.Domain.Gathering;
 using Game.Domain.Players;
 using Game.Domain.Vitals;
 
@@ -199,10 +202,19 @@ namespace Game.Application.Server
         public WorldState()
         {
             Roster = new ReplicatedTable<RosterEntry>(TableIds.Roster, RosterEntryCodec.Instance);
+            Resources = new ReplicatedTable<ResourceState>(TableIds.Resources, ResourceStateCodec.Instance);
         }
 
         /// <summary>접속자 명단 표(복제됨).</summary>
         public ReplicatedTable<RosterEntry> Roster { get; }
+
+        /// <summary>
+        /// 자원 상태 표(ResourceIndex → 바뀐 상태, 복제됨). [FR-009] 손대지 않은 자원은 넣지 않는다(바뀐 항목만).
+        /// </summary>
+        public ReplicatedTable<ResourceState> Resources { get; }
+
+        /// <summary>호스트가 이 PC에서 만든 월드(자원 위치·종류를 읽는 표). 아직 없으면 null.</summary>
+        public LocalWorld Local { get; private set; }
 
         /// <summary>접속 중인 플레이어 수.</summary>
         public int PlayerCount => _players.Count;
@@ -223,6 +235,19 @@ namespace Game.Application.Server
         }
 
         internal void RecordPing(PlayerId id, Vec3f position) => _lastPings[id] = position;
+
+        internal void AttachLocal(LocalWorld local) => Local = local;
+
+        /// <summary>자원 상태를 바꾼다. 손대지 않은 상태로 돌아가면 표에서 지운다(바뀐 항목만 들고 있는다).</summary>
+        internal void SetResource(ushort index, ResourceState state)
+        {
+            if (state.IsPristine)
+            {
+                Resources.Remove(index);
+                return;
+            }
+            Resources.Set(index, state);
+        }
     }
 
     /// <summary>한 틱 안에서 명령 처리가 끝났음을 알리는 결과(누가, 무슨 결과).</summary>
@@ -276,6 +301,7 @@ namespace Game.Application.Server
             _slotUsed = new bool[Math.Max(1, settings.MaxPlayers)];
             State = new WorldState();
             _tables.Add(State.Roster);
+            _tables.Add(State.Resources);
         }
 
         public WorldState State { get; }
@@ -298,7 +324,10 @@ namespace Game.Application.Server
         /// <summary>플레이어가 나갔음.</summary>
         public event Action<PlayerId> PlayerRemoved;
 
-        /// <summary>복제할 표를 더한다(자원 표 등).</summary>
+        /// <summary>호스트가 만든 월드를 연결한다. 타격 검증이 자원 위치·종류를 여기서 읽는다.</summary>
+        public void AttachWorld(LocalWorld local) => State.AttachLocal(local ?? throw new ArgumentNullException(nameof(local)));
+
+        /// <summary>복제할 표를 더한다(건축물 등 이후 마일스톤의 표).</summary>
         public void AddTable(IReplicatedTable table) => _tables.Add(table ?? throw new ArgumentNullException(nameof(table)));
 
         /// <summary>

@@ -76,6 +76,12 @@ namespace Game.Adapters.Net.Join
             _hostPlayer = hostPlayer;
         }
 
+        /// <summary>
+        /// 허가 뒤 참가자가 월드를 만드는 동안 더 기다려 주는 시간(초). 기본 0(시간 제한 그대로).
+        /// 월드 생성이 있는 실제 세션에서는 조립 지점이 SDD 3.12.6의 생성 예산(25초) 이상으로 정한다.
+        /// </summary>
+        public double WorldGenerationAllowanceSeconds { get; set; }
+
         /// <summary>플레이어가 참가를 마치고 나갔음(연결 끊김).</summary>
         public event Action<PlayerId> PlayerLeft;
 
@@ -171,7 +177,9 @@ namespace Game.Adapters.Net.Join
                     }
                     continue;
                 }
-                if (c.Phase != Phase.InGame && now - c.Since > _timeoutSeconds)
+                // [NFR-018] 허가를 받은 참가자는 자기 PC에서 월드를 만드는 동안 WorldReady를 보낼 수 없다. 그 시간만큼 더 기다린다.
+                double limit = c.Phase == Phase.Accepted ? _timeoutSeconds + WorldGenerationAllowanceSeconds : _timeoutSeconds;
+                if (c.Phase != Phase.InGame && now - c.Since > limit)
                 {
                     _log.Warn("join", "참가 시간 초과 conn=" + c.Id + " phase=" + c.Phase);
                     Reject(c, JoinRejectReason.Timeout);

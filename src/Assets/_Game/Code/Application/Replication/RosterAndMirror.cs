@@ -9,8 +9,11 @@
 // =============================================================
 using System;
 using System.Collections.Generic;
+using Game.Application.Gathering;
 using Game.Application.Protocol;
+using Game.Application.WorldSync;
 using Game.Domain.Common;
+using Game.Domain.Gathering;
 
 namespace Game.Application.Replication
 {
@@ -235,7 +238,21 @@ namespace Game.Application.Replication
         {
             Roster = new ReplicatedTable<RosterEntry>(TableIds.Roster, RosterEntryCodec.Instance);
             RegisterTable(Roster);
+            Resources = new ReplicatedTable<ResourceState>(TableIds.Resources, ResourceStateCodec.Instance);
+            RegisterTable(Resources);
         }
+
+        /// <summary>
+        /// 자원 상태 표(ResourceIndex → 바뀐 상태). 호스트와 같은 월드를 로컬에서 만든 뒤 스냅샷·델타로 이 표만 맞춘다. [FR-009]
+        /// 자원 화면(M1-10 2차)은 <see cref="Local"/>의 생성 표와 이 표를 함께 읽는다.
+        /// </summary>
+        public ReplicatedTable<ResourceState> Resources { get; }
+
+        /// <summary>이 PC에서 만든 월드. 접속 절차에서 월드 생성이 끝나면 채워지고, 세션을 떠나면 비워진다.</summary>
+        public LocalWorld Local { get; private set; }
+
+        /// <summary>월드 생성이 끝났음을 알린다(접속 절차가 화면 스레드에서 부른다).</summary>
+        public void AttachLocal(LocalWorld local) => Local = local;
 
         /// <summary>접속자 명단 표(자리 번호 → 항목).</summary>
         public ReplicatedTable<RosterEntry> Roster { get; }
@@ -319,6 +336,7 @@ namespace Game.Application.Replication
                 table.Clear();
             }
             _avatars.Clear();
+            Local = null;
             SnapshotChunksReceived = 0;
             SnapshotChunksExpected = 0;
             ApplyFailures = 0;
