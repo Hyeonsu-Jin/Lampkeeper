@@ -197,18 +197,30 @@ function Sample-Processes {
 Write-Log ("M1 측정 시작: 모드={0}, 측정 {1}초, 빌드={2}" -f $Mode, $DurationSeconds, $exe.FullName)
 Write-Log ("결과 폴더: {0}" -f $outDir)
 Write-Log ("PC: {0} 논리 코어 {1}개" -f ((Get-CimInstance Win32_Processor | Select-Object -First 1).Name), $cores)
+# Unity 에디터 프로세스만 센다. MCP 연결용 WindowsApps\unity.exe(unity mcp)는
+# 실행 파일 경로가 \Editor\Unity.exe로 끝나지 않으므로 에디터로 보지 않는다.
+function Test-UnityEditorRunning {
+    try {
+        $procs = Get-CimInstance Win32_Process -Filter "Name = 'Unity.exe'" -ErrorAction Stop
+        foreach ($p in $procs) {
+            if ($p.ExecutablePath -and $p.ExecutablePath -like '*\Editor\Unity.exe') { return $true }
+        }
+        return $false
+    } catch { return $false }
+}
+
 try {
-    $gpuNames = (Get-CimInstance Win32_VideoController | ForEach-Object { $_.Name }) -join ', '
+    $gpuNames =(Get-CimInstance Win32_VideoController | ForEach-Object { $_.Name }) -join ', '
     Write-Log ("GPU: {0}" -f $gpuNames)
 } catch { $gpuNames = '알 수 없음' }
 if (Get-Process -Name $gameName -ErrorAction SilentlyContinue) {
     Write-Log "경고: 이미 실행 중인 $gameName 프로세스가 있습니다. 측정이 흐려질 수 있으니 먼저 끄세요."
 }
-if (Get-Process -Name 'Unity' -ErrorAction SilentlyContinue) {
+if (Test-UnityEditorRunning) {
     Write-Log "경고: Unity 에디터가 켜져 있습니다. 판정용 측정에서는 에디터를 닫아야 합니다(짧은 점검은 괜찮음)."
 }
 
-$result = [ordered]@{ mode = $Mode; duration_s = $DurationSeconds; started = (Get-Date).ToString('s'); build = $exe.FullName; gpu = $gpuNames; cores = $cores; editor_open = [bool](Get-Process -Name 'Unity' -ErrorAction SilentlyContinue) }
+$result = [ordered]@{ mode = $Mode; duration_s = $DurationSeconds; started = (Get-Date).ToString('s'); build = $exe.FullName; gpu = $gpuNames; cores = $cores; editor_open = (Test-UnityEditorRunning) }
 
 try {
     # ---- 호스트 ----
