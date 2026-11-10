@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -509,7 +509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b451130472dc75a468c99ec7bafa9580, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Game.Adapters.Presentation::Game.Adapters.Presentation.World.TerrainViewBuilder
-  _groundLayer: {fileID: 0}
+  _groundLayer: {fileID: 8574412962073106934, guid: d1ab2c557e8388a4eb98035b54d99a09, type: 2}
+  _terrainMaterial: {fileID: 2100000, guid: 851362e8f6be8c844a4de869e8829180, type: 2}
 --- !u!4 &674305519
 Transform:
   m_ObjectHideFlags: 0
