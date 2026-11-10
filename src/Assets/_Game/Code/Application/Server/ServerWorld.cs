@@ -11,6 +11,7 @@
 // =============================================================
 using System;
 using System.Collections.Generic;
+using Game.Application.Ai;
 using Game.Application.Commands;
 using Game.Application.Config;
 using Game.Application.Gathering;
@@ -20,6 +21,7 @@ using Game.Application.Protocol;
 using Game.Application.Replication;
 using Game.Application.WorldSync;
 using Game.Domain.Common;
+using Game.Domain.Creatures;
 using Game.Domain.Gathering;
 using Game.Domain.Players;
 using Game.Domain.Vitals;
@@ -237,6 +239,22 @@ namespace Game.Application.Server
 
         internal void AttachLocal(LocalWorld local) => Local = local;
 
+        /// <summary>접속 중인 플레이어의 번호·위치를 buffer에 복사한다(AI 입력용, 할당 없음).</summary>
+        /// <returns>복사한 수(buffer 길이를 넘으면 거기까지)</returns>
+        internal int CopyPlayerViews(AiPlayerView[] buffer)
+        {
+            int n = 0;
+            foreach (KeyValuePair<PlayerId, PlayerCharacter> pair in _players)
+            {
+                if (n >= buffer.Length)
+                {
+                    break;
+                }
+                buffer[n++] = new AiPlayerView(pair.Key, pair.Value.Position);
+            }
+            return n;
+        }
+
         /// <summary>자원 상태를 바꾼다. 손대지 않은 상태로 돌아가면 표에서 지운다(바뀐 항목만 들고 있는다).</summary>
         internal void SetResource(ushort index, ResourceState state)
         {
@@ -288,6 +306,7 @@ namespace Game.Application.Server
         private readonly Dictionary<PlayerId, int> _slots = new Dictionary<PlayerId, int>();
         private readonly bool[] _slotUsed;
         private readonly List<IReplicatedTable> _tables = new List<IReplicatedTable>();
+        private readonly AiPlayerView[] _aiPlayers;
 
         public ServerWorld(ServerSettings settings, CommandDispatcher dispatcher, IClock clock, IPerfProbe perf, ILog log)
         {
@@ -298,12 +317,61 @@ namespace Game.Application.Server
             _log = log ?? NullLog.Instance;
             _moveValidator = new AvatarMoveValidator(settings.Move);
             _slotUsed = new bool[Math.Max(1, settings.MaxPlayers)];
+            _aiPlayers = new AiPlayerView[Math.Max(1, settings.MaxPlayers)];
             State = new WorldState();
             _tables.Add(State.Roster);
             _tables.Add(State.Resources);
         }
 
         public WorldState State { get; }
+
+        /// <summary>생물 AI 일정(호스트 전용). 연결하지 않았으면 null. [DES-062]</summary>
+        public AiScheduler Ai { get; private set; }
+
+        /// <summary>
+        /// 생물 AI를 연결한다. 틱마다 조향 결과 반영(명령 처리 앞)과 판단·공격 판정(명령 처리 뒤)이 돈다. 한 번만 부를 수 있다.
+        /// </summary>
+        public void AttachAi(AiScheduler scheduler)
+        {
+            if (Ai != null)
+            {
+                throw new InvalidOperationException("생물 AI는 이미 연결되어 있습니다.");
+            }
+            Ai = scheduler ?? throw new ArgumentNullException(nameof(scheduler));
+        }
+
+        /// <summary>
+        /// 시험용 생물을 시드 고정 배치로 만든다(M1-11 부하 시험, 호스트 전용). 월드가 붙어 있으면 보행 격자를 만들고 지면 위에 놓는다.
+        /// 위치는 월드 중심(플레이어 스폰) 둘레 30~150 m 고리다.
+        /// </summary>
+        /// <param name="count">생물 수(시험은 60)</param>
+        /// <param name="seed">배치 시드(같으면 같은 위치)</param>
+        /// <returns>만든 수</returns>
+        /// <exception cref="InvalidOperationException">AttachAi 전에 불렀을 때</exception>
+        public int SpawnTestCreatures(int count, ulong seed)
+        {
+            if (Ai == null)
+            {
+                throw new InvalidOperationException("AttachAi를 먼저 부르세요.");
+            }
+            LocalWorld local = State.Local;
+            float cx = local != null ? local.WidthMeters * 0.5f : 0f;
+            float cz = local != null ? local.DepthMeters * 0.5f : 0f;
+            if (local != null && !Ai.Backend.HasWalkGrid)
+            {
+                Ai.PrepareWalkGrid(local, cx, cz);
+            }
+            Func<float, float, bool> walkable = Ai.Backend.HasWalkGrid ? (Func<float, float, bool>)Ai.Backend.IsWalkable : null;
+            (float X, float Z)[] spots = TestCreatureLayout.Generate(count, seed, cx, cz, walkable);
+            for (int i = 0; i < spots.Length; i++)
+            {
+                float y = local != null ? local.SurfaceHeightMeters(spots[i].X, spots[i].Z) : 0f;
+                // 생물마다 다른 배회 난수 시드(번호 기반이라 같은 시드면 같은 배회).
+                uint rng = unchecked((uint)(seed ^ (seed >> 32)) + (uint)(i + 1) * 2654435761u);
+                Ai.Registry.Spawn(CreatureDefinition.TestCreature, new Vec3f(spots[i].X, y, spots[i].Z), rng);
+            }
+            return spots.Length;
+        }
 
         /// <summary>복제 대상 표 목록(복제 송신기가 읽는다).</summary>
         public IReadOnlyList<IReplicatedTable> Tables => _tables;
@@ -426,9 +494,27 @@ namespace Game.Application.Server
             _perf.Begin(PerfMarkers.ServerTotal);
             try
             {
+                // [DES-062] 지난번 예약한 조향 잡 결과를 먼저 반영한다(SDD 3.11.10).
+                if (Ai != null)
+                {
+                    _perf.Begin(PerfMarkers.ServerAiApply);
+                    Ai.ApplySteering();
+                    _perf.End(PerfMarkers.ServerAiApply);
+                }
+
                 _perf.Begin(PerfMarkers.ServerCommands);
                 ProcessCommands(tick);
                 _perf.End(PerfMarkers.ServerCommands);
+
+                // 판단(10 Hz 분산) -> 공격 판정 -> 다음 조향 입력·예약.
+                if (Ai != null)
+                {
+                    _perf.Begin(PerfMarkers.ServerAiDecide);
+                    int players = State.CopyPlayerViews(_aiPlayers);
+                    Ai.Decide(tick, deltaSeconds, _aiPlayers, players);
+                    _perf.End(PerfMarkers.ServerAiDecide);
+                    _perf.Count("ai.creatures", Ai.Registry.Count);
+                }
 
                 // 월드 시스템(시각, 상태 값, 스폰 등)은 M2 이후에 이 자리에서 돈다.
                 _perf.Begin(PerfMarkers.ServerSystems);
