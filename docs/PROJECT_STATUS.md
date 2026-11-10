@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10·M1-11 완료, M1-12 1차(측정 준비) 완료)
-- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **M1-12 2차: 에디터를 닫고 `powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1`(P8 5분) + `-Mode P1` 측정 → `docs/test/perf/M1_tech_verification.md` 작성. 화면 없는 봇 크래시 수정됨** → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험 → 묶음 끝에 문서 한 번에 반영(STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion`) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
+- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10·M1-11·M1-12 완료)
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **묶음 끝 문서 반영(SDD·STORYBOARD·SRS, 반영 대기 항목 모음) → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험** (STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion` 포함) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가와 Steam 릴레이 접속(M1-12 미확인), Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -132,6 +132,7 @@
 | 2026-11-10 | 개발용 관심 범위 표시 추가(사용자 요청, developer): F1로 켜고 끔(기본 꺼짐), 오른쪽 아래, 개발 빌드·에디터 전용(IMGUI, F3 성능 표시와 같은 방식). 내 위치, 받은 생물 수/범위 300 m, 가까움·중간·멂 수, 최근접·최원 거리와 한계 310 m, 호스트는 서버 전체 생물 수. 파일 CreatureInterestStats(순수 계산)·CreatureInterestHud·GameFlow 연결, 시험 3개. 총괄 재확인: EditMode 645/645, PlayMode 26/26, 개발 빌드 15:24. 사용자 화면 확인 완료. **SRS·SDD 반영 대기**: 개발용 키 F1(3.7.4 개발 옵션·STORYBOARD 키 할당표의 개발 전용 키) | 사용자 요청 |
 | 2026-11-10 | M1-12 1차 결과(developer, focus 1회, 측정 빌드 16:19): 봇 `-bot`(BotBrain 경로→자원 타격→생물 추적, BotClient는 World 씬·지형·자원 뷰 없이 동작), JoinTimeline(중도 참가 단계별 시간 JSON), RuntimePerfSampler(1초마다 메모리·대역폭·RTT·바뀐 자원 수, IL2CPP용 psapi), CSV 열 6개 추가, 측정 스크립트 `tools/perf/RunM1Perf.ps1`(호스트 + 봇 6 + 60초 뒤 중도 참가 봇 1, P1 모드, summary.md·json), 기존 버그 수정(활동 생물 수가 CSV에 안 남던 카운터 이름). 30초 점검(에디터 켜짐, 판정용 아님): Server.Total 평균 0.061 ms·p99 0.277 ms, 메인 스레드 2.68 ms, 호스트 송신 624 kbps, 참가자 수신 95 kbps, 중도 참가 11.1초(연결 10.3초가 대부분), 메모리 1.5 GB, VRAM 1.3 GB. **결함: 개발 빌드를 `-batchmode`/`-nographics`로 띄우면 시작 직후 크래시**(ntdll, 종료 코드 -1073741819, 창 모드는 정상, 11-04에는 -nographics 동작) → 스크립트가 창 모드 봇(320x180)으로 자동 전환. 참고: 봇 창 실행으로 플레이어 설정(레지스트리 PlayerPrefs)의 마지막 창 크기가 320x1080 창 모드로 남음(실행 인자 없이 exe를 켤 때만 영향). 총괄 재확인: EditMode 662/662, PlayMode 26/26, 남은 프로세스 0, 빌드 폴더 플러그인 원상태 | developer 보고 + 총괄 검증 |
 | 2026-11-10 | **화면 없는 실행 크래시 수정**(사용자 결정: 측정 전에 먼저 수정 → debugger): 원인은 `UiSafeArea16x9.Refresh`의 끝없는 재귀(offset 설정이 같은 호출 안에서 OnRectTransformDimensionsChange를 다시 불러 Refresh 반복, Null 그래픽 장치에서 캔버스 크기가 수렴하지 않아 스택 넘침 → ntdll 접근 위반). 근거: WER 덤프 스택 잔여 주소를 GameAssembly.pdb로 풀어 확인, frame timing 끄기는 무관 확인. 수정: 재진입 방지 플래그 + 캔버스 폭·높이 0 이하/NaN/무한이면 건너뜀(UiSafeArea16x9.cs 한 파일). 빌드 4회. 화면 없는 30초 점검: 크래시 0, 접속 8명, 호스트 FPS 60.0/1% Low 59.7(참고), 중도 참가 0.73초(연결 0.20초, 창 모드 때 10.3초는 봇 창 부팅 시간이 섞였던 것으로 보임), 참가자 수신 115 kbps. 남은 의심: Null 장치에서 값이 수렴하지 않은 정확한 이유 미확인. 총괄 재확인: EditMode 662/662, PlayMode 26/26, ProjectSettings 차이 없음 | 사용자 결정 + debugger |
+| 2026-11-10 | **M1-12 측정 결과: 조건부 통과**(에디터 닫고 총괄이 RunM1Perf.ps1 실행, 보고서 `docs/test/perf/M1_tech_verification.md`는 developer). P8(호스트 + 화면 없는 봇 7, 300초): Server.Total 평균 0.060 ms·p99 0.377 ms(틱 최악 5.57 ms, AiApply 구간), 메인 스레드 2.20 ms, 호스트 송신 1.03 Mbps, 참가자 수신 최대 175 kbps, 중도 참가 0.74초, 메모리 1.37 GB, VRAM 1.4 GB, 호스트 FPS 60 고정(vSync 추정, 참고). P1: Server.Total 0.029 ms, 송신 66 kbps. 3.12.9 미달 대응 불필요, 관찰 항목. 「조건부」 이유: PC 1대·봇 CPU 공유·임시 그래픽·Tugboat 직접 전송, Steam 릴레이 미확인. 권고: 흐름장 전용 측정 표식, 생물 스냅샷 GC 재측정, 실제 에셋 뒤 재측정(M6-10). 스크립트 에디터 감지 오탐(MCP용 unity.exe) 수정 | 총괄 측정 + developer 보고서 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -232,6 +233,7 @@
 | 1 (Do M1-11 1차) | 179 | 58 | EditMode 624 + PlayMode 25 | 100% (649/649) | 0 | - |
 | 1 (Do M1-11 2차) | 179 | 58 | EditMode 642 + PlayMode 26 | 100% (668/668) | 0 | - |
 | 1 (Do M1-12 1차) | 179 | 58 | EditMode 662 + PlayMode 26 | 100% (688/688) | 1 (화면 없는 실행 시작 크래시, 수정됨) | - |
+| 1 (Do M1-12 측정) | 179 | 58 | EditMode 662 + PlayMode 26, 성능 P8·P1 판정 항목 전부 통과 | 100% | 0 (신규) | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
