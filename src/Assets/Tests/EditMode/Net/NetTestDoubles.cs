@@ -13,6 +13,7 @@ using Game.Adapters.Net.Join;
 using Game.Adapters.Net.Replication;
 using Game.Application.Commands;
 using Game.Application.Config;
+using Game.Application.Gathering;
 using Game.Application.Ports;
 using Game.Application.Protocol;
 using Game.Application.Replication;
@@ -125,6 +126,7 @@ namespace Game.Tests.Net
             var guard = new RequestGuard(30, new CommandLimits(ProtocolConstants.PositionHalfRangeMeters));
             var dispatcher = new CommandDispatcher(guard, Log);
             dispatcher.Register<PingCommand>(CommandKind.Ping, new PingCommandHandler());
+            HitResourceCommandHandler.Install(dispatcher, guard, new HarvestSettings());
             World = new ServerWorld(new ServerSettings(), dispatcher, Clock, null, Log);
 
             var info = new HostWorldInfo { WorldName = "w", HostName = "h", SeedText = "BENCH-0001", Seed = 1, GeneratorVersion = 0, GameVersion = Build, ContentHash = Hash, ExpectedWorldHash = expectedWorldHash };

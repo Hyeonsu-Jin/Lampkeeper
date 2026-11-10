@@ -30,6 +30,9 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Game.Application.Session;
 using Game.Application.Server;
+using Game.Application.Gathering;
+using Game.Application.WorldSync;
+using Game.Domain.Gathering;
 
 namespace Game.Tests.Integration
 {
@@ -38,6 +41,9 @@ namespace Game.Tests.Integration
         private const ulong DevPlayerId = 101UL;
         private const string AvatarPrefabPath = "Assets/_Game/Prefabs/PlayerAvatar.prefab";
         private const float WaitSeconds = 10f;
+
+        // 월드(약 2만 개 자원)를 시험마다 다시 만들지 않도록 같은 시드면 재사용한다.
+        private static readonly LocalWorldProvider SharedWorlds = new LocalWorldProvider();
 
         private GameObject _networkObject;
         private NetworkManager _network;
@@ -81,6 +87,8 @@ namespace Game.Tests.Integration
                 Perf = NullPerfProbe.Instance,
                 AvatarPrefab = avatar.GetComponent<NetworkObject>(),
                 IsDevelopmentBuild = true,
+                WorldScale = WorldScale.Full,
+                Worlds = SharedWorlds,
             };
         }
 
@@ -223,6 +231,66 @@ namespace Game.Tests.Integration
             // [R-31] PacketBroadcast 한 종류로 바이트를 담는 한 겹이 늘어난 비용. 결과는 보고서에 적는다.
             Debug.Log("[R-31] FishNet PacketBroadcast 송신 1건당 관리 힙 할당 약 " + perSend + " B (Ping 명령, " + command.Payload.Length + " B 본문, 시도 " + deltas.Count + "회 중앙값)");
             Assert.Less(perSend, 4096, "송신 1건당 할당이 비정상적으로 크다");
+        }
+
+        [UnityTest]
+        public IEnumerator LateJoin_With5000ChangedResources_MirrorEqualsHost_ThenHitDeltaArrives()
+        {
+            // [FR-009, NFR-016, NFR-018] 2만 개 중 5,000개가 이미 바뀐 월드에 (호스트 자신의 클라이언트가) 중도 참가한다.
+            // 참가 경로는 참가자와 같다: 시드 → 로컬 생성 → 요약값 비교 → 바뀐 상태만 스냅샷 → 이후 델타.
+            var world = new HostWorldInfo { WorldName = "resources", SeedText = "BENCH-0001", Access = SessionAccess.FriendsOnly };
+            _runtime = SessionRuntime.CreateHost(_deps, world);
+            LocalWorld local = _runtime.World.State.Local;
+            Assert.IsNotNull(local);
+            Assert.AreNotEqual(0UL, world.ExpectedWorldHash, "호스트가 월드를 만들어 기대 요약값을 정했다");
+            Assert.AreEqual(5000, ResourceChangeTool.ApplyChanges(_runtime.World.State.Resources, local, ResourceChangeTool.DefaultChangedCount, 4242UL));
+
+            float start = Time.realtimeSinceStartup;
+            _runtime.StartHost();
+            yield return WaitUntil(() => { _runtime.Tick(); return _runtime.Session.State == ClientSessionState.InGame; }, "중도 참가 완료");
+            float joinSeconds = Time.realtimeSinceStartup - start;
+
+            Assert.AreSame(local, _runtime.Mirror.Local, "참가자 사본이 로컬에서 만든 월드를 가졌다");
+            Assert.AreEqual(5000, _runtime.Mirror.Resources.Count);
+            foreach (var entry in _runtime.World.State.Resources.Entries)
+            {
+                Assert.IsTrue(_runtime.Mirror.Resources.TryGet(entry.Key, out ResourceState mirrored));
+                Assert.AreEqual(entry.Value, mirrored);
+            }
+            UnityEngine.Debug.Log("[M1-10] 루프백 중도 참가(5,000개 변경) " + (joinSeconds * 1000f).ToString("F0") + " ms (서버 시작·접속·월드 준비·스냅샷 " + _runtime.Mirror.SnapshotChunksReceived + "조각 포함)");
+
+            // 이후 타격: 서 있는 나무를 때리면 델타 하나가 사본에 반영된다.
+            int tree = -1;
+            Vec3f treePos = Vec3f.Zero;
+            for (int i = 0; i < local.ResourceCount && tree < 0; i++)
+            {
+                local.TryGetResource(i, out ResourceKind kind, out Vec3f pos);
+                if (kind == ResourceKind.Tree && !_runtime.World.State.Resources.TryGet((uint)i, out _))
+                {
+                    tree = i;
+                    treePos = pos;
+                }
+            }
+            Assert.GreaterOrEqual(tree, 0);
+            Assert.IsTrue(_runtime.World.State.TryGetPlayer(new PlayerId(DevPlayerId), out var player));
+            player.Position = new Vec3f(treePos.X + 1f, treePos.Y, treePos.Z);
+
+            CommandResultMessage? result = null;
+            _runtime.ClientTransport.Received += message =>
+            {
+                if (message is CommandResultMessage r)
+                {
+                    result = r;
+                }
+            };
+            Assert.IsTrue(CommandCodec.TryEncode(new HitResourceCommand(900u, (ushort)tree, 0), out CommandMessage command));
+            Assert.IsTrue(_runtime.ClientTransport.SendDefault(command));
+            yield return WaitUntil(() => result.HasValue, "타격 결과 수신");
+            Assert.IsTrue(result.Value.Ok, result.Value.Rejection.ToString());
+            yield return WaitUntil(() => _runtime.Mirror.Resources.TryGet((uint)tree, out _), "타격 델타가 사본에 반영됨");
+            _runtime.Mirror.Resources.TryGet((uint)tree, out ResourceState hit);
+            Assert.AreEqual(ResourcePhase.Damaged, hit.Phase);
+            Assert.AreEqual(5001, _runtime.Mirror.Resources.Count);
         }
 
         [UnityTest]
