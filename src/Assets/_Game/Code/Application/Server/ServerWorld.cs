@@ -83,8 +83,24 @@ namespace Game.Application.Server
         public float MaxDeltaSeconds { get; }
         public float MaxVerticalSpeed { get; }
 
-        public AvatarMoveSettings(float walkSpeed, float runSpeed, float tolerance, float slackMeters, float staminaGraceSeconds, float maxDeltaSeconds, float maxVerticalSpeed)
+        /// <summary>자세 수신 빈도 상한(Hz). 기본은 송신 30 Hz의 1.5배. [IMP-001, SEC-001 항목 3]</summary>
+        public float MaxPoseHz { get; }
+
+        /// <summary>첫 자세가 스폰 지점에서 벗어나도 되는 수평 반경(m). [IMP-001, REV-003]</summary>
+        public float SpawnRadiusMeters { get; }
+
+        /// <summary>첫 자세가 스폰 지점에서 벗어나도 되는 높이 차(m).</summary>
+        public float SpawnHeightToleranceMeters { get; }
+
+        /// <summary>자세 빈도 버킷의 순간 허용 개수(잠깐 끊겼다 몰려 들어오는 자세를 흡수).</summary>
+        public const int PoseBurstCapacity = 5;
+
+        public AvatarMoveSettings(float walkSpeed, float runSpeed, float tolerance, float slackMeters, float staminaGraceSeconds, float maxDeltaSeconds, float maxVerticalSpeed,
+            float maxPoseHz = 45f, float spawnRadiusMeters = 15f, float spawnHeightToleranceMeters = 15f)
         {
+            MaxPoseHz = maxPoseHz;
+            SpawnRadiusMeters = spawnRadiusMeters;
+            SpawnHeightToleranceMeters = spawnHeightToleranceMeters;
             WalkSpeed = walkSpeed;
             RunSpeed = runSpeed;
             Tolerance = tolerance;
@@ -120,6 +136,26 @@ namespace Game.Application.Server
             Stamina = stamina ?? throw new ArgumentNullException(nameof(stamina));
         }
 
+        /// <summary>스폰 지점. 첫 자세는 이 근처여야 한다. [IMP-001]</summary>
+        public Vec3f SpawnPosition { get; private set; }
+
+        /// <summary>스폰 지점을 정한다(플레이어를 들일 때 한 번).</summary>
+        public void SetSpawn(Vec3f spawn) => SpawnPosition = spawn;
+
+        /// <summary>마지막으로 받아들인 자세를 호스트가 받은 시각(초, 호스트 시계). 클라이언트 시각은 믿지 않는다.</summary>
+        internal double LastHostSeconds { get; set; }
+
+        /// <summary>수평 이동 예산(m). 호스트 시간이 흐르면 차오르고, 이동하면 줄어든다. 자세를 쪼개 보내도 합계는 같다.</summary>
+        internal float BudgetHorizontal { get; set; }
+
+        /// <summary>수직 이동 예산(m).</summary>
+        internal float BudgetVertical { get; set; }
+
+        /// <summary>자세 수신 빈도 버킷 토큰과 마지막 보충 시각.</summary>
+        internal double PoseTokens { get; set; }
+        internal double PoseTokensAt { get; set; }
+        internal bool PoseBucketStarted { get; set; }
+
         public bool HasLast { get; internal set; }
         public AvatarPose LastAccepted { get; internal set; }
         public StaminaState Stamina { get; }
@@ -130,7 +166,7 @@ namespace Game.Application.Server
 
     /// <summary>
     /// 아바타 이동 검사. [D-04, D-24, SDD 3.11.12] 위치는 클라이언트가 계산하고 호스트는 속도·범위만 검사한다.
-    /// 허용 거리 = 속도 × 허용 배율 × 시간 + 여유 거리. 서버 쪽 스태미나 추정이 0이면 걷기 속도가 상한이다(0.5초 여유 포함).
+    /// 허용 거리 = 속도 × 허용 배율 × 호스트 수신 시간(누적 예산) + 여유 거리(한 번). 서버 쪽 스태미나 추정이 0이면 걷기 속도가 상한이다(0.5초 여유 포함).
     /// 속도 한도 안의 위치 조작은 막지 못하며 Check 단계 보안 점검 대상이다(R-07).
     /// </summary>
     public sealed class AvatarMoveValidator
@@ -143,54 +179,105 @@ namespace Game.Application.Server
         }
 
         /// <summary>
-        /// 새 자세를 검사한다. 받아들이면 상태(마지막 자세·스태미나 추정)를 갱신한다.
+        /// 새 자세를 검사한다. 받아들이면 상태(마지막 자세·스태미나 추정·예산)를 갱신한다.
+        /// [IMP-001] 시간은 호스트가 받은 시각만 쓴다(자세 안의 시각은 중복·옛 자세 판별에만 쓴다).
+        /// 거리는 자세마다 여유를 더하지 않고 누적 예산으로 따진다.
         /// </summary>
         /// <param name="state">이 플레이어의 검사 상태</param>
         /// <param name="pose">클라이언트가 보낸 자세</param>
+        /// <param name="hostSeconds">호스트가 이 자세를 받은 시각(호스트 시계, 초)</param>
         /// <returns>결과. 거부면 호스트가 마지막으로 받아들인 위치는 state.LastAccepted.Position</returns>
-        public AvatarMoveVerdict Check(AvatarMoveState state, in AvatarPose pose)
+        public AvatarMoveVerdict Check(AvatarMoveState state, in AvatarPose pose, double hostSeconds)
         {
+            // [SEC-001 항목 3] 자세 빈도 상한. 넘치는 자세는 조용히 버린다(되돌림 회신도 폭주하지 않게).
+            if (!TakePoseToken(state, hostSeconds))
+            {
+                return AvatarMoveVerdict.Stale;
+            }
+
             // 월드 밖이거나 값이 이상하면 거부한다(NaN·무한대 포함).
             if (!pose.Position.IsFinite || !ProtocolConstants.IsInsideWorld(pose.Position.X, pose.Position.Z))
             {
                 return AvatarMoveVerdict.Rejected;
             }
 
-            // 첫 자세는 스폰 직후 기준점으로 받아들인다(시간 간격이 없음).
+            // [REV-003] 첫 자세는 스폰 지점 근처만 기준점으로 받아들인다(월드 어디로든 순간 이동하는 것을 막음).
             if (!state.HasLast)
             {
+                float fromSpawn = Vec3f.HorizontalDistance(state.SpawnPosition, pose.Position);
+                float heightGap = Math.Abs(pose.Position.Y - state.SpawnPosition.Y);
+                if (fromSpawn > _settings.SpawnRadiusMeters || heightGap > _settings.SpawnHeightToleranceMeters)
+                {
+                    return AvatarMoveVerdict.Rejected;
+                }
                 state.LastAccepted = pose;
                 state.HasLast = true;
+                state.LastHostSeconds = hostSeconds;
+                state.BudgetHorizontal = _settings.SlackMeters;
+                state.BudgetVertical = _settings.SlackMeters;
                 return AvatarMoveVerdict.Accepted;
             }
 
-            // 보낸 쪽 시각 차이(밀리초). 한 바퀴 돌아도 부호 있는 차이로 맞는다.
+            // 보낸 쪽 시각은 앞서 나가는지만 본다. 한 바퀴 돌아도 부호 있는 차이로 맞는다.
             int deltaMs = unchecked((int)(pose.TimeMs - state.LastAccepted.TimeMs));
             if (deltaMs <= 0)
             {
                 return AvatarMoveVerdict.Stale;
             }
-            float dt = Math.Min(deltaMs / 1000f, _settings.MaxDeltaSeconds);
+
+            // [SEC-001 항목 2] 경과 시간은 호스트 시계 기준. 끊겼다 이어진 경우를 위해 상한(최대 간격)을 둔다.
+            float maxDt = _settings.MaxDeltaSeconds;
+            float dt = (float)Math.Min(Math.Max(0d, hostSeconds - state.LastHostSeconds), maxDt);
 
             // [FR-024] 스태미나가 있어야(또는 막 소진된 직후 여유 안이어야) 달리기 속도를 인정한다.
             bool runAllowed = state.Stamina.CanRun || state.SecondsAtZero <= _settings.StaminaGraceSeconds;
             bool running = pose.Running && runAllowed;
             float speed = running ? _settings.RunSpeed : _settings.WalkSpeed;
 
+            // [SEC-001 항목 1] 여유 거리는 자세마다가 아니라 예산 한도에 한 번만 들어 있다.
+            float capH = speed * _settings.Tolerance * maxDt + _settings.SlackMeters;
+            float capV = _settings.MaxVerticalSpeed * maxDt + _settings.SlackMeters;
+            float budgetH = Math.Min(state.BudgetHorizontal + speed * _settings.Tolerance * dt, capH);
+            float budgetV = Math.Min(state.BudgetVertical + _settings.MaxVerticalSpeed * dt, capV);
+
             float horizontal = Vec3f.HorizontalDistance(state.LastAccepted.Position, pose.Position);
             float vertical = Math.Abs(pose.Position.Y - state.LastAccepted.Position.Y);
-            float allowedHorizontal = speed * _settings.Tolerance * dt + _settings.SlackMeters;
-            float allowedVertical = _settings.MaxVerticalSpeed * dt + _settings.SlackMeters;
-            if (horizontal > allowedHorizontal || vertical > allowedVertical)
+            if (horizontal > budgetH || vertical > budgetV)
             {
+                // 거부된 자세는 기준 시각·예산을 바꾸지 않는다(다음 자세에서 같은 시간만큼 다시 계산).
                 return AvatarMoveVerdict.Rejected;
             }
+
+            state.BudgetHorizontal = budgetH - horizontal;
+            state.BudgetVertical = budgetV - vertical;
+            state.LastHostSeconds = hostSeconds;
 
             // 받아들인 자세로 스태미나를 추정한다(달리기 플래그 기준). 0 근처에서는 소진 시간을 센다.
             state.Stamina.Tick(dt, pose.Running && state.Stamina.CanRun);
             state.SecondsAtZero = state.Stamina.Current <= 0f ? state.SecondsAtZero + dt : 0f;
             state.LastAccepted = pose;
             return AvatarMoveVerdict.Accepted;
+        }
+
+        /// <summary>자세 수신 토큰 버킷에서 하나를 꺼낸다. 없으면 false.</summary>
+        private bool TakePoseToken(AvatarMoveState state, double hostSeconds)
+        {
+            double capacity = AvatarMoveSettings.PoseBurstCapacity;
+            if (!state.PoseBucketStarted)
+            {
+                state.PoseBucketStarted = true;
+                state.PoseTokens = capacity;
+                state.PoseTokensAt = hostSeconds;
+            }
+            double elapsed = Math.Max(0d, hostSeconds - state.PoseTokensAt);
+            state.PoseTokensAt = Math.Max(state.PoseTokensAt, hostSeconds);
+            state.PoseTokens = Math.Min(capacity, state.PoseTokens + elapsed * _settings.MaxPoseHz);
+            if (state.PoseTokens < 1d)
+            {
+                return false;
+            }
+            state.PoseTokens -= 1d;
+            return true;
         }
     }
 
@@ -304,6 +391,7 @@ namespace Game.Application.Server
         private readonly Queue<QueuedCommand> _queue = new Queue<QueuedCommand>();
         private readonly Dictionary<PlayerId, AvatarMoveState> _moveStates = new Dictionary<PlayerId, AvatarMoveState>();
         private readonly Dictionary<PlayerId, int> _slots = new Dictionary<PlayerId, int>();
+        private readonly Dictionary<PlayerId, int> _queuedPerPlayer = new Dictionary<PlayerId, int>();
         private readonly bool[] _slotUsed;
         private readonly List<IReplicatedTable> _tables = new List<IReplicatedTable>();
         private readonly AiPlayerView[] _aiPlayers;
@@ -418,7 +506,9 @@ namespace Game.Application.Server
             Vec3f spawn = SpawnPositionForSlot(slot);
             var character = new PlayerCharacter(id, displayName, spawn, _settings.Stamina);
             State.AddPlayer(character);
-            _moveStates[id] = new AvatarMoveState(character.Stamina); // 서버 쪽 스태미나 추정은 캐릭터의 값 하나만 쓴다
+            var moveState = new AvatarMoveState(character.Stamina); // 서버 쪽 스태미나 추정은 캐릭터의 값 하나만 쓴다
+            moveState.SetSpawn(spawn); // [IMP-001] 첫 자세는 스폰 근처만 받는다
+            _moveStates[id] = moveState;
             State.Roster.Set((uint)slot, new RosterEntry(id, displayName, isHost));
             PlayerAdded?.Invoke(id, slot);
             return slot;
@@ -434,11 +524,17 @@ namespace Game.Application.Server
             _slots.Remove(id);
             _slotUsed[slot] = false;
             _moveStates.Remove(id);
+            _queuedPerPlayer.Remove(id);
             State.RemovePlayer(id);
             State.Roster.Remove((uint)slot);
             _dispatcher.RemovePlayer(id);
             PlayerRemoved?.Invoke(id);
         }
+
+        /// <summary>
+        /// 디코드 실패 같은 입력에 거부 회신을 해도 되는지. 명령과 같은 플레이어 전체 버킷을 쓴다(회신 폭주로 부풀리지 않기). [IMP-005, SEC-004]
+        /// </summary>
+        public bool AllowRejectionReply(PlayerId player) => _dispatcher.AllowReply(player, _clock.RealtimeSeconds);
 
         public bool HasPlayer(PlayerId id) => _slots.ContainsKey(id);
 
@@ -474,11 +570,16 @@ namespace Game.Application.Server
             {
                 return false;
             }
-            if (_queue.Count >= _settings.MaxQueuedCommands)
+            // [IMP-005, DEF-003] 대기열은 플레이어별 몫이 있다. 한 명이 몫을 다 채워도 다른 참가자의 자리는 남는다.
+            // 몫 = 전체 상한 / 최대 인원(올림, 최소 1). 전체 상한도 그대로 지킨다.
+            _queuedPerPlayer.TryGetValue(player, out int mine);
+            int quota = Math.Max(1, (_settings.MaxQueuedCommands + Math.Max(1, _settings.MaxPlayers) - 1) / Math.Max(1, _settings.MaxPlayers));
+            if (_queue.Count >= _settings.MaxQueuedCommands || mine >= quota)
             {
-                _log.Warn("command", "대기열이 가득 차 명령을 버렸습니다. player=" + player);
+                _log.Warn("command", "대기열 몫을 넘어 명령을 버렸습니다. player=" + player);
                 return false;
             }
+            _queuedPerPlayer[player] = mine + 1;
             _queue.Enqueue(new QueuedCommand(player, command));
             return true;
         }
@@ -553,7 +654,7 @@ namespace Game.Application.Server
                 return AvatarMoveVerdict.Stale;
             }
 
-            AvatarMoveVerdict verdict = _moveValidator.Check(state, pose);
+            AvatarMoveVerdict verdict = _moveValidator.Check(state, pose, _clock.RealtimeSeconds);
             switch (verdict)
             {
                 case AvatarMoveVerdict.Accepted:
@@ -577,6 +678,10 @@ namespace Game.Application.Server
             while (budget-- > 0 && _queue.Count > 0)
             {
                 QueuedCommand item = _queue.Dequeue();
+                if (_queuedPerPlayer.TryGetValue(item.Player, out int queued) && queued > 0)
+                {
+                    _queuedPerPlayer[item.Player] = queued - 1;
+                }
                 if (!State.TryGetPlayer(item.Player, out _))
                 {
                     continue; // 대기 중에 나간 플레이어

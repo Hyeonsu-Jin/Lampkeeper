@@ -133,14 +133,22 @@ namespace Game.Adapters.Net.Gateway
             if (!CommandCodec.TryDecode(message, out ICommand command, out Rejection rejection))
             {
                 DroppedCount++;
-                _server.SendDefault(connectionId, new CommandResultMessage(message.RequestId, false, rejection));
+                // [IMP-005, NFR-041] 잘못된 패킷 회신도 명령과 같은 빈도 버킷을 쓴다. 한도를 넘으면 회신 없이 버린다.
+                if (_world.AllowRejectionReply(player))
+                {
+                    _server.SendDefault(connectionId, new CommandResultMessage(message.RequestId, false, rejection));
+                }
                 return;
             }
 
             if (!_world.Enqueue(player, command))
             {
                 DroppedCount++;
-                _server.SendDefault(connectionId, new CommandResultMessage(message.RequestId, false, new Rejection(ReasonCode.RateLimited)));
+                // [IMP-005] 몫을 넘긴 명령의 거부 회신도 같은 빈도 버킷으로 제한한다(회신 폭주 방지).
+                if (_world.AllowRejectionReply(player))
+                {
+                    _server.SendDefault(connectionId, new CommandResultMessage(message.RequestId, false, new Rejection(ReasonCode.RateLimited)));
+                }
             }
         }
 

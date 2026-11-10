@@ -168,7 +168,7 @@ namespace Game.Tests.Application
         [Test]
         public void QueueIsBounded_AndPerTickBudgetLimitsWork()
         {
-            var settings = new ServerSettings { MaxQueuedCommands = 10, MaxCommandsPerTick = 3, RequestsPerSecondLimit = 1000 };
+            var settings = new ServerSettings { MaxPlayers = 1, MaxQueuedCommands = 10, MaxCommandsPerTick = 3, RequestsPerSecondLimit = 1000 };
             var clock = new FakeClock();
             var dispatcher = new CommandDispatcher(new RequestGuard(1000, new CommandLimits(1500f)), NullLog.Instance);
             dispatcher.Register<PingCommand>(CommandKind.Ping, new PingCommandHandler());
@@ -240,6 +240,13 @@ namespace Game.Tests.Application
         }
     }
 
+    /// <summary>시험용: 자세 안의 시각(ms)을 호스트 수신 시각으로 쓰는 호출(정직한 클라이언트를 흉내 낸다).</summary>
+    internal static class AvatarMoveValidatorTestExtensions
+    {
+        public static AvatarMoveVerdict Check(this AvatarMoveValidator validator, AvatarMoveState state, AvatarPose pose) =>
+            validator.Check(state, pose, pose.TimeMs / 1000d);
+    }
+
     public class AvatarMoveValidatorTests
     {
         // 걷기 4, 달리기 7, 허용 배율 1.25, 여유 0.5 m, 소진 여유 0.5초, 최대 간격 0.5초, 수직 40 m/s
@@ -252,11 +259,60 @@ namespace Game.Tests.Application
         private static (AvatarMoveValidator, AvatarMoveState) Create() => (new AvatarMoveValidator(Settings), new AvatarMoveState(Stamina));
 
         [Test]
-        public void FirstPose_IsAcceptedAsBaseline()
+        public void FirstPose_NearSpawn_IsAcceptedAsBaseline()
         {
             var (validator, state) = Create();
-            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(0f, 1000)));
+            state.SetSpawn(new Vec3f(100f, 0f, 100f));
+            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(105f, 1000, z: 100f)));
             Assert.IsTrue(state.HasLast);
+        }
+
+        [Test]
+        public void FirstPose_FarFromSpawn_OrWrongHeight_IsRejected()
+        {
+            // [IMP-001, REV-003] 첫 자세로 순간 이동하지 못한다.
+            var (validator, state) = Create();
+            state.SetSpawn(new Vec3f(100f, 0f, 100f));
+            Assert.AreEqual(AvatarMoveVerdict.Rejected, validator.Check(state, Pose(500f, 1000, z: 100f)));
+            Assert.AreEqual(AvatarMoveVerdict.Rejected, validator.Check(state, Pose(100f, 1100, y: 200f, z: 100f)));
+            Assert.IsFalse(state.HasLast);
+        }
+
+        [Test]
+        public void ClientClaimedTime_IsNotTrusted_HostTimeDecidesDistance()
+        {
+            // [IMP-001] 자세 안 시각을 10초 앞당겨도 호스트가 받은 시각 차이(0.1초)만 인정한다.
+            var (validator, state) = Create();
+            validator.Check(state, Pose(0f, 0), 0d);
+            Assert.AreEqual(AvatarMoveVerdict.Rejected, validator.Check(state, Pose(3f, 10000), 0.1d));
+        }
+
+        [Test]
+        public void SlackIsGivenOnce_NotPerPose()
+        {
+            // [IMP-001] 걷기 한도(4 x 1.25 = 5 m/s)로 2초: 합계 10 m + 여유 0.5 m까지만 가능. 33 ms마다 0.18 m씩 = 5.45 m/s는 쌓여 결국 거부된다.
+            var (validator, state) = Create();
+            validator.Check(state, Pose(0f, 0), 0d);
+            int rejected = 0;
+            for (int i = 1; i <= 60; i++)
+            {
+                uint ms = (uint)(i * 33);
+                if (validator.Check(state, Pose(0.18f * i, ms), ms / 1000d) == AvatarMoveVerdict.Rejected) { rejected++; }
+            }
+            Assert.Greater(rejected, 0);
+        }
+
+        [Test]
+        public void PoseFlood_IsDroppedByRateLimit()
+        {
+            // [IMP-001, SEC-001 항목 3] 같은 호스트 시각에 자세를 몰아 보내면 버킷(5개)을 넘는 자세는 버린다.
+            var (validator, state) = Create();
+            int stale = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                if (validator.Check(state, Pose(0f, (uint)(i + 1)), 1d) == AvatarMoveVerdict.Stale) { stale++; }
+            }
+            Assert.AreEqual(45, stale);
         }
 
         [Test]
@@ -349,6 +405,7 @@ namespace Game.Tests.Application
         {
             // 회귀: 월드 좌표는 0~3072인데 ±1536으로 검사해 중앙(1536) 스폰의 이동이 전부 거부되던 결함.
             var (validator, state) = Create();
+            state.SetSpawn(new Vec3f(1536f, 311f, 1536f));
             Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536f, 0, y: 311f, z: 1536f)));
             Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536.2f, 33, y: 311f, z: 1535.8f)));
             Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536.4f, 66, y: 311f, z: 1535.6f)));
@@ -379,8 +436,8 @@ namespace Game.Tests.Application
         public void TimeWrapAround_IsHandled()
         {
             var (validator, state) = Create();
-            validator.Check(state, Pose(0f, uint.MaxValue - 100));
-            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1f, 400)), "49일 시각이 한 바퀴 돌아도 차이로 계산");
+            validator.Check(state, Pose(0f, uint.MaxValue - 100), 0d);
+            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1f, 400), 0.5d), "49일 시각이 한 바퀴 돌아도 차이로 계산");
         }
 
         [Test]
@@ -388,12 +445,14 @@ namespace Game.Tests.Application
         {
             // [SDD 3.9.8] 호스트는 수락한 자세의 달리기 플래그로 스태미나를 추정한다(캐릭터의 스태미나 하나로 관리).
             var dispatcher = new CommandDispatcher(new RequestGuard(30, new CommandLimits(1500f)), NullLog.Instance);
-            var world = new ServerWorld(new ServerSettings(), dispatcher, new FakeClock(), null, NullLog.Instance);
+            var clock = new FakeClock();
+            var world = new ServerWorld(new ServerSettings(), dispatcher, clock, null, NullLog.Instance);
             var player = new PlayerId(5);
             world.AddPlayer(player, "p", false);
             world.CheckAvatarPose(player, Pose(0f, 0), out _);
             for (int i = 1; i <= 10; i++)
             {
+                clock.Advance(0.5); // 호스트 시계 기준으로 0.5초씩
                 world.CheckAvatarPose(player, Pose(3.5f * i, (uint)(500 * i), running: true), out _);
             }
             world.State.TryGetPlayer(player, out var character);
@@ -412,10 +471,12 @@ namespace Game.Tests.Application
             world.AddPlayer(player, "p", false);
 
             Assert.AreEqual(AvatarMoveVerdict.Accepted, world.CheckAvatarPose(player, Pose(0f, 0), out _));
+            clock.Advance(1.0);
             Assert.AreEqual(AvatarMoveVerdict.Accepted, world.CheckAvatarPose(player, Pose(3f, 1000), out _));
             world.State.TryGetPlayer(player, out var character);
             Assert.AreEqual(3f, character.Position.X, 0.001f);
 
+            clock.Advance(0.1);
             Assert.AreEqual(AvatarMoveVerdict.Rejected, world.CheckAvatarPose(player, Pose(300f, 1100), out Vec3f correction));
             Assert.AreEqual(3f, correction.X, 0.001f, "보정 위치 = 마지막 수락 위치");
             Assert.AreEqual(3f, character.Position.X, 0.001f);

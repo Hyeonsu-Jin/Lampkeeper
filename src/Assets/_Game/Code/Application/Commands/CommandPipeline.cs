@@ -154,6 +154,20 @@ namespace Game.Application.Commands
             return kindBucket.TryTake(now);
         }
 
+        /// <summary>
+        /// 전체 버킷에서만 토큰 하나를 쓴다(명령 종류를 알 수 없는 입력, 예: 디코드 실패 회신). [IMP-005, SEC-004]
+        /// 명령과 같은 플레이어 버킷을 쓰므로 쓰레기 입력을 보내도 처리 예산을 더 얻지 못한다.
+        /// </summary>
+        public bool CheckRateAll(PlayerId player, double now)
+        {
+            if (!_players.TryGetValue(player, out PlayerBuckets buckets))
+            {
+                buckets = new PlayerBuckets { All = new TokenBucket(_ratePerSecond, _ratePerSecond, now) };
+                _players[player] = buckets;
+            }
+            return buckets.All.TryTake(now);
+        }
+
         /// <summary>값 범위를 검사한다. 맞으면 null.</summary>
         public Rejection? CheckRanges(ICommand command) => command.CheckRanges(_limits);
 
@@ -199,6 +213,9 @@ namespace Game.Application.Commands
 
         /// <summary>플레이어가 나갈 때 빈도 상태를 지운다.</summary>
         public void RemovePlayer(PlayerId player) => _guard.RemovePlayer(player);
+
+        /// <summary>디코드 실패 같은 입력에 거부 회신을 보내도 되는지(전체 빈도 버킷 사용). [IMP-005]</summary>
+        public bool AllowReply(PlayerId player, double now) => _guard.CheckRateAll(player, now);
 
         /// <summary>
         /// 명령 하나를 처리하고 결과를 돌려준다. 이 함수는 예외를 던지지 않는다.
