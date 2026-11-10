@@ -36,6 +36,15 @@ namespace Game.Adapters.Presentation.World
 
         [SerializeField] private TerrainLayer _groundLayer;
 
+        /// <summary>
+        /// Terrain에 쓸 재질(HDRP/TerrainLit). 씬에 연결돼 있어야 빌드에 셰이더가 포함된다.
+        /// 실행 중에 만든 Terrain은 빌드가 셰이더를 찾지 못해 바닥이 안 보일 수 있다(M1-10 결함).
+        /// </summary>
+        [SerializeField] private Material _terrainMaterial;
+
+        /// <summary>연결된 지형 재질(시험·점검용).</summary>
+        public Material TerrainMaterial => _terrainMaterial;
+
         private readonly List<Terrain> _tiles = new List<Terrain>();
         private readonly List<UnityEngine.Object> _ownedAssets = new List<UnityEngine.Object>();
 
@@ -59,6 +68,16 @@ namespace Game.Adapters.Presentation.World
         {
             if (world == null) throw new ArgumentNullException(nameof(world));
             Clear();
+
+            if (_terrainMaterial == null)
+            {
+                Debug.LogWarning("[TerrainViewBuilder] 지형 재질이 비어 있습니다. 빌드에서 바닥이 안 보일 수 있습니다.");
+            }
+
+            if (_terrainMaterial != null && !_terrainMaterial.enableInstancing)
+            {
+                Debug.LogWarning("[TerrainViewBuilder] 지형 재질의 GPU 인스턴싱이 꺼져 있어 drawInstanced를 끕니다.");
+            }
 
             int tile = world.TileSize;
             if (tile <= 0 || (tile & (tile - 1)) != 0)
@@ -122,8 +141,13 @@ namespace Game.Adapters.Presentation.World
                     go.transform.SetParent(transform, false);
                     go.transform.position = new Vector3(tx * tileMeters, baseMeters, tz * tileMeters);
                     var terrain = go.GetComponent<Terrain>();
+                    if (_terrainMaterial != null)
+                    {
+                        terrain.materialTemplate = _terrainMaterial;
+                    }
                     terrain.heightmapPixelError = HeightmapPixelError;
-                    terrain.drawInstanced = true;
+                    // 재질에 GPU 인스턴싱이 꺼져 있으면 빌드에 인스턴싱 변형이 없어 지형이 안 그려지므로 끈다
+                    terrain.drawInstanced = _terrainMaterial == null || _terrainMaterial.enableInstancing;
                     terrain.drawTreesAndFoliage = false; // 풀·나무는 Terrain이 아니라 자원 뷰가 그린다
                     _tiles.Add(terrain);
                 }
