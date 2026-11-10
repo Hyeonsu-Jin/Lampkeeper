@@ -1,0 +1,350 @@
+﻿{
+    "mode":  "P8",
+    "duration_s":  300,
+    "started":  "2026-11-10T23:13:57",
+    "build":  "E:\\Claude_Project\\U_SRP_Survive\\src\\Builds\\Development\\KkeojinHaneul.exe",
+    "gpu":  "Intel(R) UHD Graphics 770, NVIDIA GeForce RTX 3070 Ti",
+    "cores":  20,
+    "editor_open":  false,
+    "upscale":  "off",
+    "vsync_option":  "default",
+    "bots_windowed":  false,
+    "finished":  "2026-11-10T23:37:00",
+    "host":  {
+                 "rows":  291,
+                 "server_total_avg_ms":  0.059549828178694073,
+                 "server_total_p99_mean_ms":  0.41227491408934752,
+                 "server_total_p99_max_ms":  2.323,
+                 "server_total_tick_max_ms":  2.323,
+                 "main_ms_avg":  2.1241649484536089,
+                 "gpu_ms_avg":  4.7278350515463954,
+                 "gpu_samples_dropped":  0,
+                 "fps_avg":  60.00248109965635,
+                 "fps_1pct_low_mean":  59.628075601374583,
+                 "fps_1pct_low_min":  59.172,
+                 "send_kbps_mean":  836.84414696907254,
+                 "send_kbps_p95":  1052.851872,
+                 "send_kbps_max":  1169.578152,
+                 "peers_max":  8,
+                 "peer_send_kbps_max":  226.11588,
+                 "creatures_mean":  60,
+                 "resources_synced_max":  5036,
+                 "gc_kb_per_s_mean":  528.140876691366,
+                 "working_set_mb_max":  1323.828,
+                 "managed_heap_mb_max":  54.234,
+                 "server_total_tick_mean_ms":  0.12077995418098517,
+                 "flow_recompute_seconds":  291,
+                 "flow_recompute_mean_ms":  2.1763711340206182,
+                 "flow_recompute_max_ms":  4.035
+             },
+    "bots":  [
+                 {
+                     "name":  "bot2",
+                     "recv_kbps_p95":  172.641304,
+                     "recv_kbps_max":  181.06279199999997,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.4903083700440516,
+                     "join":  {
+                                  "player":  "2",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.212,
+                                  "generate_s":  0.322,
+                                  "snapshot_s":  0.145,
+                                  "views_s":  null,
+                                  "total_s":  0.68,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot3",
+                     "recv_kbps_p95":  165.23160000000001,
+                     "recv_kbps_max":  182.534032,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.7722466960352405,
+                     "join":  {
+                                  "player":  "3",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.208,
+                                  "generate_s":  0.314,
+                                  "snapshot_s":  0.153,
+                                  "views_s":  null,
+                                  "total_s":  0.675,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot4",
+                     "recv_kbps_p95":  173.20836799999998,
+                     "recv_kbps_max":  184.25912,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.3973568281938311,
+                     "join":  {
+                                  "player":  "4",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.213,
+                                  "generate_s":  0.316,
+                                  "snapshot_s":  0.183,
+                                  "views_s":  null,
+                                  "total_s":  0.712,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot5",
+                     "recv_kbps_p95":  175.508688,
+                     "recv_kbps_max":  184.125264,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.73612334801762,
+                     "join":  {
+                                  "player":  "5",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.214,
+                                  "generate_s":  0.317,
+                                  "snapshot_s":  0.184,
+                                  "views_s":  null,
+                                  "total_s":  0.714,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot6",
+                     "recv_kbps_p95":  172.867208,
+                     "recv_kbps_max":  184.383152,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.5577092511013211,
+                     "join":  {
+                                  "player":  "6",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.243,
+                                  "generate_s":  0.314,
+                                  "snapshot_s":  0.154,
+                                  "views_s":  null,
+                                  "total_s":  0.711,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot7",
+                     "recv_kbps_p95":  116.4904,
+                     "recv_kbps_max":  179.871424,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.8590308370044042,
+                     "join":  {
+                                  "player":  "7",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.213,
+                                  "generate_s":  0.328,
+                                  "snapshot_s":  0.139,
+                                  "views_s":  null,
+                                  "total_s":  0.68,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 },
+                 {
+                     "name":  "bot8",
+                     "recv_kbps_p95":  175.820928,
+                     "recv_kbps_max":  181.053808,
+                     "rtt_ms":  0,
+                     "cpu_core_pct_mean":  3.8099999999999996,
+                     "join":  {
+                                  "player":  "8",
+                                  "bot":  true,
+                                  "complete":  true,
+                                  "connect_s":  0.213,
+                                  "generate_s":  0.32,
+                                  "snapshot_s":  0.146,
+                                  "views_s":  null,
+                                  "total_s":  0.679,
+                                  "budget_total_s":  60,
+                                  "within_budget":  true
+                              }
+                 }
+             ],
+    "seed":  {
+                 "worldSeed":  "18394260519106264912",
+                 "worldSeedText":  "BENCH-0001",
+                 "generatorVersion":  "0",
+                 "creatureSeed":  "11",
+                 "resourceChangeSeed":  "5000"
+             },
+    "display":  {
+                    "vsync":  "1",
+                    "targetFps":  "-1",
+                    "refreshHz":  "60",
+                    "option":  "Unchanged"
+                },
+    "gpu_vram_mb_max":  1224.43359375,
+    "failures":  [
+
+                 ],
+    "summary":  [
+                    {
+                        "항목":  "Server.Total 평균 (ms/틱, 291초)",
+                        "값":  "0.121",
+                        "기준":  "\u003c= 3",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "Server.Total 프레임당 평균 (ms, 틱 없는 프레임 포함, 참고)",
+                        "값":  "0.060",
+                        "기준":  "참고(FPS에 따라 변함)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "Server.Total p99 (ms, 초별 p99의 평균)",
+                        "값":  "0.412",
+                        "기준":  "\u003c= 5",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "Server.Total p99 최악의 1초 / 틱 1회 최대 (ms)",
+                        "값":  "2.32 / 2.32",
+                        "기준":  "참고(틱 상한 6.0)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "메인 스레드 평균 (ms)",
+                        "값":  "2.12",
+                        "기준":  "\u003c= 13",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "호스트 송신 (kbps, 초별 값의 95%)",
+                        "값":  "1052.9",
+                        "기준":  "\u003c= 4000",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "호스트 송신 평균 / 최대 (kbps), 접속자 최대",
+                        "값":  "836.8 / 1169.6, 8명",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "호스트 FPS 평균 / 1% Low 평균 / 최저 (참고)",
+                        "값":  "60.0 / 59.6 / 59.2",
+                        "기준":  "참고(봇이 같은 CPU를 나눠 씀)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "호스트 GPU 프레임 (ms, 참고, 비정상 표본 0개 제외)",
+                        "값":  "4.73",
+                        "기준":  "참고(\u003c= 14.5)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "활동 생물 평균 / 바뀐 자원 / GC 할당(KB/s)",
+                        "값":  "60 / 5036 / 528.1",
+                        "기준":  "조건 확인(60 / 5000)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "흐름장 재계산 워커 시간 (ms, 재계산이 있던 291초의 평균 / 최대)",
+                        "값":  "2.18 / 4.04",
+                        "기준":  "참고(SDD R-41)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "시드 (월드 / 생물 배치 / 자원 변경)",
+                        "값":  "18394260519106264912 (BENCH-0001, 생성기 v0) / 11 / 5000",
+                        "기준":  "재현용 기록(NFR-021)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "업스케일 설정",
+                        "값":  "off",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "호스트 화면: vSync 옵션 / vSyncCount / 프레임 제한 / 주사율(Hz)",
+                        "값":  "Unchanged / 1 / -1 / 60",
+                        "기준":  "FPS 해석용(vSync 켜면 주사율 상한)",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "참가자 수신 (kbps, 봇별 95%의 최댓값)",
+                        "값":  "175.8",
+                        "기준":  "\u003c= 512",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "중도 참가 시간 (초): 연결 0.213 / 월드 생성 0.32 / 스냅샷 0.146",
+                        "값":  "0.679",
+                        "기준":  "\u003c= 60",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "프로세스 메모리 최대 작업 집합 (MB, 프로세스별 최댓값)",
+                        "값":  "1324",
+                        "기준":  "\u003c= 10240",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "VRAM 전용 사용량 (MB, 호스트, GPU 성능 카운터)",
+                        "값":  "1224",
+                        "기준":  "\u003c= 7680",
+                        "판정":  "PASS"
+                    },
+                    {
+                        "항목":  "호스트 CPU 점유 (한 코어 기준 %, 평균)",
+                        "값":  "42.3",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot2: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.5 / 181.1 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot3: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.8 / 182.5 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot4: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.4 / 184.3 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot5: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.7 / 184.1 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot6: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.6 / 184.4 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot7: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.9 / 179.9 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    },
+                    {
+                        "항목":  "bot8: CPU(한 코어 %) / 수신 최대(kbps) / RTT(ms)",
+                        "값":  "3.8 / 181.1 / 0.0",
+                        "기준":  "참고",
+                        "판정":  "-"
+                    }
+                ]
+}
