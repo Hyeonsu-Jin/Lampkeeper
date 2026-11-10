@@ -345,6 +345,19 @@ namespace Game.Tests.Application
         }
 
         [Test]
+        public void WorldCenterSpawn_FirstAndMovingPoses_AreAccepted()
+        {
+            // 회귀: 월드 좌표는 0~3072인데 ±1536으로 검사해 중앙(1536) 스폰의 이동이 전부 거부되던 결함.
+            var (validator, state) = Create();
+            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536f, 0, y: 311f, z: 1536f)));
+            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536.2f, 33, y: 311f, z: 1535.8f)));
+            Assert.AreEqual(AvatarMoveVerdict.Accepted, validator.Check(state, Pose(1536.4f, 66, y: 311f, z: 1535.6f)));
+            // 월드 한쪽 끝(3072)까지는 허용, 훨씬 밖은 거부.
+            Assert.IsTrue(Game.Application.Protocol.ProtocolConstants.IsInsideWorld(3072f, 3072f));
+            Assert.IsFalse(Game.Application.Protocol.ProtocolConstants.IsInsideWorld(3200f, 100f));
+        }
+
+        [Test]
         public void LongGap_IsCappedAtMaxDelta_SoTeleportAfterPauseIsRejected()
         {
             var (validator, state) = Create();
