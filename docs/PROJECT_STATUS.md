@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Act 진행 중 (승인 IMP 12건 처리 완료, 회귀 시험 대기. EditMode 704/704·PlayMode 26/26 통과, KnownDefect 없음)
-- 다음에 할 일: **[2026-11-10 Act (5) IMP-018 완료]** 측정 도구 보완(시드·`-vsync`·`Server.FlowRecompute` 표식·`-VSyncOff`/`-UpscaleOff`/`-SummarizeOnly`, GPU 비정상 표본 제외, Server.Total 틱당 판정) + 에디터 닫고 재측정 3회(결과 `docs/test/perf/raw/M1_20261110_225236`·`230758`·`231356`, 보고서 8장), SDD v0.17. **다음은 (6) test-engineer 회귀 시험 모드**: 처리 IMP 12건 확인, IMPROVEMENTREPORT 갱신, 시험 대응표 고칠 점(SRS v0.13 기준: NFR-012·015는 M6 판정, FR-003 두 버전·"?" 사례, NFR-030 45 Hz·첫 자세 15 m·비멤버 차단 시험, NFR-041 대기열 몫·10초 51회 종료·이동 거부 51회 비종료, NFR-045 5초 묶음·Error 제외·20 MB, FR-158 Logs/만, FR-007·008·010·011·169 M1 판정 범위 축소), Do 결함 소급 DEF 등록(IMP-011), 커버리지 계측 시 실패 1건 이름 확인 → 사이클 병합·태그 v0.1.0 제안. 주의: 이 PC는 `core.hooksPath`가 비어 있어 IMP-011 commit-msg 훅이 아직 꺼져 있음. TMP 폰트 `Pretendard-*Dynamic SDF.asset` 2개는 커밋 제외(R-46), 출시 빌드 전 처리 결정 필요. 다음 사이클 후보: NFR-030 지형 높이 Y 검사, Server.Total p99를 틱 기준으로(현재 프레임 기준), CI·성능 패키지·커버리지 하한(보류).
+- 현재 단계: Act 회귀 시험 완료 (승인 IMP 12건 모두 검증 완료, EditMode 705/705·PlayMode 26/26 통과, 미해결 결함 0)
+- 다음에 할 일: **[2026-11-11 Act (6) 회귀 시험 완료]** test-engineer 회귀 판정 12/12 검증 완료(IMP-013은 SRS 머리말 버전 DEF-012 수정 뒤 재확인), TC-067 추가(TC 68), Do 결함 소급 DEF-006~011 등록, 시험 대응표 SRS v0.13 기준 갱신. 커버리지 계측 중 실패 1건은 재현되지 않아 이름 미확인(계측이 도메인 재로드 때 꺼지는 문제, 다음 측정 전 방식 변경). **다음은 사이클 병합(`cycle/1-mvp` → `main`)·태그 v0.1.0 제안**, 이어서 사이클 2 시작 여부 확인. 남은 수동 시험: IMP-014 MP-01~08, MP-09(비멤버 연결 실측). `tools/git/`의 untracked LFS 훅 4개(post-checkout·post-commit·post-merge·pre-push) 커밋 여부 사용자 결정 대기. 주의: 이 PC는 `core.hooksPath`가 비어 있어 IMP-011 commit-msg 훅이 아직 꺼져 있음. TMP 폰트 `Pretendard-*Dynamic SDF.asset` 2개는 커밋 제외(R-46), 출시 빌드 전 처리 결정 필요. 다음 사이클 후보: NFR-030 지형 높이 Y 검사, Server.Total p99를 틱 기준으로(현재 프레임 기준), CI·성능 패키지·커버리지 하한(보류).
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -14,7 +14,7 @@
 | 1 | Plan | 승인됨 | 2026-11-03 | docs/SRS.md v0.8 (승인), docs/SDD.md v0.6 (승인), docs/DESIGN_PROPOSAL.md, docs/wireframes/ (hud, defense, cooking), docs/STORYBOARD.md v1.3 |
 | 1 | Do | 승인됨 (M1-01~M1-13) | 2026-11-10 | src/ (M1 기술 검증: Steam·FishNet 접속, 1인칭 이동, 자원 2만 개 동기화·중도 참가, 시험 AI 60체·생물 복제, 봇·측정 스크립트, 출시 IL2CPP 빌드), docs/test/perf/M1_tech_verification.md, tools/perf/RunM1Perf.ps1, SRS v0.12·SDD v0.14·STORYBOARD v1.8 |
 | 1 | Check | 완료 | 2026-11-10 | docs/check/REVIEW_REPORT.md(REV 15), docs/check/SECURITY_REPORT.md(SEC 10), docs/test/TEST_PLAN·TEST_SPEC·TEST_LOG·TEST_COMPLETION_REPORT.md(TC 66, DEF 5), docs/IMPROVEMENTREPORT.md(IMP 18) |
-| 1 | Act | 진행 중 (IMP 12건 처리 완료, 회귀 시험 대기) | 2026-11-10 | src/ 개선, docs/IMPROVEMENTREPORT.md, SRS v0.13·SDD v0.17·STORYBOARD v1.9, docs/test/perf/M1_tech_verification.md 8장 |
+| 1 | Act | 완료 (IMP 12건 처리·회귀 검증 완료, 병합 대기) | 2026-11-11 | src/ 개선, docs/IMPROVEMENTREPORT.md, SRS v0.13·SDD v0.17·STORYBOARD v1.9, docs/test/perf/M1_tech_verification.md 8장, docs/test/ 회귀 결과(TC 68, DEF 12) |
 
 ## 결정 기록
 | 날짜 | 결정 내용 (채택한 SUG, 확정한 디자인, Act 대상 IMP 등) | 근거 |
@@ -148,6 +148,7 @@
 | 2026-11-10 | **보류**: GameCI EditMode CI 도입(라이선스 종류 미정), 성능 시험 패키지·커버리지 하한(기준선 줄 62.1%만 기록, docs/test/COVERAGE_BASELINE.md) | 사용자 미결정. 총괄 추천은 CI는 출시 준비·협업 시점, 나머지는 사이클 2(M2) |
 | 2026-11-10 | **IMP-011 커밋 규칙 보강**: Act 커밋부터 `Closes: IMP-xxx, DEF-xxx` 사용(b889f97·de07509·4931bef). 제목 50자 검사 훅 `tools/git/commit-msg` 추가(Conventional Commits 형식·50자·대문자 시작·마침표 금지 검사, 병합·revert 제외). 개발 PC마다 `git config core.hooksPath tools/git` 한 번 실행. 기존 50자 초과 제목 17/99건은 이력 재작성 없이 둠. Do 결함 소급 DEF 등록은 test-engineer 회귀 시험 때 TEST_LOG에 함께 | REV 7장 권고 7. 훅은 저장소에 커밋해 PC 간 공유 |
 | 2026-11-10 | **IMP-018 처리·재측정**: 측정 도구 보완 후 에디터 닫고 P8 300초 3회(기본·vSync 끔·업스케일 끔). 판정 항목 모두 통과, vSync 끈 호스트 FPS 평균 454·1% Low 176(60 고정은 vSync 상한), 업스케일 끔 GPU 4.73 ms(켬 4.82), 흐름장 재계산 평균 1.7~2.3·최대 3.1~4.6 ms, 틱 최악 2.3~3.3 ms. 1회차는 유튜브 재생 중이었으나 판정 항목 영향이 작아 유효 채택, 2·3회차는 오염돼 영상 끄고 재측정(무효 폴더 225837·230435). **Server.Total 판정을 틱당 평균 ≤ 3.0 ms로 변경**(사용자 결정, SDD v0.17 33행·3.12.3·3.12.4) | 프레임당 평균은 FPS에 따라 변함(vSync 끔 0.009 ms), 틱당 0.12~0.14 ms로 여유 큼 |
+| 2026-11-11 | **Act 회귀 결과 수용**: 회귀 판정 재작업 1건(IMP-013, SRS 머리말 버전 DEF-012)을 고친 뒤 커밋. 승인 IMP 12/12 검증 완료, 미해결 결함 0 | 사용자 결정 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -226,6 +227,9 @@
 | `-testcreatures`·메뉴를 여러 번 쓰면 생물이 누적됨 | developer (M1-11 2차) | 시험 조건 흐려짐 | 세션당 한 번만 사용(안내) |
 | 화면 없는 봇(-batchmode/-nographics) 시작 크래시 | developer (M1-12 1차) | 측정 조건 왜곡 | 해소: UiSafeArea16x9 재귀 수정(2026-11-10). Null 장치에서 수렴하지 않은 이유는 미확인 |
 | 중도 참가 「연결」 구간 10.3초(창 모드 점검 실행) | developer (M1-12 1차) | NFR-018 여유 감소 | 화면 없는 점검에서 0.20초로 해소 추정, 2차 측정에서 재확인 |
+| 커버리지 계측이 도메인 재로드 때 꺼지고 `StopRecording`이 NullReference, 계측 중 실패 1건 이름 미확인 | test-engineer (Act 회귀) | 커버리지 수치 갱신 불가(기준선 62.1% 유지) | 다음 측정 전에 계측 방식 변경, 결과를 파일로 저장해 Failed 항목 확인 |
+| 이 PC의 `core.hooksPath`가 비어 commit-msg 훅 꺼짐, `tools/git/`에 LFS 훅 4개 untracked | test-engineer (Act 회귀) | 커밋 규칙 자동 검사 없음, hooksPath를 바꾸면 LFS 훅 누락 위험 | 사용자 결정 대기: LFS 훅 커밋 후 `git config core.hooksPath tools/git` |
+| 자동 시험으로 확인 못 한 항목(SEC-002 실측 MP-09, 2PC·릴레이 MP-01·02, 출시 빌드 거부 실동작) | test-engineer (Act 회귀) | 보안·접속 확인 공백 | IMP-014 수동 시험, 다음 출시 빌드 때 확인, 사이클 2 PlayMode 후보 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -251,6 +255,7 @@
 | 1 (Do M1-12 측정) | 179 | 58 | EditMode 662 + PlayMode 26, 성능 P8·P1 판정 항목 전부 통과 | 100% | 0 (신규) | - |
 | 1 (Do M1-13, M1 완료) | 179 | 58 | EditMode 663 + PlayMode 26 (+ 아키텍처 약 35건 포함) | 100% (689/689) | 누적 5 (모두 수정: ESC 메뉴, 이동 거부, 빌드 지형, 화면 없는 실행 크래시, PlayMode 글꼴 참조) | - |
 | 1 (Check) | 179 | 58 | TC 66 (EditMode 671 + PlayMode 26, 수동 MP-01~09) | TC 통과 44/66, 자동 시험 691/697 (실패 6 = 결함 재현) | 5 (DEF-001~005, 미해결) + REV 15 + SEC 10 | 0% (IMP 18 제안) |
+| 1 (Act 회귀) | 179 | 58 | TC 68 (EditMode 705 + PlayMode 26, 수동 MP-01~09) | 자동 시험 100% (731/731), TC 통과 53/68 (부분 8·차단 6 수동·대기 1) | 12 (DEF-001~012 모두 해결, 006~011 소급 등록) | 승인 12/12 (100%), 전체 12/18 (보류 5, 수동 대기 1) |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)

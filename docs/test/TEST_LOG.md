@@ -1,5 +1,7 @@
 # 시험 실행 기록 (ISO/IEC/IEEE 29119-3) — 사이클 1 (M1)
 
+> 이 문서의 1~5장은 Check 단계(첫 실행) 기록이고, **회귀 시험(Act 뒤, 2026-11-10) 결과는 6장**이다. 4장 결함 5건은 모두 6장에서 해결됨으로 확인됐고, 4장 끝에 소급 등록 결함(DEF-006~011)을 추가했다.
+
 - 실행 일: 2026-11-10 (UTC 09:33~09:37), 열린 에디터 pid 31620, `cycle/1-mvp` @ `a5db2df` + 시험 코드 8건(미커밋)
 - 결과 원본: `docs/test/results/editmode_full.json`, `editmode_known_defects.json`, `playmode_full.json`
 
@@ -96,6 +98,23 @@ EditMode 총수에는 패키지 시험 1건(`AddressableAssets.DocExampleCode.Te
 | DEF-004 | 버전 불일치 거부 때 두 버전이 표시되지 않음 | 높음 | TC-054, 003 / FR-003, REV-002, NFR-058 | `--filter TC054` | 「게임 버전 불일치」+ 참가자·호스트 버전 표시 | `JoinRejected`에 사유 코드만 있고 문구에 버전 자리 없음 | `Application/Protocol/Messages.cs`(`JoinRejected`), `strings.ko.txt` `join.fail.version.*`, `STORYBOARD.md` SCR-012 |
 | DEF-005 | Player.log가 켜져 SteamID·사용자 경로 원문이 남음 | 보통 | TC-056 / NFR-042, SEC-005 | `--filter TC056` | 출시 빌드 `usePlayerLog: 0` 또는 마스킹 | `usePlayerLog: 1` | `ProjectSettings/ProjectSettings.asset:97`, `RuntimeSupport.cs` `UnityLog` |
 
+**상태 갱신(회귀 시험, 2026-11-10)**: DEF-001·002·003 해결됨 (커밋 b889f97), DEF-004·005 해결됨 (4931bef). 근거 TC-050~054·056 통과(6.2).
+
+### 4.1 소급 등록 결함 (IMP-011)
+Do 단계에서 DEF ID 없이 고쳐진 결함을 `git log`의 `fix` 커밋에서 찾아 소급 등록했다. `main`의 17개 직접 커밋(4dcd38b~8eed7fa)에는 `fix` 커밋이 없어 이 목록은 모두 `cycle/1-mvp` 커밋이다. 모두 상태는 **해결됨**이다(발견 단계가 Do라 TC 없이 고쳐졌고 새 시험은 그 뒤 일부 추가됨).
+
+| DEF ID | 제목 | 심각도 | 관련 TC·FR/NFR | 재현 절차(커밋 메시지 기준) | 기대 결과 | 실제 결과 | 추정 원인 위치 | 해결 커밋 |
+|---|---|---|---|---|---|---|---|---|
+| DEF-006 | 이동·핑 좌표 검사가 월드를 원점 중심으로 봐서 월드 중앙 스폰 이동이 모두 거부됨 | 높음 | NFR-030, DES-084 | 월드 중앙(1536, 1536)에 스폰해 앞으로 이동 | 월드 안 이동 수락 | 모두 「월드 밖」으로 거부·되돌려져 떨림만 생김 | `CommandPipeline.cs`, `ServerWorld.cs`(±1536 m 범위) | ae66631 (2026-11-10, 기록 a2d0511) |
+| DEF-007 | 출시·개발 플레이어 빌드에서 지형이 그려지지 않음(바닥 자리에 하늘) | 높음 | DES-089, NFR-028 | 플레이어 빌드로 World 진입 | 지형 표시 | 인스턴싱 변형이 빌드에서 제거돼 셰이더 없음 | `TerrainViewBuilder.cs`, `World.unity` 재질 미지정 | 719653c, cc97e52 (기록 68b69a9) |
+| DEF-008 | 생물 위치 압축 범위가 원점 중심 ±1536 m라 월드 좌표 절반이 잘림 | 높음 | DES-080, DES-082, NFR-017 | 월드 좌표 0~3072 m의 생물 복제 | 월드 전체 위치 정확 | 절반 영역 위치가 잘림 | `Messages.cs`(`Quantize.PositionToU16`, `CreatureState`) | 13ebf31 |
+| DEF-009 | 화면 없는 실행(-batchmode, -nographics)에서 개발 빌드가 시작 직후 스택 오버플로로 종료 | 높음 | NFR-021, DES-122 | 개발 빌드를 -batchmode -nographics로 실행 | 정상 기동 | `UiSafeArea16x9.Refresh` 재진입 무한 반복으로 크래시 | `UiSafeArea16x9.cs` | c97e571 (기록 c10658a) |
+| DEF-010 | 활동 생물 수가 측정 CSV에 기록되지 않음 | 낮음 | NFR-011, NFR-021 | 측정 실행 후 CSV 확인 | 활동 생물 수 열 기록 | 다른 이름으로 보고돼 비어 있음 | `ServerWorld.cs` 지표 이름 | b31a7be |
+| DEF-011 | 측정 스크립트가 MCP용 unity.exe까지 에디터로 세어 「에디터 켜짐」으로 오표시 | 낮음 | NFR-021 | 측정 스크립트 실행 | 에디터 프로세스만 판정 | 에디터가 닫혀도 켜짐으로 표시 | `tools/perf/RunM1Perf.ps1` | 4b739ca |
+| DEF-012 | SRS 머리말 「문서 버전」이 0.12로 남아 변경 이력(0.13)과 어긋남 | 낮음 | IMP-013, SRS 문서 관리 | `docs/SRS.md` 3행과 부록 변경 이력 비교 | 머리말 0.13 | 0.12 (SDD 머리말은 SRS v0.13 참조) | `docs/SRS.md` 머리말 | **해결됨**(회귀 시험에서 신규 발견, 2026-11-11 회귀 재확인, Act 회귀 결과 커밋) |
+
+심각도는 커밋 메시지의 영향(이동 불가·화면 소실·크래시=높음, 측정 기록 오류=낮음)으로 test-engineer가 매겼다. 모두 총 DEF 수에 합산하며, 결함 수는 5건에서 12건(DEF-012 신규 포함: 높음 6, 보통 3, 낮음 3, 치명 0)이 되고, 미해결은 0건이다(DEF-012는 2026-11-11 재확인으로 해결: `docs/SRS.md` 3행 문서 버전 0.13 확인, IMP-013 검증 완료). DEF-012는 소급이 아니라 회귀 시험의 신규 발견이다.
+
 재현하지 못해 DEF로 올리지 않은 것(IMP에서 다룸): SEC-002(비멤버 연결 노출, 실측 필요, MP-09), SEC-003·REV-007(로그 폭주, 부하 시험이 필요), REV-005(GC, Profiler 측정 필요), REV-014(git 기준만 발생). Do 중 결함 5건(PROJECT_STATUS 측정 표)은 DEF ID가 없어 소급 등록하지 못했다(내용·재현 정보 부족, IMP-011).
 
 ## 5. 모니터링 메모
@@ -103,3 +122,43 @@ EditMode 총수에는 패키지 시험 1건(`AddressableAssets.DocExampleCode.Te
 - 실행 후 남은 게임 프로세스 0, 백그라운드 명령 0.
 - 수동 차단 6건의 원인: 계정·PC 2대 필요(TC-002·005·027·030), 해당 기능 M3(TC-022), 권장 사양 PC 없음(TC-020).
 - 관찰: 시험 실행 뒤 `git status`에 `Pretendard-*Dynamic SDF.asset` 2개 수정이 보임(실행 중 TMP가 글리프를 추가한 것으로 추정). 시험 산출이 아니라 에디터 작업 결과일 수 있어 원인 미확정(IMP-015).
+
+## 6. 회귀 시험 (Act (6), 2026-11-10 23:50~, `cycle/1-mvp` @ `4d341c0` + 시험 코드 1건 추가)
+### 6.1 실행 요약
+| 방식 | 전체 | 통과 | 실패 | 건너뜀 | 비고 |
+|---|---|---|---|---|---|
+| EditMode (첫 실행) | 704 | 704 | 0 | 0 | `KnownDefect` 분류 시험 0건(Check 때 6건 실패가 모두 해결) |
+| EditMode (TC-067 추가 뒤 `--filter TC067`) | 1 | 1 | 0 | 0 | 새 시험 1건. 전체는 705건이 됨(704 + 1) |
+| PlayMode | 26 | 26 | 0 | 0 | 12.9초, 실행 직전 `editor focus` 1회 |
+| 커버리지 켠 EditMode | 704 | 704 | 0 | 0 | 6.3 절 참고. 실패 재현 안 됨 |
+
+Check 대비 EditMode 671 → 705(Act에서 시험 33건 + 회귀 1건 추가), 실패 6 → 0.
+
+### 6.2 IMP 근거 TC 회귀
+| TC | 근거 IMP·DEF | 회귀 실행 결과 | 판정 |
+|---|---|---|---|
+| TC-050 | IMP-001, DEF-001 | 2배 속도(14 m/s) 자세가 거부됨 | 통과 |
+| TC-051 | IMP-001, DEF-001 | 시각 500 ms씩 부풀린 자세 30개가 호스트 수신 시각 기준으로 거부됨 | 통과 |
+| TC-052 | IMP-001, DEF-002 | 스폰에서 먼 첫 자세 거부 | 통과 |
+| TC-053 | IMP-005, DEF-003 | 한 참가자가 가득 채워도 다른 참가자 명령 수락 | 통과 |
+| TC-054 | IMP-002, DEF-004 | `JoinRejected`에 호스트 버전 실림, 문구에 자리 있음 | 통과 |
+| TC-056 | IMP-006, DEF-005 | `usePlayerLog: 0` | 통과 |
+| TC-038 | IMP-001 | 상위 TC, 하위 TC-050·051·052 통과 | 통과 |
+| TC-043 | IMP-005 | 상위 TC, 하위 TC-053 통과 + TC-067 신설 통과 | 통과 |
+| TC-003 | IMP-002 | 자동 범위 통과(TC-054 포함). 2PC 실제 접속은 MP-01·03 대기 | 부분 |
+| TC-067 (신설) | IMP-004, NFR-041 | 10초에 50회는 유지, 51회째 종료 알림 | 통과 |
+| IMP-003 근거 | 비멤버 연결(SEC-002) | `Net.JoinAndGatewayTests`의 비멤버 거부·참가 요청 없음 시간 초과·세계 준비 시간 초과 통과. 실제 FishNet 인증기 동작은 MP-09 필요 | 부분 |
+| IMP-004 근거 | 자세·로그 폭주 | `PoseRateGate`(2), `ThrottledLog`(2), `FileLogSinkLimitTests`(3) 통과 | 통과 |
+| IMP-012 근거 | 출시 빌드 거부 | `BuildArtifactInspectorTests`, 빌드 스크립트 점검(devops 보고) 통과 | 통과 |
+
+Check 판정 집계(66개)는 변하지 않은 부분(부분 7, 차단 6)을 빼고 다음과 같이 바뀐다: 실패 9 → 0, 통과 44 → 53, 부분 7 → 8(TC-003 추가), 차단 6 유지, 대기 1(TC-068, M2). TC 총수 66 → 68(TC-067 통과, TC-068 대기): 53 + 8 + 6 + 1 = 68.
+
+### 6.3 커버리지 계측 실행의 실패 1건 확인 (IMP-016)
+- 에디터의 코드 최적화를 Debug로 바꾸고 `Coverage.enabled = true`로 도메인을 다시 불러온 뒤 `CodeCoverage.StartRecording()`을 호출하고 EditMode 전체를 두 번 돌렸다(첫 실행 약 2분 이내, 두 번째 57초). 두 번 모두 704/704 통과, **실패 시험이 없어 이름을 확인하지 못했다. 재현되지 않음.**
+- 이번 시도에서는 도메인 재로드 뒤 `Coverage.enabled`가 False로 돌아가 있었고 `StopRecording()`이 NullReference로 실패해 결과 파일이 새로 생기지 않았다. 따라서 이번 계측 실행은 줄 커버리지 수치를 갱신하지 못했다(기준선은 `COVERAGE_BASELINE.md`의 62.1% 유지, 코드가 Act 중 늘었으므로 다음 측정 때 갱신 필요). 설정은 원래대로 되돌렸다(`Coverage.enabled` False, 코드 최적화 Release 확인).
+- 이전 1건 실패의 원인 추정(계측으로 느려진 실행의 시간 민감 시험)은 그대로이며 시험 이름은 미확인이다. 다음 측정 때 결과를 파일로 저장해 `Failed` 항목을 찾는다.
+
+### 6.4 모니터링
+- Console 오류: 알려진 소음(`SpawnablePrefabs is null`)뿐. 실행 뒤 `git status`에 TMP 글꼴 2개 수정(R-46)과 시험 파일만 보임.
+- `editor focus` 1회(PlayMode 직전). 에디터 도메인 재로드는 커버리지 설정 전환 때 4회 발생.
+- 알림: 이 PC의 `core.hooksPath`가 비어 commit-msg 훅(IMP-011)이 꺼져 있다. 사용자 결정 대기.

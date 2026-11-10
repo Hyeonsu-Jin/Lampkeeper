@@ -1,6 +1,6 @@
 # 시험 명세서 (ISO/IEC/IEEE 29119-3) — 사이클 1 (M1)
 
-- 문서 버전: 1.0 / 날짜: 2026-11-10
+- 문서 버전: 1.1 (회귀 시험 반영, SRS v0.13 기준) / 날짜: 2026-11-10
 - TC 표기: 기존 자동 시험은 클래스(개수)로 묶어 TC에 대응시킴. 새로 쓴 시험은 메서드 이름에 TC ID가 있음(`TC050_...`). 기법 약어: 동등=동등 분할, 경계=경계값, 상태=상태 전이, 시나리오, 오류=오류 추측, 구조=구조 기반.
 - 표의 「사전 조건·입력·절차」는 대응 시험 코드와 4장 수동 절차에 있다(표에는 요약만).
 
@@ -12,17 +12,17 @@ FR·NFR별 기대 동작을 TC로 묶었다. 호스트 권위(NFR-030)와 요청
 
 | TC | FR/NFR·SCR | 레벨 | 방식 | 기법 | 대응 시험 (클래스, 개수) | 기대 결과 | 우선순위 |
 |---|---|---|---|---|---|---|---|
-| TC-001 | FR-001 세션 열기 | 단위·통합 | A | 동등, 상태 | Application.LobbyMetaBuilderTests(2), SessionServiceTests(8), Domain.SessionRulesTests(21), Infrastructure.GameMenuAndLobbyViewTests(11) | 방 열기 → 로비 메타·참가 조건(친구 전용)·상태 전이 정상 | H |
+| TC-001 | FR-001 세션 열기 (M1 판정 범위: 친구 전용 고정) | 단위·통합 | A | 동등, 상태 | Application.LobbyMetaBuilderTests(2), SessionServiceTests(8), Domain.SessionRulesTests(21), Infrastructure.GameMenuAndLobbyViewTests(11) | 방 열기 → 로비 메타·참가 조건(친구 전용)·상태 전이 정상 | H |
 | TC-002 | FR-002 친구 초대 | 인수 | M | 시나리오 | MP-01(2PC) + TC-059(오버레이 창, 사용자 확인) | 초대 창 표시, 친구가 수락해 참가 | H |
-| TC-003 | FR-003 세션 참가 | 통합·시스템 | A+M | 결정 테이블, 경계 | Net.JoinHandshakeTests(17), Domain.SessionRulesTests, GameVersionTests(53), Application.ClientSessionTests(11), ConnectScreenModelTests(9), PlayMode HostClientLoopback(8) + TC-054 + MP-01·03 | 거부 사유 하나 결정, 버전 불일치 때 두 버전 표시 | H |
+| TC-003 | FR-003 세션 참가 | 통합·시스템 | A+M | 결정 테이블, 경계 | Net.JoinHandshakeTests(17), Domain.SessionRulesTests, GameVersionTests(53), Application.ClientSessionTests(11), ConnectScreenModelTests(9), PlayMode HostClientLoopback(8) + TC-054(통과, 회귀) + ProtocolCodecTests.JoinRejected_*(3) + MP-01·03 | 거부 사유 하나 결정, 버전 불일치 때 「내 버전 X / 호스트 버전 Y」 두 버전 표시, 호스트 버전을 모르면 Y 자리에 「?」(옛 형식 `JoinRejected`도 읽음, 프로토콜 3) | H |
 | TC-004 | FR-004 최대 인원 | 단위 | A | 경계 | Application.ServerWorldPlayersTests(5, 8명/9번째), SessionRulesTests | 9번째 참가 거부(인원 초과) | H |
 | TC-005 | FR-005 Steam 릴레이 | 인수 | M | 시나리오 | MP-02 | 서로 다른 네트워크 두 PC가 릴레이로 접속 | H |
 | TC-006 | FR-006 / NFR-008 전송 전환 | 통합 | A | 동등 | PlayMode TransportSelectorTests(5), Application.CheckPlatformReadyTests(18), LaunchOptionsParserTests(25) + MP-03 | 출시는 Steam 고정, 개발은 Tugboat 선택, 출시↔개발 접속 거부 | H |
-| TC-007 | FR-007 요청 호스트 검증 | 단위·통합 | A | 동등, 경계 | CommandPipelineTests(9), GatheringRulesTests(14), Net.GatewayTests(8), PlayMode Command_RoundTrips | 거리·상태 검증, 잘못된 요청 거부 | H |
-| TC-008 | FR-008 월드 동기화 | 통합 | A | 시나리오 | Application.ReplicatedTableTests(9), Net.ReplicationPublisherTests(5), ResourceSyncTests(8), CreatureReplicationTests(17) | 호스트 변경이 참가자 사본에 반영 | H |
+| TC-007 | FR-007 요청 호스트 검증 (M1 판정 범위: 검증 구조와 M1 존재 요청만, 제작·건축·공격은 해당 마일스톤) | 단위·통합 | A | 동등, 경계 | CommandPipelineTests(9), GatheringRulesTests(14), Net.GatewayTests(8), PlayMode Command_RoundTrips | 거리·상태 검증, 잘못된 요청 거부 | H |
+| TC-008 | FR-008 월드 동기화 (M1 판정 범위: 위치·시간·자원 오브젝트 상태, 건축·작물·적·정화 구역은 해당 마일스톤) | 통합 | A | 시나리오 | Application.ReplicatedTableTests(9), Net.ReplicationPublisherTests(5), ResourceSyncTests(8), CreatureReplicationTests(17) | 호스트 변경이 참가자 사본에 반영 | H |
 | TC-009 | FR-009 중도 참가 동기화 | 시스템 | A | 시나리오 | PlayMode LateJoin_With5000ChangedResources, ClientSessionTests | 중도 참가자 사본 = 호스트, 이후 델타 도착 | H |
-| TC-010 | FR-010 PvP 없음 | 단위 | A | 구조 | Application.PvpAbsenceTests(1, 새로 추가) | 명령 종류에 플레이어 피해 명령 없음 | M |
-| TC-011 | FR-011 세션 나가기 | 시스템 | A | 상태 | PlayMode LeavingSession_FreesSlot, ServerWorldPlayersTests, UiStateTests(5) | 슬롯 반환, 서버 정지, 화면 복귀 | M |
+| TC-010 | FR-010 PvP 없음 (M1 판정 범위: 규칙만, 공격 수용 기준 시험은 M4) | 단위 | A | 구조 | Application.PvpAbsenceTests(1, 새로 추가) | 명령 종류에 플레이어 피해 명령 없음 | M |
+| TC-011 | FR-011 세션 나가기 (M1 판정 범위: 캐릭터 제거·퇴장 알림, 아이템 복원은 M3) | 시스템 | A | 상태 | PlayMode LeavingSession_FreesSlot, ServerWorldPlayersTests, UiStateTests(5) | 슬롯 반환, 서버 정지, 화면 복귀 | M |
 | TC-012 | FR-023 1인칭 이동 | 단위·인수 | A+M | 경계 | AvatarMoveValidatorTests(13), RemoteAvatarTrackTests(4), LocalPlayerPoseBufferTests(1), Infrastructure.InputActionsAssetTests(7) + TC-060 | 이동·보간·입력 맵 정상 | H |
 | TC-013 | FR-024 달리기 | 단위·인수 | A+M | 상태 | AvatarMoveValidatorTests, Domain.StaminaStateTests(6) + TC-060 | 달리기 속도 인정, 스태미나 0이면 걷기 한도 | H |
 | TC-014 | FR-025 스태미나 | 단위 | A | 경계, 상태 | StaminaStateTests, Application.StaminaHudModelTests(4) | 소모·회복·0 불이익 없음 | H |
@@ -38,10 +38,10 @@ FR·NFR별 기대 동작을 TC로 묶었다. 호스트 권위(NFR-030)와 요청
 | TC-024 | NFR-009 App ID 구성 | 통합 | A+M | 동등 | LobbyMetaBuilderTests + MP-01 | 로비 메타에 앱 구분 값, 480 공용 ID에서 혼선 없음 | M |
 | TC-025 | NFR-010 1인 프레임 | 성능 | P | 시나리오 | P1 측정(보고서 2장) | 평균 60 이상(참고) | M |
 | TC-026 | NFR-011 8인 호스트 프레임 | 성능 | P | 시나리오 | P8 측정, PlayMode BenchScene | 서버 틱·메인 스레드 예산 이내(참고) | H |
-| TC-027 | NFR-012 참가자 프레임 | 인수 | M | 시나리오 | MP-04 | 참가자 FPS 측정(봇은 화면 없음) | M |
+| TC-027 | NFR-012 참가자 프레임 (M6 판정, M1은 측정값 기록만) | 인수 | M | 시나리오 | MP-04 | 참가자 FPS 측정(봇은 화면 없음) | M |
 | TC-028 | NFR-013 참가자 대역폭 | 성능 | P | 시나리오 | P8 측정(174.8 kbps) | <= 512 kbps | H |
 | TC-029 | NFR-014 호스트 업로드 | 성능 | P | 시나리오 | P8 측정(1,028 kbps) | <= 4,000 kbps | H |
-| TC-030 | NFR-015 상태 반영 지연 | 인수 | M | 시나리오 | MP-05 | 지연 기준 이내 | M |
+| TC-030 | NFR-015 상태 반영 지연 (M6 판정, M1은 측정값 기록만) | 인수 | M | 시나리오 | MP-05 | 지연 기준 이내 | M |
 | TC-031 | NFR-016 대량 자원 동기화 | 시스템·성능 | A+P | 시나리오 | PlayMode LateJoin_With5000..., ResourceSyncTests, P8 측정 | 5,000개 변경 동기화, 프레임 유지 | H |
 | TC-032 | NFR-017 동시 적 수 | 성능 | A+P | 경계 | CreatureReplicationTests, Domain.CreatureBrainTests(12), AiSchedulerTests(14), P8 측정(60체) | 60체 처리·복제 (상한 수치 판정은 M4 이후) | M |
 | TC-033 | NFR-018 중도 참가 시간 | 성능 | P | 시나리오 | P8 측정(0.744 s) | <= 60 s | M |
@@ -49,27 +49,29 @@ FR·NFR별 기대 동작을 TC로 묶었다. 호스트 권위(NFR-030)와 요청
 | TC-035 | NFR-027 엔진 | 구조 | A | 구조 | Architecture.ArchitectureRulesTests(35) | 엔진 버전·asmdef 고정 | L |
 | TC-036 | NFR-028 렌더 파이프라인 | 구조 | A | 구조 | Infrastructure.TerrainMaterialSceneTests(1), GraphicsDataTests | HDRP 설정·재질 | L |
 | TC-037 | NFR-029 플랫폼 | 구조 | A | 구조 | Infrastructure.BuildArtifactInspectorTests(3), 출시 빌드 성공 | Windows IL2CPP 빌드, Pipeline 어셈블리 0건 | M |
-| TC-038 | NFR-030 호스트 권위 | 단위·시스템 | A | 경계, 오류 | AvatarMoveValidatorTests(13), ArchitectureRulesTests, PlayMode AvatarPose_IsValidatedByHost + TC-050·051·052 | 2배 속도 위치는 되돌림, 상태 변경은 호스트만 | H |
+| TC-038 | NFR-030 호스트 권위 | 단위·시스템 | A | 경계, 오류 | AvatarMoveValidatorTests(13), ArchitectureRulesTests, PlayMode AvatarPose_IsValidatedByHost + TC-050·051·052·067~068, PoseRateGate(2), AdversarialClientTests, Net.JoinAndGatewayTests(Steam_NonLobbyMember_IsAccessDenied, NoJoinRequest_TimesOut, AcceptedButNoWorldReady_TimesOut) | 2배 속도 위치는 되돌림, 자세 45 Hz(순간 5개) 초과 폐기, 첫 자세는 스폰 15 m 이내만, 비멤버 연결 차단(스폰·위치·SteamID 0건), 상태 변경은 호스트만 | H |
 | TC-039 | NFR-031 전송 계층 교체 | 구조 | A | 구조 | ArchitectureRulesTests(Domain·Application 엔진·전송 참조 0) | 게임 로직이 전송에 비의존 | M |
 | TC-040 | NFR-038 참가자 끊김 시 세션 유지 | 시스템 | A | 상태 | PlayMode LeavingSession_FreesSlot, ServerWorldPlayersTests | 한 명이 나가도 세션 유지, 슬롯 재사용 | H |
 | TC-041 | NFR-039 호스트 끊김 시 참가자 처리 | 단위·인수 | A+M | 상태 | ClientSessionTests(11), UiStateTests + MP-08 | 참가자가 메인 메뉴로, 실제 끊김 확인 | M |
 | TC-042 | NFR-040 요청 값 검증 | 단위·시스템 | A | 오류, 경계 | ProtocolCodecTests(31), PlayMode MalformedPacket_FromClient, GatewayTests, CommandPipelineTests | 잘못된 값·패킷에도 호스트 정상 | H |
-| TC-043 | NFR-041 요청 빈도 제한 | 단위 | A | 경계 | RequestGuardTests(4), CommandPipelineTests.ClientCannotBypassRate + TC-053 | 10배 요청에도 상한 이하만 적용, 다른 참가자 영향 없음 | H |
+| TC-043 | NFR-041 요청 빈도 제한 | 단위 | A | 경계 | RequestGuardTests(4), CommandPipelineTests.ClientCannotBypassRate, Flood_IsRateLimited_AndFloodRepliesAreNotAmplified + TC-053, TC-067 | 10배 요청에도 상한 이하만 적용, 대기열은 플레이어별 몫(전체÷8)이라 다른 참가자 영향 없음, 디코드 실패·빈도 초과 10초 51회에 연결 종료(TC-067), 이동 거부 51회는 종료하지 않음(어댑터 연결 규칙, 자동 시험 없음, 아래 3장 시험 공백) | H |
 | TC-044 | NFR-048 메모리 | 성능 | P+M | 시나리오 | P8 측정(개발 빌드 1,366 MB) + MP-06 | 출시 빌드 <= 10 GB / VRAM <= 7.5 GB | M |
 | TC-045 | NFR-049 네트워크 라이브러리 | 검사 | A | 구조 | SECURITY_REPORT 6장 버전 목록, ArchitectureRulesTests | FishNet 4.7.4 등 고정 기록 | L |
-| TC-046 | NFR-053 생성 결정론 | 단위 | A | 동등 | WorldGen.DetMathTests(22), V0GeneratorTests(15), GenHashToolTests(10), 골든 해시 | 같은 PC 반복 생성 같은 해시 | H |
+| TC-046 | NFR-053 생성 결정론, FR-169 (M1 판정 범위: 같은 PC 반복 생성 일치와 생성 시간 기록, 네 지역 내부 생성은 M3) | 단위 | A | 동등 | WorldGen.DetMathTests(22), V0GeneratorTests(15), GenHashToolTests(10), 골든 해시 | 같은 PC 반복 생성 같은 해시 | H |
 | TC-047 | NFR-058 게임 버전(SemVer) | 단위 | A | 동등, 경계 | Domain.GameVersionTests(53), Infrastructure.BuildInfoAndTextTests(3) | 규칙대로 비교·표시 | H |
 | TC-048 | SCR 화면 계층·UI 규칙 | 통합 | A | 구조 | PlayMode UiLayerPlayTests(6), Infrastructure.UiPrefabRulesTests(17), Application.TextTableTests(13) | 로비·메뉴 레이어, 프리팹 규칙, 문구 표 | M |
 | TC-049 | 월드 뷰 (지형·자원 풀링) | 시스템 | A | 시나리오 | PlayMode WorldViewPlayTests(2), Application.ResourceViewRulesTests(7) | 타일당 지형, 자원 뷰 풀 재사용 | M |
-| TC-050 | NFR-030, FR-024, SEC-001 | 단위 | A(결함 재현) | 오류 | `AdversarialClientTests.TC050` | 달리기 2배(14 m/s) 정직한 시각 자세가 1회 이상 거부 | H |
-| TC-051 | NFR-030, REV-001 | 단위 | A(결함 재현) | 오류 | `TC051` | 시각을 500 ms씩 올린 자세 30개(1초 분량)가 모두 수락되면 안 됨 | H |
-| TC-052 | NFR-030, REV-003 | 단위 | A(결함 재현) | 오류 | `TC052` | 참가 직후 스폰에서 먼 첫 자세 거부 | M |
-| TC-053 | NFR-041, REV-004, SEC-004 | 단위 | A(결함 재현) | 오류 | `TC053` | 한 참가자가 대기열을 채워도 다른 참가자 명령 수락 | M |
-| TC-054 | FR-003, REV-002 | 단위 | A(결함 재현) | 시나리오 | `TC054` | 버전 불일치 거부 메시지·문구에 버전 자리 있음 | H |
+| TC-050 | NFR-030, FR-024, SEC-001 | 단위 | A(회귀 통과) | 오류 | `AdversarialClientTests.TC050` | 달리기 2배(14 m/s) 정직한 시각 자세가 1회 이상 거부 | H |
+| TC-051 | NFR-030, REV-001 | 단위 | A(회귀 통과) | 오류 | `TC051` | 시각을 500 ms씩 올린 자세 30개(1초 분량)가 모두 수락되면 안 됨 | H |
+| TC-052 | NFR-030, REV-003 | 단위 | A(회귀 통과) | 오류 | `TC052` | 참가 직후 스폰에서 먼 첫 자세 거부 | M |
+| TC-053 | NFR-041, REV-004, SEC-004 | 단위 | A(회귀 통과) | 오류 | `TC053` | 한 참가자가 대기열을 채워도 다른 참가자 명령 수락 | M |
+| TC-054 | FR-003, REV-002 | 단위 | A(회귀 통과) | 시나리오 | `TC054` | 버전 불일치 거부 메시지·문구에 버전 자리 있음 | H |
 | TC-055 | REV-014 | 구조 | A | 구조 | `ReleaseHygieneTests.TC055` | Assets 아래 원본 없는 `.meta` 0개 (로컬 디스크 기준) | L |
-| TC-056 | SEC-005, NFR-042 | 구조 | A(결함 재현) | 구조 | `ReleaseHygieneTests.TC056` | `usePlayerLog: 0` | M |
+| TC-056 | SEC-005, NFR-042 | 구조 | A(회귀 통과) | 구조 | `ReleaseHygieneTests.TC056` | `usePlayerLog: 0` | M |
 | TC-057 | M1-09 측정용 생물·AI(FR 외 보조) | 단위·통합 | A | 상태 | Application.BotBrainTests(17), AiSchedulerTests, Infrastructure.AiJobsBackendTests(12) | 봇·AI 작업 스케줄, 네이티브 메모리 해제 | M |
-| TC-058 | NFR-042·045 로그·설정 | 단위 | A | 동등 | ConfigTests(38), ConfigLoaderTests(9), LogSanitizerTests(23) | 설정 읽기, 로그에서 SteamID·경로 가림 | M |
+| TC-058 | NFR-042·045 로그·설정 | 단위 | A | 동등 | ConfigTests(38), ConfigLoaderTests(9), LogSanitizerTests(23), AbuseGuardTests.ThrottledLog_*(2), Infrastructure.FileLogSinkLimitTests(3), DiagnosticsTests.FileLogSink_*(4) | 설정 읽기, 로그에서 SteamID·경로 가림, 같은 Warning 5초 묶음(반복 횟수 포함)·Error는 묶음 제외, 파일 20 MB 상한, 보관 10개 | M |
+| TC-067 | NFR-041 연결 종료 경계 | 단위 | A | 경계 | `AbuseGuardTests.TC067` (회귀 시험에서 추가) | 10초에 50회는 유지, 51회째에 종료 | H |
+| TC-068 | FR-158 오류 보고 파일 (M2) | 단위·인수 | 대기 | 시나리오 | 해당 기능은 M2 구현. M2 시험 때 압축 파일에 `Logs/` 폴더 파일만 있고 Player.log가 없는지 확인 | 첨부 범위 `Logs/`만 | L |
 | TC-059 | FR-002, SCR 로비 | 인수 | M(완료) | 시나리오 | 사용자 확인: Steam 오버레이 초대 창 | 초대 창 표시 | H |
 | TC-060 | FR-023~025 | 인수 | M(완료) | 시나리오 | 사용자 확인: 이동·달리기·스태미나 | 정상 | H |
 | TC-061 | NFR-004, SCR 메뉴 | 인수 | M(완료) | 시나리오 | 사용자 확인: 키보드 Esc 메뉴·방향키 포커스 | 정상 | M |
@@ -79,23 +81,27 @@ FR·NFR별 기대 동작을 TC로 묶었다. 호스트 권위(NFR-030)와 요청
 | TC-065 | NFR-017 | 인수 | M(완료) | 시나리오 | 사용자 확인: 생물 60체 표시·추적·참가자 표시 | 정상 | M |
 | TC-066 | FR-163 | 인수 | M(완료) | 시나리오 | 사용자 확인: F1 관심 범위 표시 | 정상 | L |
 
+TC-067은 회귀 시험 때 새로 추가했다. TC-068은 M2 기능이라 지금은 시험할 수 없다(대기).
+
 TC-059~066은 이번 Check에서 다시 실행하지 않았고, PROJECT_STATUS.md 결정 기록의 사용자 확인 내용을 근거로 한다.
 
 ## 3. 새 시험 코드 (이번에 추가)
 | 파일 | TC | 비고 |
 |---|---|---|
-| `src/Assets/Tests/EditMode/Application/AdversarialClientTests.cs` | TC-050~054 | `[Category("KnownDefect")]`. 실패가 정상(결함 재현). `[Ignore]` 안 씀 |
-| `src/Assets/Tests/EditMode/Architecture/ReleaseHygieneTests.cs` | TC-055, TC-056 | TC-056만 KnownDefect |
+| `src/Assets/Tests/EditMode/Application/AdversarialClientTests.cs` | TC-050~054 | 결함 재현 시험이었고 Act에서 결함이 고쳐져 `KnownDefect` 표시를 뺐다(회귀 통과). `[Ignore]` 안 씀 |
+| `src/Assets/Tests/EditMode/Architecture/ReleaseHygieneTests.cs` | TC-055, TC-056 | TC-056도 회귀 통과(KnownDefect 표시 제거) |
 | `src/Assets/Tests/EditMode/Application/PvpAbsenceTests.cs` | TC-010 | 일반 시험 |
 
-기존 `FirstPose_IsAcceptedAsBaseline`(`ServerAndSessionTests.cs`)은 REV-003의 동작을 정상으로 고정하고 있어, DEF-002를 고칠 때 함께 바꿔야 한다.
+기존 `FirstPose_IsAcceptedAsBaseline`은 DEF-002 수정으로 `FirstPose_NearSpawn_IsAcceptedAsBaseline`, `FirstPose_FarFromSpawn_OrWrongHeight_IsRejected`로 바뀌었다.
+
+**시험 공백(회귀 시험에서 확인)**: (1) 이동 검사 거부만 51회 보내도 연결이 끊기지 않는 규칙은 어댑터(FishNet) 연결 코드라 EditMode로 닿지 않음 — PlayMode 시험 후보(다음 사이클). (2) FishNet 인증기로 비멤버 연결에 스폰·위치·SteamID가 0건인 것은 실제 FishNet 연결이 필요해 MP-09로만 확인 가능. (3) FR-158은 M2 기능.
 
 ## 4. 수동 플레이 시험 절차 (29119-5 키워드 형식, 사용자 수행)
 공통: 출시 빌드 `src/Builds/Release/`, 개발 빌드 `src/Builds/Development/`. Steam 로그인 필요.
 
 - **MP-01 친구 계정 2PC 참가 (TC-002, 003, 021, 024)**: `실행 PC1 출시빌드` → `확인화면 SCR 로비` → `탭 방 열기` → `탭 친구 초대` → `실행 PC2(친구 계정) 출시빌드` → `수락 초대` → `대기 10초` → `확인 PC2 월드 진입` → `확인 PC1 명단에 참가자 2명` → `확인 서로 캐릭터 보임` → `확인 Logs/ 폴더 오류 0`.
 - **MP-02 Steam 릴레이 (TC-005)**: 서로 다른 공유기의 두 PC로 MP-01 반복 → `확인 연결 성공` → `기록 접속까지 시간` → `확인 이동 동기화 끊김 없음`.
-- **MP-03 출시↔개발 접속 거부 (TC-006, 003)**: `실행 PC1 출시빌드 방 열기` → `실행 PC2 개발빌드 참가` → `확인 거부 화면` → `확인 문구에 사유 표시(버전 두 개는 DEF-004로 아직 안 나옴)` → 반대 조합도 반복.
+- **MP-03 출시↔개발 접속 거부 (TC-006, 003)**: `실행 PC1 출시빌드 방 열기` → `실행 PC2 개발빌드 참가` → `확인 거부 화면` → `확인 문구에 「내 버전 X / 호스트 버전 Y」 두 버전 표시(DEF-004 수정 후), 호스트 버전을 알 수 없으면 Y 자리에 ?` → 반대 조합도 반복.
 - **MP-04 참가자 프레임 (TC-027)**: MP-01 상태에서 `열기 F3`(개발 빌드) 또는 외부 FPS 표시 → `걷기 60초` → `기록 참가자 평균 FPS·1% Low`.
 - **MP-05 반영 지연 (TC-030)**: 호스트가 `타격 나무` → 참가자 화면에서 변화까지 `기록 지연(ms)`(동영상 프레임 수로 추정).
 - **MP-06 출시 빌드 메모리·권장 사양 (TC-020, 044)**: 출시 빌드로 방 열기 → `대기 5분` → `기록 작업 관리자 메모리·GPU 전용 메모리` → 기준 10 GB / 7.5 GB.
