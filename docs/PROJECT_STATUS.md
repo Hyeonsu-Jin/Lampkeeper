@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10 1차 완료)
-- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **M1-10 2차(ResourceViewStreamer·지형 표시, World 씬 연결, 「5,000개 변경」 메뉴·실행 옵션, 로딩·생성 중 표시, 공격 키 → 타격 명령)** → M1-11 시험용 AI 60체 부하 → M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개) → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험 → 묶음 끝에 문서 한 번에 반영(STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion`) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
+- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10 1·2차 구현 완료, 사용자 수동 플레이 시험 대기)
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **M1-10 사용자 수동 플레이 시험(방 열기 → 「월드를 만드는 중」·지형 위 스폰, 나무 5회 타격 쓰러짐·돌 파괴, 메뉴 Game/Dev/Resources/Apply 5000 Changes + F3 FPS, 두 번째 인스턴스 중도 참가)** → M1-11 시험용 AI 60체 부하 → M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개) → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험 → 묶음 끝에 문서 한 번에 반영(STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion`) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -119,6 +119,7 @@
 | 2026-11-10 | 동적 대체 글꼴 4개(Pretendard Regular·SemiBold·Bold Dynamic SDF, LiberationSans SDF - Fallback)는 플레이 중 쌓인 임시 글자를 비운 상태로 커밋(12332ec), 이후 플레이로 다시 바뀌면 커밋 전에 되돌림. 빈 src/Assets/Resources 폴더 삭제 | 사용자 결정 |
 | 2026-11-10 | M1 묶음 4는 작업 하나씩 진행, M1-10부터 developer에게 단독으로 맡김 | 사용자 결정 (토큰 절약) |
 | 2026-11-10 | M1-10 1차 결과(developer, Unity MCP 사용, focus 1회): Domain/Gathering(ResourceState 16비트·HarvestRules), Application/Gathering(타격 명령 본문 3 B·호스트 처리기), Application/WorldSync(LocalWorld·요약값, ResourceChangeTool 「5,000개 변경」), ServerWorld 자원 표 복제, 참가자 백그라운드 생성·JoinComplete 전 델타 보관. 관찰: Full 월드 생성+요약값 605 ms, 5,000개 변경 스냅샷 20,008 B, 타격 델타 8 B, 루프백 중도 참가 313 ms(정식 측정은 M1-12). **SDD 반영 대기**(묶음 끝): 델타는 준비된 모든 연결에 전송, 거리 검증은 수평만(지형 붙으면 재검토), 타격 빈도 상수 4회/초, 거부 사유 기존 코드 재사용, 폴더 Gathering·WorldSync(3.8), 허가 뒤 생성 대기 +30초. 총괄 재확인: 컴파일 0, EditMode 577/577, PlayMode 23/23, Console 오류는 FishNet 시험 소음(SpawnablePrefabs is null)뿐, .meta 누락 0 | developer 보고 + 총괄 검증 |
+| 2026-11-10 | M1-10 2차 결과(developer, Unity MCP 사용, focus 2회): Application/WorldSync(ResourceCellGrid 32 m 칸, ResourceVisualRules), Adapters/Presentation/World(TerrainViewBuilder Full 36타일·충돌체·임시 단색, ResourceViewStreamer 60 m GameObject 풀 + 350 m RenderMeshInstanced·임시 도형·쓰러짐 회전, ResourceHitInput 공격 0.3초 간격), Editor 메뉴 Game/Dev/Resources/Apply 5000 Changes, 개발 옵션 `-resourcechanges N`, 문구 키 lobby.status.generating, 인스턴싱 재질 4개, World 씬에 TerrainView·ResourceViews 추가·Ground 삭제(MCP·에디터 API). **SDD 반영 대기**(묶음 끝): 패키지 com.unity.modules.terrainphysics 추가(D-03), 스폰 = 월드 중앙 + 지면 높이 0.1 m, 쓰러진·부서진 자원은 충돌체 끔, 물·스플랫·디테일·낙관적 표현·CommandResult 처리는 이후. 미측정: Full 규모 표시 개수·FPS·드로우콜·지형 생성 시간. 총괄 재확인: 컴파일 0, EditMode 584/584, PlayMode 25/25, 새 Console 오류 0(FishNet 시험 소음만), .meta 누락 0, 씬 변경은 TerrainView·ResourceViews 추가와 Ground 삭제뿐 | developer 보고 + 총괄 검증 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -188,6 +189,7 @@
 | 개발 전용 한글 대체 글꼴(OS 맑은 고딕, 메모리 전용)이 플레이어 빌드에서도 동작하는지 미확인, 다른 OS에서는 □ · 키보드 Esc로 ESC 메뉴 열기는 MCP 키 흉내가 안 먹어 미확인 · 처음 만드는 경로(새 PC에서 Boot 씬 생성) 미실행 | developer·debugger (uGUI 전환) | 한글 미표시, 입력 경로 결함 늦게 발견 | Pretendard 도입(사용자 작업), 사용자 수동 확인, M1-13 개발 빌드에서 확인 |
 | 호스트 시작 때 월드 생성이 메인 스레드를 약 0.6초 막음(이 PC), 느린 PC는 더 김 | developer (M1-10 1차) | 시작 시 잠깐 멈춤 | M1-10 2차에서 로딩 표시, M1-12에서 측정 |
 | 참가자 월드 생성 작업은 취소할 수 없음(도중에 나가면 결과만 버림) | developer (M1-10 1차) | 나간 뒤에도 잠시 CPU 사용 | 낮음, M2 세션 관리 때 재검토 |
+| 지형 36타일 동기 생성 시간 Full 규모 미확인, 월드 중앙 스폰 지점이 물·급경사일 수 있음 | developer (M1-10 2차) | 시작 시 멈춤, 스폰 불편 | 사용자 수동 시험으로 확인, 길면 여러 프레임 분할 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -204,6 +206,7 @@
 | 1 (Do M1 묶음 3 마무리: ESC 결함·SemVer) | 179 | 58 | EditMode 541 + PlayMode 16 | 100% (557/557) | 1 (ESC 메뉴 버튼 무반응, 수정됨) | - |
 | 1 (Do M1 묶음 3 마무리: uGUI 전환) | 179 | 58 | EditMode 555(1 건너뜀) + PlayMode 22 | 100% (576/576, 건너뜀 제외) | 1 (PlayMode 대체 글꼴 죽은 참조, 수정됨) | - |
 | 1 (Do M1-10 1차) | 179 | 58 | EditMode 577 + PlayMode 23 | 100% (600/600) | 0 | - |
+| 1 (Do M1-10 2차) | 179 | 58 | EditMode 584 + PlayMode 25 | 100% (609/609) | 0 | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
