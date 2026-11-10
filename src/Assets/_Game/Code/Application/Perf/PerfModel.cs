@@ -25,11 +25,18 @@ namespace Game.Application.Perf
         public const string ClientViews = "Client.Views";
         public const string ClientUi = "Client.UI";
 
+        /// <summary>
+        /// [IMP-018, SDD R-41] 흐름장 재계산이 워커 스레드에서 걸린 시간(예약부터 완료까지, ms).
+        /// 메인 스레드에서 재는 구간이 아니라 Record로 값을 넣는다. 재계산이 있던 주기에만 값이 생긴다(max·maxcall이 의미 있음).
+        /// 기존 열 위치를 바꾸지 않으려고 목록 맨 끝에 둔다.
+        /// </summary>
+        public const string ServerFlowRecompute = "Server.FlowRecompute";
+
         /// <summary>CSV 열과 통계 계산 순서가 되는 전체 목록(고정 순서).</summary>
         public static readonly IReadOnlyList<string> All = new[]
         {
             ServerTotal, ServerCommands, ServerAiDecide, ServerAiApply, ServerSystems, ServerReplication,
-            ClientMirror, ClientViews, ClientUi,
+            ClientMirror, ClientViews, ClientUi, ServerFlowRecompute,
         };
     }
 

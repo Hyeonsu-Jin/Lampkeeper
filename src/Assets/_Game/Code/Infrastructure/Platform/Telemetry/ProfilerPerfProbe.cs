@@ -89,6 +89,18 @@ namespace Game.Infra.Platform.Telemetry
         }
 
         /// <inheritdoc />
+        public void Record(string marker, double milliseconds)
+        {
+            if (!TryGetSlot(marker, out int index) || milliseconds < 0)
+            {
+                return;
+            }
+            ref Slot slot = ref _slots[index];
+            slot.SumMs += milliseconds;
+            if (milliseconds > slot.MaxCallMs) slot.MaxCallMs = milliseconds;
+        }
+
+        /// <inheritdoc />
         public void Count(string name, double value) => _aggregator.SetCounter(name, value);
 
         /// <summary>

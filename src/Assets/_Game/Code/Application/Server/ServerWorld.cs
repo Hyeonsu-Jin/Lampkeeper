@@ -586,6 +586,20 @@ namespace Game.Application.Server
             return true;
         }
 
+        /// <summary>[IMP-018] 새로 잰 흐름장 재계산 워커 시간이 있으면 측정 표식으로 알린다(같은 값을 두 번 알리지 않음).</summary>
+        private void ReportFlowRecompute()
+        {
+            AiNavStats stats = Ai.NavStats;
+            if (stats == null || stats.FlowRecomputeSerial == _flowSerialReported)
+            {
+                return;
+            }
+            _flowSerialReported = stats.FlowRecomputeSerial;
+            _perf.Record(PerfMarkers.ServerFlowRecompute, stats.LastFlowRecomputeMs);
+        }
+
+        private int _flowSerialReported;
+
         /// <summary>
         /// 서버 틱 한 번. FishNet TimeManager 틱(30 Hz)에서 부른다.
         /// </summary>
@@ -603,6 +617,7 @@ namespace Game.Application.Server
                     _perf.Begin(PerfMarkers.ServerAiApply);
                     Ai.ApplySteering();
                     _perf.End(PerfMarkers.ServerAiApply);
+                    ReportFlowRecompute();
                 }
 
                 _perf.Begin(PerfMarkers.ServerCommands);

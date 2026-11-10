@@ -8,7 +8,8 @@
 //   -perfhud               개발용 성능 표시를 켠 채 시작(실행 중에는 F3으로 켜고 끔)
 //   -bench P1|P8           Bench 장면 실행(측정 장면 재현)
 //   -upscale on|off        Bench 측정에서 업스케일링 켬(판정 경로)·끔(참고)
-//   -benchseconds <초>     Bench 길이. 생략하면 P1 600초, P8 300초(SRS 3.3)
+//   -vsync on|off          off면 vSyncCount 0 + 프레임 제한 없음(주사율에 묶이지 않은 FPS 측정, IMP-018). 생략하면 건드리지 않음
+//   -benchseconds <초>    Bench 길이. 생략하면 P1 600초, P8 300초(SRS 3.3)
 // 개발 빌드에서만 의미가 있다(출시 빌드는 호출한 쪽이 무시).
 // =============================================================
 using System;
@@ -36,6 +37,16 @@ namespace Game.Application.Perf
         Off = 2,
     }
 
+    /// <summary>수직 동기화(vSync) 지정(측정용).</summary>
+    public enum VSyncSwitch
+    {
+        /// <summary>설정을 건드리지 않는다(기존 동작).</summary>
+        Unchanged = 0,
+        On = 1,
+        /// <summary>vSyncCount 0, 프레임 제한 없음. 모니터 주사율에 묶이지 않은 FPS를 잰다.</summary>
+        Off = 2,
+    }
+
     /// <summary>성능·Bench 명령줄 옵션.</summary>
     public sealed class PerfOptions
     {
@@ -44,6 +55,7 @@ namespace Game.Application.Perf
         public const string BenchFlag = "-bench";
         public const string UpscaleFlag = "-upscale";
         public const string BenchSecondsFlag = "-benchseconds";
+        public const string VSyncFlag = "-vsync";
 
         /// <summary>P1 기본 길이(초): 10분 순회.</summary>
         public const int DefaultP1Seconds = 600;
@@ -69,11 +81,15 @@ namespace Game.Application.Perf
         /// <summary>Bench 길이(초). 지정하지 않았으면 장면 기본값.</summary>
         public int BenchSeconds { get; }
 
+        /// <summary>vSync 지정(IMP-018). 지정하지 않으면 Unchanged.</summary>
+        public VSyncSwitch VSync { get; }
+
         /// <summary>해석하지 못한 값 설명.</summary>
         public IReadOnlyList<string> Errors { get; }
 
-        private PerfOptions(bool perfLog, string perfLogFolder, bool hud, BenchScenario? bench, UpscaleSwitch upscale, int benchSeconds, IReadOnlyList<string> errors)
+        private PerfOptions(bool perfLog, string perfLogFolder, bool hud, BenchScenario? bench, UpscaleSwitch upscale, int benchSeconds, VSyncSwitch vsync, IReadOnlyList<string> errors)
         {
+            VSync = vsync;
             PerfLog = perfLog;
             PerfLogFolder = perfLogFolder;
             Hud = hud;
@@ -96,6 +112,7 @@ namespace Game.Application.Perf
             BenchScenario? bench = null;
             UpscaleSwitch upscale = UpscaleSwitch.PresetDefault;
             int seconds = 0;
+            VSyncSwitch vsync = VSyncSwitch.Unchanged;
 
             for (int i = 0; args != null && i < args.Count; i++)
             {
@@ -126,6 +143,13 @@ namespace Game.Application.Perf
                     else if (Is(value, "off")) upscale = UpscaleSwitch.Off;
                     else if (value != null) errors.Add("-upscale 값은 on 또는 off 이어야 합니다: " + value);
                 }
+                else if (Is(arg, VSyncFlag))
+                {
+                    string value = ReadValue(args, ref i, VSyncFlag, errors);
+                    if (Is(value, "on")) vsync = VSyncSwitch.On;
+                    else if (Is(value, "off")) vsync = VSyncSwitch.Off;
+                    else if (value != null) errors.Add("-vsync 값은 on 또는 off 이어야 합니다: " + value);
+                }
                 else if (Is(arg, BenchSecondsFlag))
                 {
                     string value = ReadValue(args, ref i, BenchSecondsFlag, errors);
@@ -141,7 +165,7 @@ namespace Game.Application.Perf
             {
                 seconds = bench.Value == BenchScenario.P1 ? DefaultP1Seconds : DefaultP8Seconds;
             }
-            return new PerfOptions(perfLog, folder, hud, bench, upscale, seconds, errors);
+            return new PerfOptions(perfLog, folder, hud, bench, upscale, seconds, vsync, errors);
         }
 
         private static bool Is(string actual, string expected) => string.Equals(actual, expected, StringComparison.OrdinalIgnoreCase);

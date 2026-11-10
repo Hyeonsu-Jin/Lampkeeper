@@ -24,10 +24,28 @@
     처음에 접속시킬 봇 수(기본 6). 중도 참가 봇 1개가 추가된다(총 7).
 .PARAMETER OutRoot
     결과를 모을 폴더(기본: <저장소>\docs\test\perf\raw).
+.PARAMETER VSyncOff
+    (IMP-018) 호스트를 -vsync off 로 띄운다(vSyncCount 0, 프레임 제한 없음). 모니터 주사율에 묶이지 않은 FPS 참고값을 얻는 용도.
+    생략하면 기존 동작(게임 설정 그대로). 호스트가 로그에 남긴 주사율(refreshHz)과 vSync 상태는 summary.md·summary.json·run_info.csv 에 기록된다.
+.PARAMETER UpscaleOff
+    (IMP-018) 호스트를 -upscale off 로 띄운다(업스케일링 끈 참고 측정). 생략하면 기존대로 -upscale on(판정 경로).
+    결과 폴더 형식과 판정 기준은 그대로이고, summary 에 업스케일 설정이 적힌다.
+.PARAMETER SummarizeOnly
+    (IMP-018) 기존 결과 폴더(예: docs\test\perf\raw\M1_20261110_225236)를 주면 게임을 실행하지 않고 그 폴더의 CSV·로그·summary.json 을 읽어
+    summary.md · summary.json · run_info.csv 만 다시 만든다. 원본 CSV·로그·run.log·procs.csv 는 고치지 않는다.
+    GPU 프레임 비정상 표본(0 미만 또는 1000 ms 초과)은 평균에서 빼고 개수를 표시한다. Server.Total 은 틱당 평균(ms/틱)으로 판정하고
+    프레임당 평균은 참고 행으로 남긴다(vSync를 끄면 프레임이 늘어 프레임당 평균만 작아지기 때문).
+.NOTES
+    (IMP-018) 이번 실행의 시드(월드·생물 배치·자원 변경)는 호스트 로그의 "[Perf] seed ..." 줄에서 읽어 summary.md·summary.json·run_info.csv 에 기록한다.
+    흐름장 재계산 워커 시간(Server.FlowRecompute, SDD R-41)은 호스트 CSV 열에서 읽어 요약에 평균·최대로 나온다(참고값, 판정 아님).
+    -SummarizeOnly 에서는 프로세스 작업 집합 피크(PeakWorkingSet)를 복원하지 못해 메모리는 CSV·procs.csv 의 최댓값만 쓴다.
 .EXAMPLE
     powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1
+    powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1 -VSyncOff
+    powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1 -UpscaleOff
     powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1 -Mode P1
     powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1 -DurationSeconds 30
+    powershell -ExecutionPolicy Bypass -File tools\perf\RunM1Perf.ps1 -SummarizeOnly docs\test\perf\raw\M1_20261110_225236
 #>
 [CmdletBinding()]
 param(
@@ -36,7 +54,10 @@ param(
     [int]$DurationSeconds = 300,
     [int]$LateJoinAfterSeconds = 60,
     [int]$Bots = 6,
-    [string]$OutRoot = ''
+    [string]$OutRoot = '',
+    [switch]$VSyncOff,
+    [switch]$UpscaleOff,
+    [string]$SummarizeOnly = ''
 )
 
 $ErrorActionPreference = 'Stop'
@@ -53,20 +74,30 @@ $Limits = @{
     JoinSeconds      = 60.0
     ProcessMemoryMb  = 10240.0
     VramMb           = 7680.0
+    GpuFrameSaneMaxMs = 1000.0   # 이보다 큰 GPU 프레임 표본은 계수기 오류로 보고 요약에서 뺀다
+    ServerTickHz     = 30.0      # 서버 틱 주기(SDD): 프레임 평균에는 틱 없는 프레임이 섞이므로 틱 기준 평균 계산에 쓴다
 }
 
 # ---------- 경로 ----------
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
 if ([string]::IsNullOrEmpty($BuildDir)) { $BuildDir = Join-Path $repoRoot 'src\Builds\Development' }
 if ([string]::IsNullOrEmpty($OutRoot)) { $OutRoot = Join-Path $repoRoot 'docs\test\perf\raw' }
-$exe = Get-ChildItem -Path $BuildDir -Filter '*.exe' -File | Where-Object { $_.Name -notlike 'UnityCrashHandler*' } | Select-Object -First 1
-if ($null -eq $exe) { throw "빌드 폴더에서 실행 파일을 찾지 못했습니다: $BuildDir" }
-$stamp = Get-Date -Format 'yyyyMMdd_HHmmss'
-$outDir = Join-Path $OutRoot ("M1_" + $stamp)
-New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+$resummarize = -not [string]::IsNullOrEmpty($SummarizeOnly)
+if ($resummarize) {
+    # 요약만 다시 만들기: 게임을 실행하지 않고 기존 폴더의 CSV·로그·summary.json 을 읽는다(원본 CSV·로그는 고치지 않는다).
+    $outDir = (Resolve-Path -LiteralPath $SummarizeOnly).Path
+    $exe = $null
+    $gameName = 'KkeojinHaneul'
+} else {
+    $exe = Get-ChildItem -Path $BuildDir -Filter '*.exe' -File | Where-Object { $_.Name -notlike 'UnityCrashHandler*' } | Select-Object -First 1
+    if ($null -eq $exe) { throw "빌드 폴더에서 실행 파일을 찾지 못했습니다: $BuildDir" }
+    $stamp = Get-Date -Format 'yyyyMMdd_HHmmss'
+    $outDir = Join-Path $OutRoot ("M1_" + $stamp)
+    New-Item -ItemType Directory -Force -Path $outDir | Out-Null
+    $gameName = [System.IO.Path]::GetFileNameWithoutExtension($exe.Name)
+}
 
 $Port = 7770
-$gameName = [System.IO.Path]::GetFileNameWithoutExtension($exe.Name)
 $cores = [Environment]::ProcessorCount
 # 어떤 이유로 스크립트가 중간에 죽어도 게임 프로세스가 남지 않게 하는 안전장치(초).
 $backstopSeconds = $DurationSeconds + 420
@@ -74,6 +105,7 @@ $backstopSeconds = $DurationSeconds + 420
 function Write-Log([string]$text) {
     $line = '[{0}] {1}' -f (Get-Date -Format 'HH:mm:ss'), $text
     Write-Host $line
+    if ($resummarize) { return } # 요약만 다시 만들 때는 원본 run.log 를 건드리지 않는다
     Add-Content -Path (Join-Path $outDir 'run.log') -Value $line -Encoding UTF8
 }
 
@@ -194,6 +226,7 @@ function Sample-Processes {
 }
 
 # =====================================================================
+if (-not $resummarize) {
 Write-Log ("M1 측정 시작: 모드={0}, 측정 {1}초, 빌드={2}" -f $Mode, $DurationSeconds, $exe.FullName)
 Write-Log ("결과 폴더: {0}" -f $outDir)
 Write-Log ("PC: {0} 논리 코어 {1}개" -f ((Get-CimInstance Win32_Processor | Select-Object -First 1).Name), $cores)
@@ -220,11 +253,13 @@ if (Test-UnityEditorRunning) {
     Write-Log "경고: Unity 에디터가 켜져 있습니다. 판정용 측정에서는 에디터를 닫아야 합니다(짧은 점검은 괜찮음)."
 }
 
-$result = [ordered]@{ mode = $Mode; duration_s = $DurationSeconds; started = (Get-Date).ToString('s'); build = $exe.FullName; gpu = $gpuNames; cores = $cores; editor_open = (Test-UnityEditorRunning) }
+$result = [ordered]@{ mode = $Mode; duration_s = $DurationSeconds; started = (Get-Date).ToString('s'); build = $exe.FullName; gpu = $gpuNames; cores = $cores; editor_open = (Test-UnityEditorRunning); upscale = $(if ($UpscaleOff) { 'off' } else { 'on' }); vsync_option = $(if ($VSyncOff) { 'off' } else { 'default' }) }
 
 try {
     # ---- 호스트 ----
-    $hostArgs = '-screen-fullscreen 0 -screen-width 1920 -screen-height 1080 -upscale on -transport tugboat -host -devPlayerId 1 -testcreatures 60 -resourcechanges 5000'
+    $upscaleArg = if ($UpscaleOff) { 'off' } else { 'on' }
+    $hostArgs = "-screen-fullscreen 0 -screen-width 1920 -screen-height 1080 -upscale $upscaleArg -transport tugboat -host -devPlayerId 1 -testcreatures 60 -resourcechanges 5000"
+    if ($VSyncOff) { $hostArgs += ' -vsync off' }
     Start-Game 'host' $hostArgs
     $hostLog = $procs['host'].Log
     $hostReady = Wait-Until { (Read-SharedText $hostLog) -match '참가 시간:' -or $procs['host'].Proc.HasExited } 240 '호스트가 게임에 들어감'
@@ -297,6 +332,42 @@ catch {
 finally {
     Stop-Games
 }
+}
+else {
+    # ---- 요약만 다시 만들기: 기존 결과 폴더에서 실행 정보를 복원 ----
+    $oldPath = Join-Path $outDir 'summary.json'
+    if (-not (Test-Path -LiteralPath $oldPath)) { throw "summary.json 이 없는 폴더입니다: $outDir" }
+    $old = (Read-SharedText $oldPath) | ConvertFrom-Json
+    $Mode = [string]$old.mode; $DurationSeconds = [int]$old.duration_s; $gpuNames = [string]$old.gpu; $cores = [int]$old.cores
+    $result = [ordered]@{ mode = $Mode; duration_s = $DurationSeconds; started = [string]$old.started; build = [string]$old.build; gpu = $gpuNames; cores = $cores; editor_open = [bool]$old.editor_open; upscale = [string]$old.upscale; vsync_option = [string]$old.vsync_option }
+    $script:botWindowed = [bool]$old.bots_windowed
+    foreach ($f in @($old.failures)) { if ($f) { [void]$failures.Add([string]$f) } }
+    $oldGpuMax = if ($null -ne $old.gpu_vram_mb_max) { [double]$old.gpu_vram_mb_max } else { $null }
+    foreach ($d in (Get-ChildItem -LiteralPath $outDir -Directory | Where-Object { $_.Name -eq 'host' -or $_.Name -like 'bot*' })) {
+        $procs[$d.Name] = @{ Dir = $d.FullName; Log = (Join-Path $d.FullName 'player.log') }
+    }
+    $Bots = [Math]::Max(0, @($procs.Keys | Where-Object { $_ -like 'bot*' }).Count - 1)
+    $pc = Join-Path $outDir 'procs.csv'
+    if (Test-Path -LiteralPath $pc) {
+        foreach ($r in ((Read-SharedText $pc) | ConvertFrom-Csv)) {
+            [void]$procRows.Add([pscustomobject]@{ name = $r.name; time_s = [double]::Parse($r.time_s, $inv); cpu_pct_core = [double]::Parse($r.cpu_pct_core, $inv); cpu_pct_machine = [double]::Parse($r.cpu_pct_machine, $inv); working_set_mb = [double]::Parse($r.working_set_mb, $inv); private_mb = [double]::Parse($r.private_mb, $inv) })
+        }
+    }
+    # 측정 구간은 run.log 의 「측정 시작」「측정 끝」 시각과 호스트 CSV 파일 이름의 시각으로 되살린다(처음 실행과 같은 방식).
+    $runLog = Read-SharedText (Join-Path $outDir 'run.log')
+    $day = ([datetime]$old.started).Date
+    $ms = [regex]::Match($runLog, '\[(\d\d:\d\d:\d\d)\] 측정 시작')
+    $me = [regex]::Match($runLog, '\[(\d\d:\d\d:\d\d)\] 측정 끝')
+    $measureStart = if ($ms.Success) { $day.Add([TimeSpan]::Parse($ms.Groups[1].Value)) } else { $day }
+    $measureEnd = if ($me.Success) { $day.Add([TimeSpan]::Parse($me.Groups[1].Value)) } else { $day.AddSeconds($DurationSeconds) }
+    $hostCsv = Get-ChildItem -LiteralPath $procs['host'].Dir -Filter 'perf_*.csv' | Select-Object -First 1
+    $csvOrigin = $measureStart
+    if ($null -ne $hostCsv -and $hostCsv.BaseName -match 'perf_(\d{8}_\d{6})') {
+        $csvOrigin = [datetime]::ParseExact($Matches[1], 'yyyyMMdd_HHmmss', $inv)
+    }
+    Write-Log ("요약만 다시 만들기: {0}" -f $outDir)
+}
+
 
 # =====================================================================
 # 요약
@@ -338,20 +409,42 @@ if ($null -ne $hostRows) {
 $hostStats = [ordered]@{}
 if ($win.Count -gt 0) {
     $stAvg = Col $win 'Server.Total.avg'; $stP99 = Col $win 'Server.Total.p99'; $stMax = Col $win 'Server.Total.maxcall'
-    $main = Col $win 'main_ms_avg'; $gpu = Col $win 'gpu_ms_avg'; $fps = Col $win 'fps_avg'; $low = Col $win 'fps_1pct_low'
+    $main = Col $win 'main_ms_avg'; $gpuAll = Col $win 'gpu_ms_avg'; $gpu = [double[]]@($gpuAll | Where-Object { $_ -ge 0 -and $_ -le $Limits.GpuFrameSaneMaxMs }); $gpuDropped = $gpuAll.Count - $gpu.Count; $frames = Col $win 'frames'; $fps = Col $win 'fps_avg'; $low = Col $win 'fps_1pct_low'
     $send = Col $win 'net.send_bytes_per_s'; $creat = Col $win 'creatures.active'; $synced = Col $win 'resources.synced'
     $gc = Col $win 'gc_alloc_bytes'; $peers = Col $win 'net.peers'; $peerSend = Col $win 'net.peer_send_max_bytes_per_s'
     $ws = Col $win 'mem.working_set_mb'; $heap = Col $win 'mem.managed_heap_mb'
     $hostStats = [ordered]@{
         rows = $win.Count
         server_total_avg_ms = Mean $stAvg; server_total_p99_mean_ms = Mean $stP99; server_total_p99_max_ms = Max $stP99; server_total_tick_max_ms = Max $stMax
-        main_ms_avg = Mean $main; gpu_ms_avg = Mean $gpu; fps_avg = Mean $fps; fps_1pct_low_mean = Mean $low; fps_1pct_low_min = if ($low.Count) { ($low | Measure-Object -Minimum).Minimum } else { 0 }
+        main_ms_avg = Mean $main; gpu_ms_avg = Mean $gpu; gpu_samples_dropped = $gpuDropped; fps_avg = Mean $fps; fps_1pct_low_mean = Mean $low; fps_1pct_low_min = if ($low.Count) { ($low | Measure-Object -Minimum).Minimum } else { 0 }
         send_kbps_mean = (Mean $send) * 8 / 1000; send_kbps_p95 = (Percentile $send 95) * 8 / 1000; send_kbps_max = (Max $send) * 8 / 1000
         peers_max = Max $peers; peer_send_kbps_max = (Max $peerSend) * 8 / 1000
         creatures_mean = Mean $creat; resources_synced_max = Max $synced; gc_kb_per_s_mean = (Mean $gc) / 1024
         working_set_mb_max = Max $ws; managed_heap_mb_max = Max $heap
     }
+    # [IMP-018] Server.Total.avg 는 「프레임당 평균」이라 틱이 없는 프레임(0)이 섞인다. FPS가 높을수록(vSync 끔) 값이 작아진다.
+    # 그래서 틱당 평균 = (초별 평균 x 프레임 수)의 합 / (서버 틱 주기 x 측정 초)로 따로 계산한다.
+    $totalMs = 0.0
+    for ($i = 0; $i -lt [Math]::Min($stAvg.Count, $frames.Count); $i++) { $totalMs += $stAvg[$i] * $frames[$i] }
+    $hostStats['server_total_tick_mean_ms'] = $totalMs / ($Limits.ServerTickHz * $win.Count)
+    # [IMP-018] 흐름장 재계산 워커 시간(Server.FlowRecompute, 초별 maxcall 중 재계산이 있던 초만). 열이 없는 옛 빌드면 0개.
+    $flowSec = @((Col $win 'Server.FlowRecompute.maxcall') | Where-Object { $_ -gt 0 })
+    $hostStats['flow_recompute_seconds'] = $flowSec.Count
+    $hostStats['flow_recompute_mean_ms'] = if ($flowSec.Count) { Mean ([double[]]$flowSec) } else { 0.0 }
+    $hostStats['flow_recompute_max_ms'] = if ($flowSec.Count) { Max ([double[]]$flowSec) } else { 0.0 }
 }
+
+# [IMP-018] 호스트 로그에서 실제 쓴 시드와 화면 상태(vSync·주사율)를 읽는다. 줄 형식은 게임 쪽(GameFlow, DevDiagnostics)과 맞춘 key=value.
+function Read-LogFields([string]$logPath, [string]$prefix) {
+    $fields = [ordered]@{}
+    $text = Read-SharedText $logPath
+    $m = [regex]::Matches($text, [regex]::Escape($prefix) + '([^\r\n]*)')
+    if ($m.Count -eq 0) { return $fields }
+    foreach ($kv in [regex]::Matches($m[$m.Count - 1].Groups[1].Value, '(\w+)=(\S*)')) { $fields[$kv.Groups[1].Value] = $kv.Groups[2].Value }
+    return $fields
+}
+$seedInfo = Read-LogFields $procs['host'].Log '[Perf] seed '
+$displayInfo = Read-LogFields $procs['host'].Log '[Perf] display '
 
 # 봇별 수신·CPU
 $botStats = New-Object System.Collections.ArrayList
@@ -373,22 +466,41 @@ foreach ($name in ($procs.Keys | Where-Object { $_ -like 'bot*' } | Sort-Object)
 
 $hostCpu = @($procRows | Where-Object { $_.name -eq 'host' } | ForEach-Object { [double]$_.cpu_pct_core })
 $hostWsPeak = if ($procs['host'].ContainsKey('PeakWs')) { [double]$procs['host']['PeakWs'] } else { 0 }
-$gpuMax = if ($gpuSamples.Count -gt 0) { Max ([double[]]$gpuSamples.ToArray()) } else { $null }
+$gpuMax = if ($resummarize) { $oldGpuMax } elseif ($gpuSamples.Count -gt 0) { Max ([double[]]$gpuSamples.ToArray()) } else { $null }
 
 # ---- 판정 표 ----
 if ($win.Count -eq 0) {
     Add-Row '호스트 성능 CSV' '없음' '-' 'FAIL'
 } else {
     $h = $hostStats
-    Add-Row ('Server.Total 평균 (ms, {0}초)' -f $h.rows) ($h.server_total_avg_ms.ToString('0.000', $inv)) ('<= ' + $Limits.ServerTotalAvgMs) (Judge ($h.server_total_avg_ms -le $Limits.ServerTotalAvgMs))
+    # 판정은 틱당 평균(보수적인 값)으로 한다. 프레임당 평균은 FPS에 따라 변하므로 참고로만 둔다.
+    Add-Row ('Server.Total 평균 (ms/틱, {0}초)' -f $h.rows) ($h.server_total_tick_mean_ms.ToString('0.000', $inv)) ('<= ' + $Limits.ServerTotalAvgMs) (Judge ($h.server_total_tick_mean_ms -le $Limits.ServerTotalAvgMs))
+    Add-Row 'Server.Total 프레임당 평균 (ms, 틱 없는 프레임 포함, 참고)' ($h.server_total_avg_ms.ToString('0.000', $inv)) '참고(FPS에 따라 변함)' '-'
     Add-Row 'Server.Total p99 (ms, 초별 p99의 평균)' ($h.server_total_p99_mean_ms.ToString('0.000', $inv)) ('<= ' + $Limits.ServerTotalP99Ms) (Judge ($h.server_total_p99_mean_ms -le $Limits.ServerTotalP99Ms))
     Add-Row 'Server.Total p99 최악의 1초 / 틱 1회 최대 (ms)' ('{0:0.00} / {1:0.00}' -f $h.server_total_p99_max_ms, $h.server_total_tick_max_ms) '참고(틱 상한 6.0)' '-'
     Add-Row '메인 스레드 평균 (ms)' ($h.main_ms_avg.ToString('0.00', $inv)) ('<= ' + $Limits.MainThreadAvgMs) (Judge ($h.main_ms_avg -le $Limits.MainThreadAvgMs))
     Add-Row '호스트 송신 (kbps, 초별 값의 95%)' ($h.send_kbps_p95.ToString('0.0', $inv)) ('<= ' + $Limits.HostSendKbps) (Judge ($h.send_kbps_p95 -le $Limits.HostSendKbps))
     Add-Row '호스트 송신 평균 / 최대 (kbps), 접속자 최대' ('{0:0.0} / {1:0.0}, {2:0}명' -f $h.send_kbps_mean, $h.send_kbps_max, $h.peers_max) '참고' '-'
     Add-Row '호스트 FPS 평균 / 1% Low 평균 / 최저 (참고)' ('{0:0.0} / {1:0.0} / {2:0.0}' -f $h.fps_avg, $h.fps_1pct_low_mean, $h.fps_1pct_low_min) '참고(봇이 같은 CPU를 나눠 씀)' '-'
-    Add-Row '호스트 GPU 프레임 (ms, 참고)' ($h.gpu_ms_avg.ToString('0.00', $inv)) '참고(<= 14.5)' '-'
+    Add-Row ('호스트 GPU 프레임 (ms, 참고, 비정상 표본 {0}개 제외)' -f $h.gpu_samples_dropped) ($h.gpu_ms_avg.ToString('0.00', $inv)) '참고(<= 14.5)' '-'
     Add-Row '활동 생물 평균 / 바뀐 자원 / GC 할당(KB/s)' ('{0:0} / {1:0} / {2:0.0}' -f $h.creatures_mean, $h.resources_synced_max, $h.gc_kb_per_s_mean) '조건 확인(60 / 5000)' '-'
+    if ($h.flow_recompute_seconds -gt 0) {
+        Add-Row ('흐름장 재계산 워커 시간 (ms, 재계산이 있던 {0}초의 평균 / 최대)' -f $h.flow_recompute_seconds) ('{0:0.00} / {1:0.00}' -f $h.flow_recompute_mean_ms, $h.flow_recompute_max_ms) '참고(SDD R-41)' '-'
+    } else {
+        Add-Row '흐름장 재계산 워커 시간' '기록 없음(재계산이 없었거나 옛 빌드)' '참고(SDD R-41)' '-'
+    }
+}
+# [IMP-018] 측정 조건: 시드, 업스케일, vSync, 주사율
+if ($seedInfo.Count -gt 0) {
+    Add-Row '시드 (월드 / 생물 배치 / 자원 변경)' ('{0} ({1}, 생성기 v{2}) / {3} / {4}' -f $seedInfo['worldSeed'], $seedInfo['worldSeedText'], $seedInfo['generatorVersion'], $seedInfo['creatureSeed'], $seedInfo['resourceChangeSeed']) '재현용 기록(NFR-021)' '-'
+} else {
+    Add-Row '시드' '호스트 로그에 없음(옛 빌드)' '재현용 기록(NFR-021)' '-'
+}
+Add-Row '업스케일 설정' $result.upscale '참고' '-'
+if ($displayInfo.Count -gt 0) {
+    Add-Row '호스트 화면: vSync 옵션 / vSyncCount / 프레임 제한 / 주사율(Hz)' ('{0} / {1} / {2} / {3}' -f $displayInfo['option'], $displayInfo['vsync'], $displayInfo['targetFps'], $displayInfo['refreshHz']) 'FPS 해석용(vSync 켜면 주사율 상한)' '-'
+} else {
+    Add-Row '호스트 화면(vSync·주사율)' '호스트 로그에 없음(옛 빌드)' 'FPS 해석용' '-'
 }
 $maxBotRecv = 0.0
 foreach ($b in $botStats) { if ($b.recv_kbps_p95 -gt $maxBotRecv) { $maxBotRecv = $b.recv_kbps_p95 } }
@@ -426,6 +538,15 @@ $result['bots_windowed'] = $script:botWindowed
 $result['finished'] = (Get-Date).ToString('s')
 $result['host'] = $hostStats
 $result['bots'] = $botStats
+$result['seed'] = $seedInfo
+$result['display'] = $displayInfo
+# [IMP-018] 실행 조건을 CSV로도 남긴다(key,value).
+$runInfo = New-Object System.Collections.ArrayList
+foreach ($k in $seedInfo.Keys) { [void]$runInfo.Add([pscustomobject]@{ key = 'seed.' + $k; value = $seedInfo[$k] }) }
+foreach ($k in $displayInfo.Keys) { [void]$runInfo.Add([pscustomobject]@{ key = 'display.' + $k; value = $displayInfo[$k] }) }
+[void]$runInfo.Add([pscustomobject]@{ key = 'upscale'; value = $result.upscale })
+[void]$runInfo.Add([pscustomobject]@{ key = 'vsync_option'; value = $result.vsync_option })
+$runInfo | Export-Csv -Path (Join-Path $outDir 'run_info.csv') -NoTypeInformation -Encoding UTF8
 $result['gpu_vram_mb_max'] = $gpuMax
 $result['failures'] = $failures
 $result['summary'] = $summary
@@ -437,6 +558,9 @@ $md = New-Object System.Text.StringBuilder
 [void]$md.AppendLine(('- 모드 {0}, 측정 {1}초, 시작 {2}' -f $Mode, $DurationSeconds, $result.started))
 [void]$md.AppendLine(('- PC: 논리 코어 {0}개, GPU {1}' -f $cores, $gpuNames))
 [void]$md.AppendLine(('- Unity 에디터 켜짐: {0}' -f $result.editor_open))
+[void]$md.AppendLine(('- 업스케일: {0}, vSync 옵션: {1}' -f $result.upscale, $result.vsync_option))
+if ($seedInfo.Count -gt 0) { [void]$md.AppendLine(('- 시드: 월드 {0} ({1}), 생물 배치 {2}, 자원 변경 {3}' -f $seedInfo['worldSeed'], $seedInfo['worldSeedText'], $seedInfo['creatureSeed'], $seedInfo['resourceChangeSeed'])) }
+if ($displayInfo.Count -gt 0) { [void]$md.AppendLine(('- 호스트 화면: vSyncCount {0}, 프레임 제한 {1}, 주사율 {2} Hz' -f $displayInfo['vsync'], $displayInfo['targetFps'], $displayInfo['refreshHz'])) }
 if ($script:botWindowed) { [void]($md.AppendLine('- 주의: 화면 없는 봇이 시작하지 못해 창 모드 봇(320x180)으로 측정했습니다. 호스트 FPS·CPU 참고값이 더 나빠집니다.')) }
 if ($DurationSeconds -lt 120) { [void]$md.AppendLine('- 주의: 측정 시간이 짧아 판정용이 아닙니다(점검 실행).') }
 [void]$md.AppendLine('')
@@ -444,7 +568,7 @@ if ($DurationSeconds -lt 120) { [void]$md.AppendLine('- 주의: 측정 시간이
 [void]$md.AppendLine('|---|---|---|---|')
 foreach ($r in $summary) { [void]$md.AppendLine(('| {0} | {1} | {2} | {3} |' -f $r.항목, $r.값, $r.기준, $r.판정)) }
 [void]$md.AppendLine('')
-[void]$md.AppendLine('원본: host\perf_*.csv, bot*\perf_*.csv(성능), bot*\*_join.json(참가 시간), procs.csv(프로세스 CPU·메모리), */player.log, summary.json')
+[void]$md.AppendLine('원본: host\perf_*.csv, bot*\perf_*.csv(성능), bot*\*_join.json(참가 시간), procs.csv(프로세스 CPU·메모리), run_info.csv(시드·화면 조건), */player.log, summary.json')
 $md.ToString() | Out-File -FilePath (Join-Path $outDir 'summary.md') -Encoding UTF8
 
 Write-Host ''

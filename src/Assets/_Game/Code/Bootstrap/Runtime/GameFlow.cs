@@ -263,6 +263,10 @@ namespace Game.Bootstrap.Runtime
             };
             _deps.Runtime.DevTestCreatures = _deps.DevTestCreatures;
             _runtime = SessionRuntime.CreateHost(_deps.Runtime, info);
+            // [IMP-018, NFR-021] 호스트가 실제로 쓴 시드를 한 줄로 남긴다(CreateHost가 글자에서 숫자 시드를 정해 info.Seed에 넣는다).
+            // 스크립트(tools/perf/RunM1Perf.ps1)가 key=value로 읽으므로 형식을 바꾸지 않는다.
+            Debug.Log("[Perf] seed worldSeed=" + info.Seed + " worldSeedText=" + info.SeedText + " generatorVersion=" + info.GeneratorVersion
+                + " creatureSeed=" + SessionRuntime.TestCreatureSeed + " resourceChangeSeed=" + DevResourceChangeSeed);
             WireSession(_runtime);
             _runtime.HostOpened += OnHostOpened;
 

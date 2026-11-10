@@ -24,6 +24,14 @@ namespace Game.Application.Ports
 
         /// <summary>이름 붙은 지표 값을 알린다(대역폭, RTT, 활동 생물 수 등). 가장 최근 값이 기록에 남는다.</summary>
         void Count(string name, double value);
+
+        /// <summary>
+        /// [IMP-018] 다른 곳(워커 스레드 등)에서 잰 시간을 구간 값으로 넣는다. 메인 스레드에서 부른다.
+        /// 같은 프레임에 여러 번 부르면 합계에 더해진다. 기본 구현은 아무것도 하지 않는다(기존 구현·시험용 가짜 측정기가 그대로 컴파일되게).
+        /// </summary>
+        /// <param name="marker">구간 이름(PerfMarkers)</param>
+        /// <param name="milliseconds">잰 시간(ms)</param>
+        void Record(string marker, double milliseconds) { }
     }
 
     /// <summary>측정하지 않는 기본 구현. 측정기가 없을 때(출시 빌드, 시험) 쓴다.</summary>
@@ -35,6 +43,7 @@ namespace Game.Application.Ports
         public void Begin(string marker) { }
         public void End(string marker) { }
         public void Count(string name, double value) { }
+        public void Record(string marker, double milliseconds) { }
     }
 
     /// <summary><c>using</c>으로 구간을 재는 도우미. 힙 할당이 없는 값 형식이다.</summary>

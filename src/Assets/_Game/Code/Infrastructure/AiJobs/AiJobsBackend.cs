@@ -54,8 +54,14 @@ namespace Game.Infra.AiJobs
         private readonly Stopwatch _cycleWatch = new Stopwatch();
         private bool _disposed;
 
+        // [IMP-018] 흐름장 재계산 워커 시간: 흐름장 잡이 모두 끝난 직후 표식 잡이 시각을 적는다(Burst가 아닌 관리 잡).
+        private NativeArray<long> _flowEndStamp;
+        private long _flowStartStamp;
+        private bool _flowTimed;
+
         public AiJobsBackend(AiNavSettings nav)
         {
+            _flowEndStamp = new NativeArray<long>(1, Allocator.Persistent);
             _nav = nav ?? throw new ArgumentNullException(nameof(nav));
             if (nav.FlowRadiusCells < 1 || nav.MaxFlowFields < 1) throw new ArgumentOutOfRangeException(nameof(nav));
             _window = nav.FlowRadiusCells * 2 + 1;
@@ -176,8 +182,11 @@ namespace Game.Infra.AiJobs
             // 1) 흐름장(대상마다 1개, 서로 독립이라 워커 스레드에서 병렬).
             JobHandle flow = default;
             _cycleHadFlow = _flowDirty;
+            _flowTimed = false;
+            bool flowScheduled = false;
             if (_flowDirty)
             {
+                _flowStartStamp = Stopwatch.GetTimestamp();
                 int cells = _window * _window;
                 for (int f = 0; f < _nav.MaxFlowFields; f++)
                 {
@@ -203,9 +212,16 @@ namespace Game.Infra.AiJobs
                                 HeapCapacity = cells * HeapSlotsPerCell, Cost = _cost, Dirs = _dirs, Heap = _heap,
                             };
                             flow = JobHandle.CombineDependencies(flow, job.Schedule());
+                            flowScheduled = true;
                         }
                     }
                     _fields[f] = info;
+                }
+                if (flowScheduled)
+                {
+                    // 흐름장 잡이 모두 끝난 뒤 시각을 적는 표식 잡. 조향 잡이 이 잡에도 의존하므로 CompleteSteering에서 함께 끝난다.
+                    flow = new FlowStampJob { Stamp = _flowEndStamp }.Schedule(flow);
+                    _flowTimed = true;
                 }
                 _flowDirty = false;
                 _forceRebuildAll = false;
@@ -253,6 +269,14 @@ namespace Game.Infra.AiJobs
             Stats.LastCycleMs = _cycleWatch.Elapsed.TotalMilliseconds;
             Stats.LastCycleIncludedFlow = _cycleHadFlow;
             Stats.LastAgentCount = n;
+            if (_flowTimed)
+            {
+                // [IMP-018] 예약부터 흐름장 완료까지의 워커 시간. 표식 잡 시각이 앞서는 일은 없지만 0 아래로는 내리지 않는다.
+                long ticks = Math.Max(0L, _flowEndStamp[0] - _flowStartStamp);
+                Stats.LastFlowRecomputeMs = ticks * 1000.0 / Stopwatch.Frequency;
+                Stats.FlowRecomputeSerial++;
+                _flowTimed = false;
+            }
         }
 
         public void Dispose()
@@ -270,6 +294,7 @@ namespace Game.Infra.AiJobs
             DisposeGrid();
             DisposeAgents();
             _hash.Dispose();
+            if (_flowEndStamp.IsCreated) _flowEndStamp.Dispose();
         }
 
         /// <summary>예약된 잡이 있으면 결과를 버리고 끝낸다(입력을 바꾸기 전에 안전하게 비우는 용도).</summary>
@@ -333,5 +358,13 @@ namespace Game.Infra.AiJobs
                 throw new ObjectDisposedException(nameof(AiJobsBackend));
             }
         }
+    }
+
+    /// <summary>[IMP-018] 앞선 잡이 끝난 시각(Stopwatch 틱)을 적는 표식 잡. 시각 읽기가 필요해 Burst를 쓰지 않는다.</summary>
+    internal struct FlowStampJob : IJob
+    {
+        public NativeArray<long> Stamp;
+
+        public void Execute() => Stamp[0] = Stopwatch.GetTimestamp();
     }
 }

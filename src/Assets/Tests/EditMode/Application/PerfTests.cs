@@ -288,6 +288,33 @@ namespace Game.Tests.Application
         }
 
         [Test]
+        public void Options_VSync_OffOnAndDefault()
+        {
+            // [IMP-018] 옵션이 없으면 기존 동작(건드리지 않음)
+            Assert.AreEqual(VSyncSwitch.Unchanged, PerfOptions.Parse(new[] { "-bench", "P8" }).VSync);
+            Assert.AreEqual(VSyncSwitch.Unchanged, PerfOptions.None.VSync);
+            Assert.AreEqual(VSyncSwitch.Off, PerfOptions.Parse(new[] { "-vsync", "OFF" }).VSync);
+            Assert.AreEqual(VSyncSwitch.On, PerfOptions.Parse(new[] { "-vsync", "on" }).VSync);
+            Assert.IsNotEmpty(PerfOptions.Parse(new[] { "-vsync", "half" }).Errors);
+            Assert.IsNotEmpty(PerfOptions.Parse(new[] { "-vsync" }).Errors);
+        }
+
+        [Test]
+        public void FlowRecomputeMarker_IsLast_AndPositionOfOtherColumnsUnchanged()
+        {
+            // [IMP-018] 기존 열 위치를 바꾸지 않으려고 새 표식은 맨 끝에 둔다.
+            Assert.AreEqual(PerfMarkers.ServerFlowRecompute, PerfMarkers.All[PerfMarkers.All.Count - 1]);
+            Assert.AreEqual(0, System.Linq.Enumerable.ToList(PerfMarkers.All).IndexOf(PerfMarkers.ServerTotal));
+            StringAssert.Contains("Server.FlowRecompute.max", PerfCsv.Header());
+        }
+
+        [Test]
+        public void NullProbe_Record_DoesNothing()
+        {
+            Assert.DoesNotThrow(() => NullPerfProbe.Instance.Record(PerfMarkers.ServerFlowRecompute, 1.5));
+        }
+
+        [Test]
         public void Options_ReportBadValues()
         {
             Assert.IsNotEmpty(PerfOptions.Parse(new[] { "-bench", "P3" }).Errors);

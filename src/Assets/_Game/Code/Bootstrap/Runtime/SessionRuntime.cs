@@ -204,7 +204,7 @@ namespace Game.Bootstrap.Runtime
         }
 
         /// <summary>시험용 생물 배치 시드(같은 시드면 늘 같은 위치).</summary>
-        private const ulong TestCreatureSeed = 11UL;
+        public const ulong TestCreatureSeed = 11UL;
 
         /// <summary>
         /// [개발 도구] 호스트에서만: 시험용 생물 count체를 월드 중심 둘레에 만든다. 복제는 관심 범위 규칙에 따라 자동으로 간다.

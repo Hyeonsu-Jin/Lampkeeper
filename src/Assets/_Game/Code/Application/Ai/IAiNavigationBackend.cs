@@ -102,6 +102,12 @@ namespace Game.Application.Ai
         /// <summary>마지막 주기에 흐름장 계산이 포함되었는지.</summary>
         public bool LastCycleIncludedFlow { get; set; }
 
+        /// <summary>[IMP-018] 마지막으로 잰 흐름장 재계산의 워커 시간(ms, 예약부터 완료까지). 아직 잰 적이 없으면 0.</summary>
+        public double LastFlowRecomputeMs { get; set; }
+
+        /// <summary>[IMP-018] 흐름장 재계산을 잰 횟수. 값이 바뀌었을 때만 새 측정값이 생긴 것이다.</summary>
+        public int FlowRecomputeSerial { get; set; }
+
         /// <summary>현재 흐름장 수.</summary>
         public int FlowFieldCount { get; set; }
 

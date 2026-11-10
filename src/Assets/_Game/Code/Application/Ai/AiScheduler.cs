@@ -112,6 +112,9 @@ namespace Game.Application.Ai
             _backend.BuildWalkGrid(desc);
         }
 
+        /// <summary>[IMP-018] 백엔드 측정값(흐름장 재계산 워커 시간 등). 시험 백엔드는 null일 수 있다.</summary>
+        public AiNavStats NavStats => _backend.Stats;
+
         /// <summary>지난번에 예약한 조향 잡을 끝내고 위치를 반영한다. 예약이 없으면 아무 일도 하지 않는다.</summary>
         public void ApplySteering()
         {

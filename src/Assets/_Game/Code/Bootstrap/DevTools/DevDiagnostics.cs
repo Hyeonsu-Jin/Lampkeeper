@@ -54,6 +54,8 @@ namespace Game.Bootstrap.DevTools
                 return options;
             }
 
+            ApplyDisplayOptions(options);
+
             foreach (string error in options.Errors)
             {
                 Debug.LogWarning(LogTag + "성능 옵션 오류: " + error);
@@ -76,6 +78,30 @@ namespace Game.Bootstrap.DevTools
             }
             return options;
         }
+
+        /// <summary>
+        /// [IMP-018] -vsync off 이면 vSync를 끄고 프레임 제한을 풀어 주사율에 묶이지 않은 FPS를 잰다. 옵션이 없으면 설정을 건드리지 않는다.
+        /// 어떤 경우든 화면 상태(vSync, 프레임 제한, 주사율)를 한 줄로 남겨 측정 조건 증거로 쓴다.
+        /// 한 줄 형식은 스크립트(tools/perf/RunM1Perf.ps1)가 key=value로 읽으므로 바꾸지 않는다.
+        /// </summary>
+        private static void ApplyDisplayOptions(PerfOptions options)
+        {
+            if (options.VSync == VSyncSwitch.Off)
+            {
+                QualitySettings.vSyncCount = 0;
+                UnityEngine.Application.targetFrameRate = -1; // 제한 없음
+            }
+            else if (options.VSync == VSyncSwitch.On)
+            {
+                QualitySettings.vSyncCount = 1;
+            }
+            Debug.Log(DisplayLogPrefix + "vsync=" + QualitySettings.vSyncCount + " targetFps=" + UnityEngine.Application.targetFrameRate
+                + " refreshHz=" + Screen.currentResolution.refreshRateRatio.value.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture)
+                + " option=" + options.VSync);
+        }
+
+        /// <summary>화면 상태 로그 줄 머리. 스크립트가 이 글자로 찾는다.</summary>
+        public const string DisplayLogPrefix = "[Perf] display ";
 
         /// <summary>
         /// 이미 켜진 성능 측정을 CSV 기록과 함께 다시 시작한다(Bench처럼 항상 파일이 필요한 측정용).
