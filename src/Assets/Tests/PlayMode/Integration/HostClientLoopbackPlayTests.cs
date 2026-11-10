@@ -140,7 +140,7 @@ namespace Game.Tests.Integration
 
             // 호스트가 정한 스폰 위치가 로컬 이동 쪽으로 전달된다.
             Assert.IsTrue(_runtime.Pose.TryTakeCorrection(out Vec3f spawn));
-            Assert.AreEqual(ServerSettings.SpawnFor(0).X, spawn.X, 0.01f);
+            Assert.AreEqual(_runtime.World.SpawnPositionForSlot(0).X, spawn.X, 0.01f); // 월드가 붙은 호스트의 스폰은 월드 중앙 기준
         }
 
         [UnityTest]
