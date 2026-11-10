@@ -4,9 +4,9 @@
 
 | 항목 | 내용 |
 |---|---|
-| 문서 버전 | 0.13 |
-| 작성일 | 2026-11-02 (최종 수정 2026-11-04) |
-| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, v0.13은 UI 방식 변경(UI Toolkit → uGUI, 사용자 결정 2026-11-04) 반영으로 승인 상태 유지) |
+| 문서 버전 | 0.14 |
+| 작성일 | 2026-11-02 (최종 수정 2026-11-10) |
+| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, v0.13은 UI 방식 변경(UI Toolkit → uGUI, 사용자 결정 2026-11-04) 반영, v0.14는 M1 묶음 4(M1-10~M1-12) 구현 사실 반영으로 승인 상태 유지) |
 | 작성 | architect (기획 에이전트, 설계 담당) |
 | 준거 표준 | IEEE Std 1016-2009 (설계 관점·설계 뷰 구조), ISO/IEC/IEEE 12207 (아키텍처 정의·설계 정의 프로세스) |
 | 범위 | SRS v0.11의 FR 179개, NFR 58개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
@@ -57,6 +57,7 @@
 | 0.11 | 2026-11-04 | architect | M1 구현 묶음 3(M1-07~M1-09) 결과의 사실 반영, 참조 SRS v0.10 그대로, 상태 「승인」 유지. 설계 방향·게임 런타임 asmdef 12개(Bootstrap 제외)의 참조 변경 없음. 실제 asmdef·`ArchitectureRulesTests`·코드를 읽어 대조함. (1) 3.4.2: `Game.Tests.Integration`에 `Game.Domain`·`Game.Adapters.Net` 추가, `Game.Bootstrap`은 「필요 시」 허용 범위 안에서 `Unity.InputSystem`을 실제로 참조(`InputActionAsset`을 받아 게임 흐름에 넘김), `Unity.Localization`은 허용만 하고 참조 안 함. `Game.Editor`는 FishNet·Net 어댑터를 참조하지 않고 FishNet 형식(`NetworkManager`, `NetworkObject`, `PlayerAvatar`)을 **이름으로 찾아 붙임(리플렉션)** — D-25 신설. (2) 3.4.1 규칙 8·3.4.3: Net 어댑터의 FishNet 형식 사용을 `Transport/`(DES-121)·`Avatar/`(DES-084) 폴더로 한정하는 소스 검사, Application·Domain·WorldGen 소스의 `using FishNet`/`using Steamworks`/`using UnityEngine` 금지 검사를 아키텍처 시험으로 강제. (3) 부트·네트워크 시작 순서: Boot 씬 NetworkManager는 꺼 둔 채 저장 → `TransportSelector.Apply`가 `TransportManager`를 직접 붙이고 전송 지정 → `GameBootstrap`이 켬 → 틱·시간 초과·연결 수 상한 적용(3.9.9 신설, 3.2.3, DES-100·101). World 씬은 Additive로 불러 Boot 씬을 유지. (4) 에디터 생성 파이프라인 `Game/Setup/Run All` 순서와 결과물(`Settings/GameInput.inputactions`, `Prefabs/PlayerAvatar.prefab` → `Assets/DefaultPrefabObjects.asset` 등록, `Scenes/World.unity`)(3.8.2). (5) 실행 옵션: `-host`/`-connect`는 전송을 안 주면 Tugboat, `-transport steam`과 함께 주면 옵션 오류를 기록하되 중단하지 않음, `-steamlobbytest`·`-autowalk`·`-autoquit N`·`-bootsmoke` 추가(3.7.4, DES-103). (6) 설정값: `NetworkTuning`의 `JoinTimeoutSeconds`·`MaxCommandsPerTick`·`MaxQueuedCommands`·`SnapshotBytesPerSecond`, `BalanceValues.Movement`의 `MoveTolerance`·`MoveSlackMeters`·`MoveStaminaGraceSeconds`·`MaxPoseDeltaSeconds`·`MaxVerticalSpeedMps`(모두 `ConfigValidator` 검사)를 3.11.12·3.11.13·3.12.1에 표로, 3.11.12 의사코드를 실제 `AvatarMoveValidator`에 맞춤(v0.10의 `MoveStaminaGrace`·`MoveSlack` → 실제 이름). (7) 3.7.10: 글자 크기는 `--text-scale` 배율이 아니라 단계 클래스가 바꾸는 `--fs-*` 변수, 색 토큰 실제 이름(`--color-*`)과 STORYBOARD 2.1 이름 대응표. (8) 측정·관찰: 한 PC 8프로세스 측정의 1% Low 28 FPS·예산 위반 로그(R-32), `PacketBroadcast` 송신 1건당 관리 힙 약 81 B(R-31 갱신), Steam 「친구 전용」 로비는 로비 검색 목록에 나오지 않음(R-33, 사용자 결정 대기), 빌드 번호가 `bundleVersion`을 `0.1.<빌드 번호>`로 덮어씀(R-34, 사용자 결정 대기). 설계 요소·작업 수 변화 없음 |
 | 0.12 | 2026-11-04 | architect | R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, 참조 SRS v0.11(NFR-058 게임 버전 규칙 추가, NFR 58개), 상태 「승인」 유지. 의존 규칙·asmdef 변경 없음. (1) **게임 버전 = SemVer 2.0.0**(사용자 결정): 사이클 = MINOR, `fix/` = PATCH, 지금 `0.1.0`, 배포한 번호 불변. 설계: 원본은 사람이 정하는 `PlayerSettings.bundleVersion`(핵심 + 사전 릴리스), `BuildCommands`는 핵심을 덮어쓰지 않고 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙였다 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `ReadBuildNumber`·`-buildNumber`·`GAME_BUILD_NUMBER`·`VersionPrefix` 폐지, `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 참가 검사는 게임 버전 **전체 문자열 일치**(출시·개발 같은 규칙, 출시 ↔ 개발·에디터 ↔ 플레이어는 거부). 숫자 인코딩(`주×10000 + …`) 폐지 → `JoinRequest.gameVersion` 문자열(≤ 64 B), `protocolVer` 1 → 2, `JoinRequest` 첫 필드 `protocolVer` 위치 고정 규칙, 로비 `kh_build` 값 = 전체 문자열, 월드 파일 헤더 `gameVer` u16 ×3, 표시 형식(출시 `v{Core}`, 개발·에디터 `v{Full}`). 새 절 3.7.12, **DES-037 GameVersion** 신설, D-26 신설, 고친 곳 3.5.2, 3.7.1, 3.7.2, 3.7.4, 3.8.2, 3.9.2, DES-031·112, 6장(FR-003, FR-145, NFR-058), 7장(M1-01, M1 묶음 3 마무리 작업, M1-13, M2-07, M10-06). R-34 해소, R-35 신설. (2) **R-33 해소**(사용자 확인: 친구 전용 로비가 로비 검색에 나오지 않는 것은 Steam 정상 동작): 공개 세션 목록(FR-145, M2-07)은 「공개」 세션만, SRS·설계 변경 없음(3.7.4, M2-07, 6장 FR-145). 설계 요소 107 → **108개**, 작업 수 변화 없음(M1 마무리 작업은 기존 M1-07·M1-01 (5)의 보완) |
 | 0.13 | 2026-11-04 | architect | **UI 방식 변경**(사용자 결정 2026-11-04: UI Toolkit → **uGUI(Canvas + TextMeshPro)**, 앞으로 만들 모든 UI도 uGUI. 이유: UI 오브젝트를 하이어라키에서 직접 만들고 관리하는 쪽이 유지보수에 나음), 참조 SRS v0.11 그대로, 상태 「승인」 유지. 요구사항 변경 없음. (1) **D-16을 D-27로 대체**(D-16은 기록으로 남김), D-27 신설. (2) **관리 원칙**: UI·씬·프리팹은 하이어라키·프리팹의 게임 오브젝트가 원본. 에디터 생성기는 「없을 때 처음 한 번 만들기 + 있으면 검사만」으로 바꾸고, 이미 있는 씬·프리팹을 통째로 다시 만들어 덮어쓰지 않음. 에이전트는 Unity MCP 도구(gameobject·component·prefab)로 개별 오브젝트를 고침. 화면마다 프리팹, 씬에는 프리팹 인스턴스(3.8.2 생성 파이프라인 표 재작성, D-25 근거 갱신). (3) **테마**: USS 변수 → ScriptableObject `UiTheme` + 적용 컴포넌트 `ThemedText`·`ThemedGraphic`·`ThemedSelectable`. 토큰 이름은 v0.12의 USS 이름에서 `--`만 뺀 것(`color-*` 20개, `fs-*` 5개 + 큰 제목 `fs-heading-lg` 신설), 글자 크기 3단계는 기준값 × 배율(0.9/1.0/1.25) 반올림으로 v0.12 값과 같게(3.7.10). (4) **캔버스 구성**: Screen Space Overlay, CanvasScaler 1920×1080·높이 기준(Match 1), 가운데 16:9 영역 `UiSafeArea16x9`, 정적·동적 캔버스 분리, 상호작용 없는 요소 Raycast Target 끔, 정렬 순서 띠(0 월드 표시 / 100 HUD / 200 창 / 300 경고 / 400 모달 / 500 시스템), 숨김 = Canvas·CanvasGroup·GraphicRaycaster를 함께 끔(ESC 메뉴 결함 재발 방지), 입력은 EventSystem + `InputSystemUIInputModule`, 닫기·탭 이동은 `UiInputRouter`, 비활성 버튼도 포커스를 받음(`interactable`을 끄지 않음), Layout Group·Content Size Fitter(3.7.10). (5) **손목 계기·월드 표시 재검토**: 계기 화면은 uGUI 프리팹을 UI 전용 캡처 카메라로 렌더 텍스처에 그리고(값이 바뀔 때만, 최대 10 Hz, HDRP 카메라 설정은 DES-114), 표시 면 (B)는 사다리꼴 메시 `UiWarpedRawImage`. 이름표·핑은 화면 좌표 투영을 유지, R-18 해소(3.4.4, 3.7.11, D-21). (6) **asmdef·패키지**: `com.unity.ugui` 2.0.0을 manifest에 명시(Unity 6에서 TextMeshPro 포함, 지금은 HDRP 의존으로만 설치됨), `Game.Adapters.Presentation`·`Game.Editor`·`Game.Tests.Infrastructure`·`Game.Tests.Integration`에 `UnityEngine.UI`·`Unity.TextMeshPro`, UI Toolkit(`UnityEngine.UIElements`) 사용 금지 소스 검사(3.4.1 규칙 9, 3.4.2, 3.4.3, D-03). (7) **시험**: USS 규칙 검사 → 프리팹·테마 규칙 검사(모든 TMP 글자의 `ThemedText`, `richText` 꺼짐, Raycast Target, 텍스트 키, 토큰 값 일치, 글꼴 글자 포함, 대비), 버튼은 `onClick.Invoke()`, PlayMode 화면 층 레이캐스트 시험(3.4.3, 7장). (8) 새 설계 요소 **DES-122 UiThemeKit**, DES-091·092·095·097·120 갱신, 7장 「M1 묶음 3 마무리 — UI uGUI 전환」 작업과 M1-08·M2-01·M2-11·M2-12 설명 갱신, R-18 해소·R-20·R-21·R-22·R-28 갱신, R-36~R-40 신설. 설계 요소 108 → **109개**, 작업 수 변화 없음(전환 작업은 M1 묶음 3 마무리 보완) |
+| 0.14 | 2026-11-10 | architect | M1 묶음 4(M1-10~M1-12) 구현 사실 반영, 참조 SRS v0.11 그대로, 상태 「승인」 유지. 설계 방향·의존 규칙 변경 없음, 새 DES 없음. (1) 월드 좌표 0~3072 m, 이동·핑 검사 `IsInsideWorld`(+16 m), 생물 위치 압축 -16~3088 m·Y 포함(3.7.2, 3.11.12). (2) 스폰 = 월드 중앙 + 자리 간격, 지면 +0.1 m(3.9.8). (3) 자원 델타 전 연결, 타격 수평 거리만·초당 4회(3.9.3, 3.11.8). (4) 중도 참가 백그라운드 생성·델타 보관 상한 20,000·+30초, 호스트 동기 생성(3.9.2). (5) `TerrainViewBuilder`·`ResourceViewStreamer`·`ResourceHitInput` 사실, 인스턴싱 빌드 주의(DES-087·089, 3.12.7). (6) `com.unity.modules.terrainphysics`(D-03). (7) World 씬 구성(3.2.3). (8) `IAiNavigationBackend` 실제 시그니처, 보행 격자 600 m(3.11.11, 3.10.6). (9) 생물 복제 등급·Despawn 여유 10 m·보간 방식(3.11.9, DES-082·088). (10) `Game.Tests.Infrastructure` → `Game.Infra.AiJobs`(3.4.2). (11) 새 폴더(3.8.2). (12) 개발 옵션 `-resourcechanges`·`-testcreatures`·`-bot`·`-gameversion`, F1·F3 표시(3.7.4). (13) 화면 없는 실행 UI 안전(3.7.10 (10)). (14) UI 기호 제거 결정, 기호 대체 글꼴 안 함(3.7.10 (8)). (15) M1-12 측정 결과(3.12.4, 7장 메모). (16) R-41~R-45 신설. (17) 자연 에셋 도입 일정(DES-089, 7장 메모) |
 
 ---
 
@@ -169,7 +170,7 @@ flowchart TB
 |---|---|---|
 | `Boot` | 컴포지션 루트 생성(DES-100), Steam 초기화, 설정·콘텐츠 로드, 충돌 감지·광과민성 경고 | 항상 첫 씬. v0.11(M1 실제): 루트 오브젝트 = `Bootstrap`(GameBootstrap), **꺼진 상태의 `NetworkManager`**(전송을 정한 뒤 켬, 3.9.9), 메뉴 카메라, SCR-001 화면, 개발용 로비 화면, `GameHud`. World 씬을 Additive로 불러도 Boot 씬은 그대로 남아 조립 루트 역할을 계속함(`DontDestroyOnLoad`를 쓰지 않음). **v0.13(uGUI 전환 뒤)**: UI 루트 오브젝트는 모두 **프리팹 인스턴스** — `UiRoot`(`UiRoot` 컴포넌트 + 자식 `EventSystem`(EventSystem + `InputSystemUIInputModule`), 씬 전체에서 EventSystem은 이것 하나), `SteamRequiredScreen`, `DevLobbyScreen`, `GameHud`, `GameMenu`(ESC 메뉴, Hud에서 분리). 씬 파일이 원본이며 생성기는 씬이 없을 때만 만듦(3.8.2) |
 | `MainMenu` | 월드 만들기·불러오기·관리, 공개 세션 목록, 참가, 옵션 | M1에는 없음(개발용 로비 화면이 Boot 씬 안에 있음). M2에서 만듦 |
-| `World` | 런타임 생성 지형·자원, 고정 콘텐츠(마지막 등불, 장막의 근원) 프리팹 배치, 플레이 | 지형은 실행 중 생성(DES-089). 고정 콘텐츠는 `WorldLayout` 데이터가 가리키는 프리팹. v0.11(M1 실제): `WorldSceneBuilder`가 만든 개발용 장면 — 평평한 바닥(400 m), 햇빛, 기준 상자 8개, 1인칭 조작 장치 `PlayerRig`(CharacterController + 눈 높이 카메라 + `FirstPersonController`), 원격 플레이어 표시 `RemoteAvatarViews`. 접속이 끝나면 `GameFlow`가 Additive로 불러오고 나갈 때 내림. 지형 생성 표시는 M1-10부터. v0.13: UI 오브젝트(Canvas·EventSystem)를 두지 않음 — 게임 중 UI도 Boot 씬의 프리팹 인스턴스가 그림 |
+| `World` | 런타임 생성 지형·자원, 고정 콘텐츠(마지막 등불, 장막의 근원) 프리팹 배치, 플레이 | 지형은 실행 중 생성(DES-089). 고정 콘텐츠는 `WorldLayout` 데이터가 가리키는 프리팹. v0.11(M1 실제): `WorldSceneBuilder`가 만든 개발용 장면 — 평평한 바닥(400 m), 햇빛, 기준 상자 8개, 1인칭 조작 장치 `PlayerRig`(CharacterController + 눈 높이 카메라 + `FirstPersonController`), 원격 플레이어 표시 `RemoteAvatarViews`. 접속이 끝나면 `GameFlow`가 Additive로 불러오고 나갈 때 내림. 지형 생성 표시는 M1-10부터. **v0.14(M1-10 실제)**: 평평한 바닥 `Ground`를 삭제하고 루트 오브젝트 `TerrainView`·`ResourceViews`·`CreatureViews`를 추가(3.7.2~3.9 표시 어댑터가 월드 생성 뒤 채움). v0.13: UI 오브젝트(Canvas·EventSystem)를 두지 않음 — 게임 중 UI도 Boot 씬의 프리팹 인스턴스가 그림 |
 | `Bench` (개발 빌드 전용) | P1/P8 측정 장면 재현, 시험용 AI 60체 | DES-113 |
 
 ### 3.3 논리 관점
@@ -454,7 +455,7 @@ v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-1
 | `Game.Tests.Domain` | 시험(EditMode) | `Game.Domain` + Test Runner·NUnit | false | 도메인 규칙 시험. 경로 `Assets/Tests/EditMode/Domain/` |
 | `Game.Tests.Application` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.WorldGen` + Test Runner·NUnit | false | 유스케이스·명령·복제 모델 시험. v0.10: 메시지 코덱 왕복 시험(메시지마다 「쓰고 다시 읽으면 같은 값」, 고정 바이트 기대값, 크기 상한·잘린 입력 거부)과 `AvatarMoveValidator` 시험. 경로 `Assets/Tests/EditMode/Application/` |
 | `Game.Tests.Net` | 시험(EditMode) (v0.10 신설) | `Game.Application`, `Game.Domain`, `Game.Adapters.Net` + Test Runner·NUnit | false | 가짜 `INetServer`/`INetClient`로 게이트웨이(DES-081)·JoinHandshake(DES-085)·복제 송수신(DES-082, 083) 시험. FishNet 없이 돌아야 하므로 `FishNet.Runtime`을 참조하지 않음 — 시험 대상 클래스는 FishNet 형식을 공개 API·기반 클래스에 쓰지 않음(3.4.1 규칙 8). 경로 `Assets/Tests/EditMode/Net/` |
-| `Game.Tests.Infrastructure` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.Infra.Config`, `Game.Adapters.Presentation`, `Game.Infra.Transport`, `Game.Infra.Steam`, `Game.Infra.Platform`(v0.9), `Game.Bootstrap`, `Game.Editor`, `FishNet.Runtime`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro` + Test Runner·NUnit | false | 설정 로더·전송 선택·Steam 확인·부트·빌드 도구 시험, v0.9: 로그·측정(진단)·그래픽 프리셋 데이터 시험. v0.13: UI 프리팹·테마 규칙 검사(`UiPrefabRulesTests`, 3.4.3)와 화면 뷰 시험(프리팹을 불러 `Button.onClick.Invoke()`). 경로 `Assets/Tests/EditMode/Infrastructure/` |
+| `Game.Tests.Infrastructure` | 시험(EditMode) | `Game.Application`, `Game.Domain`, `Game.Infra.Config`, `Game.Adapters.Presentation`, `Game.Infra.Transport`, `Game.Infra.Steam`, `Game.Infra.Platform`(v0.9), `Game.Bootstrap`, `Game.Editor`, `FishNet.Runtime`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro`, **v0.14: `Game.Infra.AiJobs`(AI 백엔드 시험, 새 asmdef 없음)** + Test Runner·NUnit | false | 설정 로더·전송 선택·Steam 확인·부트·빌드 도구 시험, v0.9: 로그·측정(진단)·그래픽 프리셋 데이터 시험. v0.13: UI 프리팹·테마 규칙 검사(`UiPrefabRulesTests`, 3.4.3)와 화면 뷰 시험(프리팹을 불러 `Button.onClick.Invoke()`). 경로 `Assets/Tests/EditMode/Infrastructure/` |
 | `Game.Tests.Architecture` | 시험(EditMode) | Test Runner·NUnit만(리플렉션·asmdef 파일 읽기로 검사) | false | 이 표와 실제 참조 비교(v0.9: 시험 어셈블리 포함), 의존 방향, 렌더링 격리, Pipeline 패키지 격리(3.4.3), 프로젝트 설정 검사(DES-112). 경로 `Assets/Tests/EditMode/Architecture/` |
 | `Game.Tests.WorldGen` | 시험(EditMode) (v0.9 신설) | `Game.WorldGen`, `Game.Application` + Test Runner·NUnit | false | 결정론 수학, 생성기 V0, `-genhash` 도구, 골든 해시 시험(M1-04). 경로 `Assets/Tests/EditMode/WorldGen/` |
 | `Game.Tests.Integration` | 시험(PlayMode) | `Game.Application`, `Game.Domain`(v0.11), `Game.Adapters.Net`(v0.11), `Game.Adapters.Presentation`(v0.9), `Game.Infra.Platform`(v0.9), `Game.Infra.Rendering`(v0.9), `Game.Bootstrap`(v0.9), `Game.Infra.Transport`, `FishNet.Runtime`, `FishySteamworks`, v0.13: `UnityEngine.UI`, `Unity.TextMeshPro`(화면 층 레이캐스트·포커스 시험) + Test Runner·NUnit | false | 루프백 호스트 + 클라이언트 통합 시험. v0.9: 그래픽·측정 플레이 모드 시험, Bench 씬 시험(M1-05, M1-06). v0.11: 실제 FishNet 경유 루프백 시험(`HostClientLoopbackPlayTests`)이 `SessionRuntime`(Bootstrap)·`FishNetClient`(Net 어댑터)·도메인 ID 형식을 직접 써서 `Game.Domain`·`Game.Adapters.Net` 추가, 전송 선택 시험(`TransportSelectorTests`). v0.13: 화면 층 시험(`UiLayerPlayTests` — 로비·게임·게임 + ESC 메뉴 상태마다 보이는 버튼 가운데로 `EventSystem.RaycastAll`을 쏘아 맨 위 결과가 그 화면의 버튼인지, 키보드·패드 내비게이션이 맨 위 화면 밖으로 나가지 않는지). 경로 `Assets/Tests/PlayMode/Integration/` |
@@ -785,6 +786,8 @@ flowchart LR
 
 **v0.10 (사용자 결정 2026-11-03)**: 아래 표의 메시지 형식과 바이트 인코딩은 **`Game.Application`의 `Protocol/`**(DES-080)에 순수 C#으로 정의합니다. FishNet 형식은 쓰지 않습니다. FishNet에는 바이트 묶음을 담는 Broadcast **한 종류(`PacketBroadcast`)** 만 등록하고, Net 어댑터의 `FishNetServer`/`FishNetClient`(DES-121)가 포트 `INetServer`/`INetClient`(3.7.3)를 구현해 메시지 ↔ 바이트 변환을 `MessageCodec`에 맡깁니다. FishNet은 연결 관리, 전송(FishySteamworks/Tugboat), 신뢰·비신뢰 채널, 바이트 전달, 호스트 모드, 서버 틱(TimeManager), 플레이어 아바타 NetworkObject(DES-084)에 계속 씁니다. 플레이어 아바타만 NetworkObject이고, 자세는 아바타의 RPC로 오갑니다(3.9.8).
 
+**v0.14(M1-10 실제) 월드 좌표·압축 범위**: 월드 좌표는 **0~3072 m**(원점 중심 아님). 이동 검사·핑 검사는 `ProtocolConstants.IsInsideWorld`로 0~3072 m + 가장자리 여유 16 m(`WorldEdgeMarginMeters`). 생물 위치 압축(`Quantize.PositionToU16`, `CreatureState`)은 **-16~3088 m 구간을 2^16 단계(4.7 cm), Y 포함**으로 인코딩합니다.
+
 ```mermaid
 flowchart LR
     subgraph APP["Game.Application (순수 C#)"]
@@ -870,13 +873,17 @@ flowchart LR
 | `-genhash <seeds.txt> -out <report.json> [-genver <v>]` | 화면 없이 시드 목록을 생성해 요약값 보고(NFR-053 다른 PC 비교) |
 | `-genvalidate <count> -out <report.json>` | NFR-055 자동 시험(검증 조건 + 같은 PC 반복 결정론) |
 | `-bench P1|P8 [-upscale on|off]` | 측정 장면 실행과 CSV 기록(NFR-021) |
-| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). M1 대체 측정(이 PC 1대 + 봇 7개)과 8인 사전 부하 시험용. `-batchmode -nographics`로 화면 없이 실행 가능(v0.8: 빌드한 플레이어의 batchmode라 에디터 프로젝트 잠금과 무관. 금지 대상은 에디터의 batchmode 실행뿐, D-22) |
+| `-bot` | 봇 클라이언트(정해진 경로 이동·채집·공격 반복). M1 대체 측정(이 PC 1대 + 봇 7개)과 8인 사전 부하 시험용. `-batchmode -nographics`로 화면 없이 실행 가능(v0.8: 빌드한 플레이어의 batchmode라 에디터 프로젝트 잠금과 무관. 금지 대상은 에디터의 batchmode 실행뿐, D-22). **v0.14(M1-12 실제)**: `BotBrain`이 경로 이동 → 자원 타격 → 생물 추적을 실제로 수행하며 World 씬·지형·자원 뷰 없이 동작, `-batchmode -nographics` 동작 확인 |
+| `-resourcechanges <N>` (v0.14) | 호스트가 월드 생성 직후 자원 N개를 바뀐 상태로 만듦(자원 델타 부하 시험). 에디터 메뉴 `Game/Dev/Resources/Apply 5000 Changes (Host, Play Mode)` |
+| `-testcreatures <N>` (v0.14) | 호스트가 시험 생물 N체를 만듦(AI·복제 부하 시험). 메뉴 `Game/Dev/AI/Spawn 60 Test Creatures (Host, Play Mode)`, 여러 번 쓰면 누적 |
+| `-gameversion <문자열>` (v0.14 표에 추가, SemVer 구현 때부터 있음) | 게임 버전 문자열을 강제로 바꿈(개발 전용, `BuildInfo.TryOverrideForDevelopment`, 해석 실패 시 경고 후 무시). 버전이 다른 참가자의 거부 시험용(R-35) |
+| 개발용 표시 (v0.14) | **F3 성능 표시**(기존), **F1 관심 범위 표시**(오른쪽 아래: 내 위치, 받은 생물 수, 등급별 수, 최근접·최원 거리, 호스트는 서버 전체 수. IMGUI, 에디터·개발 빌드만) |
 | (선택) 다른 PC 결정론 비교 | M6 전에도 할 수 있는 선택 절차: 다른 PC(Intel/AMD)에서 같은 빌드로 `-genhash seeds.txt -out <PC이름>.json`을 실행해 결과 파일을 모으고, 개발 PC에서 비교 도구(`-genhash-compare a.json b.json ...`, 개발 빌드)로 불일치 시드·부분 요약값을 보고. 정식 판정은 M6-10 |
 | Steam 없이 실행 | 출시·일반 개발 빌드는 Steam이 없으면 부트 안내 화면(SCR-001)에서 멈춤. 예외: 개발 빌드에서 `-transport tugboat`와 `-devPlayerId`를 함께 주면 Steam 초기화 없이 같은 PC 시험 가능(개발 빌드 전용) |
 | `-perflog` | 성능 CSV 기록(FR-163) |
 | `-bootsmoke` (v0.11 표에 추가, M1-02부터 있음) | 부트 판정을 한 번 하고 종료 코드로 끝냄: 0 = 메인 메뉴로 진행 가능, 1 = 설정 오류, 2 = SCR-001(Steam 필요). 자동 시험·빌드 확인용 |
 | `-steamlobbytest` (v0.11) | 실제 Steam 로비 점검을 계정 하나로 돌리고 종료 코드(0 = 통과)로 끝냄(`SteamLobbySmoke`): 친구 전용 로비 생성 → 메타데이터·멤버 확인 → 검색(친구 전용 로비가 목록에 **0개인 것이 정상**, R-33 해소 — 사용자 확인 2026-11-04) → 공개 로비 생성 → `kh_game` 필터 검색으로 찾기(Steam 색인 지연 때문에 간격을 두고 여러 번 재시도) → 메타데이터 확인. Steam을 실제로 초기화한 경우에만 동작하고 개발용 신원(`-devPlayerId`)일 때는 무시 |
-| `-autowalk` (v0.11) | 입력 없이 자동으로 걷기(화면 없는 다중 프로세스 시험에서 이동·복제 부하를 만들기 위함). M1-12의 `-bot`이 생기기 전 임시 수단 |
+| `-autowalk` (v0.11) | 입력 없이 자동으로 걷기(화면 없는 다중 프로세스 시험에서 이동·복제 부하를 만들기 위함). M1-12의 `-bot`이 생기기 전 임시 수단. v0.14: `-bot`으로 대체됨(옵션은 남아 있음) |
 | `-autoquit <N>` (v0.11) | N초 뒤 스스로 종료(여러 프로세스 시험 정리용). N은 0보다 큰 실수 |
 | 빌드 명령의 버전 처리 (v0.12) | `Game/Build/Windows Development`·`Windows Release`(`BuildCommands`, 열린 에디터에서 `unity command build run`)는 `bundleVersion`의 SemVer 핵심을 덮어쓰지 않고, 빌드하는 동안만 `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙였다가 되돌립니다. 출시 빌드는 태그 `v<핵심>`이 다른 커밋을 가리키면 실패. **`-buildNumber` 인자와 `GAME_BUILD_NUMBER` 환경 변수는 폐지**(3.7.12 (2)) |
 | 공통 (v0.11) | 위 개발 옵션은 모두 `BuildFlags.IsDevelopment`(에디터·개발 빌드)에서만 동작. 출시 빌드는 개발 옵션이 있으면 「무시합니다」 경고만 로그에 남김. 값 오류는 예외 없이 오류 목록으로 모아 경고 로그로 남김 |
@@ -1092,9 +1099,11 @@ record ActionCompleted(ActionType Type, PlayerId Player, ContentId Target, int A
 
 **(7) 다국어 텍스트 키**: `ThemedText`의 텍스트 키는 지금 `ILocalizedText`(`TableLocalizedText`, `Localization/strings.ko.txt`·`strings.en.txt`)로 찾고, M2-01에서 같은 포트 뒤를 Unity Localization String Table로 바꿉니다(프리팹 변경 없음). 언어를 바꾸면 `UiRoot`가 켜진 모든 키 글자를 다시 채웁니다. 키 상수(`LobbyTextKeys`, `HudTextKeys` 등)는 코드가 동적으로 고르는 글자에 계속 씁니다. STORYBOARD 2.7 「스크린리더 라벨」(요소 이름 = 텍스트 키 규칙)은 오브젝트 이름 규칙으로 지킵니다.
 
-**(8) 글꼴 (STORYBOARD 2.2, R-37)**: Pretendard(OFL 1.1, 라이선스 원문 동봉) 3굵기를 TMP 글꼴 애셋으로 만듭니다. 사슬: **정적 SDF 아틀라스**(ASCII + KS X 1001 한글 2,350자 + 게임 문장에 쓰는 글자, 굵기별) → **동적 대체 글꼴**(Pretendard 원본, 그 밖의 한글 11,172자·Steam 이름·채팅용, 실행 중 아틀라스 추가) → **기호 대체 글꼴**(정적, `UiGlyphs` 기호 중 Pretendard에 없는 것, OFL 글꼴 부분 집합). 리치 텍스트를 끄므로 TMP 스프라이트 태그(`<sprite>`)로 아이콘을 넣지 않고, 아이콘은 기호 글꼴 또는 별도 `Image`로 그립니다. 글꼴 파일은 `Assets/_Game/UI/Fonts/`. TMP Settings(`Assets/TextMesh Pro/Resources/TMP Settings.asset`)의 기본 글꼴 = Pretendard Regular, 대체 목록 = 위 사슬. 어떤 문자가 사슬에 없으면 □로 보입니다(규칙 검사로 게임 문장은 0건, Steam 이름의 중국어·일본어·이모지 등은 R-37).
+**(8) 글꼴 (STORYBOARD 2.2, R-37)**: Pretendard(OFL 1.1, 라이선스 원문 동봉) 3굵기를 TMP 글꼴 애셋으로 만듭니다. 사슬: **정적 SDF 아틀라스**(ASCII + KS X 1001 한글 2,350자 + 게임 문장에 쓰는 글자, 굵기별) → **동적 대체 글꼴**(Pretendard 원본, 그 밖의 한글 11,172자·Steam 이름·채팅용, 실행 중 아틀라스 추가) → ~~**기호 대체 글꼴**(정적, `UiGlyphs` 기호 중 Pretendard에 없는 것, OFL 글꼴 부분 집합)~~. **v0.14(사용자 결정 2026-11-04)**: Pretendard에 ✔·✕·컬러 이모지가 없으므로 **UI 기호는 모두 빼고 글자로만 상태를 표시**합니다. 기호 대체 글꼴 단계는 하지 않습니다. 중국어·일본어 대체 글꼴은 지금 넣지 않고 이름 표시 화면을 만들 때 다시 정합니다(R-37 유지). 리치 텍스트를 끄므로 TMP 스프라이트 태그(`<sprite>`)로 아이콘을 넣지 않고, 아이콘은 별도 `Image`로 그립니다. 글꼴 파일은 `Assets/_Game/UI/Fonts/`. TMP Settings(`Assets/TextMesh Pro/Resources/TMP Settings.asset`)의 기본 글꼴 = Pretendard Regular, 대체 목록 = 위 사슬. 어떤 문자가 사슬에 없으면 □로 보입니다(규칙 검사로 게임 문장은 0건, Steam 이름의 중국어·일본어·이모지 등은 R-37).
 
 **(9) 성능 규칙 (3.12.3 UI 0.8 ms)**: 매 프레임 갱신하는 UI 코드는 관리 힙 할당 0(문자열 연결·`string.Format`·LINQ 금지, TMP `SetText(형식, 값)`, 값이 바뀔 때만 갱신). 캔버스 다시 만들기(rebuild)는 동적 하위 캔버스 안에서만 일어나게 합니다. 측정 구간 `Client.UI`(3.12.4).
+
+**(10) 화면 없는 실행 안전 (v0.14)**: UI 코드는 `-batchmode -nographics`(Null 그래픽 장치)에서도 안전해야 합니다. `UiSafeArea16x9.Refresh`가 Null 장치에서 재귀로 크래시했던 결함을 고쳤습니다(재진입 방지 + 캔버스 크기가 0·NaN이면 건너뜀). 캔버스 크기에 의존하는 UI 코드는 같은 방어를 둡니다.
 
 #### 3.7.11 HUD 구조: 장치형 기본 + 일반 HUD 옵션 (v0.4, 사용자 결정 2026-11-02)
 
@@ -1258,6 +1267,7 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
 ├─ CLAUDE.md
 ├─ .claude/
 ├─ docs/                                  SRS, SDD, 디자인, 테스트 문서, 측정 보고서(docs/test/perf/)
+├─ tools/perf/                            (v0.14) RunM1Perf.ps1(M1-12 측정 스크립트, 열린 에디터가 아닌 빌드한 플레이어를 띄움). 측정 보고서·원본은 docs/test/perf/
 ├─ .gitignore                             src/Library, src/Temp, src/Logs, src/UserSettings, src/Builds, *.csproj, *.sln
 ├─ .gitattributes                         Git LFS: *.fbx *.png *.tga *.psd *.wav *.exr *.asset(대용량 지형 데이터) 등. YAML 애셋의 `merge=unityyamlmerge` 지정은 남아 있으나 드라이버를 git 설정에 등록하지 않아 git 기본 병합으로 동작하고, 충돌 시 `git mergetool`로 UnityYAMLMerge 실행(M1-01 (4))
 └─ src/                                   ← Unity 프로젝트 루트 (Unity 6000.3.27f2)
@@ -1268,7 +1278,7 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  ├─ Code/
       │  │  ├─ Domain/                    Game.Domain.asmdef
       │  │  │  ├─ Common/                 PlayerId, ContentId, Result, ReasonCode, DomainEvent, GameVersion(v0.12, DES-037)
-      │  │  │  ├─ Players/  Vitals/  Life/  Items/  Resources/  Crafting/  Building/
+      │  │  │  ├─ Players/  Vitals/  Life/  Items/  Resources/  Crafting/  Building/  Gathering/(v0.14: `GatheringTypes.cs` = ResourceKind·ResourcePhase·ResourceState(16비트: 타격 수 8 + 단계 4 + 쓰러짐 방향 4)·HarvestRules)
       │  │  │  ├─ World/                  WorldClock, PurifiedZoneSet, RegionMap, WorldSettings, Difficulty
       │  │  │  ├─ Defense/  Creatures/  Combat/  Farming/  Cooking/  Buffs/  Threats/
       │  │  │  ├─ Progression/            ActionCompleted, Proficiency, Unlocks, Objectives, Story, Tutorial
@@ -1283,16 +1293,16 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  │  │  ├─ V0/                     M1 시험용 생성기 (출시 전 삭제 가능)
       │  │  │  └─ V1/ (V2/ ...)           버전별 생성기. 공개 배포 후 동결
       │  │  ├─ Application/               Game.Application.asmdef
-      │  │  │  ├─ Ports/  Commands/  Server/  Replication/  Session/  WorldLifecycle/
+      │  │  │  ├─ Ports/  Commands/  Server/  Replication/  Session/  WorldLifecycle/  Gathering/  WorldSync/  Perf/ (v0.14 실제: Gathering/ = `HitResourceCommand`(타격 명령 본문 3 B, 호스트 처리기, HarvestSettings)·`ResourceStateCodec`(자원 표 항목 2 B + 상태 2 B). WorldSync/ = `LocalWorld`(로컬 월드 + 요약값, WorldScale, LocalWorldProvider)·`ResourceChangeTool`(「5,000개 변경」)·`ResourceCellGrid`(32 m 칸 검색)·`ResourceVisualRules`(상태 → 표시 규칙). 스냅샷·델타 적용은 기존 Replication/(ClientReplicationReceiver 등)이 하며, Replication/에 `CreatureInterest`·`ClientCreatureStore`·`CreatureInterestStats`(F1 표시 계산) 추가. Perf/ = `BotBrain`·`JoinTimeline`)
       │  │  │  ├─ Protocol/               (v0.10) MessageKind, 메시지 구조체, AvatarPose, ByteWriter/ByteReader, 양자화, 크기 상한, MessageCodec (DES-080)
       │  │  │  ├─ Gameplay/               채집·제작·건축·생존·방어전·전투·농사·요리·위협·숙련도
-      │  │  │  ├─ Ai/                     AiScheduler, SpawnDirector
+      │  │  │  ├─ Ai/                     AiScheduler, SpawnDirector (v0.14 실제: `AiScheduler`, `AiSettings`(AiSettings·AiNavSettings·AiLodPolicy), `CreatureRegistry`(CreatureRegistry·TestCreatureLayout·WalkGridBuilder), `IAiNavigationBackend`(포트·WalkGridDesc·AiAgentBuffer). SpawnDirector는 아직 없음, M5)
       │  │  │  ├─ Client/                 ClientSession, ClientWorldMirror
       │  │  │  └─ Settings/
       │  │  ├─ Adapters/
       │  │  │  ├─ Net/                    Game.Adapters.Net.asmdef (Transport/ = FishNetServer·FishNetClient·PacketBroadcast(DES-121, `FishNetPacketTransport.cs`), Gateway/, Replication/, Avatar/(DES-084, `PlayerAvatar.cs`), Join/). v0.10: Messages/ 없음(메시지는 Application/Protocol/). v0.11: **FishNet 형식은 Transport/·Avatar/에서만**(3.4.1 규칙 8, 아키텍처 시험이 폴더 이름으로 검사)
       │  │  │  ├─ Presentation/           Game.Adapters.Presentation.asmdef
-      │  │  │  │  ├─ Player/  World/(Terrain, Resources, Creatures, Lighting)  Interaction/
+      │  │  │  │  ├─ Player/  World/(Terrain, Resources, Creatures, Lighting. v0.14: TerrainViewBuilder, ResourceViewStreamer, ResourceHitInput, 생물 표시)  Interaction/
       │  │  │  │  ├─ UI/                  Common/(v0.13: UiTheme·UiTokens·Themed*·UiButton·UiScreen·UiRoot·UiScreenStack·UiInputRouter·UiSafeArea16x9·UiRaycastBlocker·KeycapView·UiArcGraphic·UiWarpedRawImage, UiGlyphs·텍스트 키 상수), Screens/(화면마다 …Screen 컴포넌트 + …View 클래스), Hud/(Common/ 공통 부품, Screen/ 일반 HUD, Diegetic/ 손목 계기·스태미나 호·등불 이름표), Presenters/
       │  │  │  │  ├─ Input/  Localization/  Audio/  Accessibility/
       │  │  │  └─ Persistence/            Game.Adapters.Persistence.asmdef (Codec/, Chunks/, Migrations/, Store/)
@@ -1303,7 +1313,7 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  │  │  ├─ Config/                 Game.Infra.Config.asmdef (ScriptableObject 클래스, 로더)
       │  │  │  ├─ Platform/               Game.Infra.Platform.asmdef (Logging/, Crash/, Telemetry/, Settings/, Tasks/)
       │  │  │  └─ Rendering/              Game.Infra.Rendering.asmdef (HdrpRenderBackend, Graphics/, Upscaling/, PostProcess/) — HDRP 의존 코드는 여기만
-      │  │  ├─ Bootstrap/                 Game.Bootstrap.asmdef (GameBootstrap = 컴포지션 루트, Runtime/(GameFlow, SessionRuntime, RuntimeSupport), DevTools/)
+      │  │  ├─ Bootstrap/                 Game.Bootstrap.asmdef (GameBootstrap = 컴포지션 루트, Runtime/(GameFlow, SessionRuntime, RuntimeSupport), DevTools/(v0.14: `BotClient`·`RuntimePerfSampler`·`CreatureInterestHud` 추가))
       │  │  └─ Editor/                    Game.Editor.asmdef (에디터 전용: BuildCommands, BuildArtifactInspector, ProjectConfigurator, 씬·애셋 생성 스크립트 — v0.11: InputActionsBuilder, WorldAndNetworkBuilders(AvatarPrefabBuilder, WorldSceneBuilder) 추가. v0.13: 생성기는 「없을 때만 만들기 + 검사」로 바뀜(아래 표), UiThemeBuilder(테마 애셋이 없을 때만), UI/(토큰 드롭다운 속성 그리기, Apply Theme To Prefabs 메뉴))
       │  ├─ Data/                         ScriptableObject 애셋 (코드 아님)
       │  │  ├─ Balance/                   부록 C.1 설정값 묶음
@@ -1315,11 +1325,11 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
       │  ├─ Localization/                 String Table(ko, en). M1~: strings.ko.txt·strings.en.txt(텍스트 키 표, M2-01에서 String Table로). v0.13: 글꼴은 UI/Fonts/로
       │  ├─ Art/  Audio/  VFX/
       │  ├─ Prefabs/                      v0.11: PlayerAvatar.prefab (NetworkObject + PlayerAvatar, 모양 없음 — 표시는 표현 어댑터가 월드 사본으로 그림)
-      │  ├─ Materials/                    v0.11: WorldGround, WorldProp, RemoteAvatar, BenchGround, BenchAgent (HDRP/Lit, 생성 스크립트가 만듦)
+      │  ├─ Materials/                    v0.11: WorldGround, WorldProp, RemoteAvatar, BenchGround, BenchAgent (HDRP/Lit, 생성 스크립트가 만듦). v0.14: TerrainGround.mat(HDRP/TerrainLit, GPU 인스턴싱 켬) + TerrainGround.terrainlayer, 자원 재질 4개(인스턴싱 켬)
       │  ├─ Scenes/                       Boot, World(v0.11 M1 개발용 장면), Bench. 계획: MainMenu(M2)
       │  ├─ UI/                           (v0.13, uGUI) 화면 배치는 ui-ux-designer 결과(STORYBOARD)를 따르고 **프리팹이 원본**
       │  │  ├─ Theme/                     UiTheme.asset (색·글자 크기·글꼴 토큰 한 벌, 3.7.10)
-      │  │  ├─ Fonts/                     Pretendard TTF(3굵기)·TMP 글꼴 애셋(정적·동적)·기호 대체 글꼴, OFL 라이선스 원문
+      │  │  ├─ Fonts/                     Pretendard TTF(3굵기)·TMP 글꼴 애셋(정적·동적. v0.14: 기호 대체 글꼴은 만들지 않음), OFL 라이선스 원문
       │  │  ├─ Icons/                     단색 아이콘 스프라이트, 입력 장치 아이콘 세트(Xbox, M2: PlayStation)
       │  │  └─ Prefabs/
       │  │     ├─ UiRoot.prefab           UiRoot(테마·글자 단계·화면 스택·입력 라우터) + 자식 EventSystem(InputSystemUIInputModule)
@@ -1450,6 +1460,7 @@ sequenceDiagram
 ```
 
 - v0.10: 위 메시지(`JoinRequest`~`JoinComplete`, `SnapshotChunk`, `TableDelta`)는 모두 `Protocol/` 메시지입니다. GW(DES-081, 085)와 RP(DES-082)는 `INetServer`로만 주고받고, 실제 바이트 전송은 `FishNetServer`/`FishNetClient`(DES-121)가 `PacketBroadcast`로 합니다. 그래서 참가 판정·스냅샷·델타 보관 흐름은 가짜 `INetServer`로 FishNet 없이 시험합니다(`Game.Tests.Net`).
+- **v0.14(M1-10 실제)**: 참가자는 월드를 백그라운드 Task로 생성합니다(`ClientSession.PrepareInBackground`). JoinAccepted 뒤 JoinComplete 전에 온 델타는 보관했다가 순서대로 적용합니다(상한 20,000개). 허가 뒤 월드 생성 대기 시간은 기본 시간 초과에 **+30초**(`JoinHandshake.WorldGenerationAllowanceSeconds`)를 더합니다. 호스트는 `CreateHost` 안에서 월드를 **동기 생성**합니다(Full 약 0.3~0.6초, R-45).
 
 #### 3.9.3 자원 타격 → 쓰러짐 → 드롭 → 경험치 이벤트
 
@@ -1485,6 +1496,7 @@ sequenceDiagram
 ```
 
 - 여러 명이 같은 나무를 때려도 호스트가 명령을 도착 순서대로 하나씩 처리하므로 쓰러짐·드롭은 한 번만 일어납니다(FR-051).
+- **v0.14(M1-10 실제)**: 자원 델타는 관심 범위가 아니라 **준비된 모든 연결**에 보냅니다. 타격 거리 검사는 **수평 거리만** 봅니다(허용 2.5 m + 여유 0.75 m, 지형 높이 연동 뒤 재검토). 타격 빈도 상수는 **초당 4회**(`HarvestSettings.DefaultHitsPerSecond`, 설정값 분리 전). 거부 사유는 기존 코드(OutOfRange·TargetMissing·NotAllowedNow·InvalidValue)를 재사용합니다. 클라이언트는 `ResourceHitInput`이 공격 입력을 0.3초 간격으로 보냅니다. 낙관적 표현·`CommandResult` 처리는 이후 작업입니다.
 
 #### 3.9.4 자동 저장 (원자적 교체)
 
@@ -1610,6 +1622,7 @@ sequenceDiagram
 - 서버 쪽 스태미나 추정: 호스트는 수락한 자세의 달리기 플래그로 `VitalsRules`(DES-003)를 같이 돌려 스태미나를 추정하고, 추정값이 0이면 허용 속도를 걷기 속도 기준으로 낮춥니다(3.11.12). 추정이 클라이언트 값과 조금 달라도 허용 오차(`MoveTolerance`, `MoveSlackMeters`, `MoveStaminaGraceSeconds`) 안에서 흡수합니다.
 - 손에 든 것·생명 상태·체력 비율 같은 아바타 표시 상태(FR-042, FR-159, FR-160)는 호스트 권위 값이므로 클라이언트 자세 RPC에 싣지 않고, 호스트가 정해 ObserversRpc(신뢰, 바뀔 때만) 또는 복제 메시지로 보냅니다.
 - 아바타 RPC의 인자는 FishNet 형식이 아닌 Protocol 바이트(`AvatarPose` 인코딩)이므로, 자세 형식·양자화도 다른 메시지와 같은 코덱·왕복 시험을 따릅니다.
+- **v0.14(M1-10 실제) 스폰 위치**: 월드 중앙 + 참가자 자리 간격, 높이 = 지면 높이 + 0.1 m. 월드(지형)가 없으면 기존 위치를 씁니다.
 
 #### 3.9.9 부트와 네트워크 시작 순서 (v0.11, M1-07 실제, DES-100·101)
 
@@ -1751,6 +1764,8 @@ stateDiagram-v2
     Seek --> Dead: 체력 0
     Dead --> [*]
 ```
+
+v0.14(M1-11 실제): 위 상태 가운데 M1에서 구현한 것은 대상 추적·공격 사거리 판정까지입니다. 피해는 `CreatureAttack` 목록으로만 만들고 적용은 이후 작업입니다. 값은 아직 코드 기본값(`new AiSettings()`·`new AiNavSettings()`)이며 설정 애셋 분리 전입니다.
 
 #### 3.10.7 UI 상태와 게임 진행의 분리 (I-07, SRS v0.5 3.2 공통 규칙)
 
@@ -1992,7 +2007,7 @@ func OnServerTickEnd(tick):          // 30Hz
     CreatureReplication(tick)        // 3.11.9
     for conn in conns: conn.Flush()  // 메시지 묶어 보내기(FishNet이 MTU 단위로 분할)
 ```
-- 자원 상태 인코딩: `ResourceIndex(u16) + hits(u8) + phase(4비트) + fallDir(4비트)` = 4바이트.
+- 자원 상태 인코딩: `ResourceIndex(u16) + hits(u8) + phase(4비트) + fallDir(4비트)` = 4바이트. v0.14(M1-10 실제): 자원 델타는 관심 범위가 아니라 준비된 모든 연결에 보냄(위 의사코드의 「모든 참가자」 그대로).
 - 드롭 아이템·작물·건축물은 생성/변경/삭제 이벤트 단위로 보냅니다. 건축물은 위치(float 3개)·방향(u16)·종류(u16)·체력%(u8).
 - **제작대·용광로(v0.6)**: 둘 다 건축물 테이블의 항목입니다(별도 테이블 없음). 제작대는 상태가 없습니다. 용광로는 건축물 항목에 `lit`(불 켜짐, 1비트)만 더해 모든 참가자에게 보내고(불빛·연기 표시), 칸 내용·연료 점수·작업 진행은 **열어 본 사람에게만** `FurnaceView`로 보냅니다(보관함 구독 방식). 진행률은 매 틱 보내지 않고 「작업 시작 서버 시각 + 가공 시간」만 보내 클라이언트가 계산합니다. 관심 범위 밖이어도 호스트는 계속 계산합니다(3.11.18). 중도 참가 스냅샷에는 `lit`만 들어갑니다.
 
@@ -2013,6 +2028,7 @@ func CreatureReplication(tick):
 // 클라이언트: 생물마다 스냅샷 버퍼, 렌더 시각 = 서버 시각 - 보간 지연(기본 100 ms + 등급 간격)으로 보간
 // 양자화: 위치 = 월드 좌표를 2^16 단계(약 4.7 cm), 방향 8비트, 애니메이션 상태 8비트, 체력% 8비트
 ```
+- **v0.14(M1-10·M1-11 실제)**: 등급 경계 Near 50 m·Mid 150 m는 상수, Far = `InterestRangeMeters`(300 m), 송신 주기는 설정 Hz에서 계산합니다. **Despawn은 경계보다 10 m 더 나가야** 보냅니다(경계 왕복 시 Spawn/Despawn 반복 방지). 클라이언트 보간은 위 「서버 시각 − 지연」 방식이 아니라, **새 스냅샷이 오면 보이던 위치에서 새 위치로 직전 수신 간격(30~1000 ms로 제한)만큼 이동**합니다(서버 시계 동기 불필요). 호스트도 같은 복제 경로를 거쳐 `Mirror.Creatures` 한 곳에서 생물을 그립니다. 위치 양자화 범위는 -16~3088 m(3.7.2).
 - 플레이어 아바타(최대 8개)는 FishNet NetworkObject이고(v0.10: NetworkTransform 대신 ServerRpc → 호스트 검사 → ObserversRpc, 3.9.8) **항상 전원 관찰**합니다(나침반·동료 목록이 거리와 무관하게 필요, FR-125, FR-160).
 - 자원·건축물 델타는 양이 작아 관심 범위 없이 전원에게 보냅니다(3.12.5 대역폭 추정).
 - **동기화 범위(확정, 사용자 결정 2026-11-02)**: FR-008의 「모든 플레이어에게 같게」는 생물에 대해 「각 참가자의 관심 범위(기본 300 m, 설정값) 안에서 같게」로 적용합니다. 범위 밖 생물은 그 참가자에게 보내지 않습니다.
@@ -2060,6 +2076,7 @@ job Steering(agents, flowFields, spatialHash, dt) [Burst, IJobParallelFor]:
     next.y = SampleHeight(heightGrid, next)                  // 물리 레이캐스트 없이 높이 격자에서
     out[agent.index] = next                                   // 자기 칸에만 기록
 ```
+- **v0.14(M1-11 실제)**: `IAiNavigationBackend`는 `BuildWalkGrid(WalkGridDesc)`, `SetFlowTargets(x, z, count)`, `ScheduleSteering(AiAgentBuffer)`, `CompleteSteering(AiAgentBuffer)`, `Dispose`입니다. 보행 격자는 시험 생성 때 **월드 중심 600 m 범위만** 만들고(월드 전체는 M4 전, R-42), 물·정화 구역은 `WalkGridDesc.Blocked`로 넣을 수 있게만 열어 둡니다. 대상이 같은 칸이면 흐름장 재계산을 생략합니다. 흐름장 재계산은 에디터에서 4~10 ms로 워커 예산(2.5 ms)을 넘습니다(R-41).
 - NavMesh를 쓰지 않는 이유: 3 km 생성 지형에 실행 중 NavMesh를 구우면 시간·메모리가 크고, 60체가 각자 경로를 구하면 메인 스레드 비용이 큽니다(5장 D-07).
 
 #### 3.11.12 참가자 이동 검증 (DES-084, NFR-030)
@@ -2075,7 +2092,7 @@ func PlayerAvatar.OnPoseServerRpc(bytes):                      // 호스트에�
 
 // v0.11: 실제 구현(Application/Server/ServerWorld.cs의 AvatarMoveValidator)에 맞춤. m = BalanceValues.Movement
 func AvatarMoveValidator.Check(s, pose):                      // 연결별 상태 s (LastAccepted, Stamina, SecondsAtZero)
-    if not pose.Pos.IsFinite or |pose.Pos.X| > half or |pose.Pos.Z| > half: return Rejected   // 월드 밖·NaN·무한대
+    if not pose.Pos.IsFinite or not ProtocolConstants.IsInsideWorld(pose.Pos): return Rejected   // 월드 밖·NaN·무한대. v0.14: 월드는 0~3072 m + 가장자리 여유 16 m
     if not s.HasLast: s.LastAccepted = pose; return Accepted                 // 스폰 직후 첫 자세는 기준점
     deltaMs = (int)(pose.TimeMs - s.LastAccepted.TimeMs)                      // 보낸 쪽 시각, 한 바퀴 돌아도 부호 있는 차이
     if deltaMs <= 0: return Stale                                            // 늦게 온·중복 자세는 버림(보정 안 함)
@@ -2274,6 +2291,7 @@ func OnServerTick(now):                             // FurnaceService, 30 Hz
 3. **조건**: SRS 3.3 P8(권장 사양 8대, Steam 릴레이, `측정 기준 시드`, 자원 5,000개 변경, 활동 생물 = `동시 적 상한`, 5분).
    - **M1 (v0.7, 사용자 결정 2026-11-03)**: 이 PC 한 대에서 호스트 1 + 봇 7개(`-bot -batchmode -nographics`, Tugboat 직접 전송, 같은 PC)로 대체 측정합니다. 시험용 AI 60체 + `Bench` 씬. 판정 대상은 **호스트 서버 처리 예산(`Server.Total`)·대역폭(봇 연결별 송수신)·중도 참가 시간·메모리**이고, 호스트 FPS는 봇 프로세스가 같은 CPU를 나눠 써서 실제보다 낮게 나올 수 있으므로 참고값으로 기록합니다(봇 프로세스의 CPU 점유율을 함께 기록). Steam 릴레이 8인 접속은 이 PC + 가능한 다른 계정·PC로 기능 확인만 합니다. v0.9(D-22): 측정 빌드는 열린 에디터에서 `unity command build run`으로 만들 수 있지만, **측정하는 동안에는 Unity 에디터를 닫아 둡니다**(에디터 프로세스가 같은 CPU·GPU·메모리를 써서 결과가 흐려지지 않도록). 측정 보고서에 에디터를 닫은 상태였음을 적습니다.
      - v0.11 관찰(M1-07~09 다중 프로세스 시험, 측정 아님): 이 PC 한 대에서 호스트 1 + `-nographics` 클라이언트 7개(Tugboat, `-autowalk`)를 띄웠을 때 호스트 **1% Low 28 FPS**와 프레임 예산 위반 로그가 나왔습니다. 클라이언트 7개가 같은 CPU를 나눠 쓰고, 측정 빌드·업스케일링 조건·에디터 닫음 조건을 맞추지 않은 상태라 판정 값이 아닙니다(R-27과 같은 왜곡). M1-12 대체 측정에서는 이 값을 판정에 쓰지 않고 **별도로 해석**합니다: (a) 예산 위반 로그를 구간별(`Server.*`, `Client.*`, GC)로 나눠 서버 처리 예산 자체의 초과인지, CPU 경합에 따른 호스트 렌더 지연인지 구분하고, (b) 봇·클라이언트 프로세스의 CPU 점유율과 함께 기록하고, (c) 클라이언트 수를 1·3·7로 바꿔 1% Low가 클라이언트 프로세스 수에 따라 떨어지는지(경합) 확인합니다(R-32).
+     - **v0.14 M1-12 결과(2026-11-10, 조건부 통과, `docs/test/perf/M1_tech_verification.md`)**: P8 대체 측정에서 `Server.Total` 평균 0.060 ms·p99 0.377 ms(틱 최악 5.57 ms는 `AiApply`), 메인 스레드 2.20 ms, 호스트 송신 1.03 Mbps, 참가자 수신 175 kbps, 중도 참가 0.74초, 메모리 1.37 GB, VRAM 1.4 GB. 한계: PC 1대·봇·임시 그래픽·Tugboat, Steam 릴레이 미확인. 남은 위험은 R-41~R-45.
    - **M6-10**: 실제 권장 사양 PC 8대 P8로 정식 판정합니다.
 4. **판정** (C-52 확정): 기준 프리셋 「높음」 + 업스케일링 품질 모드(NVIDIA → DLSS, 그 밖 → FSR)로 측정합니다. 호스트 `Server.Total` 프레임당 평균 ≤ 3.0 ms, p99 ≤ 5.0 ms, 메인 스레드 평균 ≤ 13 ms. 호스트와 참가자 7명 모두 평균 FPS ≥ 60, 1% Low ≥ 45 FPS. 업스케일링을 끈 측정은 판정에 쓰지 않고 참고값으로만 기록합니다(GPU 여유 파악용). 측정 PC마다 GPU 종류와 쓴 업스케일러를 보고서에 적습니다.
 5. **사전 측정**: M1~M5는 봇 클라이언트 7개(`-bot`, 직접 전송)로 서버 처리 예산을 측정합니다(M1은 이 PC 한 대). 다른 PC를 쓸 수 있으면 봇을 그 PC로 옮겨 호스트 FPS의 왜곡을 줄일 수 있습니다(선택).
@@ -2327,6 +2345,8 @@ v0.9 (M1-06 구현에서 확인한 사실):
 - **LOD 편향**: HDRP는 카메라마다 HDRP 애셋의 lodBias 표로 `QualitySettings.lodBias`를 덮어씁니다. 그래서 프리셋의 LOD 편향 값은 실행 중에 `QualitySettings`로 넣지 않고, 편집기 메뉴 `GraphicsAssetBuilder`가 품질 단계별 HDRP 애셋에 구워 넣습니다. **프리셋 값을 바꾸면 이 메뉴를 다시 실행**해야 합니다(멱등).
 - **프리셋 데이터 위치**: 프리셋 애셋 `GraphicsPresetConfig`(ScriptableObject)는 `Game.Infra.Config`에 두고 `GameDataConfig.Graphics`로 연결합니다. `Game.Infra.Rendering`은 이 애셋을 직접 읽지 않고, 조립 단계에서 순수 C# `GraphicsPresetCatalog`(`Game.Application`)로 바꿔 받습니다(인프라끼리 참조 금지, 3.4.2).
 - **업스케일러 모듈**: HDRP의 DLSS·FSR2 코드는 내장 모듈 `com.unity.modules.nvidia`·`com.unity.modules.amd`가 없으면 컴파일에서 빠집니다(D-03).
+
+v0.14 (M1-10 빌드 주의): 실행 중 만드는 Terrain은 씬에 재질 참조가 있어야 셰이더가 빌드에 포함되고, `drawInstanced`를 쓰면 재질의 GPU 인스턴싱이 켜져 있어야 합니다(GraphicsSettings의 인스턴싱 변형 제거 = Strip Unused 때문). `TerrainViewBuilder`는 재질이 인스턴싱을 지원하지 않으면 `drawInstanced`를 끕니다. 새 자원·지형 재질을 더할 때마다 빌드에서 확인합니다.
 
 #### 3.12.8 메모리 (NFR-048: 프로세스 10 GB, VRAM 7.5 GB — C-49 확정, 사용자 결정 2026-11-03)
 - 시스템 메모리: 생성·게임 데이터 약 100 MB(3.5.5), Unity Terrain 36타일(512 m, 513² 높이 + 스플랫맵) 약 0.5 GB, 애셋(텍스처·메시·오디오)이 대부분. 지역별 애셋은 그 지역에 가까워질 때 읽는 방식(주소 지정 애셋 Addressables 도입)은 M9a에서 메모리 측정 후 결정합니다(지금은 넣지 않음).
@@ -2440,14 +2460,14 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES ID | 이름 | 종류 | 레이어 | 설명 | 관련 FR/NFR |
 |---|---|---|---|---|---|
 | DES-081 | ServerCommandGateway | 모듈 | 어댑터(Net) | 연결 → PlayerId(전송 원격 ID, `Connected(connId, remoteId)`로 받음), 디코드된 메시지 받기, 예외 격리, 빈도·값 범위 검사, 디스패처 호출, 결과 회신. v0.10: 포트·Protocol 메시지에만 의존, 가짜 `INetServer`로 시험(`Game.Tests.Net`) | FR-007, NFR-040, NFR-041 |
-| DES-082 | ReplicationPublisher | 모듈 | 어댑터(Net) | 테이블 델타·스냅샷 청크 송신, 생물 관심 범위 등급 송신, 연결별 큐·속도 제한. v0.10: 포트·Protocol 메시지에만 의존 | FR-008, FR-009, NFR-013~016 |
+| DES-082 | ReplicationPublisher | 모듈 | 어댑터(Net) | 테이블 델타·스냅샷 청크 송신, 생물 관심 범위 등급 송신, 연결별 큐·속도 제한. v0.10: 포트·Protocol 메시지에만 의존. v0.14: 자원 델타는 준비된 모든 연결, 생물은 관심 범위 등급(Near 50 m·Mid 150 m·Far 300 m, Despawn 여유 +10 m, 3.11.9) | FR-008, FR-009, NFR-013~016 |
 | DES-083 | ClientReplicationReceiver | 모듈 | 어댑터(Net) | 수신 → 미러 적용, 생물 보간 버퍼. v0.10: 포트·Protocol 메시지에만 의존 | FR-008, NFR-015 |
 | DES-084 | PlayerAvatar (NetworkObject) | 컴포넌트 | 어댑터(Net) | v0.11: 위치 `Adapters/Net/Avatar/PlayerAvatar.cs`, 프리팹 `Prefabs/PlayerAvatar.prefab`(NetworkObject + PlayerAvatar, 모양 없음, `DefaultPrefabObjects` 등록). FishNet 형식을 써도 되는 두 폴더 중 하나(3.4.1 규칙 8). 클라이언트 계산 이동 + 호스트 검사. v0.10: NetworkTransform 대신 소유자 ServerRpc(비신뢰, `AvatarPose` 바이트) → 호스트에서 `AvatarMoveValidator`(DES-052) 호출 → 통과하면 ObserversRpc(비신뢰, 소유자 제외)로 중계, 거부하면 TargetRpc 보정. 내 자세는 `ILocalPlayerPose`에서 읽고, 받은 다른 참가자 자세는 `ClientWorldMirror`에 넣음(표현 어댑터 참조 없음). 손에 든 것·생명 상태·체력 비율은 호스트가 정해 공유(3.9.8) | FR-023, FR-024, FR-042, FR-159, FR-160, NFR-030 |
 | DES-085 | JoinHandshake | 모듈 | 어댑터(Net) | JoinRequest/Accepted/Rejected, WorldReady, 로비 멤버 확인, 비밀번호 확인. v0.10: 포트·Protocol 메시지에만 의존, 가짜 `INetServer`로 시험 | FR-003, FR-004, FR-009, FR-115, FR-146, FR-169 |
 | DES-086 | FirstPersonController | 컴포넌트 | 어댑터(표현) | 1인칭 이동·달리기(CharacterController), 카메라, 감도·반전·시야각. 스태미나는 `VitalsRules`(DES-003)로 계산(0이면 걷기 속도). v0.10: 매 프레임 자세를 `ILocalPlayerPose`에 쓰고, 호스트 보정을 받으면 위치를 되돌림 | FR-023, FR-024, FR-025, FR-118 |
-| DES-087 | ResourceViewStreamer | 컴포넌트 | 어댑터(표현) | 셀 단위 근거리 GameObject 풀 + 원거리 인스턴싱, 쓰러짐·파괴 애니메이션 | FR-047, FR-049, NFR-011, NFR-012, NFR-016 |
-| DES-088 | CreatureViews | 컴포넌트 | 어댑터(표현) | 생물 보간 표시, 애니메이터(화면 밖 정지), 피격 반응, 지역 변형 외형 | FR-076~081 |
-| DES-089 | TerrainViewBuilder | 컴포넌트 | 어댑터(표현) | 정수 높이 → Unity Terrain 36타일, 물 표면, 스플랫·디테일 | FR-168, NFR-052 |
+| DES-087 | ResourceViewStreamer | 컴포넌트 | 어댑터(표현) | 셀 단위 근거리 GameObject 풀 + 원거리 인스턴싱, 쓰러짐·파괴 애니메이션. v0.14(M1-10): `ResourceViewStreamer`는 32 m 칸, 60 m 안 GameObject 풀 + 350 m 안 `RenderMeshInstanced`(재질 4개 인스턴싱 켬), 쓰러진·부서진 자원은 충돌체 끔. 타격 입력은 `ResourceHitInput`(공격 0.3초 간격). 쓰러짐 연출·낙관적 표현은 이후 | FR-047, FR-049, NFR-011, NFR-012, NFR-016 |
+| DES-088 | CreatureViews | 컴포넌트 | 어댑터(표현) | 생물 보간 표시, 애니메이터(화면 밖 정지), 피격 반응, 지역 변형 외형. v0.14(M1-11): `CreatureViews` 루트 아래 `Mirror.Creatures` 한 곳에서 그림(호스트 포함). 보간 = 새 스냅샷이 오면 직전 수신 간격(30~1000 ms로 제한)만큼 이동(3.11.9). 애니메이터·피격·변형 외형은 이후 | FR-076~081 |
+| DES-089 | TerrainViewBuilder | 컴포넌트 | 어댑터(표현) | 정수 높이 → Unity Terrain 36타일, 물 표면, 스플랫·디테일. v0.14(M1-10): Full 36타일 + 충돌체, 재질 `TerrainGround.mat`(HDRP/TerrainLit, GPU 인스턴싱 켬) + `TerrainGround.terrainlayer`, 재질이 인스턴싱을 지원하지 않으면 `drawInstanced` 끔. 물·스플랫·디테일은 이후. **자연 에셋 도입 원칙(사용자 결정 2026-11-10)**: M3에 지역별 자연 프로필(바닥 TerrainLayer·풀/꽃 디테일·자원 모델) + 지역 1 에셋, M6 지역 1 완성·재측정, M9a/b/c·M10 지역별. 지형·자원 배치는 생성기, 바닥·풀·꽃은 화면 전용 Terrain 레이어·디테일, **나무·돌·광석은 Terrain 나무 배치 기능이 아니라 에셋 프리팹을 `ResourceViewStreamer`가 배치**(상태 동기화·쓰러짐 연출), 에셋마다 빌드 확인(3.12.7) | FR-168, NFR-052 |
 | DES-090 | LightingAtmosphere | 컴포넌트 | 어댑터(표현) | 낮·밤, 장막 아래 잿빛 조명, 정화 구역, 완전한 어둠, 광원(횃불·랜턴)의 **상태 계산**. 적용은 `IRenderBackend`(DES-114) 호출 | FR-033~036, FR-106 |
 | DES-091 | UI (v0.13: uGUI + TextMeshPro, v0.12까지 UI Toolkit) | 컴포넌트 모음 + 프리팹 | 어댑터(표현) | 화면·HUD 프리젠터(배치는 STORYBOARD), 사유 메시지, 리치 텍스트 끔. 공통 기반(글자 크기 단계·색 토큰·모양 구분 규칙, M1부터 — v0.13: DES-122 테마 위에), 다크 단일 테마, 화면을 열어도 게임 진행 유지(로컬 입력 경로만 전환), 독립 레시피북(`OpenRecipeBook(source)`, v0.6: `Hotkey` = 열람 + 손 제작, `Station` = 제작대 팝업) (3.7.10, 3.10.7), 용광로 화면(v0.6, 진행 막대는 시작 시각 + 가공 시간으로 로컬 계산). v0.4: 일반 HUD(`ScreenHud`), HUD 공통 부품, `HudModeSwitcher`(재시작 없이 전환) (3.7.11). **v0.13**: 화면마다 프리팹(`UI/Prefabs/Screens/`, `Hud/`)이 원본이고 루트에 `UiScreen` + `…Screen` 컴포넌트, 표시 로직은 일반 C# `…View` 클래스(패시브 뷰). M1 화면: `SteamRequired`(SCR-001), `DevLobby`(SCR-004 최소판·SCR-012), `GameHud`(SCR-015 M1 범위), `GameMenu`(SCR-016, Hud에서 분리). 화면 층·숨김 규칙 3.7.10 (5) | NFR-001~003, NFR-056, NFR-057, FR-052, FR-094, FR-128, FR-171 |
 | DES-092 | InputLayer | 컴포넌트 | 어댑터(표현) | Input Actions, 장치별 재설정·저장, 장치 전환 감지, 안내 아이콘. v0.13: UI 입력은 EventSystem + `InputSystemUIInputModule`(게임과 같은 Input Actions 인스턴스), 닫기·탭 이동은 `UiInputRouter`(DES-122), 키캡 `KeycapView`(장치 전환 시 1초 안 교체), UI 지도에 `Point`·`Click`·`ScrollWheel` 추가(3.7.10 (6)) | NFR-002, NFR-004, FR-117, FR-166 |
@@ -2512,6 +2532,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | 내장 모듈 `com.unity.modules.physics2d` | 1.0.0 | **필수**: FishNet 4.7.4R이 이 모듈 없이는 컴파일되지 않음(M1-02에서 확인) | 2D 물리를 쓰지 않더라도 **`manifest.json`에서 지우지 않음** |
 | 내장 모듈 `com.unity.modules.nvidia`, `com.unity.modules.amd` (v0.9) | 1.0.0 / 1.0.0 | **필수**: HDRP 17.3.0의 DLSS(NVIDIA)·FSR2(AMD) 코드가 이 모듈 없이는 컴파일에서 빠짐(M1-06에서 확인) | 업스케일링(FR-121, 3.12.7)에 필요. **`manifest.json`에서 지우지 않음** |
 | FishySteamworks | **4.1.1** | FishNet 4.7.4R·Steamworks.NET 2025.165.0과 **조합 컴파일 확인**(M1-02). 8인 Steam 릴레이 접속 확인은 M1-07·M1-12에서 | `Assets/ThirdParty/FishySteamworks/FishySteamworks.asmdef`로 별도 어셈블리. 4.0.0부터 App ID는 Steamworks.NET 쪽에서 처리 |
+| 내장 모듈 `com.unity.modules.terrainphysics` (v0.14) | 1.0.0 | **필수**: Terrain 충돌체(`TerrainCollider`)가 이 모듈에 있음. 자원 타격·이동·생물 높이 처리에 지형 충돌체 필요(M1-10에서 추가) | **`manifest.json`에서 지우지 않음** |
 | Steamworks.NET (`com.rlabrecque.steamworks.net`) | **2025.165.0** (Steamworks SDK 1.65) | 조합 컴파일 확인(M1-02) | **UPM git URL + 태그로 고정**(`https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net#2025.165.0`). 문제 시 2025.164.1로 내림 |
 | Tugboat | FishNet 4.7.4R에 포함된 버전 | — | 개발용 직접 전송 |
 | Input System | **1.20.1** | 설치·컴파일 확인 | |
@@ -2962,6 +2983,7 @@ M1 범위: 기술 검증(M1-01~M1-12)과 이를 위한 최소 기능(로비 생�
 | M1-13 | M1 완료 빌드, M1 FR 시험, 아키텍처 시험. v0.9(D-22): FR·아키텍처 시험은 열린 에디터에서 Unity CLI로 → 같은 열린 에디터에서 `unity command build run`으로 출시 IL2CPP 빌드(`BuildWindowsRelease`)와 산출물 검사(Pipeline 런타임 어셈블리 0건, 3.4.3. Console의 `[Build]` 기록으로 검사가 돌았는지 확인). 에디터를 닫지 않음(성능 측정이 아님). v0.12: 출시 빌드의 게임 버전 `0.1.0+rel.…` 로그, 빌드 뒤 `bundleVersion` 원상 복구, 출시 ↔ 개발 빌드 접속 거부 확인(3.7.12) | DES-112, DES-113 | NFR-043 | M1-01~M1-12 |
 
 - **v0.11 M1-07~M1-09 결과(2026-11-04)**: 구현 완료. EditMode 476/476, PlayMode 16/16 통과. Tugboat 8인 접속과 9번째 참가자 인원 초과 거부, Steam 호스트 경로(`-transport steam -host`) 확인. 실제와 다르게 적혀 있던 곳을 3.2.3, 3.4.1~3.4.3, 3.7.2, 3.7.4, 3.7.10, 3.8.2, 3.9.9, 3.10.1, 3.11.12~13, 3.12.1, 3.12.4~5, DES-084·100·101·103·112·121, D-25에 맞춤. 남은 사용자 결정: R-33(친구 전용 로비와 공개 목록), R-34(빌드 번호 규칙) — **v0.12에서 둘 다 해소**(사용자 결정 2026-11-04). M1-12 착수 때 볼 것: R-31(송신 할당 약 81 B/건), R-32(한 PC 8프로세스 1% Low 28 FPS 해석). 생성 메뉴 `Game/Setup/Run All`은 Do 묶음마다 다시 실행해 확인(D-25)
+- **v0.14 M1-10~M1-12 결과(2026-11-10)**: 구현·시험 완료(M1-12는 조건부 통과). M1-10: 월드 좌표 0~3072 m, 자원 델타 전 연결 송신, 중도 참가 백그라운드 생성, `TerrainViewBuilder`·`ResourceViewStreamer`·`ResourceHitInput`(3.7.2, 3.9.2, 3.9.3, 3.11.9, DES-087·089). M1-11: `IAiNavigationBackend` 실제 시그니처, 보행 격자 600 m 한정, 생물 복제 등급·Despawn 여유 10 m(3.11.9, 3.11.11, DES-082·088). M1-12: 개발 옵션 `-bot`·`-resourcechanges`·`-testcreatures`와 F1 표시(3.7.4), 측정 결과(3.12.4). 위험 R-41~R-45 신설. 패키지 `com.unity.modules.terrainphysics` 추가(D-03). **자연 에셋 도입 일정(사용자 결정 2026-11-10)**: M3에 지역별 자연 프로필(바닥 TerrainLayer·풀/꽃 디테일·자원 모델)과 지역 1 에셋, M6에 지역 1 완성·재측정, M9a/b/c·M10에 지역별 에셋. 원칙은 DES-089 행 참조
 - **v0.12 M1 묶음 3 마무리 — 게임 버전 규칙 (D-26, 3.7.12, NFR-058, DES-037·DES-031·DES-080·DES-112)**: M1-07·M1-01 (5)에 대한 보완 작업으로, M1-10에 들어가기 전에 끝냅니다. 순서: (1) `GameVersion` 값 객체와 `Game.Tests.Domain` 시험 → (2) `SessionRules`·`JoinFacts`의 버전을 문자열로, `JoinRequest.gameVersion`(≤ 64 B)·`ProtocolVersion` 2·`protocolVer` 먼저 읽기 규칙, `HostWorldInfo`·`ClientHandshakeInfo`·`LobbyMetaBuilder`(`kh_build` = `Full`) → 코덱 고정 바이트·세션 시험 갱신 → (3) `BuildInfo.Version`(에디터 `+editor`, 해석 실패 = 설정 오류), 부트 로그 첫 줄, DevLobby 화면 버전 한 줄(`ToDisplayString`) → (4) `BuildCommands`(메타데이터 붙임·`finally` 되돌림·출시 태그 검사·`ReadBuildNumber`/`-buildNumber`/`GAME_BUILD_NUMBER` 폐지)·`ProjectConfigurator`(비어 있을 때만 `0.1.0`, `VersionPrefix` 폐지) → (5) 확인: `unity recompile`, EditMode·PlayMode 시험, 열린 에디터에서 개발 빌드 1회(`unity command build run`) 뒤 `[Build] 게임 버전=0.1.0+dev.…` 로그와 `bundleVersion`이 `0.1.0`으로 돌아왔는지(`git status`에 `ProjectSettings.asset` 변경 없음), 빌드한 플레이어 `-bootsmoke` 로그의 버전 줄, 같은 빌드 폴더 두 프로세스 Tugboat 접속 통과·에디터 재생 ↔ 플레이어 접속 「게임 버전 불일치」 거부. 출시 빌드 확인은 M1-13에서 함께 함(빌드 횟수를 줄임)
 - **v0.13 M1 묶음 3 마무리 — UI uGUI 전환 (D-27, 3.7.10, 3.8.2, DES-091·092·095·122·112·100, FR-129·FR-130·FR-166, NFR-002·004·050·056·057)**: M1-08 UI 결과물의 교체 작업으로, **M1-10에 들어가기 전에 끝냅니다**(작업 수 변화 없음). **범위: 기능·화면 동작은 그대로**(SCR-001 Steam 필요, 개발용 로비·접속 중, HUD 스태미나 호·경고·명단·연결 상태, ESC 메뉴의 친구 초대·세션 나가기·닫기와 안내 문구·「● 게임 진행 중」 배지, 글자 크기·색 값 동일). 새 화면·새 기능은 넣지 않습니다. 순서:
   1. **패키지·자원**: `manifest.json`에 `"com.unity.ugui": "2.0.0"` 추가(D-03) → TMP Essential Resources 가져오기(`Assets/TextMesh Pro/`) → TMP Settings: 기본 글꼴, 「Enable Raycast Target」 끔. 사용자 작업: Pretendard(Regular·SemiBold·Bold) TTF와 OFL 라이선스 파일을 `Assets/_Game/UI/Fonts/`에 넣기(공식 배포처, 출시 전 라이선스 최종 확인) — 받기 전에는 TMP 기본 글꼴로 진행하고 글꼴 검사만 「대기」로 둠.
@@ -3177,4 +3199,9 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-38 | (v0.13 신규) 「오브젝트가 원본」 원칙(D-27)의 부작용: (1) 생성기로 다시 만들 수 없어 프리팹·씬이 잘못 고쳐지면 git 이력으로만 되돌릴 수 있음, (2) 사용자가 에디터에서 고치는 동안 에이전트가 MCP 도구로 같은 씬·프리팹을 고치면 저장하지 않은 변경이 섞이거나 사라짐, (3) 프리팹·씬 YAML 병합 충돌이 늘어 R-28(Smart Merge 미검증)의 영향이 커짐, (4) 씬 인스턴스에 덮어쓴 값이 쌓여 프리팹과 화면이 달라짐 | UI 손상·작업 손실, 병합 실패 | 중간 | (1) 사용자가 승인한 결과물 단위로 자주 커밋(CLAUDE.md 커밋 시점), 생성기의 검사 단계와 `UiPrefabRulesTests`가 빠진 구성 요소를 바로 알림. (2) 에이전트 작업 중 사용자는 에디터를 조작하지 않음(CLAUDE.md), 에이전트는 작업 전 열린 씬의 저장 안 된 변경 여부를 확인하고 바꾼 오브젝트 목록을 보고. (3) 화면마다 프리팹을 나눠 한 파일의 충돌 범위를 줄이고, 씬에는 인스턴스와 참조만 둠. (4) 인스턴스에 추가된 오브젝트·컴포넌트 0건 규칙 검사, 배치는 프리팹 모드에서만 고침 |
 | R-39 | (v0.13 신규) 손목 계기(M2-12)를 uGUI로 렌더 텍스처에 그리려면 HDRP UI 캡처 카메라가 필요함: HDRP 카메라 한 대의 메인 스레드·GPU 비용, Screen Space - Camera 캔버스의 TMP 표시·노출·색 공간 처리, 「필요할 때만 한 번 그리기」 API(`RenderPipeline.SubmitRenderRequest`/`Camera.Render`)의 HDRP 17.3 동작이 **확인 필요** | M2-12 지연, UI 예산(0.8 ms) 초과, 계기 글자 흐림·색 차이 | 중간 | M2-12 첫 작업으로 시작품을 만들어 비용(`Client.UI`)과 표시를 확인. HDRP 설정은 DES-114 한 곳에 둠. 문제가 있으면 3.7.11 대체안(오버레이 직접 그리기 + 원근 없는 기울임)을 사용자에게 화면으로 보여 결정. 사용자는 언제든 일반 HUD로 바꿀 수 있음(FR-171) |
 | R-40 | (v0.13 신규) uGUI 성능 함정: 캔버스 하나 안의 요소가 바뀌면 그 캔버스 전체 메시를 다시 만들고, Layout Group·Content Size Fitter가 매 프레임 레이아웃을 다시 계산하며, 문자열 조립이 GC 할당을 만듦. 인벤토리 격자·채팅·이름표 7개·목록 화면이 늘어나는 M3~M7에서 UI 예산 0.8 ms를 넘을 수 있음 | 1% Low 저하(R-16) | 낮음~중간 | 정적·동적 캔버스 분리, 동적 캔버스에는 Layout Group 금지, 값이 바뀔 때만 갱신, TMP `SetText(형식, 값)`, 상호작용 없는 요소 Raycast Target 끔(3.7.10 (4)·(9)). 측정 구간 `Client.UI`를 M1-12·M6-10 CSV에 기록하고 넘으면 화면별로 캔버스를 더 나눔. 긴 목록은 보이는 행만 재사용하는 방식을 그 화면 작업에서 검토 |
+| R-41 | (v0.14 신규, M1-12) 흐름장 재계산이 에디터에서 4~10 ms로 워커 예산 2.5 ms를 넘음. M1-12 측정 빌드에서 틱 최악 5.57 ms(`AiApply`) | 서버 틱 p99·최악 값(NFR-011) | 중간 | 흐름장 전용 측정 표식을 추가해 빌드에서 따로 재고, 재계산 빈도·반경·격자 범위를 줄이거나 여러 틱으로 나눔(3.12.9 순서) |
+| R-42 | (v0.14 신규) 보행 격자가 월드 중심 600 m 범위만 만들어짐(시험용). 범위 밖 생물은 길 찾기를 못 함 | 실제 월드(3 km)에서 AI 동작 불가·비용 증가 | 확실(M4 전 해결) | M4 전에 월드 전체 격자 + 변경 칸만 갱신으로 확장하고 메모리·생성 시간을 다시 측정 |
+| R-43 | (v0.14 신규) `CreatureSnapshot` 배열이 틱마다 새로 할당되어 GC 약 520 KB/s | GC 스파이크, 1% Low(R-16) | 낮음~중간 | 배열 재사용(풀)·연결별 버퍼. M2~M3 전 개선 |
+| R-44 | (v0.14 신규) 자원 5,000개 일괄 변경 때 순간 FPS 24까지 떨어짐 | 체감 끊김, P8 판정 조건(FR-009) | 중간 | 델타 적용·뷰 갱신을 프레임에 나눠 처리(뷰 갱신 예산), 순간 값을 M6-10에서 재측정 |
+| R-45 | (v0.14 신규) 호스트가 월드를 `CreateHost` 안에서 동기 생성해 시작 때 약 0.6초 멈춤(Full 0.3~0.6초) | 시작 시 화면 멈춤 | 낮음 | 접속 중 화면 표시 뒤 생성하거나 백그라운드 생성(참가자와 같은 경로)으로 바꿈, 생성기 V1에서 시간 재측정 |
 
