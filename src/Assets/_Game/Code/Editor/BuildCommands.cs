@@ -220,7 +220,7 @@ namespace Game.Editor
             commit = head;
             if (TryRunGit(gitRoot, "status --porcelain --untracked-files=no", out string status))
             {
-                dirty = status.Length > 0;
+                dirty = BuildPolicy.IsDirty(status); // [R-46] 글꼴 두 파일은 제외
             }
             else
             {

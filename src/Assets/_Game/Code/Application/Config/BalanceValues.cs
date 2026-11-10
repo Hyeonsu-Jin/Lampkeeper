@@ -36,6 +36,14 @@ namespace Game.Application.Config
         public float MaxPoseDeltaSeconds = 0.5f;
         /// <summary>수직 이동(낙하·점프) 최대 속도(m/s)</summary>
         public float MaxVerticalSpeedMps = 40f;
+        /// <summary>호스트가 받는 자세 빈도 상한(Hz). 송신 주기(Network.AvatarSendHz)의 1.5배 [IMP-001, R-47, SDD 3.11.12]</summary>
+        public float MaxPoseHz = 45f;
+        /// <summary>자세 빈도 버킷의 순간 허용 개수(잠깐 끊겼다 몰려 들어오는 자세 흡수) [R-47]</summary>
+        public int PoseBurstCapacity = 5;
+        /// <summary>첫 자세가 스폰 지점에서 벗어나도 되는 수평 반경(m) [REV-003, R-47]</summary>
+        public float SpawnRadiusMeters = 15f;
+        /// <summary>첫 자세가 스폰 지점에서 벗어나도 되는 높이 차(m) [R-47]</summary>
+        public float SpawnHeightToleranceMeters = 15f;
 
         /// <summary>값을 복사한 새 객체.</summary>
         public MovementSettings Clone() => (MovementSettings)MemberwiseClone();

@@ -38,6 +38,25 @@ namespace Game.Tests.Infrastructure
             Assert.DoesNotThrow(() => BuildPolicy.CheckReleaseAllowed(true, true, "nogit"));
         }
 
+        private static readonly string NL = ((char)10).ToString();
+        private const string Bold = "\"src/Assets/_Game/UI/Fonts/Pretendard-Bold Dynamic SDF.asset\"";
+        private const string Regular = "\"src/Assets/_Game/UI/Fonts/Pretendard-Regular Dynamic SDF.asset\"";
+
+        [Test]
+        public void IsDirty_OnlyTheTwoFonts_IsNotDirty()
+        {
+            // [R-46] 호출자가 앞뒤 공백을 자른 출력(첫 줄 앞 공백 없음)도 같게 읽는다.
+            Assert.IsFalse(BuildPolicy.IsDirty("M " + Bold + NL + " M " + Regular));
+            Assert.IsFalse(BuildPolicy.IsDirty(string.Empty));
+        }
+
+        [Test]
+        public void IsDirty_FontsPlusOtherFile_IsDirty()
+        {
+            Assert.IsTrue(BuildPolicy.IsDirty("M " + Bold + NL + " M " + Regular + NL + " M src/Assets/_Game/Code/Editor/BuildPolicy.cs"));
+            Assert.IsTrue(BuildPolicy.IsDirty(" M src/Assets/_Game/UI/Fonts/Other Dynamic SDF.asset"), "목록에 없는 글꼴은 허용하지 않는다");
+        }
+
         [TestCase("KkeojinHaneul_BurstDebugInformation_DoNotShip", true)]
         [TestCase("KkeojinHaneul_BackUpThisFolder_ButDontShipItWithYourGame", true)]
         [TestCase("KkeojinHaneul_Data", false)]

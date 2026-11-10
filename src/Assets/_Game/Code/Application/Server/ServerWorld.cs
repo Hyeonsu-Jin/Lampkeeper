@@ -64,7 +64,8 @@ namespace Game.Application.Server
                 MaxCommandsPerTick = tuning.MaxCommandsPerTick,
                 MaxQueuedCommands = tuning.MaxQueuedCommands,
                 Stamina = new StaminaParams(s.Max, s.RunCostPerSecond, s.RegenDelaySeconds, s.RegenPerSecond),
-                Move = new AvatarMoveSettings(m.WalkSpeedMps, m.RunSpeedMps, m.MoveTolerance, m.MoveSlackMeters, m.MoveStaminaGraceSeconds, m.MaxPoseDeltaSeconds, m.MaxVerticalSpeedMps),
+                Move = new AvatarMoveSettings(m.WalkSpeedMps, m.RunSpeedMps, m.MoveTolerance, m.MoveSlackMeters, m.MoveStaminaGraceSeconds, m.MaxPoseDeltaSeconds, m.MaxVerticalSpeedMps,
+                    m.MaxPoseHz, m.SpawnRadiusMeters, m.SpawnHeightToleranceMeters, m.PoseBurstCapacity),
             };
         }
 
@@ -93,11 +94,12 @@ namespace Game.Application.Server
         public float SpawnHeightToleranceMeters { get; }
 
         /// <summary>자세 빈도 버킷의 순간 허용 개수(잠깐 끊겼다 몰려 들어오는 자세를 흡수).</summary>
-        public const int PoseBurstCapacity = 5;
+        public int PoseBurstCapacity { get; }
 
         public AvatarMoveSettings(float walkSpeed, float runSpeed, float tolerance, float slackMeters, float staminaGraceSeconds, float maxDeltaSeconds, float maxVerticalSpeed,
-            float maxPoseHz = 45f, float spawnRadiusMeters = 15f, float spawnHeightToleranceMeters = 15f)
+            float maxPoseHz = 45f, float spawnRadiusMeters = 15f, float spawnHeightToleranceMeters = 15f, int poseBurstCapacity = 5)
         {
+            PoseBurstCapacity = poseBurstCapacity;
             MaxPoseHz = maxPoseHz;
             SpawnRadiusMeters = spawnRadiusMeters;
             SpawnHeightToleranceMeters = spawnHeightToleranceMeters;
@@ -262,7 +264,7 @@ namespace Game.Application.Server
         /// <summary>자세 수신 토큰 버킷에서 하나를 꺼낸다. 없으면 false.</summary>
         private bool TakePoseToken(AvatarMoveState state, double hostSeconds)
         {
-            double capacity = AvatarMoveSettings.PoseBurstCapacity;
+            double capacity = _settings.PoseBurstCapacity;
             if (!state.PoseBucketStarted)
             {
                 state.PoseBucketStarted = true;

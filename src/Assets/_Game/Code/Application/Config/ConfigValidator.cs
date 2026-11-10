@@ -83,6 +83,19 @@ namespace Game.Application.Config
             Require(issues, network.SnapshotBytesPerSecond > 0, "Network.SnapshotBytesPerSecond", "0보다 커야 합니다.");
         }
 
+        /// <summary>
+        /// 균형 값과 네트워크 튜닝 사이의 관계를 검사한다. [R-47] 자세 수신 상한이 송신 주기보다 낮으면 정상 플레이어가 되돌려진다.
+        /// 둘 중 하나가 null이거나 형식 오류가 있으면 각자의 검사가 이미 알리므로 건너뛴다.
+        /// </summary>
+        public static void ValidateMovementAgainstNetwork(BalanceValues balance, NetworkTuning network, List<ConfigIssue> issues)
+        {
+            if (balance == null || balance.Movement == null || network == null)
+            {
+                return;
+            }
+            Require(issues, balance.Movement.MaxPoseHz >= network.AvatarSendHz, "Balance.Movement.MaxPoseHz", "Network.AvatarSendHz 이상이어야 합니다.");
+        }
+
         // ---------------------------------------------------------
         // 내부: 필드별 규칙
         // ---------------------------------------------------------
@@ -97,6 +110,11 @@ namespace Game.Application.Config
             Require(issues, b.Movement.MoveStaminaGraceSeconds >= 0f, "Balance.Movement.MoveStaminaGraceSeconds", "0 이상이어야 합니다.");
             Require(issues, b.Movement.MaxPoseDeltaSeconds > 0f, "Balance.Movement.MaxPoseDeltaSeconds", "0보다 커야 합니다.");
             Require(issues, b.Movement.MaxVerticalSpeedMps > 0f, "Balance.Movement.MaxVerticalSpeedMps", "0보다 커야 합니다.");
+            // [R-47] 호스트 이동 검사 상수
+            Require(issues, b.Movement.MaxPoseHz > 0f, "Balance.Movement.MaxPoseHz", "0보다 커야 합니다.");
+            Require(issues, b.Movement.PoseBurstCapacity > 0, "Balance.Movement.PoseBurstCapacity", "0보다 커야 합니다.");
+            Require(issues, b.Movement.SpawnRadiusMeters > 0f, "Balance.Movement.SpawnRadiusMeters", "0보다 커야 합니다.");
+            Require(issues, b.Movement.SpawnHeightToleranceMeters > 0f, "Balance.Movement.SpawnHeightToleranceMeters", "0보다 커야 합니다.");
 
             // [FR-024, FR-025] 스태미나
             Require(issues, b.Stamina.Max > 0f, "Balance.Stamina.Max", "0보다 커야 합니다.");

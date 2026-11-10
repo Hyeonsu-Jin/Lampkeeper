@@ -55,6 +55,7 @@ namespace Game.Application.Config
             var issues = new List<ConfigIssue>();
             ConfigValidator.ValidateBalance(balance, issues);
             ConfigValidator.ValidateNetwork(network, issues);
+            ConfigValidator.ValidateMovementAgainstNetwork(balance, network, issues);
             ContentCatalog catalog = ContentCatalogBuilder.Build(definitions, issues);
 
             if (issues.Exists(i => i.Severity == ConfigIssueSeverity.Error))

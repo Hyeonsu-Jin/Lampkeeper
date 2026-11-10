@@ -30,6 +30,50 @@ namespace Game.Editor
         public const string SymbolsFolderName = "Symbols";
 
         /// <summary>
+        /// dirty 판정에서 제외하는 파일(저장소 루트 기준 경로, 그대로 비교하며 와일드카드는 쓰지 않는다).
+        /// [R-46, 사용자 결정 2026-11-10] 두 글꼴 애셋은 m_ClearDynamicDataOnBuild=1이라 빌드할 때 동적 글자판이 지워져
+        /// 에디터가 파일을 바꾼 채로 남는다. 내용은 빌드 결과에 영향이 없으므로 이 두 파일만 허용한다.
+        /// </summary>
+        public static readonly string[] DirtyIgnoredPaths =
+        {
+            "src/Assets/_Game/UI/Fonts/Pretendard-Bold Dynamic SDF.asset",
+            "src/Assets/_Game/UI/Fonts/Pretendard-Regular Dynamic SDF.asset",
+        };
+
+        /// <summary>
+        /// `git status --porcelain` 출력에서 제외 목록 밖의 변경이 하나라도 있으면 true. 이름 바꾸기(`a -> b`)는 항상 dirty다.
+        /// </summary>
+        public static bool IsDirty(string porcelainStatus)
+        {
+            if (string.IsNullOrEmpty(porcelainStatus))
+            {
+                return false;
+            }
+            foreach (string raw in porcelainStatus.Split((char)10))
+            {
+                string line = raw.TrimEnd((char)13);
+                // 호출자가 출력 앞뒤 공백을 잘라 첫 줄의 상태 칸(" M")이 줄어들 수 있으므로, 앞 공백을 뗀 뒤 첫 공백 다음을 경로로 본다.
+                line = line.TrimStart();
+                int space = line.IndexOf(' ');
+                if (space < 0)
+                {
+                    continue;
+                }
+                string path = line.Substring(space + 1).Trim();
+                // 공백이 든 경로는 git이 따옴표로 감싼다.
+                if (path.Length >= 2 && path[0] == '"' && path[path.Length - 1] == '"')
+                {
+                    path = path.Substring(1, path.Length - 2);
+                }
+                if (Array.IndexOf(DirtyIgnoredPaths, path) < 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
         /// 출시 빌드는 깨끗한 커밋에서만 만든다. 개발 빌드는 검사하지 않는다.
         /// </summary>
         /// <param name="development">개발 빌드 여부</param>
