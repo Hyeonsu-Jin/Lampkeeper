@@ -248,6 +248,9 @@ namespace Game.Application.Replication
         /// </summary>
         public ReplicatedTable<ResourceState> Resources { get; }
 
+        /// <summary>호스트가 관심 범위 안이라고 알려 준 생물 사본(M1-11 2차). 화면(CreatureViews)이 읽는다.</summary>
+        public ClientCreatureStore Creatures { get; } = new ClientCreatureStore();
+
         /// <summary>이 PC에서 만든 월드. 접속 절차에서 월드 생성이 끝나면 채워지고, 세션을 떠나면 비워진다.</summary>
         public LocalWorld Local { get; private set; }
 
@@ -336,6 +339,7 @@ namespace Game.Application.Replication
                 table.Clear();
             }
             _avatars.Clear();
+            Creatures.Clear();
             Local = null;
             SnapshotChunksReceived = 0;
             SnapshotChunksExpected = 0;

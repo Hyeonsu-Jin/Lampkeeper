@@ -54,6 +54,9 @@ namespace Game.Bootstrap.Runtime
 
         /// <summary>개발 빌드의 -resourcechanges N: 호스트가 월드를 만든 직후 자원 N개를 바뀐 상태로 만든다(0이면 하지 않음, NFR-016 시험 조건).</summary>
         public int DevResourceChanges;
+
+        /// <summary>개발 빌드의 -testcreatures N: 호스트가 월드를 만든 직후 시험용 생물 N체를 만든다(0이면 만들지 않음, M1-11).</summary>
+        public int DevTestCreatures;
     }
 
     /// <summary>개발용 화면 흐름.</summary>
@@ -75,6 +78,7 @@ namespace Game.Bootstrap.Runtime
         private RemoteAvatarViews _remoteViews;
         private TerrainViewBuilder _terrain;
         private ResourceViewStreamer _resourceViews;
+        private CreatureViews _creatureViews;
         private ResourceHitInput _hitInput;
         private bool _hostStarting;
         private bool _inGame;
@@ -220,6 +224,7 @@ namespace Game.Bootstrap.Runtime
                 Access = SessionAccess.FriendsOnly, // [M1] 참가 조건 「친구 전용」 고정
                 GeneratorVersion = 0,
             };
+            _deps.Runtime.DevTestCreatures = _deps.DevTestCreatures;
             _runtime = SessionRuntime.CreateHost(_deps.Runtime, info);
             WireSession(_runtime);
             _runtime.HostOpened += OnHostOpened;
@@ -245,6 +250,12 @@ namespace Game.Bootstrap.Runtime
             }
             return ResourceChangeTool.ApplyChanges(_runtime.World.State.Resources, _runtime.World.State.Local, count, DevResourceChangeSeed);
         }
+
+        /// <summary>
+        /// [개발 도구] 호스트에서만: 시험용 생물 count체를 만든다. 참가자에게는 관심 범위 규칙으로 복제된다.
+        /// </summary>
+        /// <returns>만든 수. 호스트가 아니면 -1</returns>
+        public int DevSpawnTestCreatures(int count) => _runtime != null ? _runtime.SpawnTestCreatures(count) : -1;
 
         private void OnHostOpened(LobbyError error)
         {
@@ -446,6 +457,15 @@ namespace Game.Bootstrap.Runtime
             SetUpWorldView(balance);
             _controller.DevAutoWalk = _deps.AutoWalk;
             _remoteViews?.Initialize(_runtime.Mirror, _runtime.Session.LocalPlayer);
+            _creatureViews = UnityEngine.Object.FindFirstObjectByType<CreatureViews>();
+            if (_creatureViews != null)
+            {
+                _creatureViews.Initialize(_runtime.Mirror.Creatures);
+            }
+            else
+            {
+                Debug.LogWarning(LogTag + "World 씬에 CreatureViews가 없어 생물이 보이지 않습니다.");
+            }
 
             if (_deps.MenuCamera != null)
             {
@@ -514,6 +534,7 @@ namespace Game.Bootstrap.Runtime
             _resourceViews = null;
             _controller = null;
             _remoteViews = null;
+            _creatureViews = null;
         }
 
         /// <summary>UI 상태에 맞게 로컬 입력 경로와 커서를 바꾼다. 서버·복제·시각은 건드리지 않는다. [I-07]</summary>

@@ -34,6 +34,9 @@ namespace Game.Bootstrap.DevTools
         /// <summary>호스트가 월드를 만든 직후 자원 N개를 바뀐 상태로 만드는 옵션(개발 빌드 전용): -resourcechanges N</summary>
         public const string ResourceChangesFlag = "-resourcechanges";
 
+        /// <summary>호스트가 월드를 만든 직후 시험용 생물 N체를 만드는 옵션(개발 빌드 전용): -testcreatures N (M1-11 부하 시험)</summary>
+        public const string TestCreaturesFlag = "-testcreatures";
+
         /// <summary>종료 코드: 메인 메뉴로 진행 가능.</summary>
         public const int ExitContinue = 0;
         /// <summary>종료 코드: 설정(ConfigLoader) 오류.</summary>

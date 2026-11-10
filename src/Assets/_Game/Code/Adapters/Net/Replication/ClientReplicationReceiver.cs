@@ -25,11 +25,14 @@ namespace Game.Adapters.Net.Replication
         private readonly INetClient _client;
         private readonly ClientWorldMirror _mirror;
         private readonly ILog _log;
+        private readonly IClock _clock;
         private readonly List<TableDelta> _held = new List<TableDelta>();
         private bool _snapshotDone = true; // 참가 절차 밖(JoinAccepted를 받기 전)에는 받은 대로 적용
 
-        public ClientReplicationReceiver(INetClient client, ClientWorldMirror mirror, ILog log)
+        /// <param name="clock">생물 보간에 쓰는 받은 시각. null이면 시각이 0으로 고정되므로 시험에서만 생략한다</param>
+        public ClientReplicationReceiver(INetClient client, ClientWorldMirror mirror, ILog log, IClock clock = null)
         {
+            _clock = clock;
             _client = client ?? throw new ArgumentNullException(nameof(client));
             _mirror = mirror ?? throw new ArgumentNullException(nameof(mirror));
             _log = log ?? NullLog.Instance;
@@ -71,6 +74,19 @@ namespace Game.Adapters.Net.Replication
                         _held.Clear();
                         break;
 
+                    case CreatureSpawn spawn:
+                        // [FR-008] 관심 범위에 들어온 생물. 첫 스냅샷은 틱이 더 커서 그대로 적용된다.
+                        _mirror.Creatures.ApplySpawn(spawn, 0u, Now());
+                        break;
+
+                    case CreatureDespawn despawn:
+                        _mirror.Creatures.ApplyDespawn(despawn.Id);
+                        break;
+
+                    case CreatureSnapshot creatures:
+                        _mirror.Creatures.ApplySnapshot(creatures, Now());
+                        break;
+
                     case TableDelta delta:
                         if (_snapshotDone)
                         {
@@ -92,6 +108,8 @@ namespace Game.Adapters.Net.Replication
                 _log.Error("replication", "복제 수신 중 예외: " + ex);
             }
         }
+
+        private double Now() => _clock != null ? _clock.RealtimeSeconds : 0d;
 
         private void ApplyDelta(in TableDelta delta)
         {

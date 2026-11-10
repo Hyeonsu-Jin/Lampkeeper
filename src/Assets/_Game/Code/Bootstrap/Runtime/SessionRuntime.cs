@@ -16,6 +16,7 @@ using Game.Adapters.Net.Gateway;
 using Game.Adapters.Net.Join;
 using Game.Adapters.Net.Replication;
 using Game.Adapters.Net.Transport;
+using Game.Application.Ai;
 using Game.Application.Boot;
 using Game.Application.Commands;
 using Game.Application.Config;
@@ -28,6 +29,7 @@ using Game.Application.Session;
 using Game.Application.WorldSync;
 using Game.Domain.Common;
 using Game.Domain.Session;
+using Game.Infra.AiJobs;
 using Game.WorldGen.Common;
 
 namespace Game.Bootstrap.Runtime
@@ -51,6 +53,9 @@ namespace Game.Bootstrap.Runtime
 
         /// <summary>월드 캐시. 같은 PC의 호스트 서버와 호스트 클라이언트가 월드를 한 번만 만들게 한다. null이면 세션이 새로 만든다.</summary>
         public LocalWorldProvider Worlds;
+
+        /// <summary>개발 빌드의 -testcreatures N: 호스트가 월드를 만든 직후 시험용 생물 N체를 만든다(0이면 만들지 않음). M1-11 부하 시험.</summary>
+        public int DevTestCreatures;
     }
 
     /// <summary>세션 실행 구성. 세션마다 새로 만들고 <see cref="Dispose"/>로 정리한다.</summary>
@@ -67,6 +72,8 @@ namespace Game.Bootstrap.Runtime
         private FishNetServer _server;
         private ServerCommandGateway _gateway;
         private AvatarSpawner _spawner;
+        private AiJobsBackend _aiBackend;
+        private CreatureReplicator _creatureReplicator;
         private bool _disposed;
         private bool _pendingHostConnect;
 
@@ -89,7 +96,7 @@ namespace Game.Bootstrap.Runtime
                 SupportedGeneratorVersions = new ushort[] { 0 },
             };
             Session = new ClientSession(ClientTransport, Mirror, Pose, info, deps.Clock, deps.Log, deps.Config.Network.JoinTimeoutSeconds);
-            Receiver = new ClientReplicationReceiver(ClientTransport, Mirror, deps.Log);
+            Receiver = new ClientReplicationReceiver(ClientTransport, Mirror, deps.Log, deps.Clock);
 
             // [FR-009, FR-169] 허가를 받으면 시드로 월드를 로컬에서 만들고(백그라운드), 요약값이 같으면 사본에 연결한다.
             // 호스트 PC에서는 호스트 서버가 이미 만든 월드를 캐시에서 바로 받는다.
@@ -185,13 +192,31 @@ namespace Game.Bootstrap.Runtime
             {
                 HostSession?.Close();
                 _gateway?.Dispose();
+                _creatureReplicator?.Dispose();
                 _server?.Stop();
+                _aiBackend?.Dispose(); // 서버 틱이 멈춘 뒤에 잡 메모리를 해제한다
             }
             if (_deps.Network.ClientManager.Started)
             {
                 _deps.Network.ClientManager.StopConnection();
             }
             AvatarServices.Current = null;
+        }
+
+        /// <summary>시험용 생물 배치 시드(같은 시드면 늘 같은 위치).</summary>
+        private const ulong TestCreatureSeed = 11UL;
+
+        /// <summary>
+        /// [개발 도구] 호스트에서만: 시험용 생물 count체를 월드 중심 둘레에 만든다. 복제는 관심 범위 규칙에 따라 자동으로 간다.
+        /// </summary>
+        /// <returns>만든 수. 호스트가 아니면 -1</returns>
+        public int SpawnTestCreatures(int count)
+        {
+            if (!_isHost || World == null || World.Ai == null)
+            {
+                return -1;
+            }
+            return World.SpawnTestCreatures(count, TestCreatureSeed);
         }
 
         // ---------- 내부 ----------
@@ -206,6 +231,10 @@ namespace Game.Bootstrap.Runtime
             dispatcher.Register<PingCommand>(CommandKind.Ping, new PingCommandHandler());
             HitResourceCommandHandler.Install(dispatcher, guard, HarvestSettings.FromConfig(config.Balance));
             World = new ServerWorld(settings, dispatcher, _deps.Clock, _deps.Perf, _deps.Log);
+
+            // [DES-062, DES-105] 생물 AI. 월드를 붙이기 전에 연결해 둔다(시험 생물이 보행 격자를 만들 때 월드를 쓴다).
+            _aiBackend = new AiJobsBackend(new AiNavSettings());
+            World.AttachAi(new AiScheduler(new AiSettings(), _aiBackend, new CreatureRegistry()));
 
             // [FR-009, FR-169] 호스트도 시드로 월드를 로컬에서 만들어 요약값을 정한다(참가자에게 기대 요약값으로 알려 준다).
             // 시드 글자에서 시드 값을 정한다. 몇 초 걸리므로 호스트 시작 전에 끝낸다(로딩 표시는 화면 쪽 몫).
@@ -232,6 +261,16 @@ namespace Game.Bootstrap.Runtime
                 config.Network.JoinTimeoutSeconds, id => _deps.Identity.ResolveName(id), _deps.Identity.LocalPlayerId);
             join.WorldGenerationAllowanceSeconds = WorldGenerationAllowanceSeconds;
             _gateway = new ServerCommandGateway(_server, join, World, _deps.Log);
+
+            // [FR-008, DES-082] 참가자마다 관심 범위 안의 생물을 보낸다(스냅샷 동기화를 마친 연결만).
+            _creatureReplicator = new CreatureReplicator(_server, World, config.Network, join.TryGetConnection, publisher.IsReady, _deps.Log);
+
+            // [M1-11 시험] 개발 옵션: 월드를 만든 직후 시험용 생물을 만든다.
+            if (_deps.IsDevelopmentBuild && _deps.DevTestCreatures > 0)
+            {
+                int made = SpawnTestCreatures(_deps.DevTestCreatures);
+                _deps.Log.Info(LogCategory, "-testcreatures: 시험용 생물 " + made + "체를 만들었습니다.");
+            }
 
             // 서버 틱(30 Hz)은 FishNet TimeManager가 알려 준다.
             _server.Ticked += World.Tick;

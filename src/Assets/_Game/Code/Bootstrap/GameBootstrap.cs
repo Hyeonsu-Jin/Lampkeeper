@@ -191,6 +191,26 @@ namespace Game.Bootstrap
             return count;
         }
 
+        /// <summary>-testcreatures N 값을 읽는다. 없거나 양의 정수가 아니면 0(만들지 않음), 값 오류는 경고 로그로 남긴다.</summary>
+        private static int ParseTestCreatures()
+        {
+            IReadOnlyList<string> args = DevCommandLine.GetArgs();
+            if (!DevCommandLine.TryGetValue(args, DevCommandLine.TestCreaturesFlag, out string text))
+            {
+                return 0;
+            }
+            if (!int.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out int count) || count <= 0)
+            {
+                Debug.LogWarning(LogTag + "-testcreatures 값이 양의 정수가 아닙니다: " + text);
+                return 0;
+            }
+            return count;
+        }
+
+        /// <summary>[개발 도구] 에디터 메뉴가 부른다: 호스트로 게임 중일 때 시험용 생물 count체를 만든다.</summary>
+        /// <returns>만든 수. 개발 빌드가 아니거나 호스트가 아니면 -1</returns>
+        public int DevSpawnTestCreatures(int count) => BuildFlags.IsDevelopment && _flow != null ? _flow.DevSpawnTestCreatures(count) : -1;
+
         /// <summary>
         /// [개발 도구] 에디터 메뉴가 부른다: 호스트로 게임 중일 때 자원 count개를 바뀐 상태로 만든다.
         /// </summary>
@@ -363,6 +383,7 @@ namespace Game.Bootstrap
                 AutoWalk = BuildFlags.IsDevelopment && DevCommandLine.HasFlag(DevCommandLine.GetArgs(), DevCommandLine.AutoWalkFlag),
                 StatusLogSeconds = BuildFlags.IsDevelopment ? DevStatusLogSeconds : 0f,
                 DevResourceChanges = BuildFlags.IsDevelopment ? ParseResourceChanges() : 0,
+                DevTestCreatures = BuildFlags.IsDevelopment ? ParseTestCreatures() : 0,
             };
             _flow = new GameFlow(deps);
             _flow.Start();
