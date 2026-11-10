@@ -513,7 +513,8 @@ namespace Game.Application.Server
                     int players = State.CopyPlayerViews(_aiPlayers);
                     Ai.Decide(tick, deltaSeconds, _aiPlayers, players);
                     _perf.End(PerfMarkers.ServerAiDecide);
-                    _perf.Count("ai.creatures", Ai.Registry.Count);
+                    // [NFR-011] 활동 생물 수를 CSV 지표 이름으로 알린다(이전에는 이름이 달라 기록되지 않았음)
+                    _perf.Count(PerfCounters.ActiveCreatures, Ai.Registry.Count);
                 }
 
                 // 월드 시스템(시각, 상태 값, 스폰 등)은 M2 이후에 이 자리에서 돈다.
