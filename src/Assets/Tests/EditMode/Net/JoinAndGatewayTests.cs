@@ -84,6 +84,17 @@ namespace Game.Tests.Net
         }
 
         [Test]
+        public void ReleaseAndDevBuilds_WithSameCoreVersion_AreRejected()
+        {
+            // [NFR-058, DES-112] 핵심 번호가 같아도 채널(rel/dev)·빌드 시각이 다르면 다른 빌드이므로 참가를 거부한다.
+            var rig = new Rig();
+            rig.Server.SimulateConnect(1, "x");
+            rig.Server.SimulateReceive(1, Rig.Request(5, build: "0.1.0+rel.20261110090000.9f8e7d6"));
+            Assert.AreEqual(JoinRejectReason.VersionMismatch, ((JoinRejected)rig.Server.To(1).Single()).Reason);
+            Assert.AreEqual(0, rig.World.State.PlayerCount);
+        }
+
+        [Test]
         public void Steam_UsesRemoteId_NotTheIdInTheRequest()
         {
             // [D-14] 요청에 적은 devPlayerId(남의 ID를 가장)는 Steam 전송에서 무시하고 전송이 알려 준 원격 ID를 쓴다.
