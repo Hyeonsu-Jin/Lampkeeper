@@ -120,6 +120,7 @@
 | 2026-11-10 | M1 묶음 4는 작업 하나씩 진행, M1-10부터 developer에게 단독으로 맡김 | 사용자 결정 (토큰 절약) |
 | 2026-11-10 | M1-10 1차 결과(developer, Unity MCP 사용, focus 1회): Domain/Gathering(ResourceState 16비트·HarvestRules), Application/Gathering(타격 명령 본문 3 B·호스트 처리기), Application/WorldSync(LocalWorld·요약값, ResourceChangeTool 「5,000개 변경」), ServerWorld 자원 표 복제, 참가자 백그라운드 생성·JoinComplete 전 델타 보관. 관찰: Full 월드 생성+요약값 605 ms, 5,000개 변경 스냅샷 20,008 B, 타격 델타 8 B, 루프백 중도 참가 313 ms(정식 측정은 M1-12). **SDD 반영 대기**(묶음 끝): 델타는 준비된 모든 연결에 전송, 거리 검증은 수평만(지형 붙으면 재검토), 타격 빈도 상수 4회/초, 거부 사유 기존 코드 재사용, 폴더 Gathering·WorldSync(3.8), 허가 뒤 생성 대기 +30초. 총괄 재확인: 컴파일 0, EditMode 577/577, PlayMode 23/23, Console 오류는 FishNet 시험 소음(SpawnablePrefabs is null)뿐, .meta 누락 0 | developer 보고 + 총괄 검증 |
 | 2026-11-10 | M1-10 2차 결과(developer, Unity MCP 사용, focus 2회): Application/WorldSync(ResourceCellGrid 32 m 칸, ResourceVisualRules), Adapters/Presentation/World(TerrainViewBuilder Full 36타일·충돌체·임시 단색, ResourceViewStreamer 60 m GameObject 풀 + 350 m RenderMeshInstanced·임시 도형·쓰러짐 회전, ResourceHitInput 공격 0.3초 간격), Editor 메뉴 Game/Dev/Resources/Apply 5000 Changes, 개발 옵션 `-resourcechanges N`, 문구 키 lobby.status.generating, 인스턴싱 재질 4개, World 씬에 TerrainView·ResourceViews 추가·Ground 삭제(MCP·에디터 API). **SDD 반영 대기**(묶음 끝): 패키지 com.unity.modules.terrainphysics 추가(D-03), 스폰 = 월드 중앙 + 지면 높이 0.1 m, 쓰러진·부서진 자원은 충돌체 끔, 물·스플랫·디테일·낙관적 표현·CommandResult 처리는 이후. 미측정: Full 규모 표시 개수·FPS·드로우콜·지형 생성 시간. 총괄 재확인: 컴파일 0, EditMode 584/584, PlayMode 25/25, 새 Console 오류 0(FishNet 시험 소음만), .meta 누락 0, 씬 변경은 TerrainView·ResourceViews 추가와 Ground 삭제뿐 | developer 보고 + 총괄 검증 |
+| 2026-11-10 | **결함(사용자 수동 시험): 플레이어가 앞으로 가도 떨림만 있고 움직이지 않음** → debugger 원인: 이동 검사(`AvatarMoveValidator`)와 핑 좌표 검사가 월드를 원점 중심 ±1536 m로 봤으나 실제 월드 좌표는 0~3072 m라, 월드 중앙(1536, 1536) 스폰 뒤 이동이 「월드 밖」으로 거부·되돌림(파일 로그 move_rejected 237회). 사용자 재시험: 이동 정상(결함 해소 확인). 수정: `ProtocolConstants.IsInsideWorld`(0~3072 + 가장자리 여유 16 m)로 두 검사 교체, 회귀 시험 1개. 총괄 재확인: 컴파일 0, EditMode 585/585, PlayMode 25/25. **M1-11에 넘김**: `Quantize.PositionToU16`·`CreatureState`도 ±1536 기준이라 생물 복제에서 같은 문제. **SDD 반영 대기**: 3.11.9·3.11.12 월드 좌표 범위 0~3072. 남은 의심: 「오디오 리스너 2개」 로그 반복(World 카메라와 메뉴 카메라 동시 활성 추정, 미조사) | 사용자 시험 + debugger |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -190,6 +191,7 @@
 | 호스트 시작 때 월드 생성이 메인 스레드를 약 0.6초 막음(이 PC), 느린 PC는 더 김 | developer (M1-10 1차) | 시작 시 잠깐 멈춤 | M1-10 2차에서 로딩 표시, M1-12에서 측정 |
 | 참가자 월드 생성 작업은 취소할 수 없음(도중에 나가면 결과만 버림) | developer (M1-10 1차) | 나간 뒤에도 잠시 CPU 사용 | 낮음, M2 세션 관리 때 재검토 |
 | 지형 36타일 동기 생성 시간 Full 규모 미확인, 월드 중앙 스폰 지점이 물·급경사일 수 있음 | developer (M1-10 2차) | 시작 시 멈춤, 스폰 불편 | 사용자 수동 시험으로 확인, 길면 여러 프레임 분할 |
+| 생물 위치 압축(`Quantize.PositionToU16`, `CreatureState`)이 원점 중심 ±1536 m 기준이라 0~3072 월드에서 절반이 잘림 | debugger (M1-10 결함 수정) | M1-11 생물 위치 오류 | M1-11에서 developer가 함께 수정 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -207,6 +209,7 @@
 | 1 (Do M1 묶음 3 마무리: uGUI 전환) | 179 | 58 | EditMode 555(1 건너뜀) + PlayMode 22 | 100% (576/576, 건너뜀 제외) | 1 (PlayMode 대체 글꼴 죽은 참조, 수정됨) | - |
 | 1 (Do M1-10 1차) | 179 | 58 | EditMode 577 + PlayMode 23 | 100% (600/600) | 0 | - |
 | 1 (Do M1-10 2차) | 179 | 58 | EditMode 584 + PlayMode 25 | 100% (609/609) | 0 | - |
+| 1 (Do M1-10 결함 수정: 월드 좌표 범위) | 179 | 58 | EditMode 585 + PlayMode 25 | 100% (610/610) | 1 (이동 거부로 플레이어 멈춤, 수정됨) | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
