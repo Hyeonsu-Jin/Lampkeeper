@@ -69,7 +69,7 @@ namespace Game.Application.Protocol
         /// <summary>생물 스냅샷 한 번에 담는 마리 수 상한.</summary>
         public const int MaxCreaturesPerSnapshot = 256;
 
-        /// <summary>위치 양자화 범위의 절반(m). 월드는 ±이 값 안. 3072 m / 65536 단계 = 약 4.7 cm. [3.11.9]</summary>
+        /// <summary>월드 한 변의 절반(m). 월드는 0~2배 값(3072 m). 위치 압축은 여유 16 m를 더해 -16~3088 m를 65536 단계로 나눈다. [3.11.9]</summary>
         public const float PositionHalfRangeMeters = 1536f;
 
         /// <summary>월드 좌표 검사 여유(m). 가장자리에 붙어 선 플레이어를 거부하지 않게 한다.</summary>
@@ -102,6 +102,11 @@ namespace Game.Application.Protocol
         private const float Mm = 1000f;
         private const float U16Max = 65535f;
 
+        // 월드 좌표는 0~3072 m이다. 가장자리 여유(IsInsideWorld와 같은 16 m)까지 담도록 -16~3088 m를 65536 단계로 나눈다(약 4.7 cm).
+        // 높이(Y)도 같은 범위를 쓴다(지형 높이는 수백 m 이내).
+        private const float MinMeters = -ProtocolConstants.WorldEdgeMarginMeters;
+        private const float SpanMeters = 2f * ProtocolConstants.PositionHalfRangeMeters + 2f * ProtocolConstants.WorldEdgeMarginMeters;
+
         /// <summary>미터 → 밀리미터(정수). 범위를 넘으면 자른다.</summary>
         public static int MetersToMillimeters(float meters)
         {
@@ -118,7 +123,7 @@ namespace Game.Application.Protocol
         /// <summary>월드 좌표(m) → 0~65535 단계. 범위 밖은 자른다. [3.11.9]</summary>
         public static ushort PositionToU16(float meters)
         {
-            float t = (meters + ProtocolConstants.PositionHalfRangeMeters) / (2f * ProtocolConstants.PositionHalfRangeMeters);
+            float t = (meters - MinMeters) / SpanMeters;
             if (float.IsNaN(t))
             {
                 t = 0f;
@@ -126,8 +131,7 @@ namespace Game.Application.Protocol
             return (ushort)Math.Round(Math.Max(0f, Math.Min(1f, t)) * U16Max);
         }
 
-        public static float U16ToPosition(ushort value) =>
-            value / U16Max * 2f * ProtocolConstants.PositionHalfRangeMeters - ProtocolConstants.PositionHalfRangeMeters;
+        public static float U16ToPosition(ushort value) => value / U16Max * SpanMeters + MinMeters;
 
         /// <summary>각도(도, 어떤 값이든) → 0~65535 단계(0~360도).</summary>
         public static ushort AngleToU16(float degrees)
