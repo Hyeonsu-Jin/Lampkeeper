@@ -18,6 +18,7 @@ lobby.invite	친구 초대
 lobby.leave	나가기
 lobby.status.ready	준비됨
 lobby.status.opening	방을 여는 중…
+lobby.status.generating	월드를 만드는 중
 lobby.status.open	방이 열렸습니다 (접속 {0}/{1})
 lobby.status.failed	방을 열지 못했습니다. Steam 연결을 확인하세요
 lobby.status.dev_host	개발용 직접 연결 방을 열었습니다 (접속 {0}/{1})

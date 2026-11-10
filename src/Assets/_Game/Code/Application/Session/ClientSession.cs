@@ -8,6 +8,8 @@
 // 월드 로컬 생성(요약값 계산)은 M1-10에서 WorldPrepareHandler로 연결한다. 지금은 호스트가 알려 준 값을 그대로 돌려준다.
 // =============================================================
 using System;
+using Game.Application.Commands;
+using Game.Application.Gathering;
 using Game.Application.Ports;
 using Game.Application.Protocol;
 using Game.Domain.Common;
@@ -80,6 +82,7 @@ namespace Game.Application.Session
         private double _stateEnteredAt;
         private System.Threading.Tasks.Task<ulong> _prepareTask;
         private JoinAccepted _prepareAccepted;
+        private uint _nextRequestId;
 
         /// <param name="client">전송 포트</param>
         /// <param name="mirror">월드 사본(나갈 때 비움)</param>
@@ -128,6 +131,32 @@ namespace Game.Application.Session
 
         /// <summary>상태가 바뀜.</summary>
         public event Action<ClientSessionState> StateChanged;
+
+        /// <summary>
+        /// [M1 시험용] 자원 타격 명령을 호스트로 보낸다. 게임 중이 아니면 보내지 않는다.
+        /// 거리·대상 상태 검사는 호스트가 한다(FR-007). 결과는 자원 표 델타로 돌아온다.
+        /// </summary>
+        /// <param name="resourceIndex">자원 번호(생성 표 위치)</param>
+        /// <param name="handSlot">손에 든 칸 번호(M2 이후 도구 판정에 쓴다)</param>
+        /// <returns>전송 요청을 했으면 true</returns>
+        public bool TrySendHitResource(ushort resourceIndex, byte handSlot)
+        {
+            if (State != ClientSessionState.InGame)
+            {
+                return false;
+            }
+            // 요청 번호는 0을 피한다(0 = 번호 없음으로 읽히지 않게).
+            _nextRequestId = unchecked(_nextRequestId + 1u);
+            if (_nextRequestId == 0u)
+            {
+                _nextRequestId = 1u;
+            }
+            if (!CommandCodec.TryEncode(new HitResourceCommand(_nextRequestId, resourceIndex, handSlot), out CommandMessage message))
+            {
+                return false;
+            }
+            return _client.SendDefault(message);
+        }
 
         /// <summary>
         /// 호스트에 접속을 시작한다.

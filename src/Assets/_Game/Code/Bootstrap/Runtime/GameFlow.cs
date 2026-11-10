@@ -22,6 +22,7 @@ using Game.Application.Hud;
 using Game.Application.Ports;
 using Game.Application.Replication;
 using Game.Application.Session;
+using Game.Application.WorldSync;
 using Game.Domain.Common;
 using Game.Domain.Session;
 using Game.Domain.Vitals;
@@ -50,12 +51,18 @@ namespace Game.Bootstrap.Runtime
 
         /// <summary>개발 빌드: 이 간격(초)마다 상태를 로그로 남긴다. 0이면 남기지 않는다.</summary>
         public float StatusLogSeconds;
+
+        /// <summary>개발 빌드의 -resourcechanges N: 호스트가 월드를 만든 직후 자원 N개를 바뀐 상태로 만든다(0이면 하지 않음, NFR-016 시험 조건).</summary>
+        public int DevResourceChanges;
     }
 
     /// <summary>개발용 화면 흐름.</summary>
     public sealed class GameFlow
     {
         private const string LogTag = "[Flow] ";
+
+        /// <summary>개발 도구가 자원을 고르는 시드(같은 월드·개수면 늘 같은 결과).</summary>
+        private const ulong DevResourceChangeSeed = 5000UL;
 
         private readonly GameFlowDeps _deps;
         private readonly UiState _uiState = new UiState();
@@ -66,6 +73,10 @@ namespace Game.Bootstrap.Runtime
         private SessionRuntime _runtime;
         private FirstPersonController _controller;
         private RemoteAvatarViews _remoteViews;
+        private TerrainViewBuilder _terrain;
+        private ResourceViewStreamer _resourceViews;
+        private ResourceHitInput _hitInput;
+        private bool _hostStarting;
         private bool _inGame;
         private bool _worldLoading;
         private LobbyListState _listState = LobbyListState.Idle;
@@ -153,6 +164,12 @@ namespace Game.Bootstrap.Runtime
 
             LogStatusIfDue();
 
+            // [FR-044] 게임 입력 상태일 때만 공격 입력을 읽어 조준한 자원에 타격 요청을 보낸다(UI가 열려 있으면 보내지 않는다).
+            if (_uiState.Mode == UiMode.Gameplay && _hitInput != null)
+            {
+                _hitInput.Tick(Time.unscaledDeltaTime);
+            }
+
             _hud.Tick(_controller.Stamina.Ratio, _controller.Stamina.Ratio >= 1f, Time.unscaledDeltaTime, _runtime.Mirror);
             _hud.SetNetStatus(_deps.Text.Get(HudTextKeys.NetStatus, BuildStatus()));
 
@@ -174,12 +191,27 @@ namespace Game.Bootstrap.Runtime
 
         private void OnHostRequested()
         {
-            if (_runtime != null)
+            if (_runtime != null || _hostStarting)
             {
                 return;
             }
-            _lobby.SetStatus(_deps.Text.Get(LobbyTextKeys.StatusOpening));
+            // 월드 생성(Full 약 0.6초)은 한 프레임을 멈추므로, 먼저 문구를 그린 뒤 시작한다(로딩 표시).
+            _hostStarting = true;
+            _lobby.SetStatus(_deps.Text.Get(LobbyTextKeys.StatusGenerating));
             _lobby.SetHosting(true, false);
+            _deps.CoroutineHost.StartCoroutine(StartHostRoutine());
+        }
+
+        private IEnumerator StartHostRoutine()
+        {
+            yield return null;
+            yield return null; // 문구가 화면에 나온 다음 프레임에 무거운 생성을 한다
+            if (!_hostStarting)
+            {
+                yield break; // 그 사이에 취소했다
+            }
+            _hostStarting = false;
+            _lobby.SetStatus(_deps.Text.Get(LobbyTextKeys.StatusOpening));
 
             var info = new HostWorldInfo
             {
@@ -191,7 +223,27 @@ namespace Game.Bootstrap.Runtime
             _runtime = SessionRuntime.CreateHost(_deps.Runtime, info);
             WireSession(_runtime);
             _runtime.HostOpened += OnHostOpened;
+
+            // [NFR-016 시험] 개발 옵션: 월드를 만든 직후, 참가자가 붙기 전에 자원 N개를 바뀐 상태로 만든다(스냅샷으로 모두에게 간다).
+            if (_deps.DevResourceChanges > 0)
+            {
+                int applied = DevApplyResourceChanges(_deps.DevResourceChanges);
+                Debug.Log(LogTag + "-resourcechanges: 자원 " + applied + "개를 바뀐 상태로 만들었습니다.");
+            }
             _runtime.StartHost();
+        }
+
+        /// <summary>
+        /// [개발 도구] 호스트에서만: 자원 count개를 쓰러짐·부서짐·타격 중 상태로 바꾼다. 바뀐 항목은 델타로 모든 참가자에게 간다.
+        /// </summary>
+        /// <returns>바꾼 개수. 호스트가 아니거나 월드가 없으면 -1</returns>
+        public int DevApplyResourceChanges(int count)
+        {
+            if (_runtime == null || !_runtime.IsHost || _runtime.World == null || _runtime.World.State.Local == null)
+            {
+                return -1;
+            }
+            return ResourceChangeTool.ApplyChanges(_runtime.World.State.Resources, _runtime.World.State.Local, count, DevResourceChangeSeed);
         }
 
         private void OnHostOpened(LobbyError error)
@@ -329,6 +381,7 @@ namespace Game.Bootstrap.Runtime
 
         private void OnLeaveRequested()
         {
+            _hostStarting = false;
             // 호스트의 로비는 세션 종료와 함께 닫는다(참가자는 로비에서 퇴장).
             _deps.Runtime.Lobby?.Leave();
             LeaveGameView();
@@ -390,6 +443,7 @@ namespace Game.Bootstrap.Runtime
             };
             StaminaSettings s = balance.Stamina;
             _controller.Initialize(_input, _runtime.Pose, settings, new StaminaParams(s.Max, s.RunCostPerSecond, s.RegenDelaySeconds, s.RegenPerSecond));
+            SetUpWorldView(balance);
             _controller.DevAutoWalk = _deps.AutoWalk;
             _remoteViews?.Initialize(_runtime.Mirror, _runtime.Session.LocalPlayer);
 
@@ -402,6 +456,32 @@ namespace Game.Bootstrap.Runtime
             _inGame = true;
             _uiState.CloseAll();
             ApplyUiMode(UiMode.Gameplay);
+        }
+
+        /// <summary>
+        /// 지형(Terrain 타일)과 자원 표시를 준비하고 공격 입력을 잇는다. 지형은 플레이어가 서기 전에 충돌체까지 만들어 둔다
+        /// (스폰하자마자 땅 밑으로 떨어지지 않게).
+        /// </summary>
+        private void SetUpWorldView(BalanceValues balance)
+        {
+            LocalWorld local = _runtime.Mirror.Local;
+            _terrain = UnityEngine.Object.FindFirstObjectByType<TerrainViewBuilder>();
+            _resourceViews = UnityEngine.Object.FindFirstObjectByType<ResourceViewStreamer>();
+            if (local == null || _terrain == null || _resourceViews == null)
+            {
+                Debug.LogError(LogTag + "월드 표시 준비 실패: 월드=" + (local != null) + " 지형=" + (_terrain != null) + " 자원 뷰=" + (_resourceViews != null));
+                return;
+            }
+            _terrain.BuildFrom(local);
+            Camera eye = _controller.GetComponentInChildren<Camera>();
+            Transform viewer = eye != null ? eye.transform : _controller.transform;
+            _resourceViews.Initialize(_runtime.Mirror, viewer);
+            if (eye != null)
+            {
+                SessionRuntime runtime = _runtime;
+                _hitInput = new ResourceHitInput(_input, _resourceViews, eye.transform, balance.Movement.InteractionDistanceMeters,
+                    (index, slot) => runtime.Session.TrySendHitResource(index, slot));
+            }
         }
 
         private void LeaveGameView()
@@ -425,6 +505,13 @@ namespace Game.Bootstrap.Runtime
             {
                 SceneManager.UnloadSceneAsync(world);
             }
+            _hitInput = null;
+            if (_terrain != null)
+            {
+                _terrain.Clear();
+            }
+            _terrain = null;
+            _resourceViews = null;
             _controller = null;
             _remoteViews = null;
         }

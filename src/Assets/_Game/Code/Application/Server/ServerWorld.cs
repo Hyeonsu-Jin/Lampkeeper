@@ -348,7 +348,7 @@ namespace Game.Application.Server
             _slotUsed[slot] = true;
             _slots[id] = slot;
 
-            Vec3f spawn = ServerSettings.SpawnFor(slot);
+            Vec3f spawn = SpawnPositionForSlot(slot);
             var character = new PlayerCharacter(id, displayName, spawn, _settings.Stamina);
             State.AddPlayer(character);
             _moveStates[id] = new AvatarMoveState(character.Stamina); // 서버 쪽 스태미나 추정은 캐릭터의 값 하나만 쓴다
@@ -379,7 +379,24 @@ namespace Game.Application.Server
         public bool TryGetSlot(PlayerId id, out int slot) => _slots.TryGetValue(id, out slot);
 
         /// <summary>스폰 위치(자리 기준).</summary>
-        public Vec3f SpawnPositionOf(PlayerId id) => _slots.TryGetValue(id, out int slot) ? ServerSettings.SpawnFor(slot) : Vec3f.Zero;
+        public Vec3f SpawnPositionOf(PlayerId id) => _slots.TryGetValue(id, out int slot) ? SpawnPositionForSlot(slot) : Vec3f.Zero;
+
+        /// <summary>
+        /// 자리 번호의 스폰 위치. 월드가 붙어 있으면 월드 한가운데에서 자리 간격만큼 떨어진 곳, 높이는 지면 + 여유 높이다
+        /// (지형 위에서 땅에 박히거나 허공에 뜨지 않게, 월드 모서리에서 시작하지 않게). 월드가 없으면(시험) 평평한 기본 위치.
+        /// </summary>
+        public Vec3f SpawnPositionForSlot(int slot)
+        {
+            Vec3f flat = ServerSettings.SpawnFor(slot);
+            LocalWorld local = State.Local;
+            if (local == null)
+            {
+                return flat;
+            }
+            float x = local.WidthMeters * 0.5f + flat.X;
+            float z = local.DepthMeters * 0.5f + flat.Z;
+            return new Vec3f(x, local.SurfaceHeightMeters(x, z) + ServerSettings.SpawnHeightMeters, z);
+        }
 
         /// <summary>
         /// 명령을 대기열에 넣는다. 대기열이 가득 차면 버리고 false(조작된 클라이언트의 폭주 방어). [NFR-041]
@@ -460,7 +477,7 @@ namespace Game.Application.Server
                     break;
                 case AvatarMoveVerdict.Rejected:
                     // [NFR-030] 검사에 걸린 이동은 근거 자료로 로그에 남긴다(R-07, Check 단계 보안 점검).
-                    correction = state.HasLast ? state.LastAccepted.Position : ServerSettings.SpawnFor(_slots[player]);
+                    correction = state.HasLast ? state.LastAccepted.Position : SpawnPositionForSlot(_slots[player]);
                     _log.Warn("move_rejected", "player=" + player + " from=" + correction + " to=" + pose.Position);
                     break;
             }

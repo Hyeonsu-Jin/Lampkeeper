@@ -81,6 +81,23 @@ namespace Game.Application.WorldSync
             return new LocalWorld(world, hash, seed, generatorVersion, scale, watch.ElapsedMilliseconds);
         }
 
+        /// <summary>지형 타일 수(가로 x 세로).</summary>
+        public int TileCount => Generated.TilesX * Generated.TilesZ;
+
+        /// <summary>월드 가로 길이(m).</summary>
+        public float WidthMeters => Generated.WidthMm / MillimetersPerMeter;
+
+        /// <summary>월드 세로 길이(m).</summary>
+        public float DepthMeters => Generated.DepthMm / MillimetersPerMeter;
+
+        /// <summary>월드 위 (x, z) 위치의 지면 높이(m). 정수 높이 격자를 보간한 값이고 범위 밖이면 가장자리 값이다.</summary>
+        public float SurfaceHeightMeters(float xMeters, float zMeters)
+        {
+            int xMm = (int)Math.Round(xMeters * MillimetersPerMeter);
+            int zMm = (int)Math.Round(zMeters * MillimetersPerMeter);
+            return Generated.HeightMmAt(xMm, zMm) / MillimetersPerMeter;
+        }
+
         /// <summary>자원의 종류와 위치(m)를 읽는다. 번호가 범위 밖이면 false.</summary>
         public bool TryGetResource(int index, out ResourceKind kind, out Vec3f position)
         {

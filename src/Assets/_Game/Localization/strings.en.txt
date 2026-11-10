@@ -18,6 +18,7 @@ lobby.invite	Invite friends
 lobby.leave	Leave
 lobby.status.ready	Ready
 lobby.status.opening	Opening room…
+lobby.status.generating	Building the world
 lobby.status.open	Room is open ({0}/{1} connected)
 lobby.status.failed	Could not open the room. Check your Steam connection
 lobby.status.dev_host	Opened a direct-connection dev room ({0}/{1} connected)

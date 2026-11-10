@@ -20,6 +20,7 @@ namespace Game.Adapters.Presentation.UI.Common
         public const string Leave = "lobby.leave";
         public const string StatusReady = "lobby.status.ready";
         public const string StatusOpening = "lobby.status.opening";
+        public const string StatusGenerating = "lobby.status.generating";
         public const string StatusOpen = "lobby.status.open";
         public const string StatusFailed = "lobby.status.failed";
         public const string StatusDevHost = "lobby.status.dev_host";
