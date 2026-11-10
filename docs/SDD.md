@@ -4,13 +4,13 @@
 
 | 항목 | 내용 |
 |---|---|
-| 문서 버전 | 0.14 |
+| 문서 버전 | 0.16 |
 | 작성일 | 2026-11-02 (최종 수정 2026-11-10) |
-| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, v0.13은 UI 방식 변경(UI Toolkit → uGUI, 사용자 결정 2026-11-04) 반영, v0.14는 M1 묶음 4(M1-10~M1-12) 구현 사실 반영으로 승인 상태 유지) |
+| 상태 | **승인** (사이클 1 Plan, 사용자 결정 2026-11-02 반영. v0.8·v0.9는 M1 구현 묶음 1·2 결과의 사실 반영, v0.10은 M1 묶음 3 착수 때 developer 제안을 사용자가 채택한 설계 변경(2026-11-03) 반영, v0.11은 M1 묶음 3(M1-07~09) 구현 결과의 사실 반영, v0.12는 R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, v0.13은 UI 방식 변경(UI Toolkit → uGUI, 사용자 결정 2026-11-04) 반영, v0.14는 M1 묶음 4(M1-10~M1-12) 구현 사실 반영, v0.15는 사이클 1 Act(IMP-001~005·012·017) 구현 사실 반영으로 승인 상태 유지) |
 | 작성 | architect (기획 에이전트, 설계 담당) |
 | 준거 표준 | IEEE Std 1016-2009 (설계 관점·설계 뷰 구조), ISO/IEC/IEEE 12207 (아키텍처 정의·설계 정의 프로세스) |
-| 범위 | SRS v0.11의 FR 179개, NFR 58개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
-| 참조 문서 | `docs/SRS.md` **v0.11** (v0.10에 사용자 결정 2026-11-04 반영: 게임 버전 = 시맨틱 버저닝(SemVer 2.0.0) `MAJOR.MINOR.PATCH`, 출시 전 `0.y.z`(0.1.0부터)·공개 출시 `1.0.0`, 배포한 번호 재사용 금지, 사이클 태그 규칙과 같음(NFR-058). v0.10 내용: v0.9에 사용자 결정 2026-11-03 반영: 스태미나 0일 때 불이익 없음(달리기만 걷기 속도), `스태미나 회복 지연` 1초 확정, C-04는 스태미나 부분만 해소·허기·갈증·피로도·혹한은 미결. v0.9 내용: v0.8에 M1 착수 전 사용자 결정 반영: Unity 6000.3.27f2, M1 측정은 이 PC 1대 + 봇 7개·다른 CPU 결정론과 실제 8대 P8은 M6, Steam 실행 필수(오프라인 플레이 없음), C-28·C-33·C-43·C-46·C-48·C-49 해소. v0.8 내용: v0.7에 M4 제작 추가 반영: FR-173 제작대, FR-174 제작대 제작 UI(C-11 해소), FR-175 용광로, FR-176 연료 규칙, FR-177 가공 진행, FR-178 숯 만들기, FR-179 석탄 광맥. v0.7 내용: v0.6에 손목 계기 결정 반영: C-58 올림 방식 기본 토글, C-59 올린 동안 모든 행동 가능, 등불 이름표 체력 4단계 + 꺼짐. v0.6 내용: v0.5에 HUD 디자인 변경 반영: 장치형 HUD 기본, FR-171 HUD 표시 방식 옵션, FR-172 손목 계기 올림/내림, NFR-001 「표시되고 있는 동안」 기준. v0.5 내용: v0.4에 2026-11-02 디자인 관련 사용자 결정 반영: 공개 목록 예약 자리 표시, M1부터 접근성 기반, 화면을 열어도 게임 진행 유지, 독립 레시피북, 다크 단일 테마. v0.4 내용: v0.3의 세션 참가 조건 변경 — 「초대 전용 / 친구 전용 / 공개」, 새 월드 생성·세션 열기 때 선택, 월드별 저장, 기본값 「친구 전용」 — 에 더해 2026-11-02 사용자 결정 반영: C-51 M1 범위 축소, C-52 성능 측정 기준, 인원 배율 적용 범위 등), `docs/PROJECT_STATUS.md` (2026-11-02 결정 기록·위험 목록), `CLAUDE.md` |
+| 범위 | SRS v0.13의 FR 179개, NFR 58개 전체를 M1~M10(M9a/b/c 포함, 12개 마일스톤)에 걸쳐 구현하기 위한 소프트웨어 구조. 화면 배치·색상(ui-ux-designer 담당)과 코드 구현(developer 담당)은 범위 밖 |
+| 참조 문서 | `docs/SRS.md` **v0.13** (v0.15: v0.12 자연 에셋 도입 일정, v0.13 Act 반영 — NFR-030 수신 시각 기준 이동 검사·첫 자세 반경·참가 판정 전 차단, NFR-041 대기열 몫·거부 회신 버킷·자세 상한·연결 종료, NFR-045 로그 묶기·크기·개수, FR-003 두 버전 표시·프로토콜 3, FR-158 Logs/ 폴더만. FR 179개, NFR 58개 그대로. 이하 v0.11까지의 내용: v0.10에 사용자 결정 2026-11-04 반영: 게임 버전 = 시맨틱 버저닝(SemVer 2.0.0) `MAJOR.MINOR.PATCH`, 출시 전 `0.y.z`(0.1.0부터)·공개 출시 `1.0.0`, 배포한 번호 재사용 금지, 사이클 태그 규칙과 같음(NFR-058). v0.10 내용: v0.9에 사용자 결정 2026-11-03 반영: 스태미나 0일 때 불이익 없음(달리기만 걷기 속도), `스태미나 회복 지연` 1초 확정, C-04는 스태미나 부분만 해소·허기·갈증·피로도·혹한은 미결. v0.9 내용: v0.8에 M1 착수 전 사용자 결정 반영: Unity 6000.3.27f2, M1 측정은 이 PC 1대 + 봇 7개·다른 CPU 결정론과 실제 8대 P8은 M6, Steam 실행 필수(오프라인 플레이 없음), C-28·C-33·C-43·C-46·C-48·C-49 해소. v0.8 내용: v0.7에 M4 제작 추가 반영: FR-173 제작대, FR-174 제작대 제작 UI(C-11 해소), FR-175 용광로, FR-176 연료 규칙, FR-177 가공 진행, FR-178 숯 만들기, FR-179 석탄 광맥. v0.7 내용: v0.6에 손목 계기 결정 반영: C-58 올림 방식 기본 토글, C-59 올린 동안 모든 행동 가능, 등불 이름표 체력 4단계 + 꺼짐. v0.6 내용: v0.5에 HUD 디자인 변경 반영: 장치형 HUD 기본, FR-171 HUD 표시 방식 옵션, FR-172 손목 계기 올림/내림, NFR-001 「표시되고 있는 동안」 기준. v0.5 내용: v0.4에 2026-11-02 디자인 관련 사용자 결정 반영: 공개 목록 예약 자리 표시, M1부터 접근성 기반, 화면을 열어도 게임 진행 유지, 독립 레시피북, 다크 단일 테마. v0.4 내용: v0.3의 세션 참가 조건 변경 — 「초대 전용 / 친구 전용 / 공개」, 새 월드 생성·세션 열기 때 선택, 월드별 저장, 기본값 「친구 전용」 — 에 더해 2026-11-02 사용자 결정 반영: C-51 M1 범위 축소, C-52 성능 측정 기준, 인원 배율 적용 범위 등), `docs/PROJECT_STATUS.md` (2026-11-02 결정 기록·위험 목록), `CLAUDE.md` |
 | 후속 문서 | `docs/DESIGN_PROPOSAL.md`, `docs/STORYBOARD.md` (ui-ux-designer, v1.7부터 uGUI 기준), `src/` 소스 코드 (developer) |
 
 ### 1.1 용어 (SRS 1.3에 더해 설계에서 쓰는 말)
@@ -58,6 +58,8 @@
 | 0.12 | 2026-11-04 | architect | R-33·R-34에 대한 사용자 결정(2026-11-04) 반영, 참조 SRS v0.11(NFR-058 게임 버전 규칙 추가, NFR 58개), 상태 「승인」 유지. 의존 규칙·asmdef 변경 없음. (1) **게임 버전 = SemVer 2.0.0**(사용자 결정): 사이클 = MINOR, `fix/` = PATCH, 지금 `0.1.0`, 배포한 번호 불변. 설계: 원본은 사람이 정하는 `PlayerSettings.bundleVersion`(핵심 + 사전 릴리스), `BuildCommands`는 핵심을 덮어쓰지 않고 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙였다 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `ReadBuildNumber`·`-buildNumber`·`GAME_BUILD_NUMBER`·`VersionPrefix` 폐지, `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 참가 검사는 게임 버전 **전체 문자열 일치**(출시·개발 같은 규칙, 출시 ↔ 개발·에디터 ↔ 플레이어는 거부). 숫자 인코딩(`주×10000 + …`) 폐지 → `JoinRequest.gameVersion` 문자열(≤ 64 B), `protocolVer` 1 → 2, `JoinRequest` 첫 필드 `protocolVer` 위치 고정 규칙, 로비 `kh_build` 값 = 전체 문자열, 월드 파일 헤더 `gameVer` u16 ×3, 표시 형식(출시 `v{Core}`, 개발·에디터 `v{Full}`). 새 절 3.7.12, **DES-037 GameVersion** 신설, D-26 신설, 고친 곳 3.5.2, 3.7.1, 3.7.2, 3.7.4, 3.8.2, 3.9.2, DES-031·112, 6장(FR-003, FR-145, NFR-058), 7장(M1-01, M1 묶음 3 마무리 작업, M1-13, M2-07, M10-06). R-34 해소, R-35 신설. (2) **R-33 해소**(사용자 확인: 친구 전용 로비가 로비 검색에 나오지 않는 것은 Steam 정상 동작): 공개 세션 목록(FR-145, M2-07)은 「공개」 세션만, SRS·설계 변경 없음(3.7.4, M2-07, 6장 FR-145). 설계 요소 107 → **108개**, 작업 수 변화 없음(M1 마무리 작업은 기존 M1-07·M1-01 (5)의 보완) |
 | 0.13 | 2026-11-04 | architect | **UI 방식 변경**(사용자 결정 2026-11-04: UI Toolkit → **uGUI(Canvas + TextMeshPro)**, 앞으로 만들 모든 UI도 uGUI. 이유: UI 오브젝트를 하이어라키에서 직접 만들고 관리하는 쪽이 유지보수에 나음), 참조 SRS v0.11 그대로, 상태 「승인」 유지. 요구사항 변경 없음. (1) **D-16을 D-27로 대체**(D-16은 기록으로 남김), D-27 신설. (2) **관리 원칙**: UI·씬·프리팹은 하이어라키·프리팹의 게임 오브젝트가 원본. 에디터 생성기는 「없을 때 처음 한 번 만들기 + 있으면 검사만」으로 바꾸고, 이미 있는 씬·프리팹을 통째로 다시 만들어 덮어쓰지 않음. 에이전트는 Unity MCP 도구(gameobject·component·prefab)로 개별 오브젝트를 고침. 화면마다 프리팹, 씬에는 프리팹 인스턴스(3.8.2 생성 파이프라인 표 재작성, D-25 근거 갱신). (3) **테마**: USS 변수 → ScriptableObject `UiTheme` + 적용 컴포넌트 `ThemedText`·`ThemedGraphic`·`ThemedSelectable`. 토큰 이름은 v0.12의 USS 이름에서 `--`만 뺀 것(`color-*` 20개, `fs-*` 5개 + 큰 제목 `fs-heading-lg` 신설), 글자 크기 3단계는 기준값 × 배율(0.9/1.0/1.25) 반올림으로 v0.12 값과 같게(3.7.10). (4) **캔버스 구성**: Screen Space Overlay, CanvasScaler 1920×1080·높이 기준(Match 1), 가운데 16:9 영역 `UiSafeArea16x9`, 정적·동적 캔버스 분리, 상호작용 없는 요소 Raycast Target 끔, 정렬 순서 띠(0 월드 표시 / 100 HUD / 200 창 / 300 경고 / 400 모달 / 500 시스템), 숨김 = Canvas·CanvasGroup·GraphicRaycaster를 함께 끔(ESC 메뉴 결함 재발 방지), 입력은 EventSystem + `InputSystemUIInputModule`, 닫기·탭 이동은 `UiInputRouter`, 비활성 버튼도 포커스를 받음(`interactable`을 끄지 않음), Layout Group·Content Size Fitter(3.7.10). (5) **손목 계기·월드 표시 재검토**: 계기 화면은 uGUI 프리팹을 UI 전용 캡처 카메라로 렌더 텍스처에 그리고(값이 바뀔 때만, 최대 10 Hz, HDRP 카메라 설정은 DES-114), 표시 면 (B)는 사다리꼴 메시 `UiWarpedRawImage`. 이름표·핑은 화면 좌표 투영을 유지, R-18 해소(3.4.4, 3.7.11, D-21). (6) **asmdef·패키지**: `com.unity.ugui` 2.0.0을 manifest에 명시(Unity 6에서 TextMeshPro 포함, 지금은 HDRP 의존으로만 설치됨), `Game.Adapters.Presentation`·`Game.Editor`·`Game.Tests.Infrastructure`·`Game.Tests.Integration`에 `UnityEngine.UI`·`Unity.TextMeshPro`, UI Toolkit(`UnityEngine.UIElements`) 사용 금지 소스 검사(3.4.1 규칙 9, 3.4.2, 3.4.3, D-03). (7) **시험**: USS 규칙 검사 → 프리팹·테마 규칙 검사(모든 TMP 글자의 `ThemedText`, `richText` 꺼짐, Raycast Target, 텍스트 키, 토큰 값 일치, 글꼴 글자 포함, 대비), 버튼은 `onClick.Invoke()`, PlayMode 화면 층 레이캐스트 시험(3.4.3, 7장). (8) 새 설계 요소 **DES-122 UiThemeKit**, DES-091·092·095·097·120 갱신, 7장 「M1 묶음 3 마무리 — UI uGUI 전환」 작업과 M1-08·M2-01·M2-11·M2-12 설명 갱신, R-18 해소·R-20·R-21·R-22·R-28 갱신, R-36~R-40 신설. 설계 요소 108 → **109개**, 작업 수 변화 없음(전환 작업은 M1 묶음 3 마무리 보완) |
 | 0.14 | 2026-11-10 | architect | M1 묶음 4(M1-10~M1-12) 구현 사실 반영, 참조 SRS v0.11 그대로, 상태 「승인」 유지. 설계 방향·의존 규칙 변경 없음, 새 DES 없음. (1) 월드 좌표 0~3072 m, 이동·핑 검사 `IsInsideWorld`(+16 m), 생물 위치 압축 -16~3088 m·Y 포함(3.7.2, 3.11.12). (2) 스폰 = 월드 중앙 + 자리 간격, 지면 +0.1 m(3.9.8). (3) 자원 델타 전 연결, 타격 수평 거리만·초당 4회(3.9.3, 3.11.8). (4) 중도 참가 백그라운드 생성·델타 보관 상한 20,000·+30초, 호스트 동기 생성(3.9.2). (5) `TerrainViewBuilder`·`ResourceViewStreamer`·`ResourceHitInput` 사실, 인스턴싱 빌드 주의(DES-087·089, 3.12.7). (6) `com.unity.modules.terrainphysics`(D-03). (7) World 씬 구성(3.2.3). (8) `IAiNavigationBackend` 실제 시그니처, 보행 격자 600 m(3.11.11, 3.10.6). (9) 생물 복제 등급·Despawn 여유 10 m·보간 방식(3.11.9, DES-082·088). (10) `Game.Tests.Infrastructure` → `Game.Infra.AiJobs`(3.4.2). (11) 새 폴더(3.8.2). (12) 개발 옵션 `-resourcechanges`·`-testcreatures`·`-bot`·`-gameversion`, F1·F3 표시(3.7.4). (13) 화면 없는 실행 UI 안전(3.7.10 (10)). (14) UI 기호 제거 결정, 기호 대체 글꼴 안 함(3.7.10 (8)). (15) M1-12 측정 결과(3.12.4, 7장 메모). (16) R-41~R-45 신설. (17) 자연 에셋 도입 일정(DES-089, 7장 메모) |
+| 0.15 | 2026-11-10 | architect | 사이클 1 Act 구현 사실 반영(IMP-001~005·012) + IMP-017 의존성 확인, 참조 SRS **v0.13**, 상태 「승인」 유지. 의존 규칙·asmdef 변경 없음, 새 DES·D 없음. (1) 3.11.12 이동 검사: 호스트 수신 시각 dt(0.5초 상한), 수평·수직 누적 예산(한도 = 속도×배율×최대 간격 + 여유 1회), 자세 45 Hz·순간 5개(초과 Stale), 첫 자세 스폰 반경·높이 15 m(`SetSpawn`), 상수의 BalanceValues 이전 권고(결정 필요), 지형 높이 Y 검사 다음 사이클 후보. (2) 3.11.13·3.7.2: 명령 순서를 코드와 맞춤(디코드 → 대기열 플레이어별 몫 → 틱에서 빈도·범위·검증), 거부 회신 `AllowRejectionReply`(전체 버킷). (3) 3.7.2·3.7.3·3.9.2·3.7.12 (5): `FishNetJoinAuthenticator`·`INetServer.Admit`(연결 → 판정 → 인증 → 스폰·관찰), `_shareIds` 끔, `PacketBroadcast` 인증 전 수신, `_devOpenConnections` 개발 전용, `JoinTimeout`, `JoinRejected` 호스트 버전(67 B, 프로토콜 3, 옛 형식 허용), `PoseRateGate`·`AbuseMeter`, 「버전 확인은 변조 방지가 아님」. (4) 3.7.3 「로그 처리」 신설: `ThrottledLog`, 스택 추적 끔, `FileLogSink` 20 MB·10개, `usePlayerLog` 0. (5) 3.7.12 (2): 출시 빌드 dirty·git 실패 거부, 배포 제외 폴더 `Builds/Symbols/`, `INTERNAL_DEVELOPMENT_BUILD.txt`. (6) IMP-017: D-03에 FishNet·FishySteamworks·Steamworks.NET 보안 공지 확인 결과, 3.4.3에 `com.unity.pipeline` 출시 빌드 포함 여부·제거 검토 시점. (7) DES-050·052·084·085·107·112·121 설명, 6장 FR-003·FR-158·NFR-030·NFR-041·NFR-045, R-07 갱신, R-46(글꼴 dirty)·R-47(이동 상수 위치) 신설 |
+| 0.16 | 2026-11-10 | architect | 사용자 결정 2건 반영(새 DES·D 없음). (1) R-46·3.7.12 (2): 출시 빌드 dirty 판정에서 글꼴 애셋 두 파일만 제외(`BuildPolicy.DirtyIgnoredPaths`, `IsDirty`), 대응 완료. (2) R-47·3.11.12: 이동 검사 상수 네 개를 `BalanceValues.Movement` → `ServerSettings.From` → `AvatarMoveSettings`로 전달, `ConfigValidator`·`ValidateMovementAgainstNetwork` 검사, 대응 완료 |
 
 ---
 
@@ -470,6 +472,7 @@ v0.8: 이 표는 실제 asmdef 구성과 같습니다. 아키텍처 시험(DES-1
   1. **런타임 기호 금지**: 모든 빌드 대상의 Scripting Define Symbols와 프로젝트 파일에 `ENABLE_RUNTIME_PIPELINE*` 기호가 없어야 합니다(아키텍처 시험). 패키지 어셈블리는 `includePlatforms: Editor`이거나 이 기호가 있어야만 플레이어에 들어가도록 되어 있는지도 검사합니다(패키지 버전을 올리면 다시 확인).
   2. **참조 금지**: `Game.*` 어셈블리는 `Unity.Pipeline*` 어셈블리를 하나도 참조하지 않습니다(아키텍처 시험). 플레이어 어셈블리 목록에 들어가도 되는 Pipeline 어셈블리는 런타임 기능이 없는 속성 정의 `Unity.Pipeline.Attributes`뿐입니다.
   3. **출시 빌드 산출물 검사**: `Game.Editor`의 `BuildCommands`가 빌드 직후 `BuildArtifactInspector`로 데이터 폴더(Managed 폴더, IL2CPP `global-metadata.dat`)를 훑어 `Unity.Pipeline.Attributes` 외 Pipeline 어셈블리(`Unity.Pipeline`, `Unity.Pipeline.IlInterpreter` 등)가 있으면 빌드를 실패로 처리합니다. 실제 출시 IL2CPP 빌드에서 0건 확인(2026-11-03).
+  - **v0.15(IMP-017) 출시 빌드 포함 여부와 제거 시점**: 패키지는 `manifest.json`에 남아 있지만(개발 자동화 Unity CLI·MCP가 씀, D-22), 위 세 겹 때문에 **출시 빌드에는 런타임 기능이 없는 `Unity.Pipeline.Attributes`만 들어갈 수 있고 Pipeline 런타임 어셈블리는 들어가지 않습니다**(빌드마다 3번 검사가 강제). 지금은 제거하지 않습니다. **제거 검토 시점**: (1) 공개 출시 후보 빌드(M10-06 출시 점검) 전 — 출시용 작업 트리에서 패키지를 빼고 빌드해 같은 결과인지 비교할지 정함, (2) 패키지 버전을 올리거나 실험(`-exp`) 딱지가 바뀔 때(R-29), (3) Unity CLI가 이 패키지 없이 동작하게 될 때. 그 전에도 3번 검사가 1건이라도 걸리면 즉시 검토합니다.
 - **코드 검사 기준**: 참가자 쪽 코드에서 `WorldState`를 직접 바꾸는 경로 0건(NFR-030). `WorldState` 변경 메서드는 `Game.Application` 내부(internal)로 두고, 서버 시뮬레이션과 명령 처리기만 호출합니다.
 - **렌더링 격리 검사**: 아키텍처 시험에서 `Game.Infra.Rendering` 외 어셈블리가 `Unity.RenderPipelines.*`를 참조하면 실패합니다.
 - **소스 글자 검사 (v0.11, M1-07~09에서 추가)**: 같은 어셈블리 안이라 asmdef로 막을 수 없는 규칙을 소스 파일을 읽어 검사합니다. (1) `Adapters/Net/`에서 FishNet 형식은 `Transport/`·`Avatar/` 폴더에서만(3.4.1 규칙 8). (2) `Application/`·`Domain/`·`WorldGen/` 소스에 `using FishNet`, `using Steamworks`, `using UnityEngine` 없음. 폴더를 옮기거나 새 폴더를 만들 때 이 검사가 함께 바뀌어야 하므로, Net 어댑터 폴더 구성을 바꿀 때는 3.8.2와 이 규칙을 먼저 고칩니다.
@@ -811,7 +814,7 @@ flowchart LR
 |---|---|---|---|---|
 | C→S | `JoinRequest` | protocolVer(u16, **첫 필드 위치 고정**), gameVersion(길이 접두 UTF-8 ≤ 64 B, SemVer 전체 문자열), contentHash(u64), joinPath(Invite/Friend/Public/Rejoin), devPlayerId(개발 전송 전용), supportedGenVersions[], password(선택, M2). v0.12: u32 `buildVer` → 문자열 `gameVersion`, 프로토콜 버전 2(3.7.12 (5)) | 신뢰 | M1 |
 | S→C | `JoinAccepted` | seedText, seed, generatorVer, expectedWorldHash, worldSettings(공개 필드), serverTick, clock | 신뢰 | M1 |
-| S→C | `JoinRejected` | ReasonCode(인원 초과, 버전 불일치, 비밀번호 불일치, 차단됨, 참가 조건 밖, 시도 제한, 생성 불일치) | 신뢰 | M1 |
+| S→C | `JoinRejected` | reason(u8: 인원 초과, 버전 불일치, 비밀번호 불일치, 차단됨, 참가 조건 밖, 시도 제한, 생성 불일치, 시간 초과 등) + hostVersion(길이 접두 UTF-8 ≤ 64 B, 버전 불일치일 때 호스트 `GameVersion.Full`, 그 밖에는 빈 값). v0.15(IMP-002): 크기 상한 **67 B**(종류 1 + 사유 1 + 길이 1 + 64), 프로토콜 버전 3. 옛 형식(사유만, 남는 바이트 없음)은 hostVersion 빈 값으로 받아들임. 참가자는 `ClientSession.RejectHostVersion`에 담아 「내 버전 / 호스트 버전」을 보임(빈 값은 「?」, FR-003) | 신뢰 | M1 |
 | C→S | `WorldReady` | computedWorldHash | 신뢰 | M1 |
 | S→C | `SnapshotChunk` | snapshotTick, tableId, chunkIndex, chunkCount, payload(≤16 KB) | 신뢰 | M1 |
 | S→C | `JoinComplete` | snapshotTick, yourPlayerSpawn | 신뢰 | M1 |
@@ -832,18 +835,26 @@ flowchart LR
 명령(`Command.kind`) 목록 — 마일스톤 순: 이동 보정 요청 없음(이동은 아바타 RPC, 3.9.8), `HitResource`, `Gather`, `Pickup`, `MoveItem`, `SplitItem`, `DropItem`, `Consume`, `SelectHand`, `Equip`, `Craft`(손 제작 또는 제작대 id 포함, v0.6), `Repair`, `Place`, `FurnacePut/Take/Open/Close`(v0.6, 칸 종류 포함), `Demolish`, `RepairStructure`, `ContainerPut/Take/Open/Close`, `Sleep/Wake`, `SetRespawn`, `Attack`, `Revive(Start/Stop)`, `GiveUp`, `Respawn`, `Ping`, `TowerActivate`, `TowerCancel`, `Ready`, `Plant`, `Water`, `Harvest`, `Cook`, `AcquireNode`, `ClearDeathMarker`, `HostOnly:Kick/Ban/Unban/ChangeAccess/Shutdown/CancelShutdown`.
 
 메시지 공통 규칙
-- **형식과 인코딩 (v0.10)**: 모든 메시지는 `Game.Application/Protocol/`의 구조체이고 첫 바이트는 `MessageKind`(u8)입니다. 바이트 배치는 `MessageCodec`이 `ByteWriter`/`ByteReader`로 직접 정합니다(리틀 엔디언, 가변 길이 정수는 쓰는 곳을 명시, 문자열은 길이 접두 UTF-8). 양자화(위치 2^16 단계, 방향 8비트 등, 3.11.9)도 코덱에서 합니다. 쓰기 쪽은 메시지 종류별 크기 상한을 넘으면 예외 대신 실패를 돌려주고, 읽기 쪽 `TryDecode`는 모르는 종류·잘린 입력·상한 초과·남는 바이트를 모두 거부합니다(예외를 던지지 않음). 새 메시지를 더할 때는 `MessageKind` 값을 뒤에 붙이고 기존 값은 바꾸지 않으며, 프로토콜이 바뀌면 `protocolVer`(`JoinRequest`, 로비 `kh_proto`)를 올립니다. v0.12: 현재 `protocolVer` = **2**(`JoinRequest`의 버전 필드가 문자열로 바뀜). `JoinRequest`의 첫 필드 `protocolVer`(u16)·`MessageKind.JoinRequest/JoinRejected` 값·`JoinRejected` 배치는 프로토콜을 올려도 바꾸지 않고, 디코더는 `protocolVer`가 다르면 나머지를 해석하지 않고 거부 경로로 넘깁니다(옛 빌드 참가자가 시간 초과 대신 「게임 버전 불일치」를 보게 함, 3.7.12 (5)).
+- **형식과 인코딩 (v0.10)**: 모든 메시지는 `Game.Application/Protocol/`의 구조체이고 첫 바이트는 `MessageKind`(u8)입니다. 바이트 배치는 `MessageCodec`이 `ByteWriter`/`ByteReader`로 직접 정합니다(리틀 엔디언, 가변 길이 정수는 쓰는 곳을 명시, 문자열은 길이 접두 UTF-8). 양자화(위치 2^16 단계, 방향 8비트 등, 3.11.9)도 코덱에서 합니다. 쓰기 쪽은 메시지 종류별 크기 상한을 넘으면 예외 대신 실패를 돌려주고, 읽기 쪽 `TryDecode`는 모르는 종류·잘린 입력·상한 초과·남는 바이트를 모두 거부합니다(예외를 던지지 않음). 새 메시지를 더할 때는 `MessageKind` 값을 뒤에 붙이고 기존 값은 바꾸지 않으며, 프로토콜이 바뀌면 `protocolVer`(`JoinRequest`, 로비 `kh_proto`)를 올립니다. v0.12: 현재 `protocolVer` = **2**(`JoinRequest`의 버전 필드가 문자열로 바뀜). `JoinRequest`의 첫 필드 `protocolVer`(u16)·`MessageKind.JoinRequest/JoinRejected` 값·`JoinRejected` 배치는 프로토콜을 올려도 바꾸지 않고, 디코더는 `protocolVer`가 다르면 나머지를 해석하지 않고 거부 경로로 넘깁니다(옛 빌드 참가자가 시간 초과 대신 「게임 버전 불일치」를 보게 함, 3.7.12 (5)). **v0.15(IMP-002)**: 현재 `protocolVer` = **3**. `JoinRejected`는 앞쪽(종류 바이트 + 사유 u8)을 그대로 두고 **뒤에** hostVersion을 붙였으므로, 디코더는 사유 뒤에 남는 바이트가 없으면 hostVersion 빈 값으로 받아들입니다(옛 호스트의 거부도 사유는 읽힘).
 - **시험 (v0.10)**: 메시지마다 「쓰고 다시 읽으면 같은 값」 왕복 시험과, 쓰기·읽기가 같은 잘못을 함께 저질러도 잡히도록 고정 입력에 대한 **고정 바이트 기대값** 시험을 `Game.Tests.Application`에 둡니다. 잘린 입력·상한 초과·모르는 종류 거부 시험도 같이 둡니다.
 - **전송 (v0.10)**: `FishNetServer`/`FishNetClient`(DES-121)는 인코딩된 바이트를 `PacketBroadcast` 하나에 담아 표의 채널(신뢰/비신뢰)로 보내고, 받은 바이트는 `TryDecode`로 메시지로 바꿔 포트 이벤트 `Received(connId, message)`로 넘깁니다. 디코드 실패는 무시하고 로그(연결별 실패 횟수 집계)에 남깁니다. 송수신 버퍼는 재사용해 틱 루프 할당을 0에 가깝게 둡니다(R-16, R-31). v0.11 관찰(M1-07~09, 에디터 측정): `PacketBroadcast` 송신 1건당 관리 힙 할당이 **약 81 B** 남아 있어 0이 아닙니다. 플레이어 빌드 값과 틱당 송신 건수(8인 기준)는 M1-12에서 재고, 줄이는 방법은 R-31 대응을 따릅니다(변경은 DES-121 안에서 끝남).
-- 모든 C→S 메시지는 (1) 크기 상한(v0.10: 디코드 단계에서 `MessageCodec`이 검사, DES-121이 호출), (2) 빈도 상한(`초당 요청 상한`, 명령별 토큰 버킷), (3) 값 범위(아이템 ID 존재, 수량 ≥ 1, 칸 번호 범위, 좌표가 월드 안, 대상 ID 존재)를 검사합니다. (2)·(3)은 게이트웨이(DES-081)가 디코드된 메시지로 합니다(FishNet 없이 `Game.Tests.Net`에서 시험). 실패하면 무시하고 로그에 남기며, 예외가 나도 연결 처리 루프 밖으로 새지 않습니다(NFR-040).
+- 모든 C→S 메시지는 (1) 크기 상한(v0.10: 디코드 단계에서 `MessageCodec`이 검사, DES-121이 호출), (2) 빈도 상한(`초당 요청 상한`, 명령별 토큰 버킷), (3) 값 범위(아이템 ID 존재, 수량 ≥ 1, 칸 번호 범위, 좌표가 월드 안, 대상 ID 존재)를 검사합니다. (2)·(3)은 게이트웨이(DES-081)가 디코드된 메시지로 합니다(FishNet 없이 `Game.Tests.Net`에서 시험). v0.15: 명령(`Command`)은 게이트웨이가 디코드해 `ServerWorld.Enqueue`(대기열 몫)에 넣고, (2) 빈도와 (3) 값 범위는 틱에서 `CommandDispatcher`(`RequestGuard`, DES-050)가 검사합니다(순서는 3.11.13). 실패하면 무시하고 로그에 남기며, 예외가 나도 연결 처리 루프 밖으로 새지 않습니다(NFR-040).
 - 연결의 SteamID는 **전송 계층이 알려 주는 원격 ID**를 씁니다(FishySteamworks 연결 주소. v0.10: DES-121이 연결 시 원격 ID를 읽어 포트의 `Connected(connId, remoteId)`로 넘김). `JoinRequest`에 자기 SteamID를 적어 보내게 하지 않습니다. 개발 전송(Tugboat)에서만 `devPlayerId`를 씁니다(DES-103).
 - 호스트는 Steam 전송에서 **로비 멤버이거나 재접속 예약이 있는 SteamID**의 연결만 받습니다. 로비를 거치지 않은 직접 연결 시도를 막습니다.
+- **참가 전 연결 차단 (v0.15, IMP-003, NFR-030)**: FishNet 인증기 `FishNetJoinAuthenticator`(DES-121, `Adapters/Net/Transport/`, Boot 씬 NetworkManager에 붙음)는 연결이 들어와도 바로 인증하지 않습니다. 순서는 **연결 → 참가 판정(JoinHandshake, DES-085) → `INetServer.Admit(connId)`로 인증 → 스폰·관찰자 등록**입니다. `Admit`은 스냅샷 동기화가 끝나 `InGame`이 된 뒤 `JoinComplete` 직전에 부릅니다(3.9.2). 인증 전 연결에는 FishNet이 아바타 스폰·관찰자 등록·클라이언트 ID 공유를 하지 않으므로, 판정을 통과하지 못한 연결은 다른 플레이어의 위치·SteamID를 받지 못합니다.
+  - `ServerManager._shareIds`는 **끔**(Boot 씬 값). 클라이언트끼리 연결 ID 목록을 공유하지 않습니다.
+  - `PacketBroadcast`는 `RegisterBroadcast(..., requireAuthentication: false)`로 등록해 **인증 전에도 받습니다**(참가 메시지가 이 경로로 오기 때문). 인증 전 연결이 보낸 명령은 게이트웨이가 `InGame` 플레이어가 아니면 버립니다(DES-081).
+  - 참가를 마치지 못한 연결은 `NetworkTuning.JoinTimeoutSeconds`(기본 15초, 허가 뒤 월드 생성 대기는 +30초)로 `JoinHandshake`가 끊습니다(3.10.1).
+  - 개발 전용 `_devOpenConnections`(켜면 연결 즉시 인증, 방어 전후 비교용)는 `#if DEVELOPMENT_BUILD || UNITY_EDITOR`에서만 읽고, **출시 빌드는 항상 무시**합니다(`DevOpenActive` = false).
+  - `INetServer.Admit`은 포트의 기본 구현이 빈 메서드라 가짜 `INetServer`(시험)는 따로 구현하지 않아도 됩니다.
+- **연결 남용 차단 (v0.15, IMP-004, NFR-041)**: (1) 자세 RPC 입구(`PlayerAvatar.ServerSubmitPose`, DES-084)에 연결별 빈도 상한 `PoseRateGate`(`Game.Application/Server/ConnectionAbuseGuards.cs`, 토큰 버킷 `AvatarSendHz × 1.5`, 순간 5개)를 두고, 넘치는 자세는 **디코드도 하지 않고** 버립니다(`pose_dropped`). 이어서 `AvatarMoveValidator`도 45 Hz 버킷을 따로 둡니다(3.11.12). (2) `AbuseMeter`(고정 창 10초, 한도 50회): `PacketBroadcast` 디코드 실패(DES-121, 연결별), 자세 디코드 실패·자세 빈도 초과(DES-084, 아바타별)를 세고, 창 안에서 50회를 넘으면 그 연결을 끊습니다(`net_abuse`). **이동 거부(`Rejected`)는 세지 않습니다**(정상 플레이어의 지터·끊김이 연결 종료로 이어지지 않게).
+- **참가 호환성(버전) 확인은 변조 방지가 아닙니다 (v0.15, IMP-017)**: `protocolVer`·`gameVersion`·`contentHash`·생성기 버전 검사(3.7.12 (4))는 **정상 클라이언트끼리 다른 빌드가 섞이는 것을 막는 호환성 확인**일 뿐입니다. 값은 참가자가 보내므로 조작된 클라이언트는 호스트와 같은 값을 그대로 적어 보낼 수 있습니다. 변조·부정 행위 방어는 호스트 권위 판정(NFR-030), C→S 값 검사·빈도 제한(위 공통 규칙, 3.11.13), 이동 검사(3.11.12), 로비 멤버 확인(D-14)이 맡고, 버전 검사에 보안 역할을 기대하는 설계를 하지 않습니다.
 
 #### 3.7.3 내부 포트 (애플리케이션이 정의, DES-051)
 
 | 포트 | 주요 메서드 | 구현 | 비고 |
 |---|---|---|---|
-| `INetServer` | `Send(connId, msg, channel)`, `Broadcast(msg, channel, filter)`, `Disconnect(connId, reason)`, 이벤트 `Connected(connId, remoteId)/Disconnected/Received(connId, msg)` | Adapters.Net — `FishNetServer`(DES-121) | 전송 종류를 모름(NFR-031). v0.10: `msg`는 `Protocol/` 메시지, `channel`은 `NetChannel{Reliable, Unreliable}`(Application 정의). FishNet 형식이 시그니처에 없음 → 시험은 가짜 구현 |
+| `INetServer` | `Send(connId, msg, channel)`, `Broadcast(msg, channel, filter)`, `Disconnect(connId, reason)`, `Admit(connId)`(v0.15: 참가 판정을 통과한 연결을 전송 계층에서 인증, 기본 구현은 빈 메서드, 3.7.2), 이벤트 `Connected(connId, remoteId)/Disconnected/Received(connId, msg)` | Adapters.Net — `FishNetServer`(DES-121) | 전송 종류를 모름(NFR-031). v0.10: `msg`는 `Protocol/` 메시지, `channel`은 `NetChannel{Reliable, Unreliable}`(Application 정의). FishNet 형식이 시그니처에 없음 → 시험은 가짜 구현 |
 | `INetClient` | `Connect(endpoint)`, `Send(msg, channel)`, 이벤트 `Connected/Disconnected/Received(msg)` | Adapters.Net — `FishNetClient`(DES-121) | v0.10: `INetServer`와 같은 규칙 |
 | `ILocalPlayerPose` (v0.10) | `Write(AvatarPose)`(표현 쪽), `TryRead(out AvatarPose)`(Net 쪽), `ApplyCorrection(pos)`(호스트 보정을 표현 쪽에 알림) | Application의 단순 보관 구현(`LocalPlayerPoseBuffer`) 하나를 조립 루트가 두 어댑터에 넘김 | 내 플레이어 자세를 표현 어댑터(DES-086) → Net 어댑터(DES-084)로 넘김. 어댑터끼리 참조 금지(3.4.1 규칙 4) |
 | `IPlatformIdentity` | `LocalPlayerId`, `LocalDisplayName`, `ResolveName(PlayerId)` | Infra.Steam / DevIdentity | |
@@ -862,6 +873,15 @@ flowchart LR
 | `IDomainEventSink` | `Publish(evt)`, `Subscribe<T>(handler)` | Application 내부 | 동기 호출 |
 | `ILocalSettingsStore` | `Load()`, `Save(settings)` | Infra.Platform | |
 | `IBanListStore` (v0.7) | `Load()`, `Add(PlayerId, name)`, `Remove(PlayerId)`, `Contains(PlayerId)` | Infra.Platform (`bans.json`) | 호스트의 모든 월드 공통(C-46) |
+
+**로그 처리 (v0.15, IMP-004, DES-107, NFR-045, FR-158)**
+
+| 구성 | 위치 | 규칙 |
+|---|---|---|
+| `ThrottledLog(inner, IClock, windowSeconds)` | `Game.Application/Logging/`(순수 C#), 조립 루트가 `ILog`를 감쌈 | 같은 (수준 + 분류)의 Info·Warn은 창(기본 **5초**)마다 첫 줄만 통과, 나머지는 세었다가 다음 통과 줄에 「N건 생략」으로 붙임. **Error는 묶지 않음**. 반복이 많은 분류: `pose_dropped`(자세 빈도 초과), `pose_decode_failed`, `move_rejected`, `net`(패킷 디코드 실패·인코딩 실패), `net_abuse`(남용으로 연결 종료) |
+| Unity 로그 스택 추적 | `Bootstrap/Runtime/RuntimeSupport.cs` | `Application.SetStackTraceLogType`으로 **Warning·Log의 스택 추적을 끔**(Error·Exception은 유지). 반복 경고가 줄마다 수 KB를 쓰지 않게 함 |
+| `FileLogSink` | `Game.Infra.Platform/Logging/` | 한 실행에 파일 하나, 크기 상한 **20 MB**(넘으면 더 쓰지 않음), 시작할 때 `CleanupOldLogs`로 **최근 10개**(새 파일 포함)만 남김. 모든 줄은 `LogSanitizer`를 거침(민감 정보 제외) |
+| Player.log | `Editor/ProjectConfigurator.cs` | `PlayerSettings.usePlayerLog = false`(**출시·개발 빌드 모두**). 로그는 저장 폴더 `Logs/`의 `FileLogSink` 파일에만 남음(FR-158) |
 
 #### 3.7.4 개발용 실행 옵션 (DES-103, DES-113, 개발 빌드에서만)
 
@@ -1171,8 +1191,9 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
   1. `bundleVersion`을 읽고, `+` 뒤가 남아 있으면(이전 빌드가 되돌리기 전에 중단된 경우) 떼어 내고 경고합니다.
   2. 핵심을 `GameVersion.TryParse`로 검사합니다. 실패하거나 메타데이터가 있으면 빌드를 실패시킵니다(`[Build] 게임 버전 형식 오류: …`).
   3. git 정보를 읽습니다: 저장소 루트(`src/`의 부모 폴더)에서 `git rev-parse --short=7 HEAD`(커밋 7자), `git status --porcelain --untracked-files=no`(출력이 있으면 dirty). 명령마다 시간 제한 5초. git이 없거나 실패하면 커밋 = `nogit`으로 두고 경고합니다.
-  4. **출시 빌드만**: 태그 `v<핵심>`(예 `v0.1.0`)가 있고 그 커밋이 HEAD와 다르면 빌드를 실패시킵니다(이미 배포한 번호를 다른 내용에 다시 쓰는 것을 막음. 태그가 없으면 통과). 작업 트리가 dirty이면 경고만 합니다 — Steam에 올리거나 외부에 나눠 주는 출시 빌드는 깨끗한 트리에서 만든다는 항목을 출시 점검표(M10-06)에 둡니다.
+  4. **출시 빌드만**: 태그 `v<핵심>`(예 `v0.1.0`)가 있고 그 커밋이 HEAD와 다르면 빌드를 실패시킵니다(이미 배포한 번호를 다른 내용에 다시 쓰는 것을 막음. 태그가 없으면 통과). ~~작업 트리가 dirty이면 경고만 합니다~~ → **v0.15(IMP-012)**: `BuildPolicy.CheckReleaseAllowed`가 작업 트리가 **dirty이거나 git 커밋을 읽지 못하면(`nogit`) 출시 빌드를 거부**합니다(무엇이 들어갔는지 커밋으로 되짚을 수 없는 출시 빌드를 만들지 않음). 개발 빌드는 검사하지 않고 메타데이터에 `.dirty`를 붙입니다. dirty 판정은 추적 파일만 봅니다(`--untracked-files=no`). **v0.16(R-46 확정)**: 출시 빌드 dirty 판정은 글꼴 애셋 `Pretendard-Bold/Regular Dynamic SDF.asset` 두 파일만 제외한다(`m_ClearDynamicDataOnBuild: 1`로 빌드 때 동적 글자판이 지워지고, 에디터 사용 중 파일이 바뀌므로. 사용자 결정 2026-11-10). 제외 목록은 `BuildPolicy.DirtyIgnoredPaths` 한 곳에 경로 그대로 두며 와일드카드로 넓히지 않는다. 그 밖의 변경은 계속 거부한다. `BuildPolicy.IsDirty(porcelainStatus)`가 판정한다.
   5. `bundleVersion = 핵심 + "+" + 메타데이터`로 바꾸고 `BuildPipeline.BuildPlayer`를 부른 뒤, **`finally`에서 핵심으로 되돌립니다**(빌드가 끝나면 `ProjectSettings.asset`은 바뀌지 않음). 빌드 로그에 `[Build] 게임 버전=<전체 문자열>`을 남깁니다.
+  6. **v0.15(IMP-012) 빌드 뒤 산출물 정리**(`Editor/BuildPolicy.cs`, 순수 판단 함수라 EditMode 시험): Pipeline 산출물 검사(3.4.3)·글꼴 라이선스 동봉 뒤, 출력 폴더 바로 아래의 `*_DoNotShip`(예: Burst 디버그 정보)·`*_ButDontShipItWithYourGame`(IL2CPP 백업) 폴더를 **지우지 않고** `Builds/Symbols/<Release|Development>/`로 옮깁니다(충돌 보고 해석에 심볼이 필요). 개발 빌드는 출력 폴더에 내부용 표시 파일 `INTERNAL_DEVELOPMENT_BUILD.txt`(「외부에 배포하지 마세요」)를 둡니다. 그 뒤 App ID 파일 처리(개발만 480 파일)는 그대로입니다.
   - **폐지**: `ReadBuildNumber()`, 명령줄 `-buildNumber`, 환경 변수 `GAME_BUILD_NUMBER`. 빌드 일련번호는 UTC 시각으로 대신합니다.
 - **빌드 메타데이터 형식**: `<채널>.<UTC 시각 yyyyMMddHHmmss>.<커밋 7자>[.dirty]`
   - 채널: 출시 빌드 `rel`, 개발 빌드 `dev`. 에디터 재생은 빌드하지 않으므로 런타임이 `editor`를 붙입니다(메타데이터 = `editor` 한 단어).
@@ -1221,8 +1242,8 @@ R-34(빌드 번호 규칙 미정)를 이 절로 해소합니다. 게임 버전�
 **(5) 프로토콜·로비·저장 필드 형식**
 
 - **`JoinRequest`**(3.7.2): v0.11의 `buildVer`(u32 숫자 인코딩)를 **`gameVersion` 문자열**(길이 접두 UTF-8, 최대 **64바이트** `ProtocolConstants.MaxGameVersionBytes`)로 바꿉니다. 필드 순서: `protocolVer`(u16) → `gameVersion` → `contentHash`(u64) → `joinPath`(u8) → `devPlayerId`(u64) → `supportedGenVersions`(u8 개수 + u16 ×n). 길이 접두 값은 읽기 전에 상한을 확인하고, 넘으면 디코드 실패입니다(R-30).
-- **`ProtocolConstants.ProtocolVersion`을 1 → 2로 올립니다**(메시지 배치가 바뀜, 3.7.2 공통 규칙).
-- **`protocolVer` 위치 고정 규칙(v0.12 신설)**: `JoinRequest` 본문의 첫 필드 `protocolVer`(u16)는 **앞으로 모든 프로토콜 버전에서 같은 위치·형식**으로 둡니다. 디코더는 이 값을 먼저 읽고, 현재 값과 다르면 나머지를 해석하지 않고(크기 상한 안의 남은 바이트는 버림) `ProtocolVersion`만 담은 요청을 돌려줍니다 → 호스트가 1번 검사에서 `VersionMismatch`로 거부합니다. `MessageKind`의 `JoinRequest`·`JoinRejected` 값, `JoinRejected` 배치(종류 바이트 + 사유 u8), 사유 코드 `VersionMismatch`(= 2)의 값도 바꾸지 않습니다. 그래서 다음에 프로토콜을 올려도 옛 빌드 참가자는 시간 초과가 아니라 「게임 버전 불일치」를 봅니다. (프로토콜 1인 지금까지의 빌드는 이 규칙 이전이라 2와 섞이면 시간 초과로 끝날 수 있음 — 개발 빌드끼리라 허용, R-35.)
+- **`ProtocolConstants.ProtocolVersion`을 1 → 2로 올립니다**(메시지 배치가 바뀜, 3.7.2 공통 규칙). **v0.15(IMP-002)**: `JoinRejected`에 hostVersion을 붙여 **3**으로 올림(3.7.2 표).
+- **`protocolVer` 위치 고정 규칙(v0.12 신설)**: `JoinRequest` 본문의 첫 필드 `protocolVer`(u16)는 **앞으로 모든 프로토콜 버전에서 같은 위치·형식**으로 둡니다. 디코더는 이 값을 먼저 읽고, 현재 값과 다르면 나머지를 해석하지 않고(크기 상한 안의 남은 바이트는 버림) `ProtocolVersion`만 담은 요청을 돌려줍니다 → 호스트가 1번 검사에서 `VersionMismatch`로 거부합니다. `MessageKind`의 `JoinRequest`·`JoinRejected` 값, `JoinRejected` 배치(종류 바이트 + 사유 u8 — v0.15부터 그 **뒤에만** hostVersion을 붙임), 사유 코드 `VersionMismatch`(= 2)의 값도 바꾸지 않습니다. 그래서 다음에 프로토콜을 올려도 옛 빌드 참가자는 시간 초과가 아니라 「게임 버전 불일치」를 봅니다. (프로토콜 1인 지금까지의 빌드는 이 규칙 이전이라 2와 섞이면 시간 초과로 끝날 수 있음 — 개발 빌드끼리라 허용, R-35.)
 - **로비 메타데이터**(3.7.1): 키 `kh_build`는 이름을 그대로 두고, 값을 호스트의 `GameVersion.Full`로 바꿉니다. `kh_proto`는 그대로입니다. 공개 세션 목록(M2-07, FR-145)의 「게임 버전 일치」는 `kh_proto`가 같고 `kh_build`가 내 `Full`과 같을 때입니다(참가 검사 1·2와 같은 규칙. ContentHash는 로비에 없고 참가 때 호스트가 확인). `kh_build`가 `TryParse`에 실패하면 불일치로 봅니다.
 - **월드 파일 헤더**(3.5.2, M3): `gameBuild` u32를 **`gameVer` = u16 ×3(MAJOR, MINOR, PATCH, 각 자리 따로)** 로 바꿉니다. 참고용이며 읽기 판정에 쓰지 않습니다(사전 릴리스·메타데이터는 담지 않음).
 - 로그 첫 줄(부트), 오류 보고 파일(M2-10, FR-158)에는 `Full`을 남깁니다.
@@ -1461,6 +1482,7 @@ sequenceDiagram
 
 - v0.10: 위 메시지(`JoinRequest`~`JoinComplete`, `SnapshotChunk`, `TableDelta`)는 모두 `Protocol/` 메시지입니다. GW(DES-081, 085)와 RP(DES-082)는 `INetServer`로만 주고받고, 실제 바이트 전송은 `FishNetServer`/`FishNetClient`(DES-121)가 `PacketBroadcast`로 합니다. 그래서 참가 판정·스냅샷·델타 보관 흐름은 가짜 `INetServer`로 FishNet 없이 시험합니다(`Game.Tests.Net`).
 - **v0.14(M1-10 실제)**: 참가자는 월드를 백그라운드 Task로 생성합니다(`ClientSession.PrepareInBackground`). JoinAccepted 뒤 JoinComplete 전에 온 델타는 보관했다가 순서대로 적용합니다(상한 20,000개). 허가 뒤 월드 생성 대기 시간은 기본 시간 초과에 **+30초**(`JoinHandshake.WorldGenerationAllowanceSeconds`)를 더합니다. 호스트는 `CreateHost` 안에서 월드를 **동기 생성**합니다(Full 약 0.3~0.6초, R-45).
+- **v0.15(IMP-002·003)**: 전송 연결 직후에는 FishNet 인증 전이라 아바타 스폰·관찰·ID 공유가 없습니다. 스냅샷 동기화가 끝나 `InGame`이 되면 GW가 `INetServer.Admit(connId)`로 인증하고 곧바로 `JoinComplete`를 보냅니다 → 이어서 `PlayerJoined` 이벤트로 `AvatarSpawner`가 아바타를 스폰하고, FishNet은 인증된 연결부터 관찰자에 넣습니다(3.7.2 「참가 전 연결 차단」). 거부는 `JoinRejected(사유, 호스트 버전)`이고, 버전 불일치면 참가자 화면에 두 버전을 함께 보입니다(FR-003).
 
 #### 3.9.3 자원 타격 → 쓰러짐 → 드롭 → 경험치 이벤트
 
@@ -2084,28 +2106,45 @@ job Steering(agents, flowFields, spatialHash, dt) [Burst, IJobParallelFor]:
 ```
 // 이동은 클라이언트 계산 + 호스트 검사. v0.10: NetworkTransform 대신 소유자 ServerRpc(AvatarPose 바이트, 비신뢰) → 호스트 검사 → ObserversRpc (3.9.8)
 // PlayerAvatar(DES-084, Net 어댑터)는 디코드와 RPC만, 판단은 AvatarMoveValidator(Game.Application, 순수 C#)
-func PlayerAvatar.OnPoseServerRpc(bytes):                      // 호스트에서
-    if not MessageCodec.TryDecodeAvatarPose(bytes, out pose): log.Warn("pose_decode_failed", Owner); return
-    r = validator.Check(state[Owner], pose, now)
-    if r.Accepted: serverPlayer.Position = pose.Pos; ObserversRpc(ExcludeOwner, Encode(pose))   // 거리 검증(FR-007)은 이 서버 위치를 씀
-    else: TargetRpc(Owner, Correction(r.LastAcceptedPos)); log.Warn("move_rejected", Owner)
+// v0.15(IMP-004): 입구에 연결별 PoseRateGate(AvatarSendHz × 1.5, 순간 5개)와 AbuseMeter(10초 50회)를 둠(3.7.2 「연결 남용 차단」)
+func PlayerAvatar.ServerSubmitPose(bytes):                     // 호스트에서
+    now = clock.RealtimeSeconds                                 // 호스트 수신 시각
+    if not poseGate.Allow(now): log.Warn("pose_dropped", Owner); CutIfAbusive(now); return      // 디코드도 하지 않음
+    if not MessageCodec.TryDecodeAvatarPose(bytes, out pose): log.Warn("pose_decode_failed", Owner); CutIfAbusive(now); return
+    r = world.CheckAvatarPose(player, pose, out correction)     // 안에서 validator.Check(state, pose, now)
+    if r == Accepted: ObserversRpc(ExcludeOwner, bytes)         // 서버 위치 갱신은 ServerWorld 안, 거리 검증(FR-007)은 이 서버 위치를 씀
+    elif r == Rejected: TargetRpc(Owner, correction)            // 이동 거부는 AbuseMeter에 세지 않음
+    // Stale은 조용히 버림
+func CutIfAbusive(now): if abuse.Record(now): log.Warn("net_abuse", Owner); Owner.Disconnect()
 
-// v0.11: 실제 구현(Application/Server/ServerWorld.cs의 AvatarMoveValidator)에 맞춤. m = BalanceValues.Movement
-func AvatarMoveValidator.Check(s, pose):                      // 연결별 상태 s (LastAccepted, Stamina, SecondsAtZero)
-    if not pose.Pos.IsFinite or not ProtocolConstants.IsInsideWorld(pose.Pos): return Rejected   // 월드 밖·NaN·무한대. v0.14: 월드는 0~3072 m + 가장자리 여유 16 m
-    if not s.HasLast: s.LastAccepted = pose; return Accepted                 // 스폰 직후 첫 자세는 기준점
-    deltaMs = (int)(pose.TimeMs - s.LastAccepted.TimeMs)                      // 보낸 쪽 시각, 한 바퀴 돌아도 부호 있는 차이
-    if deltaMs <= 0: return Stale                                            // 늦게 온·중복 자세는 버림(보정 안 함)
-    dt = min(deltaMs / 1000, m.MaxPoseDeltaSeconds(0.5))
-    runAllowed = s.Stamina.CanRun or s.SecondsAtZero <= m.MoveStaminaGraceSeconds(0.5)
-    speed = (pose.Running and runAllowed) ? m.RunSpeedMps : m.WalkSpeedMps   // 스태미나 0 → 걷기 속도가 상한(SRS v0.10)
-    allowedH = speed * m.MoveTolerance(1.25) * dt + m.MoveSlackMeters(0.5)
-    allowedV = m.MaxVerticalSpeedMps(40) * dt + m.MoveSlackMeters(0.5)       // 낙하·점프
-    if Horizontal(pose.Pos - s.LastAccepted.Pos) > allowedH or |pose.Pos.Y - s.LastAccepted.Pos.Y| > allowedV: return Rejected
+// v0.15: 실제 구현(Application/Server/ServerWorld.cs의 AvatarMoveValidator, IMP-001)에 맞춤. m = AvatarMoveSettings
+func AvatarMoveValidator.Check(s, pose, hostSeconds):         // 연결별 상태 s (SpawnPosition, LastAccepted, LastHostSeconds, BudgetH/V, PoseTokens, Stamina, SecondsAtZero)
+    if not TakePoseToken(s, hostSeconds): return Stale                       // 자세 빈도 버킷 m.MaxPoseHz(45) Hz, 순간 PoseBurstCapacity(5)개. 넘치면 조용히 버림(보정 회신도 없음)
+    if not pose.Pos.IsFinite or not ProtocolConstants.IsInsideWorld(pose.Pos.X, pose.Pos.Z): return Rejected   // 월드 밖·NaN·무한대. 월드는 0~3072 m + 가장자리 여유 16 m(수평만)
+    if not s.HasLast:                                                         // 첫 자세: 스폰 지점 근처만 기준점으로 받음
+        if HorizontalDist(s.SpawnPosition, pose.Pos) > m.SpawnRadiusMeters(15) or |pose.Pos.Y - s.SpawnPosition.Y| > m.SpawnHeightToleranceMeters(15): return Rejected
+        s.LastAccepted = pose; s.LastHostSeconds = hostSeconds; s.BudgetH = s.BudgetV = m.SlackMeters; return Accepted
+    deltaMs = (int)(pose.TimeMs - s.LastAccepted.TimeMs)                      // 보낸 쪽 시각은 순서(중복·옛 자세) 판별에만 씀
+    if deltaMs <= 0: return Stale
+    dt = clamp(hostSeconds - s.LastHostSeconds, 0, m.MaxDeltaSeconds(0.5))   // 경과 시간은 호스트 수신 시각 기준(클라이언트 시각을 믿지 않음)
+    runAllowed = s.Stamina.CanRun or s.SecondsAtZero <= m.StaminaGraceSeconds(0.5)
+    speed = (pose.Running and runAllowed) ? m.RunSpeed : m.WalkSpeed          // 스태미나 0 → 걷기 속도가 상한(SRS v0.10)
+    capH = speed * m.Tolerance(1.25) * m.MaxDeltaSeconds + m.SlackMeters(0.5)  // 예산 한도 = 속도 × 배율 × 최대 간격 + 여유 1회
+    capV = m.MaxVerticalSpeed(40) * m.MaxDeltaSeconds + m.SlackMeters
+    budgetH = min(s.BudgetH + speed * m.Tolerance * dt, capH)                 // 수평·수직 누적 예산: 시간이 흐르면 차고, 이동하면 줄어듦
+    budgetV = min(s.BudgetV + m.MaxVerticalSpeed * dt, capV)                  //   → 자세를 잘게 쪼개 보내도 여유를 매번 더 얻지 못함
+    h = HorizontalDist(s.LastAccepted.Pos, pose.Pos); v = |pose.Pos.Y - s.LastAccepted.Pos.Y|
+    if h > budgetH or v > budgetV: return Rejected                           // 거부는 기준 시각·예산을 바꾸지 않음
+    s.BudgetH = budgetH - h; s.BudgetV = budgetV - v; s.LastHostSeconds = hostSeconds
     s.Stamina.Tick(dt, running: pose.Running and s.Stamina.CanRun)          // 받아들인 자세로 서버 쪽 스태미나 추정(회복 지연 1초 포함)
     s.SecondsAtZero = (s.Stamina.Current <= 0) ? s.SecondsAtZero + dt : 0
     s.LastAccepted = pose; return Accepted
+
+// 스폰 지점: ServerWorld.AddPlayer가 자리를 정할 때 AvatarMoveState.SetSpawn(spawn)을 한 번 부름(지면 + 0.1 m, 3.9.8)
 ```
+- **v0.15(IMP-001)**: v0.11 의사코드와 달라진 점 — (1) 경과 시간은 자세 안의 클라이언트 시각이 아니라 **호스트 수신 시각**(`hostSeconds`)으로 구하고 0.5초로 자름(시각을 부풀려 보내 큰 이동을 인정받는 것을 막음). (2) 허용 거리는 자세마다 여유를 더하던 방식에서 **수평·수직 누적 예산**으로 바꿈(한도 = 속도 × 배율 × 최대 간격 + 여유 1회). (3) 자세 빈도 버킷 45 Hz·순간 5개, 초과는 `Stale`. (4) 첫 자세는 스폰 반경 15 m·높이 차 15 m 안만 받음(월드 어디로든 순간 이동 차단).
+- **상수 위치 (v0.16 확정, R-47)**: 이동 검사 상수(`MaxPoseHz`=45, `PoseBurstCapacity`=5, `SpawnRadiusMeters`=15, `SpawnHeightToleranceMeters`=15)는 `BalanceValues.Movement`에서 읽어 `ServerSettings.From` → `AvatarMoveSettings`로 전달한다(사용자 결정 2026-11-10). `ConfigValidator`는 네 값이 0보다 큰지, `ValidateMovementAgainstNetwork`로 `MaxPoseHz ≥ Network.AvatarSendHz`(기본 30)인지 확인한다(`ConfigAssembler.Assemble`에서 호출). 수신 상한이 송신 주기보다 낮으면 정상 플레이어가 되돌려지므로 설정 오류로 본다.
+- **지형 높이 대비 Y 검사는 미반영 (v0.15, 다음 사이클 후보)**: 지금은 직전 수락 위치 대비 수직 이동량만 봅니다. 그래서 수직 예산 안에서 천천히 땅속으로 들어가거나 공중에 머무는 위치는 막지 못합니다. 호스트의 `local.SurfaceHeightMeters(x, z)`(스폰 계산에 이미 씀)로 「지면 − 여유 ≤ Y ≤ 지면 + 점프·건축물 높이 여유」를 보는 검사를 다음 사이클 후보로 둡니다(SRS v0.13 NFR-030과 같음, R-07). 권고: 건축물 위에 서는 경우가 생기면 지면 기준이 바뀌므로 M4 기본 건축과 함께 설계합니다.
 - v0.10: 스태미나 추정은 클라이언트 값과 프레임 단위로 어긋날 수 있으므로, 추정값이 0이 된 뒤 처음 0.5초(설정값 `MoveStaminaGraceSeconds`, v0.10의 `MoveStaminaGrace`)는 달리기 속도를 계속 허용합니다. 오탐으로 정상 플레이어가 되돌려지지 않게 하는 여유이며 M1-08·M1-12 로그(`move_rejected`)로 조정합니다.
 - v0.11: 결과는 세 가지입니다 — `Accepted`(중계), `Rejected`(마지막 수락 위치로 보정), `Stale`(시각이 앞서지 않은 자세. 비신뢰 채널 순서 뒤바뀜이라 보정하지 않고 버림). 시각 간격 상한(`MaxPoseDeltaSeconds`)은 오래 끊겼다 온 자세 하나로 큰 이동을 인정하지 않게 합니다.
 
@@ -2119,6 +2158,9 @@ func AvatarMoveValidator.Check(s, pose):                      // 연결별 상�
 | `MoveStaminaGraceSeconds` | 0.5 s | ≥ 0 | 서버 추정 스태미나 0 뒤 달리기 속도를 더 인정하는 시간 |
 | `MaxPoseDeltaSeconds` | 0.5 s | > 0 | 한 번에 인정하는 자세 시간 간격 상한 |
 | `MaxVerticalSpeedMps` | 40 m/s | > 0 | 수직 이동(낙하·점프) 최대 속도 |
+| (v0.16) `MaxPoseHz` | 45 Hz | > 0, ≥ `Network.AvatarSendHz` | 자세 수신 빈도 상한(송신 30 Hz × 1.5). 위 「상수 위치」 |
+| (v0.16) `PoseBurstCapacity` | 5개 | > 0 | 자세 빈도 버킷 순간 허용 개수 |
+| (v0.16) `SpawnRadiusMeters` / `SpawnHeightToleranceMeters` | 15 m / 15 m | > 0 | 첫 자세가 스폰 지점에서 벗어나도 되는 수평 반경·높이 차 |
 - **확정(사용자 결정 2026-11-02)**: 이동은 클라이언트가 계산하고 호스트는 속도·범위만 검사합니다. 속도 한도 안의 위치 조작은 막지 못하므로 **Check 단계 보안 점검(security-auditor) 대상**으로 둡니다(8장 R-07). `move_rejected` 로그는 점검 근거 자료로 씁니다.
 
 #### 3.11.13 요청 빈도 제한 (DES-050, NFR-041, NFR-050)
@@ -2129,10 +2171,28 @@ class TokenBucket(rate, burst): tokens = burst; last = now
 // 연결마다: 전체 버킷(초당 요청 상한) + 명령 종류별 버킷
 // 공격·타격: rate = 들고 있는 도구의 공격 속도(초당) — 조작 클라이언트가 10배로 보내도 적용 수 ≤ 공격 속도
 // 채팅: 채팅 빈도 상한
-// v0.11(M1-09 실제): 버킷을 통과한 명령은 ServerWorld 대기열에 들어가고, 틱마다 최대 MaxCommandsPerTick(64)개만 처리,
-//   대기열이 MaxQueuedCommands(256)개에 이르면 새 명령은 버리고 로그(서버 처리 예산 보호, NFR-041)
+// v0.15(IMP-005): 실제 순서(코드 CommandPipeline.cs 머리 주석과 같음). v0.11의 「버킷을 통과한 명령이 대기열에 들어감」은 틀린 순서였음
+func ServerCommandGateway.HandleCommand(conn, msg):              // 수신 즉시(틱 밖)
+    if not join.TryGetInGamePlayer(conn, out player): drop; return        // 참가를 마친 연결만(FR-007)
+    if not CommandCodec.TryDecode(msg, out cmd, out rejection):           // 1. 디코드
+        if world.AllowRejectionReply(player): Send(conn, CommandResult(msg.RequestId, false, rejection))
+        return                                                            //    회신 한도를 넘으면 회신 없이 버림
+    if not world.Enqueue(player, cmd):                                    // 2. 대기열(전체 상한 + 플레이어별 몫)
+        if world.AllowRejectionReply(player): Send(conn, CommandResult(cmd.RequestId, false, RateLimited))
+func ServerWorld.Enqueue(player, cmd):
+    quota = max(1, ceil(MaxQueuedCommands(256) / MaxPlayers(8)))          // 플레이어별 몫(기본 32)
+    if queue.Count >= MaxQueuedCommands or queuedBy[player] >= quota: return false
+    queuedBy[player]++; queue.Enqueue((player, cmd)); return true
+func ServerWorld.Tick():                                                  // 3. 틱마다 최대 MaxCommandsPerTick(64)개
+    for each (player, cmd) dequeued: queuedBy[player]--; dispatcher.Dispatch:
+        RequestGuard.CheckRate(player, kind)    // 전체 버킷 → 종류별 버킷. 실패 = RateLimited(회신하지 않음, NFR-041)
+        → CheckRanges → handler.Validate → handler.Execute → CommandResult 회신
+// AllowRejectionReply(player) = RequestGuard.CheckRateAll(player): 명령과 같은 플레이어 **전체 버킷**에서 토큰 하나를 씀
+//   → 쓰레기 입력·몫 초과로 회신을 부풀려도 처리 예산·회신 수가 초당 요청 상한을 넘지 않음
 ```
 - v0.11: 두 상한은 `NetworkTuning` 설정값이고 `ConfigValidator`가 `MaxCommandsPerTick ≥ 1`, `MaxQueuedCommands ≥ MaxCommandsPerTick`을 검사합니다(3.12.1 표).
+- v0.15(IMP-005): 플레이어별 몫은 별도 설정값 없이 두 설정값(`MaxQueuedCommands`, `BalanceValues.Session.MaxPlayers`)으로 계산합니다. 한 플레이어가 대기열을 채워 다른 플레이어의 명령이 버려지는 것을 막습니다. 플레이어가 나가면 몫 집계와 버킷을 지웁니다.
+- 자세 RPC는 명령 경로가 아니므로 이 버킷을 쓰지 않고 `PoseRateGate`·45 Hz 버킷·`AbuseMeter`를 따로 씁니다(3.7.2, 3.11.12).
 
 #### 3.11.14 원자적 저장 (DES-099, NFR-036)
 
@@ -2425,9 +2485,9 @@ v0.14 (M1-10 빌드 주의): 실행 중 만드는 Terrain은 씬에 재질 참�
 
 | DES ID | 이름 | 종류 | 레이어 | 설명 | 관련 FR/NFR |
 |---|---|---|---|---|---|
-| DES-050 | 명령 파이프라인 | 모듈 | 애플리케이션 | ICommand, 처리기(검증 + 실행), CommandDispatcher, RequestGuard(값 범위·토큰 버킷) | FR-007, NFR-003, NFR-040, NFR-041 |
+| DES-050 | 명령 파이프라인 | 모듈 | 애플리케이션 | ICommand, 처리기(검증 + 실행), CommandDispatcher, RequestGuard(값 범위·토큰 버킷). v0.15: 거부 회신용 `CheckRateAll`(플레이어 전체 버킷, 3.11.13) | FR-007, NFR-003, NFR-040, NFR-041 |
 | DES-051 | 포트 모음 | 인터페이스 | 애플리케이션 | 3.7.3의 포트. v0.10: `INetServer`/`INetClient`는 Protocol 메시지·`NetChannel`만 다룸(FishNet 형식 없음), `ILocalPlayerPose`와 단순 보관 구현 `LocalPlayerPoseBuffer` 추가 | NFR-031, NFR-032 |
-| DES-052 | ServerWorld·TickScheduler | 모듈 | 애플리케이션 | 서버 시뮬레이션 루트, 틱 순서, 서버 처리 측정 표식. 로컬 플레이어 비의존. v0.10: 아바타 이동 검사기 `AvatarMoveValidator`(연결별 마지막 수락 자세, 속도·범위 검사, 서버 쪽 스태미나 추정, 3.11.12) | NFR-011, NFR-030, NFR-032, FR-024 |
+| DES-052 | ServerWorld·TickScheduler | 모듈 | 애플리케이션 | 서버 시뮬레이션 루트, 틱 순서, 서버 처리 측정 표식. 로컬 플레이어 비의존. v0.10: 아바타 이동 검사기 `AvatarMoveValidator`(연결별 마지막 수락 자세, 속도·범위 검사, 서버 쪽 스태미나 추정, 3.11.12). v0.15: 호스트 수신 시각 기준·누적 예산·45 Hz 버킷·첫 자세 스폰 반경(3.11.12), 대기열 플레이어별 몫·`AllowRejectionReply`(3.11.13), `ConnectionAbuseGuards`(`PoseRateGate`, `AbuseMeter`, 3.7.2) | NFR-011, NFR-030, NFR-032, FR-024 |
 | DES-053 | 복제 모델 | 모듈 | 애플리케이션 | ReplicatedTable, 변경 기록, 스냅샷, 관심 범위 정책(등급 표) | FR-008, FR-009, NFR-013~016 |
 | DES-054 | SessionService | 유스케이스 | 애플리케이션 | 세션 열기(참가 조건 선택·월드에 저장), 참가 판정, 나가기, 강퇴, 차단·해제, 참가 조건 변경, 재접속 예약(생성·해제 시 로비 메타데이터 `kh_count`·`kh_resv` 갱신), 종료 예고, 연결 끊김 처리 | FR-001~004, FR-011, FR-115, FR-116, FR-144~148, NFR-038, NFR-039 |
 | DES-055 | WorldLifecycle | 유스케이스 | 애플리케이션 | 새 월드(참가 조건 포함), 불러오기(재생성 + 바뀐 상태), 저장·자동 저장, 백업 복원, 이름 변경·복제·삭제·폴더, 형식 변환 | FR-012~014, FR-018~020, FR-022, FR-149~152, NFR-019, NFR-020, NFR-022, NFR-024~026, NFR-036, NFR-037, NFR-054 |
@@ -2462,8 +2522,8 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES-081 | ServerCommandGateway | 모듈 | 어댑터(Net) | 연결 → PlayerId(전송 원격 ID, `Connected(connId, remoteId)`로 받음), 디코드된 메시지 받기, 예외 격리, 빈도·값 범위 검사, 디스패처 호출, 결과 회신. v0.10: 포트·Protocol 메시지에만 의존, 가짜 `INetServer`로 시험(`Game.Tests.Net`) | FR-007, NFR-040, NFR-041 |
 | DES-082 | ReplicationPublisher | 모듈 | 어댑터(Net) | 테이블 델타·스냅샷 청크 송신, 생물 관심 범위 등급 송신, 연결별 큐·속도 제한. v0.10: 포트·Protocol 메시지에만 의존. v0.14: 자원 델타는 준비된 모든 연결, 생물은 관심 범위 등급(Near 50 m·Mid 150 m·Far 300 m, Despawn 여유 +10 m, 3.11.9) | FR-008, FR-009, NFR-013~016 |
 | DES-083 | ClientReplicationReceiver | 모듈 | 어댑터(Net) | 수신 → 미러 적용, 생물 보간 버퍼. v0.10: 포트·Protocol 메시지에만 의존 | FR-008, NFR-015 |
-| DES-084 | PlayerAvatar (NetworkObject) | 컴포넌트 | 어댑터(Net) | v0.11: 위치 `Adapters/Net/Avatar/PlayerAvatar.cs`, 프리팹 `Prefabs/PlayerAvatar.prefab`(NetworkObject + PlayerAvatar, 모양 없음, `DefaultPrefabObjects` 등록). FishNet 형식을 써도 되는 두 폴더 중 하나(3.4.1 규칙 8). 클라이언트 계산 이동 + 호스트 검사. v0.10: NetworkTransform 대신 소유자 ServerRpc(비신뢰, `AvatarPose` 바이트) → 호스트에서 `AvatarMoveValidator`(DES-052) 호출 → 통과하면 ObserversRpc(비신뢰, 소유자 제외)로 중계, 거부하면 TargetRpc 보정. 내 자세는 `ILocalPlayerPose`에서 읽고, 받은 다른 참가자 자세는 `ClientWorldMirror`에 넣음(표현 어댑터 참조 없음). 손에 든 것·생명 상태·체력 비율은 호스트가 정해 공유(3.9.8) | FR-023, FR-024, FR-042, FR-159, FR-160, NFR-030 |
-| DES-085 | JoinHandshake | 모듈 | 어댑터(Net) | JoinRequest/Accepted/Rejected, WorldReady, 로비 멤버 확인, 비밀번호 확인. v0.10: 포트·Protocol 메시지에만 의존, 가짜 `INetServer`로 시험 | FR-003, FR-004, FR-009, FR-115, FR-146, FR-169 |
+| DES-084 | PlayerAvatar (NetworkObject) | 컴포넌트 | 어댑터(Net) | v0.11: 위치 `Adapters/Net/Avatar/PlayerAvatar.cs`, 프리팹 `Prefabs/PlayerAvatar.prefab`(NetworkObject + PlayerAvatar, 모양 없음, `DefaultPrefabObjects` 등록). FishNet 형식을 써도 되는 두 폴더 중 하나(3.4.1 규칙 8). 클라이언트 계산 이동 + 호스트 검사. v0.10: NetworkTransform 대신 소유자 ServerRpc(비신뢰, `AvatarPose` 바이트) → 호스트에서 `AvatarMoveValidator`(DES-052) 호출 → 통과하면 ObserversRpc(비신뢰, 소유자 제외)로 중계, 거부하면 TargetRpc 보정. 내 자세는 `ILocalPlayerPose`에서 읽고, 받은 다른 참가자 자세는 `ClientWorldMirror`에 넣음(표현 어댑터 참조 없음). 손에 든 것·생명 상태·체력 비율은 호스트가 정해 공유(3.9.8). v0.15: ServerRpc 입구에 `PoseRateGate`(송신 Hz × 1.5, 순간 5개)·`AbuseMeter`(10초 50회 넘으면 연결 종료, 이동 거부 제외)(3.7.2, 3.11.12) | FR-023, FR-024, FR-042, FR-159, FR-160, NFR-030 |
+| DES-085 | JoinHandshake | 모듈 | 어댑터(Net) | JoinRequest/Accepted/Rejected, WorldReady, 로비 멤버 확인, 비밀번호 확인. v0.10: 포트·Protocol 메시지에만 의존, 가짜 `INetServer`로 시험. v0.15: 동기화가 끝나면 `INetServer.Admit` 뒤 `JoinComplete`, 참가를 마치지 못한 연결은 `JoinTimeout`으로 끊음, 버전 불일치 거부에 호스트 버전을 실음(3.7.2, 3.9.2) | FR-003, FR-004, FR-009, FR-115, FR-146, FR-169 |
 | DES-086 | FirstPersonController | 컴포넌트 | 어댑터(표현) | 1인칭 이동·달리기(CharacterController), 카메라, 감도·반전·시야각. 스태미나는 `VitalsRules`(DES-003)로 계산(0이면 걷기 속도). v0.10: 매 프레임 자세를 `ILocalPlayerPose`에 쓰고, 호스트 보정을 받으면 위치를 되돌림 | FR-023, FR-024, FR-025, FR-118 |
 | DES-087 | ResourceViewStreamer | 컴포넌트 | 어댑터(표현) | 셀 단위 근거리 GameObject 풀 + 원거리 인스턴싱, 쓰러짐·파괴 애니메이션. v0.14(M1-10): `ResourceViewStreamer`는 32 m 칸, 60 m 안 GameObject 풀 + 350 m 안 `RenderMeshInstanced`(재질 4개 인스턴싱 켬), 쓰러진·부서진 자원은 충돌체 끔. 타격 입력은 `ResourceHitInput`(공격 0.3초 간격). 쓰러짐 연출·낙관적 표현은 이후 | FR-047, FR-049, NFR-011, NFR-012, NFR-016 |
 | DES-088 | CreatureViews | 컴포넌트 | 어댑터(표현) | 생물 보간 표시, 애니메이터(화면 밖 정지), 피격 반응, 지역 변형 외형. v0.14(M1-11): `CreatureViews` 루트 아래 `Mirror.Creatures` 한 곳에서 그림(호스트 포함). 보간 = 새 스냅샷이 오면 직전 수신 간격(30~1000 ms로 제한)만큼 이동(3.11.9). 애니메이터·피격·변형 외형은 이후 | FR-076~081 |
@@ -2479,7 +2539,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES-098 | WorldFileCodec | 모듈 | 어댑터(저장) | 헤더·청크 인코딩, 본문 해시, 청크별 형식 변환, 저장 금지 항목 검사. v0.6: `FURN` 청크 | NFR-022~025, NFR-037, NFR-042, FR-177 |
 | DES-099 | WorldSaveStore | 모듈 | 어댑터(저장) | 월드 폴더, 원자적 저장, 백업 회전·복원, 이름 변경·복제·삭제 | FR-018~020, FR-022, FR-150~152, NFR-024, NFR-026, NFR-036 |
 | DES-120 | DiegeticHud | 컴포넌트 | 어댑터(표현) | 장치형 HUD(기본): 왼쪽 손목 옛 등광 계기와 올림/내림, 계기 화면(v0.13: uGUI 프리팹 `WristPanel` → UI 캡처 카메라 → 렌더 텍스처. v0.12까지 UI Toolkit 패널), 표시 면 `IWristSurface`(기본 구현 (B) 화면 공간 기울인 평면 = v0.13: `UiWarpedRawImage` 사다리꼴 메시, v0.12까지 UI Toolkit 사용자 지정 메시. 캡처 문제 시 대체안 3.7.11·R-39. (A) 3D 손목 소품은 교체 지점만, M6-11에서 결정), 올림 방식 `WristRaiseMode`(기본 토글, 옵션 누르는 동안), 올린 동안 모든 행동 가능, 다른 창이 열리면 자동 내림, 십자선 둘레 스태미나 호, 머리 위 등불 이름표 소품(체력 4단계 + 꺼짐), 피격 호·위협 테두리(UI 레이어, 계기 위), `손목 자동 내림 시간` 설정값(기본값 결정 대기). 월드 보조 색조만 `IRenderBackend`(DES-114). 어댑터 대역(080~099)이 차서 120번 사용. v0.4 신설 | NFR-001, FR-159, FR-171, FR-172, FR-104~106 |
-| DES-121 | FishNetPacketTransport | 모듈 + 컴포넌트 | 어댑터(Net) | v0.10 신설. `FishNetServer`(`INetServer` 구현)·`FishNetClient`(`INetClient` 구현)와 바이트 래퍼 Broadcast 1종 `PacketBroadcast`. FishNet `ServerManager`/`ClientManager`에 `PacketBroadcast`만 등록, 연결 시작·종료 이벤트와 원격 ID(FishySteamworks SteamID / Tugboat 개발 ID)를 포트 이벤트로 넘김, 보낼 때 `MessageCodec.Encode` → 채널(신뢰/비신뢰)로 전송, 받을 때 `TryDecode` 실패는 버리고 로그, 송수신 버퍼 재사용. 게이트웨이·복제·참가 절차에서 FishNet 형식을 쓰는 곳은 여기뿐(DES-084 아바타 RPC 제외). v0.11: 위치 `Adapters/Net/Transport/FishNetPacketTransport.cs`(폴더 규칙 3.4.1 규칙 8). 호스트 본인 연결은 로컬 플레이어 ID를 원격 ID로 씀. 에디터 측정에서 송신 1건당 관리 힙 약 81 B 할당이 남음(R-31) | NFR-031, NFR-040, NFR-013, NFR-014, FR-005 |
+| DES-121 | FishNetPacketTransport | 모듈 + 컴포넌트 | 어댑터(Net) | v0.10 신설. `FishNetServer`(`INetServer` 구현)·`FishNetClient`(`INetClient` 구현)와 바이트 래퍼 Broadcast 1종 `PacketBroadcast`. FishNet `ServerManager`/`ClientManager`에 `PacketBroadcast`만 등록, 연결 시작·종료 이벤트와 원격 ID(FishySteamworks SteamID / Tugboat 개발 ID)를 포트 이벤트로 넘김, 보낼 때 `MessageCodec.Encode` → 채널(신뢰/비신뢰)로 전송, 받을 때 `TryDecode` 실패는 버리고 로그, 송수신 버퍼 재사용. 게이트웨이·복제·참가 절차에서 FishNet 형식을 쓰는 곳은 여기뿐(DES-084 아바타 RPC 제외). v0.11: 위치 `Adapters/Net/Transport/FishNetPacketTransport.cs`(폴더 규칙 3.4.1 규칙 8). 호스트 본인 연결은 로컬 플레이어 ID를 원격 ID로 씀. 에디터 측정에서 송신 1건당 관리 힙 약 81 B 할당이 남음(R-31). v0.15: `FishNetJoinAuthenticator`(참가 판정 통과 뒤 `Admit`으로 인증, `_devOpenConnections`는 개발·에디터 전용), `PacketBroadcast`는 인증 전에도 받음, `_shareIds` 끔, 디코드 실패 `AbuseMeter`(3.7.2) | NFR-031, NFR-040, NFR-013, NFR-014, FR-005 |
 | DES-122 | UiThemeKit | 데이터 + 컴포넌트 모음 | 어댑터(표현) | v0.13 신설(D-27). uGUI 공통 기반: 테마 애셋 `UiTheme`(ScriptableObject, `UI/Theme/UiTheme.asset` 한 벌 — 색 토큰 20개, 글자 크기 토큰 6개, 단계 배율 0.9/1.0/1.25, 글꼴 토큰 3개, 대비 검사 짝), 토큰 상수 `UiTokens`, 적용 컴포넌트 `ThemedText`(크기·색·굵기·텍스트 키, `richText`·자동 크기·레이캐스트 끔 강제)·`ThemedGraphic`·`ThemedSelectable`(STORYBOARD 2.5 상태, 포커스 3px 외곽선 + ▶), `UiButton`(사용 불가여도 포커스를 받고 사유 이벤트), `UiScreen`(층별 정렬 순서, 숨김 = Canvas·GraphicRaycaster·CanvasGroup 함께 끔), `UiRoot`(글자 단계·언어 다시 적용, `UiScreenStack`, `UiInputRouter` — Esc·Ⓑ 닫기, Q/E·LB/RB 탭 이동), `UiSafeArea16x9`, `UiRaycastBlocker`, `KeycapView`, `UiArcGraphic`, `UiWarpedRawImage`. 에디터 보조(토큰 드롭다운, Apply Theme To Prefabs)는 `Game.Editor`. 규칙 검사 `UiPrefabRulesTests`(3.4.3) | FR-129, FR-130, FR-166, NFR-002, NFR-004, NFR-050, NFR-056, NFR-057 |
 
 ### 4.5 인프라 (DES-100~113)
@@ -2493,12 +2553,12 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | DES-104 | ConfigData·ContentRegistry | 데이터 + 모듈 | 인프라 | ScriptableObject 정의, 로더·검증, ContentId 부여, ContentHash | NFR-033, NFR-034 |
 | DES-105 | AiJobsBackend | 모듈 | 인프라 | 보행 격자, 흐름장, 조향, 공간 해시(Burst) | FR-067, NFR-011, NFR-017 |
 | DES-106 | SteamCloudSync | 모듈 | 인프라 | 월드별 원격 저장소 업로드·목록·내려받기·삭제 | FR-021, FR-151, NFR-007 |
-| DES-107 | Logging·CrashReporter | 모듈 | 인프라 | 파일 로그(회전, 민감 정보 제외), 세션 잠금 파일, 보고 압축 파일. C-43 해소: 로컬 압축 파일 생성과 폴더 열기까지만, 외부 전송 경로 없음(네트워크 호출 코드를 두지 않음) | FR-158, NFR-042, NFR-045 |
+| DES-107 | Logging·CrashReporter | 모듈 | 인프라 | 파일 로그(회전, 민감 정보 제외), 세션 잠금 파일, 보고 압축 파일. C-43 해소: 로컬 압축 파일 생성과 폴더 열기까지만, 외부 전송 경로 없음(네트워크 호출 코드를 두지 않음). v0.15: `FileLogSink` 20 MB 상한·최근 10개 보관(`CleanupOldLogs`), `ThrottledLog`(Application, 5초 묶기, Error 제외), Warning·Log 스택 추적 끔, `usePlayerLog` 끔(3.7.3 「로그 처리」) | FR-158, NFR-042, NFR-045 |
 | DES-108 | PerfTelemetry | 모듈 | 인프라 | 표식·기록기, 서버 처리 예산 감시, 개발용 성능 표시, CSV. v0.9: Stopwatch 자체 측정이 기본·ProfilerMarker 보조, GPU 프레임 시간은 `enableFrameTimingStats`, 성능 표시는 IMGUI(F3, 개발 빌드 전용)(3.12.4) | FR-163, NFR-010~021, NFR-048 |
 | DES-109 | GraphicsService | 모듈 | 인프라(`Game.Infra.Rendering`) | HDRP 품질 단계·프리셋·세부 설정, 업스케일러(DLSS/FSR 품질 모드) 적용, 기준 프리셋 「높음」. v0.9: 프리셋은 순수 `GraphicsPresetCatalog`로 받음(애셋 `GraphicsPresetConfig`는 `Game.Infra.Config`), LOD 편향은 `GraphicsAssetBuilder`가 HDRP 애셋에 구워 넣음(3.12.7) | FR-120, FR-121, NFR-005, NFR-010~012, NFR-028 |
 | DES-110 | LocalSettingsStore | 모듈 | 인프라 | settings.json 읽기·쓰기(형식 버전). v0.7: 호스트 차단 목록 `bans.json`(`IBanListStore` 구현, 모든 월드 공통, C-46) | NFR-047, FR-148 |
 | DES-111 | BackgroundRunner | 모듈 | 인프라 | 생성·저장 직렬화·압축을 메인 스레드 밖에서, 결과는 메인 스레드로 | NFR-018~020, NFR-052 |
-| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 게임 버전(v0.12: SemVer, 3.7.12), 패키지 버전 고정, asmdef 규칙 시험(3.4.2 표 비교, Pipeline 패키지 격리 3.4.3), Unity Smart Merge 설정(v0.8: `git mergetool` 방식, M1-01 (4)). v0.8: 에디터 전용 어셈블리 `Game.Editor`의 빌드 명령(`BuildCommands`)·출시 빌드 산출물 검사(`BuildArtifactInspector`, Pipeline 런타임 어셈블리 0건 확인)·프로젝트 설정 적용을 이 요소에 포함. v0.11(실제, **빌드 번호 규칙은 사용자 결정 대기**, R-34): `BuildCommands`가 빌드할 때마다 `ReadBuildNumber()`(명령줄 `-buildNumber`, 없으면 환경 변수 `GAME_BUILD_NUMBER`, 둘 다 없으면 0)로 `PlayerSettings.bundleVersion`을 `VersionPrefix("0.1").빌드 번호`로 **덮어씀**(예: 손으로 0.1.2로 바꿔 두어도 번호 없이 빌드하면 0.1.0). 런타임 `BuildInfo.Number`는 이 문자열을 `주×10000 + 부×100 + 끝자리`로 바꿔 `JoinRequest.buildVer`·로비 `kh_build`·세션 규칙의 버전 비교에 씀. **v0.12(사용자 결정 2026-11-04, R-34 해소, D-26)**: 위 덮어쓰기와 숫자 인코딩을 폐지. 원본은 사람이 정하는 `bundleVersion`(SemVer 핵심 `MAJOR.MINOR.PATCH[-pre]`)이고, `BuildCommands`는 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC yyyyMMddHHmmss>.<커밋 7자>[.dirty]`를 붙였다가 `finally`에서 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `-buildNumber`·`GAME_BUILD_NUMBER` 폐지. `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 런타임 `BuildInfo.Version`(`GameVersion`, DES-037)이 `JoinRequest.gameVersion`·`kh_build`·화면 표시에 쓰임(3.7.12). **v0.13**: 씬·프리팹 생성기는 「없을 때만 처음 만들기 + 있으면 검사만」(3.8.2), 아키텍처 시험에 UI 패키지 격리·UI Toolkit 사용 금지 검사 추가(3.4.3) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049, NFR-058 |
+| DES-112 | BuildConfig·ArchitectureRules | 데이터 + 도구 | 인프라 | 개발/출시 정의 기호, App ID 설정 파일, 게임 버전(v0.12: SemVer, 3.7.12), 패키지 버전 고정, asmdef 규칙 시험(3.4.2 표 비교, Pipeline 패키지 격리 3.4.3), Unity Smart Merge 설정(v0.8: `git mergetool` 방식, M1-01 (4)). v0.8: 에디터 전용 어셈블리 `Game.Editor`의 빌드 명령(`BuildCommands`)·출시 빌드 산출물 검사(`BuildArtifactInspector`, Pipeline 런타임 어셈블리 0건 확인)·프로젝트 설정 적용을 이 요소에 포함. v0.11(실제, **빌드 번호 규칙은 사용자 결정 대기**, R-34): `BuildCommands`가 빌드할 때마다 `ReadBuildNumber()`(명령줄 `-buildNumber`, 없으면 환경 변수 `GAME_BUILD_NUMBER`, 둘 다 없으면 0)로 `PlayerSettings.bundleVersion`을 `VersionPrefix("0.1").빌드 번호`로 **덮어씀**(예: 손으로 0.1.2로 바꿔 두어도 번호 없이 빌드하면 0.1.0). 런타임 `BuildInfo.Number`는 이 문자열을 `주×10000 + 부×100 + 끝자리`로 바꿔 `JoinRequest.buildVer`·로비 `kh_build`·세션 규칙의 버전 비교에 씀. **v0.12(사용자 결정 2026-11-04, R-34 해소, D-26)**: 위 덮어쓰기와 숫자 인코딩을 폐지. 원본은 사람이 정하는 `bundleVersion`(SemVer 핵심 `MAJOR.MINOR.PATCH[-pre]`)이고, `BuildCommands`는 빌드하는 동안만 메타데이터 `+<rel|dev>.<UTC yyyyMMddHHmmss>.<커밋 7자>[.dirty]`를 붙였다가 `finally`에서 되돌림, 출시 빌드는 태그 `v<핵심>`이 다른 커밋이면 실패, `-buildNumber`·`GAME_BUILD_NUMBER` 폐지. `ProjectConfigurator`는 비어 있을 때만 `0.1.0`. 런타임 `BuildInfo.Version`(`GameVersion`, DES-037)이 `JoinRequest.gameVersion`·`kh_build`·화면 표시에 쓰임(3.7.12). **v0.13**: 씬·프리팹 생성기는 「없을 때만 처음 만들기 + 있으면 검사만」(3.8.2), 아키텍처 시험에 UI 패키지 격리·UI Toolkit 사용 금지 검사 추가(3.4.3). **v0.15(IMP-012)**: `BuildPolicy`(출시 빌드는 dirty·git 읽기 실패면 거부, `*_DoNotShip`·`*_ButDontShipItWithYourGame`을 `Builds/Symbols/<Release|Development>`로 옮김, 개발 빌드 `INTERNAL_DEVELOPMENT_BUILD.txt`), `ProjectConfigurator`의 `usePlayerLog = false`(3.7.12 (2)) | NFR-009, NFR-027~029, NFR-035, NFR-043, NFR-049, NFR-058 |
 | DES-113 | TestAndBenchHarness | 도구 | 인프라 | 골든 해시, `-genhash`(다른 PC 비교)·`-genhash-compare`(결과 파일 비교, v0.7), `-genvalidate`(NFR-055), Bench 씬(P1/P8), 봇 | NFR-021, NFR-051, NFR-053, NFR-055 |
 | DES-114 | RenderBackend (HDRP) | 모듈(어댑터 인터페이스 구현) | 인프라(`Game.Infra.Rendering`) | `IRenderBackend` 구현. Volume 혼합, 태양·광원·정화 마스크 쿠키 적용, 후처리(색각 보정·섬광 완화), 셰이더 전역 변수. v0.4: 위협 시 월드 보조 색조(Volume. 테두리·피격 호 본체는 UI 레이어, v0.5). 1인칭 손·손목 소품 그리기 패스는 메서드 자리만(손목 표시 (A) 선택 시 구현, v0.5). HDRP 의존 코드가 모이는 유일한 곳(3.4.4). v0.2 신설 | FR-033~036, FR-106, FR-130, FR-131, FR-172, NFR-028 |
 
@@ -2542,6 +2602,14 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | uGUI + TextMeshPro (`com.unity.ugui`) (v0.13) | **2.0.0** (내장 패키지) | 6000.3.27f2에 이미 설치되어 있음 — 단 `manifest.json`에는 없고 HDRP Core(`com.unity.render-pipelines.core` 17.3.0)의 의존으로만 들어와 있음(`packages-lock.json` depth 2). 패키지 안에 `UnityEngine.UI`와 `Unity.TextMeshPro` 어셈블리가 함께 있음(Unity 6에서 TextMeshPro가 uGUI 패키지로 합쳐짐) | **`manifest.json`에 `"com.unity.ugui": "2.0.0"`을 직접 적어 고정**(NFR-049, 렌더 파이프라인을 바꿔도 UI 패키지가 빠지지 않게). 옛 `com.unity.textmeshpro` 패키지는 설치하지 않음. TMP Essential Resources는 `Assets/TextMesh Pro/`에 가져옴(Examples & Extras 제외). 내장 모듈 `com.unity.modules.uielements`는 Input System·Localization 등 에디터 도구가 쓰므로 **지우지 않음**(게임 코드에서만 사용 금지, 3.4.1 규칙 9) |
 | Unity Pipeline (`com.unity.pipeline`) | **0.9.1-exp.1** (실험 버전) | Unity 공식 CLI 1.0.0-beta.15와 에디터 조작 MCP가 이 패키지로 **열린 에디터와 통신**(D-22). **에디터 전용 패키지가 아님**을 확인 | **허용(사용자 결정 2026-11-03)**, 단 3.4.3의 안전장치 3가지(런타임 기호 금지, `Game.*` 참조 금지, 출시 빌드 산출물 검사)를 지킴. 출시 IL2CPP 빌드에서 Pipeline 런타임 어셈블리 0건 확인. 실험 버전이라 올릴 때 3.4.3 검사를 다시 통과해야 함(R-29) |
 
+- **알려진 취약점 확인 (v0.15, IMP-017, 2026-11-10 웹 확인)**: 아래 세 저장소 모두 GitHub 보안 공지(Security Advisories) **0건**, `SECURITY.md`(보안 정책) 없음. 고정 버전이 각 저장소의 최신 배포입니다.
+  | 패키지 | 고정 버전 | 확인 결과 | 근거 |
+  |---|---|---|---|
+  | FishNet | 4.7.4R | 보안 공지 없음, 4.7.4R이 최신(10월 16일). 보안 관련 수정은 4.7.0R의 「SplitReader 오버플로」·「LiteNetLib 패킷 조각 메모리 할당 공격」 수정이며 고정 버전에 포함됨 | github.com/FirstGearGames/FishNet/security, /releases |
+  | FishySteamworks | 4.1.1 | 보안 공지 없음, 4.1.1이 최신(8월 26일). 보안 표기된 수정 없음 | github.com/FirstGearGames/FishySteamworks/security, /releases |
+  | Steamworks.NET | 2025.165.0 (SDK 1.65) | 보안 공지 없음, 2025.165.0이 최신(10월 29일). 검색된 Steamworks DoS 공지 GHSA-g588-cjg3-6g78(2026-05)은 **Rust `steamworks` crate** 것이라 해당 없음 | github.com/rlabrecque/Steamworks.NET/security, /releases |
+  - 세 패키지 모두 공식 보안 공지 창구가 없으므로 **공지 0건이 취약점 0건을 뜻하지 않습니다**. 그래서 호스트 쪽 방어(연결 인증 순서·빈도 상한·남용 차단·디코더 검사, 3.7.2)를 라이브러리에 기대지 않고 게임 코드에 둡니다. 다시 확인하는 시점: 마일스톤 경계에서 버전을 올릴 때, M6 수직 슬라이스 전, 출시 점검(M10-06).
+  - Unity 엔진 자체 공지(CVE-2025-59489, 명령줄 인자 주입, 2025-10)는 이 표의 범위 밖입니다. 6000.3.27f2가 수정 포함 버전인지는 Unity 공지의 수정 버전 목록으로 출시 점검(M10-06) 때 확인합니다.
 - 스크립팅 백엔드: 출시·측정 빌드 IL2CPP, 에디터 Mono. 생성 결정론은 둘 모두에서 골든 해시가 같아야 통과(D-08).
 - 개발 도구: Unity CLI 1.0.0-beta.15 + Unity Pipeline 패키지로 열린 에디터를 조작합니다(실행 방식은 D-22).
 
@@ -2708,7 +2776,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 |---|---|---|
 | FR-001 | DES-054, DES-102, DES-055 | 세션 열기 시 참가 조건 선택(v0.3) |
 | FR-002 | DES-102, DES-054 | 초대 대화상자·콜백 |
-| FR-003 | DES-054, DES-072, DES-085, DES-031, DES-037 | 참가 경로 ↔ 참가 조건. v0.12: 버전 검사 = 프로토콜·게임 버전 전체 문자열·ContentHash·생성기 버전(3.7.12 (4)) |
+| FR-003 | DES-054, DES-072, DES-085, DES-031, DES-037, DES-080 | 참가 경로 ↔ 참가 조건. v0.12: 버전 검사 = 프로토콜·게임 버전 전체 문자열·ContentHash·생성기 버전(3.7.12 (4)). v0.15: `JoinRejected` 호스트 버전, 프로토콜 3, 「내 버전 / 호스트 버전」 표시(3.7.2). 버전 검사는 호환성 확인이며 변조 방지가 아님 |
 | FR-004 | DES-031, DES-085 | 접속 + 예약 < 8 |
 | FR-005 | DES-101, DES-121 | FishySteamworks(SDR). v0.10: 바이트 전달은 DES-121 |
 | FR-006 | DES-101, DES-103 | `-transport`, 출시 빌드 노출 안 함 |
@@ -2863,7 +2931,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | FR-155 | DES-017, DES-061 | |
 | FR-156 | DES-029, DES-018, DES-033 | C-47 |
 | FR-157 | DES-093, DES-073, DES-102 | 첫 실행 언어 = Steam 언어(C-48) |
-| FR-158 | DES-107 | 로컬 파일만(C-43) |
+| FR-158 | DES-107, DES-112 | 로컬 파일만(C-43). v0.15: `Logs/` 폴더만, Player.log 끔(3.7.3 「로그 처리」) |
 | FR-159 | DES-097, DES-084, DES-120, DES-074 | 장치형 HUD: 머리 위 등불 이름표(체력 단계) |
 | FR-160 | DES-084, DES-091 | |
 | FR-161 | DES-013, DES-059 | |
@@ -2919,7 +2987,7 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | NFR-027 | DES-112 | |
 | NFR-028 | DES-109, DES-112, DES-114 | HDRP 의존 코드 격리(3.4.4) |
 | NFR-029 | DES-112 | |
-| NFR-030 | DES-050, DES-052, DES-084 | 3.4.3 검사. v0.10: 아바타 자세도 호스트 검사를 통과한 것만 중계(3.9.8) |
+| NFR-030 | DES-050, DES-052, DES-084, DES-085, DES-121 | 3.4.3 검사. v0.10: 아바타 자세도 호스트 검사를 통과한 것만 중계(3.9.8). v0.15: 수신 시각 기준 누적 예산 이동 검사·첫 자세 스폰 반경(3.11.12), 참가 판정 전 연결은 인증하지 않아 스폰·위치·SteamID를 받지 못함(3.7.2). 지형 높이 Y 검사는 다음 사이클 후보 |
 | NFR-031 | DES-051, DES-101, DES-100, DES-080, DES-121 | v0.10: 전송 라이브러리 의존은 DES-121·DES-084에만 |
 | NFR-032 | DES-052, DES-100 | D-19 |
 | NFR-033 | DES-104, DES-033 | |
@@ -2930,11 +2998,11 @@ DES-080은 v0.10에서 애플리케이션으로 옮겼습니다(4.3). v0.10부�
 | NFR-038 | DES-054, DES-101 | |
 | NFR-039 | DES-054, DES-072 | |
 | NFR-040 | DES-050, DES-081, DES-080, DES-121 | v0.10: 디코드는 예외 없는 `TryDecode`, 실패는 DES-121이 버리고 로그 |
-| NFR-041 | DES-050, DES-081 | |
+| NFR-041 | DES-050, DES-081, DES-052, DES-084, DES-121 | v0.15: 대기열 플레이어별 몫, 거부 회신 전체 버킷, 자세 RPC 빈도 상한, 10초 50회 넘으면 연결 종료(이동 거부 제외)(3.7.2, 3.11.13) |
 | NFR-042 | DES-098, DES-107, DES-069 | |
 | NFR-043 | DES-112, DES-113 | |
 | NFR-044 | DES-093 | |
-| NFR-045 | DES-107 | |
+| NFR-045 | DES-107 | v0.15: 5초 묶기(Error 제외), Warning·Log 스택 추적 끔, 20 MB·최근 10개(3.7.3 「로그 처리」) |
 | NFR-046 | DES-025, DES-068, DES-075 | 3.7.8. v0.6: 용광로 가공 완료 포함(대상 C-66) |
 | NFR-047 | DES-110, DES-073 | |
 | NFR-048 | DES-108 | 3.12.8 |
@@ -3165,7 +3233,7 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-04 | FishySteamworks 4.1.1 ↔ FishNet 4.7.4R ↔ Steamworks.NET 2025.165.0 조합 비호환 | M1 지연 | 중간 → **낮음~중간**(v0.8) | M1-02에서 먼저 컴파일·접속 확인. v0.8: **조합 컴파일 확인 완료**(내장 모듈 `com.unity.modules.physics2d` 필요, D-03). 남은 확인은 실제 Steam 릴레이 접속(M1-07·M1-12). 실패 시 Steamworks.NET 2025.164.1로 내리거나 FishySteamworks 포크 수정. 전송은 `INetServer` 뒤에 있어 게임 로직 영향 없음 |
 | R-05 | 호스트 화면도 루프백 복제를 거치는 비용 | 호스트 프레임 손실 | 낮음~중간 | M1-12 측정. 크면 호스트 전용 직접 읽기 구현 추가(DES-072 내부) |
 | R-06 | FishNet·FishySteamworks 소수 관리자 의존 | 업데이트 중단 시 대응 어려움 | 중간 | 버전 고정·회귀 시험(NFR-049), 전송·복제를 어댑터에 가둠, 엔터티 테이블 방식이라 FishNet 의존 기능이 적음. v0.10: 메시지 형식·인코딩을 `Game.Application/Protocol/`로 옮겨(D-23) FishNet 의존이 Broadcast 1종(`PacketBroadcast`, DES-121)·아바타 RPC(DES-084)·연결 관리·TimeManager로 더 줄고, 다른 전송 라이브러리로 바꿀 때 고칠 곳이 DES-121·DES-084·DES-101로 한정됨 |
-| R-07 | 클라이언트 권위 이동의 속도 한도 안 조작 | 거리 검증 우회 일부 가능 | 낮음 | 협동 전용이라 이 수준으로 충분하다고 사용자가 확정(2026-11-02). 속도·범위 검사·`move_rejected` 로그(3.11.12). **Check 단계 보안 점검(security-auditor) 대상**: 우회 가능 범위와 거리 검증(FR-007)에 미치는 영향을 SECURITY_REPORT에서 평가 |
+| R-07 | 클라이언트 권위 이동의 속도 한도 안 조작 | 거리 검증 우회 일부 가능 | 낮음 | 협동 전용이라 이 수준으로 충분하다고 사용자가 확정(2026-11-02). 속도·범위 검사·`move_rejected` 로그(3.11.12). **Check 단계 보안 점검(security-auditor) 대상**: 우회 가능 범위와 거리 검증(FR-007)에 미치는 영향을 SECURITY_REPORT에서 평가. v0.15(Act, IMP-001): 호스트 수신 시각 기준 dt·누적 예산·자세 45 Hz·첫 자세 스폰 반경으로 시각 부풀리기·자세 쪼개기·첫 자세 순간 이동을 막음(3.11.12). 남은 한계: 지형 높이 대비 Y 검사 없음(다음 사이클 후보) |
 | R-08 | App ID 480 한계(다른 게임 로비 섞임, Cloud 용량, 업적 시험 불가) | 시험 신뢰도 저하 | 높음 | `kh_game` 필터, Cloud·업적은 정식 App ID 확보 후 재시험(C-30, C-34) |
 | R-09 | Unity가 HDRP를 유지보수 모드로 전환(2026 렌더 파이프라인 전략: 새 기능 없음, 안정성·회귀 수정만) | 장기적으로 새 그래픽 기능·최적화 부족, 향후 Unity 버전에서 지원 축소 가능 | 중간 | 사용자 결정(2026-11-02): **HDRP 유지 + 위험 대응**. (1) Unity 6000.3 LTS 고정, 마일스톤 경계에서만 올림. (2) HDRP 의존 코드를 `Game.Infra.Rendering`(DES-114, DES-109) 한 곳에 격리하고 아키텍처 시험으로 위반 검출(3.4.4, D-20). (3) **M6 수직 슬라이스에서 재평가**(M6-11): 유지 / URP 전환 / 버전 상승을 사용자가 결정 |
 | R-10 | 개발 중 Unity 버전 상승(6.7 LTS 등)으로 생성·성능·패키지 변화 | 회귀 | 중간 | 마일스톤 경계에서만 올림, 골든 해시·성능 재측정, 패키지 고정 |
@@ -3204,4 +3272,6 @@ v0.6 변화: M4 9 → 13(M4-01에 제작대·레시피북 진입 추가, 석탄 
 | R-43 | (v0.14 신규) `CreatureSnapshot` 배열이 틱마다 새로 할당되어 GC 약 520 KB/s | GC 스파이크, 1% Low(R-16) | 낮음~중간 | 배열 재사용(풀)·연결별 버퍼. M2~M3 전 개선 |
 | R-44 | (v0.14 신규) 자원 5,000개 일괄 변경 때 순간 FPS 24까지 떨어짐 | 체감 끊김, P8 판정 조건(FR-009) | 중간 | 델타 적용·뷰 갱신을 프레임에 나눠 처리(뷰 갱신 예산), 순간 값을 M6-10에서 재측정 |
 | R-45 | (v0.14 신규) 호스트가 월드를 `CreateHost` 안에서 동기 생성해 시작 때 약 0.6초 멈춤(Full 0.3~0.6초) | 시작 시 화면 멈춤 | 낮음 | 접속 중 화면 표시 뒤 생성하거나 백그라운드 생성(참가자와 같은 경로)으로 바꿈, 생성기 V1에서 시간 재측정 |
+| R-46 | (v0.15 신규, IMP-012) TMP 글꼴 `Pretendard-Regular/Bold Dynamic SDF.asset`(추적 파일)이 Dynamic 모드라 에디터에서 글자를 그릴 때마다 아틀라스·글자 표가 애셋에 기록되어 작업 트리가 **저절로 dirty**가 됨 → 출시 빌드가 dirty 검사(3.7.12 (2) 4)에 늘 걸림. 같은 이유로 커밋마다 큰 이진 변경이 섞임 | 출시 빌드 불가, 형상 관리 잡음·저장소 크기 증가 | 확실 | **대응 완료 (v0.16, 사용자 결정 2026-11-10).** 출시 빌드 dirty 판정은 글꼴 애셋 `Pretendard-Bold/Regular Dynamic SDF.asset` 두 파일만 제외한다(`m_ClearDynamicDataOnBuild: 1`로 빌드 때 동적 글자판이 지워지고, 에디터 사용 중 파일이 바뀌므로). 제외 목록은 `BuildPolicy.DirtyIgnoredPaths` 한 곳에 경로 그대로 두며 와일드카드로 넓히지 않는다. 그 밖의 변경은 계속 거부한다. `BuildPolicy.IsDirty(porcelainStatus)`가 판정한다(3.7.12 (2) 4) |
+| R-47 | (v0.15 신규, IMP-001) 이동 검사 상수 `MaxPoseHz`(45)·`PoseBurstCapacity`(5)·`SpawnRadiusMeters`(15)·`SpawnHeightToleranceMeters`(15)가 `AvatarMoveSettings` 코드 값이라 `BalanceValues.Movement`(나머지 이동 설정값)와 나뉘고 `ConfigValidator` 검사도 없음. `AvatarSendHz`를 올리면 45 Hz 상한과 어긋날 수 있음 | 조정 때 코드 수정 필요, 송신 주기 변경 시 정상 자세가 `Stale`로 버려짐 | 낮음 | **대응 완료 (v0.16, 사용자 결정 2026-11-10).** 이동 검사 상수(`MaxPoseHz`=45, `PoseBurstCapacity`=5, `SpawnRadiusMeters`=15, `SpawnHeightToleranceMeters`=15)는 `BalanceValues.Movement`에서 읽어 `ServerSettings.From` → `AvatarMoveSettings`로 전달한다. `ConfigValidator`는 네 값이 0보다 큰지, `ValidateMovementAgainstNetwork`로 `MaxPoseHz ≥ Network.AvatarSendHz`(기본 30)인지 확인한다(`ConfigAssembler.Assemble`에서 호출). 수신 상한이 송신 주기보다 낮으면 정상 플레이어가 되돌려지므로 설정 오류로 본다(3.11.12 「상수 위치」) |
 
