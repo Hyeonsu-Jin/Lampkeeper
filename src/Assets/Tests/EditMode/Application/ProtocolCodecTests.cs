@@ -118,14 +118,31 @@ namespace Game.Tests.Application
         }
 
         [Test]
-        public void CreatureQuantization_ErrorIsUnderFivePointFiveCm()
+        public void CreatureQuantization_ErrorIsUnderThreeCm_AcrossWholeWorld()
         {
             // [3.11.9] 위치는 2^16 단계(약 4.7 cm)라 오차는 반 단계(약 2.4 cm) 이하여야 한다.
-            foreach (float x in new[] { -1536f, -300.123f, 0f, 12.34f, 1535f })
+            // 월드는 0~3072 m(원점 한쪽)이고 가장자리 여유 16 m까지 담는다. 경계·중앙·끝·여유 끝 값을 모두 왕복한다.
+            foreach (float x in new[] { -16f, 0f, 0.01f, 12.34f, 300.123f, 1535.9f, 1536f, 1536.1f, 2999.99f, 3071.9f, 3072f, 3088f })
             {
                 CreatureState s = CreatureState.FromWorld(1, new Vec3f(x, 0f, 0f), 0f, 0, 0);
-                Assert.AreEqual(x, s.Position.X, 0.03f);
+                Assert.AreEqual(x, s.Position.X, 0.03f, "x=" + x);
+                CreatureState z = CreatureState.FromWorld(1, new Vec3f(0f, 0f, x), 0f, 0, 0);
+                Assert.AreEqual(x, z.Position.Z, 0.03f, "z=" + x);
             }
+        }
+
+        [Test]
+        public void CreatureQuantization_HeightRangeCoversTerrain_AndClampsOutside()
+        {
+            // 높이(Y)도 같은 범위를 쓴다. 지형 높이(수백 m)가 들어가야 한다.
+            foreach (float y in new[] { 0f, 120.5f, 312.34f, 600f })
+            {
+                Assert.AreEqual(y, CreatureState.FromWorld(1, new Vec3f(0f, y, 0f), 0f, 0, 0).Position.Y, 0.03f, "y=" + y);
+            }
+            // 범위 밖은 자른다(예외 없음).
+            Assert.AreEqual(-16f, CreatureState.FromWorld(1, new Vec3f(-500f, 0f, 0f), 0f, 0, 0).Position.X, 0.001f);
+            Assert.AreEqual(3088f, CreatureState.FromWorld(1, new Vec3f(9000f, 0f, 0f), 0f, 0, 0).Position.X, 0.001f);
+            Assert.AreEqual(-16f, CreatureState.FromWorld(1, new Vec3f(float.NaN, 0f, 0f), 0f, 0, 0).Position.X, 0.001f);
         }
 
         [Test]

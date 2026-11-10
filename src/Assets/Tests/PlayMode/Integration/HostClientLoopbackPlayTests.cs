@@ -16,6 +16,10 @@ using FishNet.Managing;
 using FishNet.Managing.Object;
 using FishNet.Object;
 using Game.Adapters.Net.Transport;
+using Game.Adapters.Presentation.World;
+using Game.Application.Replication;
+using Game.Domain.Creatures;
+using Game.Domain.Players;
 using Game.Application.Boot;
 using Game.Application.Commands;
 using Game.Application.Config;
@@ -291,6 +295,80 @@ namespace Game.Tests.Integration
             _runtime.Mirror.Resources.TryGet((uint)tree, out ResourceState hit);
             Assert.AreEqual(ResourcePhase.Damaged, hit.Phase);
             Assert.AreEqual(5001, _runtime.Mirror.Resources.Count);
+        }
+
+        [UnityTest]
+        public IEnumerator Creatures_SixtyTestCreatures_AreReplicatedToTheParticipantMirror_AndShownByViews()
+        {
+            // [M1-11 2차, FR-008, DES-082, DES-088] 호스트가 생물 60체를 만들면 호스트 자신의 클라이언트 사본이 관심 범위 안 생물을 받고,
+            // 위치가 호스트와 허용 오차 안에서 같고, CreatureViews가 그 수만큼 도형을 그린다.
+            yield return StartHostAndWaitInGame();
+            Assert.AreEqual(60, _runtime.SpawnTestCreatures(60));
+
+            ServerWorld server = _runtime.World;
+            PlayerCharacter player = null;
+            foreach (PlayerCharacter p in server.State.Players)
+            {
+                player = p;
+            }
+            Assert.IsNotNull(player);
+
+            int ExpectedInRange()
+            {
+                int n = 0;
+                foreach (Creature c in server.Ai.Registry.Creatures)
+                {
+                    float dx = c.Position.X - player.Position.X;
+                    float dz = c.Position.Z - player.Position.Z;
+                    if (dx * dx + dz * dz < 300f * 300f)
+                    {
+                        n++;
+                    }
+                }
+                return n;
+            }
+
+            yield return WaitUntil(() => { _runtime.Tick(); return _runtime.Mirror.Creatures.Count > 0 && _runtime.Mirror.Creatures.Count == ExpectedInRange(); },
+                "참가자 사본의 생물 수가 관심 범위 안 생물 수와 같아짐");
+            Assert.Greater(_runtime.Mirror.Creatures.Count, 0);
+
+            // 몇 초 움직이게 둔 뒤 위치 비교(원거리는 2 Hz라 걷는 속도 x 지연만큼 어긋날 수 있어 허용 오차를 둔다).
+            yield return new WaitForSeconds(2f);
+            float worst = 0f;
+            foreach (Creature c in server.Ai.Registry.Creatures)
+            {
+                if (_runtime.Mirror.Creatures.TryGet(c.Id, out ClientCreature copy))
+                {
+                    float dx = copy.LatestPosition.X - c.Position.X;
+                    float dy = copy.LatestPosition.Y - c.Position.Y;
+                    float dz = copy.LatestPosition.Z - c.Position.Z;
+                    worst = Mathf.Max(worst, Mathf.Sqrt(dx * dx + dy * dy + dz * dz));
+                }
+            }
+            Debug.Log("[M1-11 관찰] 호스트-사본 위치 최대 차이 " + worst.ToString("F2") + " m, 사본 생물 " + _runtime.Mirror.Creatures.Count
+                + ", 스냅샷 항목 " + _runtime.Mirror.Creatures.StatesReceived);
+            Assert.Less(worst, 5f, "사본 위치가 호스트와 5 m 안에서 같아야 한다.");
+            Assert.Greater(_runtime.Mirror.Creatures.StatesReceived, 0, "스냅샷이 도착해야 한다.");
+
+            // 표시: 도형 수가 사본 수와 같고, 프레임 비용을 재 둔다.
+            var go = new GameObject("CreatureViewsTest");
+            try
+            {
+                var views = go.AddComponent<CreatureViews>();
+                views.Initialize(_runtime.Mirror.Creatures);
+                yield return WaitUntil(() => { _runtime.Tick(); return views.ViewCount == _runtime.Mirror.Creatures.Count; }, "생물 도형 수가 사본 수와 같아짐");
+                for (int i = 0; i < 120; i++)
+                {
+                    _runtime.Tick();
+                    yield return null;
+                }
+                Debug.Log("[M1-11 관찰] CreatureViews.Update 평균 " + views.UpdateMilliseconds.ToString("F3") + " ms (생물 " + views.ViewCount + "체)");
+                Assert.Less(views.UpdateMilliseconds, 2.0, "표시 갱신이 프레임 예산에 비해 작아야 한다.");
+            }
+            finally
+            {
+                UnityEngine.Object.Destroy(go);
+            }
         }
 
         [UnityTest]
