@@ -267,7 +267,9 @@ namespace Game.Adapters.Net.Join
 
         private void Reject(Conn c, JoinRejectReason reason)
         {
-            _server.SendDefault(c.Id, new JoinRejected(reason));
+            // [FR-003, IMP-002] 버전 불일치면 호스트 버전을 실어 참가자 화면이 두 버전을 보이게 한다.
+            string hostVersion = reason == JoinRejectReason.VersionMismatch ? _session.Info.GameVersion : null;
+            _server.SendDefault(c.Id, new JoinRejected(reason, hostVersion));
             c.CloseAt = _clock.RealtimeSeconds + CloseDelaySeconds;
             _replication.RemoveConnection(c.Id);
             if (c.Phase != Phase.Connected && _world.HasPlayer(c.Player))

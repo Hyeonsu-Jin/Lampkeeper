@@ -3,7 +3,7 @@
 // 레이어: Tests (Game.Tests.Application)
 // 관련: TC-050~TC-054, DEF-001~DEF-004, NFR-030, NFR-041, FR-003
 // 주의: [Category("KnownDefect")] 시험은 현재 실패하는 것이 정상이다(결함 재현). 결함이 고쳐지면 통과해야 한다. [Ignore] 하지 않는다.
-//       DEF-001~003은 IMP-001·005로 고쳐져 표시를 뺐다. TC054(DEF-004, IMP-002)만 남아 있다.
+//       DEF-001~004는 IMP-001·002·005로 고쳐져 표시를 뺐다.
 using System.Linq;
 using Game.Application.Commands;
 using Game.Application.Ports;
@@ -114,7 +114,6 @@ namespace Game.Tests.Application
         }
 
         [Test]
-        [Category("KnownDefect")]
         public void TC054_버전_불일치_거부에는_호스트_버전이_실리고_문구에_자리가_있다()
         {
             // FR-003 수용 기준: 「게임 버전 불일치」와 두 버전(참가자·호스트)을 함께 표시.
@@ -122,7 +121,7 @@ namespace Game.Tests.Application
             string path = UnityEngine.Application.dataPath + "/_Game/Localization/strings.ko.txt";
             string cause = System.IO.File.ReadAllLines(path)
                 .First(l => l.StartsWith("join.fail.version.cause\t"));
-            Assert.IsTrue(messageCarriesString && cause.Contains("{0}"),
+            Assert.IsTrue(messageCarriesString && cause.Contains("{0}") && cause.Contains("{1}"),
                 "JoinRejected에 버전 문자열이 없고 문구에 버전 자리({0})도 없음(REV-002)");
         }
     }

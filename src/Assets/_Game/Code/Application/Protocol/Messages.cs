@@ -46,7 +46,7 @@ namespace Game.Application.Protocol
     public static class ProtocolConstants
     {
         /// <summary>프로토콜 버전(JoinRequest, 로비 kh_proto). 메시지 배치를 바꿀 때 올린다.</summary>
-        public const ushort ProtocolVersion = 2;
+        public const ushort ProtocolVersion = 3;
 
         /// <summary>게임 버전 문자열 최대 UTF-8 바이트(GameVersion.MaxBytes와 같다). 읽기 전에 상한을 확인한다. [R-30, NFR-058]</summary>
         public const int MaxGameVersionBytes = 64;
@@ -308,29 +308,39 @@ namespace Game.Application.Protocol
         }
     }
 
-    /// <summary>[S→C] 참가 거부.</summary>
+    /// <summary>[S→C] 참가 거부. 버전 불일치(VersionMismatch)일 때 호스트 게임 버전을 함께 실어 참가자가 두 버전을 보게 한다. [FR-003, IMP-002]</summary>
     public readonly struct JoinRejected : INetMessage
     {
         public JoinRejectReason Reason { get; }
 
-        public JoinRejected(JoinRejectReason reason)
+        /// <summary>호스트의 게임 버전 전체 문자열(최대 64바이트). 버전 불일치가 아니면 빈 문자열.</summary>
+        public string HostVersion { get; }
+
+        public JoinRejected(JoinRejectReason reason, string hostVersion = null)
         {
             Reason = reason;
+            HostVersion = hostVersion ?? string.Empty;
         }
 
         public MessageKind Kind => MessageKind.JoinRejected;
 
-        public void Write(ByteWriter w) => w.WriteU8((byte)Reason);
+        public void Write(ByteWriter w)
+        {
+            w.WriteU8((byte)Reason);
+            w.WriteString(HostVersion, ProtocolConstants.MaxGameVersionBytes);
+        }
 
         public static bool TryRead(ByteReader r, out JoinRejected message)
         {
             byte value = r.ReadU8();
+            // 옛 빌드 호스트(프로토콜 2)는 사유 한 바이트만 보낸다. 남는 바이트가 없으면 호스트 버전 없이 받아들인다.
+            string hostVersion = r.Remaining > 0 ? r.ReadString(ProtocolConstants.MaxGameVersionBytes) : string.Empty;
             if (r.Failed || value == 0 || value > (byte)JoinRejectReason.BadRequest)
             {
                 message = default;
                 return false;
             }
-            message = new JoinRejected((JoinRejectReason)value);
+            message = new JoinRejected((JoinRejectReason)value, hostVersion);
             return true;
         }
     }

@@ -75,7 +75,9 @@ namespace Game.Tests.Net
             var rig = new Rig();
             rig.Server.SimulateConnect(1, "x");
             rig.Server.SimulateReceive(1, Rig.Request(5, build: "9.9.9"));
-            Assert.AreEqual(JoinRejectReason.VersionMismatch, ((JoinRejected)rig.Server.To(1).Single()).Reason);
+            var rejected = (JoinRejected)rig.Server.To(1).Single();
+            Assert.AreEqual(JoinRejectReason.VersionMismatch, rejected.Reason);
+            Assert.IsNotEmpty(rejected.HostVersion, "[FR-003] 버전 불일치 거부에는 호스트 버전이 실린다");
             Assert.AreEqual(0, rig.World.State.PlayerCount);
 
             rig.Server.SimulateConnect(2, "x");

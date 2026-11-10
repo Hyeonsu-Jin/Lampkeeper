@@ -23,7 +23,6 @@ namespace Game.Tests.Architecture
         }
 
         [Test]
-        [Category("KnownDefect")]
         public void TC056_Player_log가_꺼져_있다()
         {
             string path = Path.GetFullPath(Path.Combine(UnityEngine.Application.dataPath, "..", "ProjectSettings", "ProjectSettings.asset"));

@@ -32,7 +32,8 @@ namespace Game.Application.Protocol
                 case MessageKind.WorldReady: return 16;
                 case MessageKind.Command: return 1 + 1 + 4 + 2 + ProtocolConstants.MaxCommandPayloadBytes;
                 case MessageKind.JoinAccepted: return 1 + 1 + ProtocolConstants.MaxSeedTextBytes + 64;
-                case MessageKind.JoinRejected: return 4;
+                // 종류 1 + 사유 1 + 호스트 버전(길이 1 + 최대 64)
+                case MessageKind.JoinRejected: return 1 + 1 + 1 + ProtocolConstants.MaxGameVersionBytes;
                 case MessageKind.JoinComplete: return 24;
                 case MessageKind.CommandResult: return 24;
                 case MessageKind.SnapshotChunk:

@@ -782,6 +782,18 @@ namespace Game.Tests.Application
         }
 
         [Test]
+        public void VersionMismatchRejection_KeepsHostVersion()
+        {
+            // [FR-003, IMP-002] 화면이 두 버전을 보이도록 호스트 버전을 세션이 보관한다.
+            var (session, client, _, _, _) = Create();
+            session.Connect("h", 0, JoinPath.Friend);
+            client.SimulateState(NetClientState.Connected);
+            client.SimulateReceive(new JoinRejected(JoinRejectReason.VersionMismatch, "0.1.0+rel.20261110090000.9f8e7d6"));
+            Assert.AreEqual(JoinRejectReason.VersionMismatch, session.RejectReason);
+            Assert.AreEqual("0.1.0+rel.20261110090000.9f8e7d6", session.RejectHostVersion);
+        }
+
+        [Test]
         public void Rejected_EndsWithReason_AndDisconnects()
         {
             var (session, client, _, _, _) = Create();

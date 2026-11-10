@@ -164,9 +164,32 @@ namespace Game.Tests.Application
         // ---------- (2) 고정 바이트 ----------
 
         [Test]
+        public void JoinRejected_CarriesHostVersion_AndAcceptsOldFormat()
+        {
+            // [FR-003, IMP-002] 호스트 버전이 왕복되고, 옛 빌드(사유 1바이트만)도 받아들인다.
+            const string host = "0.1.0+rel.20261110090000.9f8e7d6";
+            var m = (JoinRejected)Decode(Encode(new JoinRejected(JoinRejectReason.VersionMismatch, host)));
+            Assert.AreEqual(JoinRejectReason.VersionMismatch, m.Reason);
+            Assert.AreEqual(host, m.HostVersion);
+            var old = (JoinRejected)Decode(new byte[] { 17, 2 });
+            Assert.AreEqual(JoinRejectReason.VersionMismatch, old.Reason);
+            Assert.AreEqual(string.Empty, old.HostVersion);
+        }
+
+        [Test]
+        public void JoinRejected_HostVersionOverLimit_IsRejected()
+        {
+            // 64바이트 상한을 넘는 호스트 버전은 읽지 않는다(NFR-040).
+            var bytes = new byte[3 + 65];
+            bytes[0] = 17; bytes[1] = 2; bytes[2] = 65;
+            Assert.IsFalse(MessageCodec.TryDecode(bytes, out _, out DecodeFailure _));
+        }
+
+        [Test]
         public void FixedBytes_JoinRejected()
         {
-            CollectionAssert.AreEqual(new byte[] { 17, 1 }, Encode(new JoinRejected(JoinRejectReason.Full)));
+            CollectionAssert.AreEqual(new byte[] { 17, 1, 0 }, Encode(new JoinRejected(JoinRejectReason.Full)));
+            CollectionAssert.AreEqual(new byte[] { 17, 2, 3, (byte)'1', (byte)'.', (byte)'2' }, Encode(new JoinRejected(JoinRejectReason.VersionMismatch, "1.2")));
         }
 
         [Test]
@@ -174,16 +197,16 @@ namespace Game.Tests.Application
         {
             // [NFR-058, R-30] 64바이트까지는 왕복, 65바이트는 쓰기도 읽기도 실패한다.
             string max = new string('a', ProtocolConstants.MaxGameVersionBytes);
-            var ok = (JoinRequest)Decode(Encode(new JoinRequest(2, max, 1, JoinPath.Invite, 0, new ushort[] { 0 })));
+            var ok = (JoinRequest)Decode(Encode(new JoinRequest(ProtocolConstants.ProtocolVersion, max, 1, JoinPath.Invite, 0, new ushort[] { 0 })));
             Assert.AreEqual(max, ok.GameVersion);
 
             var writer = new ByteWriter(ProtocolConstants.MaxPacketBytes);
-            Assert.IsFalse(MessageCodec.TryEncode(new JoinRequest(2, new string('a', 65), 1, JoinPath.Invite, 0, new ushort[] { 0 }), writer));
+            Assert.IsFalse(MessageCodec.TryEncode(new JoinRequest(ProtocolConstants.ProtocolVersion, new string('a', 65), 1, JoinPath.Invite, 0, new ushort[] { 0 }), writer));
 
             // 변조된 패킷: 길이 접두를 65로 적어 보낸다.
             byte[] forged = new byte[1 + 2 + 1 + 65 + 8 + 1 + 8 + 1];
             forged[0] = (byte)MessageKind.JoinRequest;
-            forged[1] = 2;
+            forged[1] = (byte)ProtocolConstants.ProtocolVersion;
             forged[3] = 65;
             Assert.IsFalse(MessageCodec.TryDecode(forged, out _, out _));
         }
@@ -208,9 +231,9 @@ namespace Game.Tests.Application
         }
 
         [Test]
-        public void ProtocolVersion_IsTwo()
+        public void ProtocolVersion_IsThree()
         {
-            Assert.AreEqual((ushort)2, ProtocolConstants.ProtocolVersion);
+            Assert.AreEqual((ushort)3, ProtocolConstants.ProtocolVersion); // [IMP-002] JoinRejected에 호스트 버전 필드 추가
         }
 
         [Test]
@@ -222,11 +245,11 @@ namespace Game.Tests.Application
         [Test]
         public void FixedBytes_JoinRequest()
         {
-            var message = new JoinRequest(2, "0.1.0", 0x1122334455667788UL, JoinPath.Friend, 0UL, new ushort[] { 0 });
+            var message = new JoinRequest(ProtocolConstants.ProtocolVersion, "0.1.0", 0x1122334455667788UL, JoinPath.Friend, 0UL, new ushort[] { 0 });
             byte[] expected =
             {
                 1,                              // 종류 JoinRequest
-                2, 0,                           // 프로토콜 2
+                3, 0,                           // 프로토콜 3
                 5, 0x30, 0x2E, 0x31, 0x2E, 0x30, // 게임 버전: 길이 5 + "0.1.0"
                 0x88, 0x77, 0x66, 0x55, 0x44, 0x33, 0x22, 0x11, // ContentHash
                 1,                              // 참가 경로 Friend
@@ -282,7 +305,7 @@ namespace Game.Tests.Application
         {
             byte[][] samples =
             {
-                Encode(new JoinRequest(2, "0.1.0+editor", 5UL, JoinPath.Invite, 3UL, new ushort[] { 0, 1 })),
+                Encode(new JoinRequest(ProtocolConstants.ProtocolVersion, "0.1.0+editor", 5UL, JoinPath.Invite, 3UL, new ushort[] { 0, 1 })),
                 Encode(new JoinAccepted("seed", 1UL, 0, 2UL, 3u, 8, SessionAccess.Public, new PlayerId(5), 1)),
                 Encode(new JoinComplete(1u, new Vec3f(1, 2, 3))),
                 Encode(new CommandMessage(1, 2u, new byte[] { 9, 9 })),
@@ -353,7 +376,7 @@ namespace Game.Tests.Application
             Assert.IsFalse(MessageCodec.TryEncode(new JoinAccepted(longSeed, 0, 0, 0, 0, 8, SessionAccess.Public, new PlayerId(1), 0), writer));
             Assert.IsFalse(MessageCodec.TryEncode(new CommandMessage(1, 1, new byte[ProtocolConstants.MaxCommandPayloadBytes + 1]), writer));
             Assert.IsFalse(MessageCodec.TryEncode(new SnapshotChunk(1, 1, 0, 1, new byte[ProtocolConstants.MaxChunkPayloadBytes + 1]), writer));
-            Assert.IsFalse(MessageCodec.TryEncode(new JoinRequest(2, "0.1.0", 1, JoinPath.Invite, 0, new ushort[ProtocolConstants.MaxGeneratorVersions + 1]), writer));
+            Assert.IsFalse(MessageCodec.TryEncode(new JoinRequest(ProtocolConstants.ProtocolVersion, "0.1.0", 1, JoinPath.Invite, 0, new ushort[ProtocolConstants.MaxGeneratorVersions + 1]), writer));
             Assert.IsFalse(MessageCodec.TryEncode(new CreatureSnapshot(1, new CreatureState[ProtocolConstants.MaxCreaturesPerSnapshot + 1]), writer));
         }
 
@@ -361,7 +384,7 @@ namespace Game.Tests.Application
         public void Decode_RejectsOutOfRangeEnumValues()
         {
             // 참가 경로·참가 조건·거부 사유는 범위를 벗어난 값을 받지 않는다.
-            byte[] request = Encode(new JoinRequest(2, "0.1.0", 1, JoinPath.Invite, 0, new ushort[] { 0 }));
+            byte[] request = Encode(new JoinRequest(ProtocolConstants.ProtocolVersion, "0.1.0", 1, JoinPath.Invite, 0, new ushort[] { 0 }));
             request[1 + 2 + (1 + 5) + 8] = 9; // 참가 경로 자리
             Assert.IsFalse(MessageCodec.TryDecode(request, out _, out _));
             Assert.IsFalse(MessageCodec.TryDecode(new byte[] { (byte)MessageKind.JoinRejected, 0 }, out _, out _), "사유 없음(0)은 거부 메시지가 될 수 없다");

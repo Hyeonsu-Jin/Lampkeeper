@@ -72,11 +72,9 @@ namespace Game.Editor
                 ReadGitInfo(gitRoot, out string commit, out bool dirty);
                 if (!development)
                 {
+                    // [IMP-012] 출시 빌드는 깨끗한 커밋에서만(dirty·git 읽기 실패면 거부).
+                    BuildPolicy.CheckReleaseAllowed(false, dirty, commit);
                     CheckReleaseTag(gitRoot, core, commit);
-                    if (dirty)
-                    {
-                        Debug.LogWarning("[Build] 작업 트리에 커밋하지 않은 수정이 있습니다. 외부에 나눠 주는 출시 빌드는 깨끗한 트리에서 만드세요(출시 점검표 M10-06).");
-                    }
                 }
                 string channel = development ? GameVersion.ChannelDevelopment : GameVersion.ChannelRelease;
                 string fullVersion = core.Core + "+" + GameVersion.ComposeBuildMetadata(channel, DateTime.UtcNow, commit, dirty);
@@ -122,6 +120,16 @@ namespace Game.Editor
                     throw new InvalidOperationException("Pretendard 라이선스 원문을 찾지 못했습니다: " + oflSource);
                 }
                 File.Copy(oflSource, Path.Combine(folder, "Pretendard-OFL.txt"), true);
+
+                // [IMP-012, SEC-009] 디버그·백업 폴더(*_DoNotShip, *_ButDontShipItWithYourGame)는 배포 폴더 밖으로 옮긴다.
+                int moved = BuildPolicy.MoveNonShippable(folder, Path.Combine(projectRoot, "Builds", BuildPolicy.SymbolsFolderName, development ? "Development" : "Release"));
+                Debug.Log("[Build] 배포 제외 폴더 " + moved + "개를 Builds/" + BuildPolicy.SymbolsFolderName + "로 옮겼습니다.");
+
+                // [IMP-012] 개발 빌드는 내부용 표시 파일을 둔다.
+                if (development)
+                {
+                    File.WriteAllText(Path.Combine(folder, BuildPolicy.InternalMarkerFile), BuildPolicy.InternalMarkerText);
+                }
 
                 // 개발 빌드만 App ID 480 파일을 실행 파일 옆에 둔다(NFR-009).
                 string appIdTarget = Path.Combine(folder, SteamAppIdFile);

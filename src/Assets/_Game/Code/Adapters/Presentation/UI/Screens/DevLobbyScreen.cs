@@ -146,11 +146,15 @@ namespace Game.Adapters.Presentation.UI.Screens
         /// <summary>
         /// 참가 실패 패널을 보인다. 제목·원인·해결 문장은 키 접두사에 .title/.cause/.fix를 붙여 조회한다. [NFR-003]
         /// </summary>
-        public void ShowFailure(string keyPrefix)
+        /// <param name="keyPrefix">문구 키 앞부분</param>
+        /// <param name="causeArgs">원인 문장의 {0}, {1} 자리에 채울 값(버전 불일치: 내 버전, 호스트 버전). 없으면 문장 그대로. [FR-003]</param>
+        public void ShowFailure(string keyPrefix, params object[] causeArgs)
         {
             Show(_failPanel);
             _failTitle.SetDynamicText(_text.Get(keyPrefix + ".title"));
-            _failCause.SetDynamicText(_text.Get(keyPrefix + ".cause"));
+            _failCause.SetDynamicText(causeArgs != null && causeArgs.Length > 0
+                ? _text.Get(keyPrefix + ".cause", causeArgs)
+                : _text.Get(keyPrefix + ".cause"));
             _failFix.SetDynamicText(_text.Get(keyPrefix + ".fix"));
             Select(_failOk);
         }

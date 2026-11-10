@@ -64,6 +64,10 @@ namespace Game.Editor
             // 호스트 창이 뒤로 가도 서버가 멈추면 안 된다(8인 세션).
             PlayerSettings.runInBackground = true;
 
+            // [IMP-006, SEC-005] Unity가 쓰는 Player.log는 SteamID·사용자 경로를 가리지 않고 남기므로 끈다.
+            // 개발 빌드도 끈다: 이 설정은 빌드 종류별이 아니라 하나뿐이고, 가려진 로그는 게임이 Logs/ 폴더에 따로 쓴다(FR-158).
+            PlayerSettings.usePlayerLog = false;
+
             AssetDatabase.SaveAssets();
             Debug.Log("[Setup] 프로젝트 설정을 적용했습니다(Force Text, IL2CPP, 선형 색 공간).");
         }

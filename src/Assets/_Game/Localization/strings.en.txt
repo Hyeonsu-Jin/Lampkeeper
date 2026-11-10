@@ -44,7 +44,7 @@ join.fail.full.title	Session full
 join.fail.full.cause	The session is full or a spot is reserved
 join.fail.full.fix	Try again later or ask the host
 join.fail.version.title	Game version mismatch
-join.fail.version.cause	Your game version differs from the host's
+join.fail.version.cause	Your game version differs from the host's. Yours {0} / Host {1}
 join.fail.version.fix	Update the game on Steam and try again
 join.fail.password.title	Wrong password
 join.fail.password.cause	The password you entered is incorrect

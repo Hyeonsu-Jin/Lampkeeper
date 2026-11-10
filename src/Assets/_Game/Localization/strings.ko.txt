@@ -44,7 +44,7 @@ join.fail.full.title	인원 초과
 join.fail.full.cause	세션이 가득 찼거나 자리 예약 중입니다
 join.fail.full.fix	잠시 후 다시 시도하거나 호스트에게 문의하세요
 join.fail.version.title	게임 버전 불일치
-join.fail.version.cause	호스트와 게임 버전이 다릅니다
+join.fail.version.cause	게임 버전이 호스트와 다릅니다. 내 버전 {0} / 호스트 버전 {1}
 join.fail.version.fix	Steam에서 게임을 업데이트한 뒤 다시 시도하세요
 join.fail.password.title	비밀번호 불일치
 join.fail.password.cause	입력한 비밀번호가 맞지 않습니다

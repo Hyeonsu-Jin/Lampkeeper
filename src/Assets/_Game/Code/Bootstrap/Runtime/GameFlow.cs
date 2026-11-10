@@ -434,7 +434,16 @@ namespace Game.Bootstrap.Runtime
                     LeaveGameView();
                     EndSession();
                     _lobby.SetHosting(false, false);
-                    _lobby.ShowFailure(prefix);
+                    if (session.Failure == ClientFailure.Rejected && session.RejectReason == JoinRejectReason.VersionMismatch)
+                    {
+                        // [FR-003] 「게임 버전 불일치」와 함께 내 버전·호스트 버전을 모두 보인다(옛 호스트는 버전을 안 보내므로 ?).
+                        string host = string.IsNullOrEmpty(session.RejectHostVersion) ? "?" : session.RejectHostVersion;
+                        _lobby.ShowFailure(prefix, BuildInfo.Version.Full, host);
+                    }
+                    else
+                    {
+                        _lobby.ShowFailure(prefix);
+                    }
                     break;
                 }
             }

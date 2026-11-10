@@ -108,6 +108,9 @@ namespace Game.Application.Session
         public ClientFailure Failure { get; private set; }
         public JoinRejectReason RejectReason { get; private set; }
 
+        /// <summary>거부될 때 호스트가 알려 준 게임 버전(버전 불일치가 아니면 빈 문자열). [FR-003]</summary>
+        public string RejectHostVersion { get; private set; } = string.Empty;
+
         /// <summary>호스트가 정해 준 내 플레이어 ID(허가 뒤).</summary>
         public PlayerId LocalPlayer { get; private set; }
 
@@ -174,6 +177,7 @@ namespace Game.Application.Session
             _path = path;
             Failure = ClientFailure.None;
             RejectReason = JoinRejectReason.None;
+            RejectHostVersion = string.Empty;
             LocalSlot = -1;
             _prepareTask = null; // 이전 시도의 월드 준비 결과는 버린다
             _mirror.Reset();
@@ -251,6 +255,7 @@ namespace Game.Application.Session
                     if (State == ClientSessionState.Connecting)
                     {
                         RejectReason = rejected.Reason;
+                        RejectHostVersion = rejected.HostVersion;
                         End(ClientFailure.Rejected);
                     }
                     break;
