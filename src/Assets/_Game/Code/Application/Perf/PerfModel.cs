@@ -42,10 +42,25 @@ namespace Game.Application.Perf
         public const string ActiveCreatures = "creatures.active";
         public const string SyncedResources = "resources.synced";
 
+        // M1-12: 연결별 대역폭(호스트는 접속자 수·연결별 최댓값, 참가자는 자기 연결 하나)과 메모리.
+        public const string NetPeers = "net.peers";
+        public const string NetPeerSendMaxBytesPerSec = "net.peer_send_max_bytes_per_s";
+        public const string NetPeerRecvMaxBytesPerSec = "net.peer_recv_max_bytes_per_s";
+
+        /// <summary>프로세스 작업 집합(MB). NFR-048 프로세스 메모리 10 GB 판정용.</summary>
+        public const string MemWorkingSetMb = "mem.working_set_mb";
+
+        /// <summary>관리 힙(MB).</summary>
+        public const string MemManagedHeapMb = "mem.managed_heap_mb";
+
+        /// <summary>Unity가 알려 주는 그래픽 메모리 사용량(MB). 값을 못 읽으면 0(= 측정 불가, 실제 VRAM은 측정 스크립트가 GPU 성능 카운터로 따로 잰다).</summary>
+        public const string MemGfxMb = "mem.gfx_mb";
+
         /// <summary>CSV 열 순서(고정).</summary>
         public static readonly IReadOnlyList<string> All = new[]
         {
             NetSendBytesPerSec, NetRecvBytesPerSec, NetRttMs, ActiveCreatures, SyncedResources,
+            NetPeers, NetPeerSendMaxBytesPerSec, NetPeerRecvMaxBytesPerSec, MemWorkingSetMb, MemManagedHeapMb, MemGfxMb,
         };
     }
 

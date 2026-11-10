@@ -19,6 +19,7 @@ using Game.Adapters.Presentation.World;
 using Game.Application.Boot;
 using Game.Application.Config;
 using Game.Application.Hud;
+using Game.Application.Perf;
 using Game.Application.Ports;
 using Game.Application.Replication;
 using Game.Application.Session;
@@ -26,6 +27,7 @@ using Game.Application.WorldSync;
 using Game.Domain.Common;
 using Game.Domain.Session;
 using Game.Domain.Vitals;
+using Game.Bootstrap.DevTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -57,6 +59,21 @@ namespace Game.Bootstrap.Runtime
 
         /// <summary>개발 빌드의 -testcreatures N: 호스트가 월드를 만든 직후 시험용 생물 N체를 만든다(0이면 만들지 않음, M1-11).</summary>
         public int DevTestCreatures;
+
+        /// <summary>개발 빌드의 -bot: 입력·화면 없이 정해진 경로로 걷고 자원을 때리고 생물을 쫓는다(M1-12 측정용, DES-113).</summary>
+        public bool Bot;
+
+        /// <summary>봇 번호(개발용 플레이어 ID). 경로가 이 값으로 정해진다.</summary>
+        public int BotNumber;
+
+        /// <summary>종료 요청(종료 코드). 봇이 접속을 잃었을 때 프로세스를 끝내는 데 쓴다. null이면 요청하지 않는다.</summary>
+        public Action<int> QuitRequested;
+
+        /// <summary>참가 시간 요약 JSON을 쓸 파일 경로. null이면 로그에만 남긴다.</summary>
+        public string JoinReportPath;
+
+        /// <summary>true이면 1초마다 메모리·대역폭·자원 수를 성능 지표로 알린다(-perflog를 켰을 때).</summary>
+        public bool SamplePerf;
     }
 
     /// <summary>개발용 화면 흐름.</summary>
@@ -86,10 +103,26 @@ namespace Game.Bootstrap.Runtime
         private bool _worldLoading;
         private LobbyListState _listState = LobbyListState.Idle;
         private double _nextStatusLog;
+        private JoinTimeline _join;
+        private BotClient _bot;
+        private RuntimePerfSampler _sampler;
+
+        /// <summary>봇이 접속을 잃어 끝낼 때의 종료 코드.</summary>
+        public const int ExitBotDisconnected = 3;
+
+        /// <summary>봇을 만들지 못했을 때의 종료 코드.</summary>
+        public const int ExitBotFailed = 4;
+
+        /// <summary>봇 프레임 속도 상한. 화면이 없어 제한이 없으면 CPU를 전부 쓰므로 제한한다(서버 틱 30 Hz, 자세 전송 30 Hz보다 충분히 높게).</summary>
+        private const int BotTargetFrameRate = 60;
 
         public GameFlow(GameFlowDeps deps)
         {
             _deps = deps ?? throw new ArgumentNullException(nameof(deps));
+            if (BuildFlags.IsDevelopment && deps.SamplePerf && deps.Runtime.Perf != null)
+            {
+                _sampler = new RuntimePerfSampler(deps.Runtime.Perf, deps.Runtime.Network, () => _runtime);
+            }
         }
 
         /// <summary>현재 세션 실행 구성(없으면 null). 시험·진단용.</summary>
@@ -157,6 +190,8 @@ namespace Game.Bootstrap.Runtime
         public void Update()
         {
             _runtime?.Tick();
+            _sampler?.Tick(Time.realtimeSinceStartupAsDouble);
+            _bot?.Tick(Time.deltaTime);
             if (_runtime != null && _lobby != null && _runtime.Session.State == ClientSessionState.Syncing)
             {
                 _lobby.SetProgress(ConnectScreenModel.Compute(_runtime.Session.State, _runtime.Mirror.SnapshotChunksReceived, _runtime.Mirror.SnapshotChunksExpected));
@@ -189,6 +224,7 @@ namespace Game.Bootstrap.Runtime
         public void Shutdown()
         {
             EndSession();
+            _sampler?.Dispose();
             _input?.Dispose();
         }
 
@@ -348,6 +384,7 @@ namespace Game.Bootstrap.Runtime
 
         private void WireSession(SessionRuntime runtime)
         {
+            _join = new JoinTimeline(); // [NFR-018] 접속 시도마다 새로 기록한다
             runtime.Session.StateChanged += OnSessionState;
         }
 
@@ -357,6 +394,18 @@ namespace Game.Bootstrap.Runtime
             if (session == null)
             {
                 return;
+            }
+            _join?.Mark(state, Time.realtimeSinceStartupAsDouble);
+            if (state == ClientSessionState.InGame)
+            {
+                ReportJoinTimeline();
+            }
+            if (state == ClientSessionState.Ended && _deps.Bot)
+            {
+                // 봇은 접속을 잃으면 사람이 다시 누를 화면이 없으므로 프로세스를 끝내 측정 스크립트가 알게 한다.
+                Debug.LogWarning(LogTag + "봇 접속 종료: 실패=" + session.Failure + " 거부=" + session.RejectReason);
+                _bot = null;
+                _deps.QuitRequested?.Invoke(ExitBotDisconnected);
             }
             switch (state)
             {
@@ -368,7 +417,14 @@ namespace Game.Bootstrap.Runtime
 
                 case ClientSessionState.InGame:
                     _lobby.SetProgress(ConnectScreenModel.Compute(state));
-                    EnterGame();
+                    if (_deps.Bot)
+                    {
+                        StartBot();
+                    }
+                    else
+                    {
+                        EnterGame();
+                    }
                     break;
 
                 case ClientSessionState.Ended:
@@ -409,6 +465,63 @@ namespace Game.Bootstrap.Runtime
             SessionRuntime runtime = _runtime;
             _runtime = null;
             runtime?.Dispose();
+        }
+
+        // ---------- 참가 시간 기록 / 봇 ----------
+
+        /// <summary>참가 시간을 로그와(경로가 있으면) 요약 JSON 파일에 남긴다. 뷰 준비가 끝난 뒤에도 한 번 더 불러 덮어쓴다.</summary>
+        private void ReportJoinTimeline()
+        {
+            if (_join == null || !_join.IsComplete)
+            {
+                return;
+            }
+            Debug.Log(LogTag + "참가 시간: " + _join.ToLogLine());
+            if (string.IsNullOrEmpty(_deps.JoinReportPath))
+            {
+                return;
+            }
+            try
+            {
+                System.IO.File.WriteAllText(_deps.JoinReportPath, _join.ToJson(_deps.Runtime.Identity.LocalPlayerId.Value.ToString(), _deps.Bot));
+            }
+            catch (System.IO.IOException ex)
+            {
+                Debug.LogWarning(LogTag + "참가 시간 요약 파일을 쓰지 못했습니다: " + ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Debug.LogWarning(LogTag + "참가 시간 요약 파일을 쓰지 못했습니다: " + ex.Message);
+            }
+        }
+
+        /// <summary>[DES-113] 봇 시작: World 씬(카메라·지형·자원 뷰)을 불러오지 않고 BotClient만 돌려 CPU를 아낀다.</summary>
+        private void StartBot()
+        {
+            if (_bot != null)
+            {
+                return;
+            }
+            // 봇은 화면이 필요 없다. 메뉴 카메라·UI를 꺼 창 모드로 띄운 경우에도 그리기 비용을 줄인다.
+            if (_deps.MenuCamera != null)
+            {
+                _deps.MenuCamera.enabled = false;
+            }
+            if (_deps.UiRoot != null)
+            {
+                _deps.UiRoot.gameObject.SetActive(false);
+            }
+            UnityEngine.Application.targetFrameRate = BotTargetFrameRate;
+            QualitySettings.vSyncCount = 0;
+            try
+            {
+                _bot = new BotClient(_runtime, _deps.Runtime.Config.Balance, _deps.BotNumber);
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.LogError(LogTag + "봇을 시작하지 못했습니다: " + ex.Message);
+                _deps.QuitRequested?.Invoke(ExitBotFailed);
+            }
         }
 
         // ---------- 게임 진입 / 이탈 ----------
@@ -483,6 +596,10 @@ namespace Game.Bootstrap.Runtime
             _inGame = true;
             _uiState.CloseAll();
             ApplyUiMode(UiMode.Gameplay);
+
+            // [NFR-018] 지형·자원 뷰까지 준비된 시점을 참가 시간의 끝으로 다시 기록한다(사람 클라이언트).
+            _join?.MarkViewsReady(Time.realtimeSinceStartupAsDouble);
+            ReportJoinTimeline();
         }
 
         /// <summary>

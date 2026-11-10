@@ -207,6 +207,13 @@ namespace Game.Bootstrap
             return count;
         }
 
+        /// <summary>참가 시간 요약 JSON 경로: 성능 CSV 옆에 같은 이름 + _join.json. -perflog가 꺼져 있으면 null(로그에만 남김).</summary>
+        private static string ResolveJoinReportPath()
+        {
+            string csv = DevDiagnostics.Telemetry != null ? DevDiagnostics.Telemetry.Telemetry.CsvPath : null;
+            return string.IsNullOrEmpty(csv) ? null : System.IO.Path.ChangeExtension(csv, null) + "_join.json";
+        }
+
         /// <summary>[개발 도구] 에디터 메뉴가 부른다: 호스트로 게임 중일 때 시험용 생물 count체를 만든다.</summary>
         /// <returns>만든 수. 개발 빌드가 아니거나 호스트가 아니면 -1</returns>
         public int DevSpawnTestCreatures(int count) => BuildFlags.IsDevelopment && _flow != null ? _flow.DevSpawnTestCreatures(count) : -1;
@@ -384,6 +391,11 @@ namespace Game.Bootstrap
                 StatusLogSeconds = BuildFlags.IsDevelopment ? DevStatusLogSeconds : 0f,
                 DevResourceChanges = BuildFlags.IsDevelopment ? ParseResourceChanges() : 0,
                 DevTestCreatures = BuildFlags.IsDevelopment ? ParseTestCreatures() : 0,
+                Bot = BuildFlags.IsDevelopment && DevCommandLine.HasFlag(DevCommandLine.GetArgs(), DevCommandLine.BotFlag),
+                BotNumber = unchecked((int)(Decision.Identity.LocalPlayerId.Value & int.MaxValue)),
+                QuitRequested = QuitGame,
+                JoinReportPath = BuildFlags.IsDevelopment ? ResolveJoinReportPath() : null,
+                SamplePerf = BuildFlags.IsDevelopment && DevDiagnostics.Telemetry != null && !string.IsNullOrEmpty(DevDiagnostics.Telemetry.Telemetry.CsvPath),
             };
             _flow = new GameFlow(deps);
             _flow.Start();

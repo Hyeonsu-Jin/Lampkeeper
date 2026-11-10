@@ -25,6 +25,9 @@ namespace Game.Bootstrap.DevTools
         /// <summary>입력 없이 자동으로 걷는 옵션(개발 빌드 전용, 화면 없는 다중 프로세스 시험용).</summary>
         public const string AutoWalkFlag = "-autowalk";
 
+        /// <summary>봇 클라이언트(개발 빌드 전용, M1-12): 입력·화면 없이 정해진 경로로 걷고 자원을 때리고 생물을 쫓는다. -connect와 함께 쓴다(DES-113).</summary>
+        public const string BotFlag = "-bot";
+
         /// <summary>N초 뒤 스스로 종료하는 옵션(개발 빌드 전용): -autoquit N</summary>
         public const string AutoQuitFlag = "-autoquit";
 
