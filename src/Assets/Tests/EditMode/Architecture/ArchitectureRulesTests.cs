@@ -178,12 +178,12 @@ namespace Game.Tests.Architecture
             CollectionAssert.AreEqual(new[] { Persistence, App, Domain, WorldGen }.OrderBy(n => n, StringComparer.Ordinal), pure);
         }
 
-        /// <summary>SDD 3.4.2 표(v0.8 + M1-04~M1-06 갱신): 시험 어셈블리가 참조하는 게임·라이브러리 어셈블리.</summary>
+        /// <summary>SDD 3.4.2 표(v0.8 + M1-04~M1-06, M1-11 갱신): 시험 어셈블리가 참조하는 게임·라이브러리 어셈블리.</summary>
         private static readonly Dictionary<string, string[]> ExpectedTestReferences = new Dictionary<string, string[]>
         {
             ["Game.Tests.Domain"] = new[] { Domain },
             ["Game.Tests.Application"] = new[] { App, Domain, WorldGen },
-            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, Bootstrap, EditorTools, FishNet, UguiRuntime, TmpRuntime },
+            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, AiJobs, Bootstrap, EditorTools, FishNet, UguiRuntime, TmpRuntime }, // M1-11: AiJobs 추가(SDD 3.4.2 표 갱신 필요)
             ["Game.Tests.Architecture"] = new string[0],
             ["Game.Tests.WorldGen"] = new[] { WorldGen, App },
             ["Game.Tests.Net"] = new[] { App, Domain, Net },

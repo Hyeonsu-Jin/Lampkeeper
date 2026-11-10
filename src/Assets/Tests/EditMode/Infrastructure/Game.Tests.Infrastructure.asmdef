@@ -11,6 +11,7 @@
         "Game.Infra.Transport",
         "Game.Infra.Steam",
         "Game.Infra.Platform",
+        "Game.Infra.AiJobs",
         "Game.Bootstrap",
         "FishNet.Runtime",
         "Game.Editor",
