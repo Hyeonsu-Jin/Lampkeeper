@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10 1·2차 구현 완료, 사용자 수동 플레이 시험 대기)
-- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **M1-10 사용자 수동 플레이 시험(방 열기 → 「월드를 만드는 중」·지형 위 스폰, 나무 5회 타격 쓰러짐·돌 파괴, 메뉴 Game/Dev/Resources/Apply 5000 Changes + F3 FPS, 두 번째 인스턴스 중도 참가)** → M1-11 시험용 AI 60체 부하 → M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개) → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험 → 묶음 끝에 문서 한 번에 반영(STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion`) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
+- 현재 단계: Do (M1 진행 중, 묶음 1·2·3 완료 + uGUI 전환 완료 · 묶음 4: M1-10 완료, M1-11 1차 완료)
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **M1-11 2차(생물 복제·관심 범위, CreatureViews 보간, 60체 부하 장면, 생물 위치 압축 0~3072 수정, Bootstrap에 AiJobsBackend 연결)** → M1-12 M1 기술 검증 측정·보고(이 PC + 봇 7개) → M1-13 M1 완료 빌드·FR 시험·아키텍처 시험 → 묶음 끝에 문서 한 번에 반영(STORYBOARD 기호 표기, SDD 3.7.10 (8) 기호 대체 글꼴 단계, `-gameversion`) → M1 완료 후 Check 단계. 남은 사용자 수동 시험: Steam 실행 빌드의 실제 초대 창, 친구 계정 2PC 초대·참가, Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -124,6 +124,7 @@
 | 2026-11-10 | developer 토큰 사용 보고서 작성(개인 참고용 `docs/dev/TOKEN_USAGE_REPORT.md`, `.gitignore`로 git 제외): 절약 적용 전후 요청 1회 평균 -63%, 기본 문맥 약 63k → 27k, SDD 작업 1개당 총량 -12%(M1-10 요청 121회). 보고서 6장 반영(사용자 요청, 총괄 수정): developer·debugger·test-engineer 정의에 같은 파일 재읽기 금지, 큰 파일은 Grep 후 범위 읽기, 2,000자 넘는 출력 자르기, 전체 시험은 CLI 요약(MCP test_run은 filter 시험만), developer 보고에 넘길 공개 API 기록. test-engineer·debugger의 옛 batchmode 실행·「에디터 닫기」·시험 asmdef 경로를 열린 에디터 방식과 실제 asmdef로 정리. 총괄: 시험 결과 요약만 받기, 연결된 작업은 문맥이 작으면 같은 developer에 이어 맡기기. 정의 변경은 앱 재시작 뒤 적용 | 사용자 요청 |
 | 2026-11-10 | M1-10 사용자 수동 시험(에디터): 나무·돌 타격 시 쓰러짐·파괴 정상. 메뉴 Game/Dev/Resources/Apply 5000 Changes 실행 때 FPS가 순간 24까지 떨어짐(관찰, M1-12에서 측정·대응). 중도 참가 시험용으로 열린 에디터에서 개발 빌드 생성(Builds/Development, 결과 Succeeded, Pipeline 런타임 어셈블리 없음) → 빌드 2개로 호스트(-host -resourcechanges 5000)·참가자(-connect 127.0.0.1:7770) 시험 안내 | 사용자 시험 |
 | 2026-11-10 | M1-10 중도 참가 수동 시험(개발 빌드 2개, Tugboat, 호스트 -resourcechanges 5000 + 직접 부순 나무·돌): 참가자 「월드를 만드는 중」 뒤 1~2초에 입장, 참가 전 부순 나무·돌이 참가자 화면에도 반영, 참가 뒤 호스트↔참가자 타격 서로 반영, 서로의 캐릭터 정상 → FR-009 중도 참가 동작 확인. **결함: 빌드에서 바닥(지형)이 보이지 않음**(에디터는 정상) → developer 수정: TerrainViewBuilder에 `_terrainMaterial`(materialTemplate) 추가, 애셋 TerrainGround.mat(HDRP/TerrainLit)·.png·.terrainlayer, World 씬 TerrainView에 MCP로 연결, 회귀 시험 TerrainMaterialSceneTests. 원인 추정(실행 중 만든 Terrain에 재질 미지정 → 빌드에서 TerrainLit 셰이더 제외, Player.log에 직접 증거 없음). 총괄 재확인: 컴파일 0, EditMode 586/586, PlayMode 25/25, 개발 빌드 재생성(12:45). 참고: 씬 저장 때 RenderSettings 스카이박스 참조가 기본값 → 없음으로 바뀜(HDRP는 Volume 하늘을 써서 영향 없음). **사용자 재시험: 여전히 안 보임(빌드에서만, 하늘만 보임)** → 진짜 원인: 지형 `drawInstanced = true`인데 재질 GPU 인스턴싱 꺼짐 + GraphicsSettings 인스턴싱 변형 제거(Strip Unused)로 빌드에 INSTANCING_ON 지형 변형이 없음. 수정(developer 이어서): TerrainGround.mat enableInstancing 켬, TerrainViewBuilder가 재질 인스턴싱에 맞춰 drawInstanced 결정(꺼져 있으면 경고), 회귀 시험에 enableInstancing 검사. 빌드 화면 캡처로 지면 보임 확인(총괄도 확인). 총괄 재확인: EditMode 586/586, PlayMode 25/25, 빌드 13:01. 남은 일: 지면 색이 의도(0.30, 0.42, 0.24)보다 어두움(조명 영향 추정, 이후 아트 작업) | 사용자 시험 |
+| 2026-11-10 | M1-11 1차 결과(developer, focus 1회): Domain/Creatures(Creature·CreatureBrain 배회→추적→근접 공격), Application/Ai(AiSettings·AiLodPolicy, IAiNavigationBackend 포트, CreatureRegistry·WalkGridBuilder, AiScheduler 10 Hz 분산·LOD), Infra.AiJobs(WalkGridJob·FlowFieldJob·AiSpatialHash·SteeringJob, AiJobsBackend), ServerWorld.AttachAi·SpawnTestCreatures. 관찰(에디터, 60체 + 8명, 300틱): 서버 틱 평균 0.16~0.29 ms, p99 4.3~8.1 ms(흐름장 재계산 틱), 흐름장 8개 재계산 4~10 ms(워커 예산 2.5 ms 초과, 빌드에서 M1-12 재측정). **SDD 반영 대기**(묶음 끝): 3.4.2 시험 참조 Game.Tests.Infrastructure → Game.Infra.AiJobs, 보행 격자는 월드 중심 600 m만(전체는 M4 전), IAiNavigationBackend 실제 시그니처(BuildWalkGrid·SetFlowTargets·ScheduleSteering·CompleteSteering), 물·정화 구역 미반영, 피해는 CreatureAttack 목록만. 총괄 재확인: 컴파일 0, EditMode 624/624, PlayMode 25/25, .meta 누락 0 | developer 보고 + 총괄 검증 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
@@ -196,6 +197,8 @@
 | 지형 36타일 동기 생성 시간 Full 규모 미확인, 월드 중앙 스폰 지점이 물·급경사일 수 있음 | developer (M1-10 2차) | 시작 시 멈춤, 스폰 불편 | 사용자 수동 시험으로 확인, 길면 여러 프레임 분할 |
 | 생물 위치 압축(`Quantize.PositionToU16`, `CreatureState`)이 원점 중심 ±1536 m 기준이라 0~3072 월드에서 절반이 잘림 | debugger (M1-10 결함 수정) | M1-11 생물 위치 오류 | M1-11에서 developer가 함께 수정 |
 | 자원 5,000개를 한 번에 바꿀 때 FPS 순간 24(에디터, 호스트) | 사용자 수동 시험 (M1-10) | 대량 변경 순간 끊김 | M1-12에서 측정, 필요하면 델타 적용·자원 뷰 재선택을 여러 프레임에 나눔 |
+| 흐름장 재계산 4~10 ms(에디터)로 워커 예산 2.5 ms 초과 | developer (M1-11 1차) | 호스트 프레임 부담 | M1-12 빌드 측정, 넘으면 바뀐 흐름장만 계산·창 반경 축소 |
+| 보행 격자가 월드 중심 600 m만 있어 생물이 밖으로 나가면 막힘 | developer (M1-11 1차) | 넓은 지역 AI 불가 | M4 전에 월드 전체 격자 |
 
 ## 측정
 | 사이클 | FR 수 | NFR 수 | TC 수 | 통과율 | 결함 수 | IMP 처리율 |
@@ -214,6 +217,8 @@
 | 1 (Do M1-10 1차) | 179 | 58 | EditMode 577 + PlayMode 23 | 100% (600/600) | 0 | - |
 | 1 (Do M1-10 2차) | 179 | 58 | EditMode 584 + PlayMode 25 | 100% (609/609) | 0 | - |
 | 1 (Do M1-10 결함 수정: 월드 좌표 범위) | 179 | 58 | EditMode 585 + PlayMode 25 | 100% (610/610) | 1 (이동 거부로 플레이어 멈춤, 수정됨) | - |
+| 1 (Do M1-10 결함 수정: 빌드 지형) | 179 | 58 | EditMode 586 + PlayMode 25 | 100% (611/611) | 1 (빌드에서 지형 안 보임, 수정됨) | - |
+| 1 (Do M1-11 1차) | 179 | 58 | EditMode 624 + PlayMode 25 | 100% (649/649) | 0 | - |
 
 설계 측정 (SDD v0.1): 설계 요소 101개, FR·NFR 추적 225/225 (100%), 구현 작업 96개 (M1 18, M2 6, M3 15, M4 9, M5 9, M6 10, M7 4, M8 3, M9a 6, M9b 5, M9c 5, M10 6)
 설계 측정 (SDD v0.6, 승인): 설계 요소 106개, FR·NFR 추적 236/236 (100%), 구현 작업 103개 (M4 13개로 증가). 화면 38개 (STORYBOARD v1.3)
