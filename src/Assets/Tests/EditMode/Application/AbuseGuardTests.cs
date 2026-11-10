@@ -48,6 +48,14 @@ namespace Game.Tests.Application
         }
 
         [Test]
+        public void TC067_10초에_50회까지는_유지하고_51회째에_연결_종료를_알린다()
+        {
+            var meter = new AbuseMeter(AbuseMeter.DefaultLimit, AbuseMeter.DefaultWindowSeconds);
+            for (int i = 1; i <= 50; i++) { Assert.IsFalse(meter.Record(i * 0.1), "50회째까지는 종료하지 않는다: " + i); }
+            Assert.IsTrue(meter.Record(5.1), "51회째에 종료");
+        }
+
+        [Test]
         public void ThrottledLog_Flood_WritesOnePerWindow_WithSuppressedCount()
         {
             var inner = new CountLog();
