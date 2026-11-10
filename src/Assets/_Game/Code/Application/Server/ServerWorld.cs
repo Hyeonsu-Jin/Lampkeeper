@@ -149,8 +149,7 @@ namespace Game.Application.Server
         public AvatarMoveVerdict Check(AvatarMoveState state, in AvatarPose pose)
         {
             // 월드 밖이거나 값이 이상하면 거부한다(NaN·무한대 포함).
-            float half = ProtocolConstants.PositionHalfRangeMeters;
-            if (!pose.Position.IsFinite || Math.Abs(pose.Position.X) > half || Math.Abs(pose.Position.Z) > half)
+            if (!pose.Position.IsFinite || !ProtocolConstants.IsInsideWorld(pose.Position.X, pose.Position.Z))
             {
                 return AvatarMoveVerdict.Rejected;
             }

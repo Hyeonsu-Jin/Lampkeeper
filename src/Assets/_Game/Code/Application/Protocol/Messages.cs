@@ -71,6 +71,19 @@ namespace Game.Application.Protocol
 
         /// <summary>위치 양자화 범위의 절반(m). 월드는 ±이 값 안. 3072 m / 65536 단계 = 약 4.7 cm. [3.11.9]</summary>
         public const float PositionHalfRangeMeters = 1536f;
+
+        /// <summary>월드 좌표 검사 여유(m). 가장자리에 붙어 선 플레이어를 거부하지 않게 한다.</summary>
+        public const float WorldEdgeMarginMeters = 16f;
+
+        /// <summary>
+        /// 수평 위치가 월드 안인지. 월드 좌표는 (0,0)~(3072,3072)다(지형·자원 생성 기준). 원점 중심(±절반)으로 검사하면
+        /// 월드 중앙(1536)에서 스폰한 플레이어의 이동이 전부 거부되므로 0~전체 크기로 본다.
+        /// </summary>
+        public static bool IsInsideWorld(float x, float z)
+        {
+            float max = 2f * PositionHalfRangeMeters + WorldEdgeMarginMeters;
+            return x >= -WorldEdgeMarginMeters && x <= max && z >= -WorldEdgeMarginMeters && z <= max;
+        }
     }
 
     /// <summary>모든 메시지가 구현하는 형식. 구조체라 박싱 없이 <see cref="MessageCodec.TryEncode{T}"/>로 쓴다.</summary>

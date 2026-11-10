@@ -266,9 +266,11 @@ namespace Game.Application.Commands
         public Rejection? CheckRanges(in CommandLimits limits)
         {
             // 좌표가 유한한 수이고 월드 안이어야 한다. [NFR-040]
+            // 월드 좌표는 0~(절반×2)다(원점 중심이 아님).
+            float max = 2f * limits.WorldHalfExtentMeters + ProtocolConstants.WorldEdgeMarginMeters;
             if (!Target.IsFinite
-                || Math.Abs(Target.X) > limits.WorldHalfExtentMeters
-                || Math.Abs(Target.Z) > limits.WorldHalfExtentMeters)
+                || Target.X < -ProtocolConstants.WorldEdgeMarginMeters || Target.X > max
+                || Target.Z < -ProtocolConstants.WorldEdgeMarginMeters || Target.Z > max)
             {
                 return new Rejection(ReasonCode.InvalidValue);
             }
