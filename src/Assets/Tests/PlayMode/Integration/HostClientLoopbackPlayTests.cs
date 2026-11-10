@@ -155,16 +155,19 @@ namespace Game.Tests.Integration
             _runtime.Pose.TryTakeCorrection(out _); // 스폰 보정은 비운다
 
             // 정상 이동: 호스트가 받아들여 서버 쪽 위치가 따라온다.
+            // [IMP-001] 첫 자세는 스폰 근처만 받으므로, 실제 클라이언트처럼 스폰 위치에서 조금 움직인 자세를 보낸다.
+            Vec3f spawn = _runtime.World.SpawnPositionForSlot(0);
+            float goodX = spawn.X + 1f;
             uint ms = 1000;
-            _runtime.Pose.Write(new AvatarPose(new Vec3f(1f, 0.1f, 1f), 10f, 0f, false, ms));
-            yield return WaitUntil(() => _runtime.World.State.TryGetPlayer(new PlayerId(DevPlayerId), out var p) && Math.Abs(p.Position.X - 1f) < 0.01f, "정상 자세가 서버 위치에 반영됨");
+            _runtime.Pose.Write(new AvatarPose(new Vec3f(goodX, spawn.Y, spawn.Z + 1f), 10f, 0f, false, ms));
+            yield return WaitUntil(() => _runtime.World.State.TryGetPlayer(new PlayerId(DevPlayerId), out var p) && Math.Abs(p.Position.X - goodX) < 0.01f, "정상 자세가 서버 위치에 반영됨");
 
             // 순간이동: 속도 한도를 넘으므로 거부하고 마지막 수락 위치로 되돌리라고 알려 준다.
             ms += 100;
-            _runtime.Pose.Write(new AvatarPose(new Vec3f(400f, 0.1f, 400f), 10f, 0f, false, ms));
+            _runtime.Pose.Write(new AvatarPose(new Vec3f(spawn.X + 400f, spawn.Y, spawn.Z + 400f), 10f, 0f, false, ms));
             yield return WaitUntil(() => _runtime.Pose.TryTakeCorrection(out _), "이동 거부 보정 도착");
             _runtime.World.State.TryGetPlayer(new PlayerId(DevPlayerId), out var player);
-            Assert.AreEqual(1f, player.Position.X, 0.01f, "거부된 위치는 서버 위치를 바꾸지 않는다");
+            Assert.AreEqual(goodX, player.Position.X, 0.01f, "거부된 위치는 서버 위치를 바꾸지 않는다");
         }
 
         [UnityTest]

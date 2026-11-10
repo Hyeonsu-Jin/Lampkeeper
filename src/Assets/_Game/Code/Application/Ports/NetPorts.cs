@@ -44,6 +44,12 @@ namespace Game.Application.Ports
 
         /// <summary>한 연결을 끊는다.</summary>
         void Disconnect(int connectionId);
+
+        /// <summary>
+        /// 참가 판정을 통과한 연결을 전송 계층에서도 「인증됨」으로 올린다. 그 전에는 게임 오브젝트 스폰·관찰이 열리지 않는다. [IMP-003, SEC-002]
+        /// 인증 개념이 없는 전송(시험용 가짜 등)은 아무것도 하지 않는다.
+        /// </summary>
+        void Admit(int connectionId) { }
     }
 
     /// <summary>클라이언트 연결 상태.</summary>

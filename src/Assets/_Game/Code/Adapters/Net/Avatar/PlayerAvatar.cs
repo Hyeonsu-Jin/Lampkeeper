@@ -59,6 +59,10 @@ namespace Game.Adapters.Net.Avatar
         private PlayerId _serverPlayer;
         private double _nextSendTime;
 
+        // [IMP-004] 서버에서만: 이 연결(소유자)의 자세 수신 빈도 상한과 실패 측정기.
+        private PoseRateGate _poseGate;
+        private readonly AbuseMeter _abuse = new AbuseMeter();
+
         /// <summary>이 아바타 주인의 플레이어 ID. 서버가 정해 모든 클라이언트에 동기화한다.</summary>
         public PlayerId OwnerPlayer => new PlayerId(_ownerPlayerId.Value);
 
@@ -122,10 +126,25 @@ namespace Game.Adapters.Net.Avatar
                 return;
             }
 
-            // [NFR-040] 디코드 실패는 버린다(예외 없음).
+            double now = services.Clock.RealtimeSeconds;
+
+            // [IMP-004, SEC-003] 연결별 빈도 상한(송신 주기 x 1.5). 넘치는 자세는 디코드도 하지 않고 버린다.
+            if (_poseGate == null)
+            {
+                _poseGate = new PoseRateGate(services.SendHz, now);
+            }
+            if (!_poseGate.Allow(now))
+            {
+                services.Log.Warn("pose_dropped", "빈도 상한 초과 player=" + _serverPlayer);
+                CutIfAbusive(services, now);
+                return;
+            }
+
+            // [NFR-040] 디코드 실패는 버린다(예외 없음). 짧은 시간에 많이 실패하면 연결을 끊는다.
             if (!MessageCodec.TryDecodeAvatarPose(poseBytes, out AvatarPose pose))
             {
                 services.Log.Warn("pose_decode_failed", "player=" + _serverPlayer);
+                CutIfAbusive(services, now);
                 return;
             }
 
@@ -139,6 +158,16 @@ namespace Game.Adapters.Net.Avatar
                 case AvatarMoveVerdict.Rejected:
                     TargetCorrect(Owner, correction.X, correction.Y, correction.Z);
                     break;
+            }
+        }
+
+        /// <summary>실패(빈도 초과·디코드 실패)를 세고 한도를 넘으면 소유 연결을 끊는다. [IMP-004, SEC-003]</summary>
+        private void CutIfAbusive(AvatarServices services, double now)
+        {
+            if (_abuse.Record(now))
+            {
+                services.Log.Warn("net_abuse", "자세 RPC 남용으로 연결을 끊습니다. player=" + _serverPlayer);
+                Owner.Disconnect(false);
             }
         }
 

@@ -15,6 +15,7 @@ using FishNet.Managing;
 using FishNet.Transporting;
 using Game.Application.Ports;
 using Game.Application.Protocol;
+using Game.Application.Server;
 using FishNetChannel = FishNet.Transporting.Channel;
 
 namespace Game.Adapters.Net.Transport
@@ -52,7 +53,7 @@ namespace Game.Adapters.Net.Transport
         private readonly ILog _log;
         private readonly string _localRemoteId;
         private readonly ByteWriter _writer = new ByteWriter(ProtocolConstants.MaxPacketBytes);
-        private readonly Dictionary<int, int> _decodeFailures = new Dictionary<int, int>();
+        private readonly Dictionary<int, AbuseMeter> _decodeFailures = new Dictionary<int, AbuseMeter>();
         private bool _registered;
 
         /// <param name="network">NetworkManager</param>
@@ -128,6 +129,16 @@ namespace Game.Adapters.Net.Transport
             }
         }
 
+        /// <summary>[IMP-003, SEC-002] 참가 판정을 통과한 연결을 FishNet 인증기에서 인증한다(인증기가 없으면 이미 인증된 상태라 할 일 없음).</summary>
+        public void Admit(int connectionId)
+        {
+            if (_network.ServerManager.GetAuthenticator() is FishNetJoinAuthenticator authenticator
+                && _network.ServerManager.Clients.TryGetValue(connectionId, out NetworkConnection connection))
+            {
+                authenticator.Authorize(connection);
+            }
+        }
+
         public void Disconnect(int connectionId)
         {
             if (_network.ServerManager.Clients.TryGetValue(connectionId, out NetworkConnection connection))
@@ -169,9 +180,19 @@ namespace Game.Adapters.Net.Transport
             {
                 // [NFR-040] 디코드 실패는 버리고 연결별로 집계해 로그에 남긴다. 예외를 던지지 않는다.
                 DecodeFailureCount++;
-                _decodeFailures.TryGetValue(connection.ClientId, out int count);
-                _decodeFailures[connection.ClientId] = count + 1;
-                _log.Warn("net", "디코드 실패 conn=" + connection.ClientId + " 사유=" + failure + " 누적=" + (count + 1));
+                if (!_decodeFailures.TryGetValue(connection.ClientId, out AbuseMeter meter))
+                {
+                    meter = new AbuseMeter();
+                    _decodeFailures[connection.ClientId] = meter;
+                }
+                // [IMP-004, SEC-003] 로그는 ThrottledLog가 묶고, 짧은 시간에 실패가 한도를 넘으면 그 연결을 끊는다.
+                bool abusive = meter.Record(UnityEngine.Time.realtimeSinceStartupAsDouble);
+                _log.Warn("net", "디코드 실패 conn=" + connection.ClientId + " 사유=" + failure + " 창 안 누적=" + meter.Count);
+                if (abusive)
+                {
+                    _log.Warn("net_abuse", "잘못된 패킷이 한도를 넘어 연결을 끊습니다. conn=" + connection.ClientId);
+                    connection.Disconnect(false);
+                }
                 return;
             }
             Received?.Invoke(connection.ClientId, message);

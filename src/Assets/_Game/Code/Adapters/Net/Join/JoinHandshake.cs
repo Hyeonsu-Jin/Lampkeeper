@@ -258,6 +258,8 @@ namespace Game.Adapters.Net.Join
                 return;
             }
             c.Phase = Phase.InGame;
+            // [IMP-003, SEC-002] 참가 판정을 통과한 연결만 전송 계층에서 인증한다(스폰·관찰·SteamID 동기화는 이 뒤부터).
+            _server.Admit(connectionId);
             _server.SendDefault(connectionId, new JoinComplete(_world.CurrentTick, _world.SpawnPositionOf(c.Player)));
             _log.Info("join", "참가 완료 player=" + c.Player);
             PlayerJoined?.Invoke(c.Player);

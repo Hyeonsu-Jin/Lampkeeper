@@ -17,6 +17,7 @@ using Game.Adapters.Presentation.UI.Hud;
 using Game.Adapters.Presentation.UI.Screens;
 using Game.Application.Boot;
 using Game.Application.Config;
+using Game.Application.Logging;
 using Game.Application.Perf;
 using Game.Application.Localization;
 using Game.Application.Ports;
@@ -373,7 +374,7 @@ namespace Game.Bootstrap
                     Identity = Decision.Identity,
                     Lobby = _lobbyService,
                     Clock = UnityClock.Instance,
-                    Log = UnityLog.Instance,
+                    Log = new ThrottledLog(UnityLog.Instance, UnityClock.Instance), // [IMP-004] 반복 경고를 묶는다
                     Perf = DevDiagnostics.Probe,
                     AvatarPrefab = _avatarPrefab,
                     IsDevelopmentBuild = BuildFlags.IsDevelopment,

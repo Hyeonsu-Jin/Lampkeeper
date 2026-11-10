@@ -27,6 +27,15 @@ namespace Game.Infra.Platform.Logging
         /// <summary>기본 로그 폴더 이름(저장 폴더 아래).</summary>
         public const string DefaultFolderName = "Logs";
 
+        /// <summary>로그 파일 크기 상한(글자 수 기준, 약 바이트). 넘으면 더 쓰지 않는다. [IMP-004, SEC-003]</summary>
+        public const long DefaultMaxBytes = 20L * 1024 * 1024;
+
+        /// <summary>보관하는 로그 파일 수(새 파일 포함). 더 오래된 것은 시작할 때 지운다.</summary>
+        public const int DefaultKeepFiles = 10;
+
+        private readonly long _maxBytes;
+        private long _written;
+        private bool _capReached;
         private readonly object _gate = new object();
         private readonly StreamWriter _writer;
         private readonly Timer _flushTimer;
@@ -56,11 +65,41 @@ namespace Game.Infra.Platform.Logging
         }
 
         /// <summary>시험용: 연결 없이 파일만 만드는 생성자(Hook을 부르지 않는다).</summary>
-        public static FileLogSink CreateUnhooked(string folder, DateTime now) => new FileLogSink(folder, now);
+        public static FileLogSink CreateUnhooked(string folder, DateTime now, long maxBytes = DefaultMaxBytes, int keepFiles = DefaultKeepFiles) =>
+            new FileLogSink(folder, now, maxBytes, keepFiles);
 
-        private FileLogSink(string folder, DateTime now)
+        /// <summary>
+        /// 폴더에서 game_*.log 중 오래된 것을 지워 keep개만 남긴다(파일 이름의 시각 순서 기준). 지운 개수를 돌려준다.
+        /// </summary>
+        public static int CleanupOldLogs(string folder, int keep)
         {
+            string[] files = Directory.GetFiles(folder, "game_*.log");
+            Array.Sort(files, StringComparer.Ordinal); // 이름에 yyyyMMdd_HHmmss가 있어 사전순 = 시간순
+            int deleted = 0;
+            for (int i = 0; i < files.Length - keep; i++)
+            {
+                try
+                {
+                    File.Delete(files[i]);
+                    deleted++;
+                }
+                catch (IOException)
+                {
+                    // 다른 프로세스가 쓰는 중이면 다음 실행 때 다시 시도한다.
+                }
+                catch (UnauthorizedAccessException)
+                {
+                }
+            }
+            return deleted;
+        }
+
+        private FileLogSink(string folder, DateTime now, long maxBytes = DefaultMaxBytes, int keepFiles = DefaultKeepFiles)
+        {
+            _maxBytes = maxBytes;
             Directory.CreateDirectory(folder);
+            // [IMP-004] 새 파일을 만들기 전에 정리해 keep-1개만 남긴다(새 파일 포함 keep개).
+            CleanupOldLogs(folder, Math.Max(0, keepFiles - 1));
             string name = "game_" + now.ToString("yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture) + ".log";
             FilePath = Path.Combine(folder, name);
             _writer = new StreamWriter(new FileStream(FilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite), new UTF8Encoding(false));
@@ -104,7 +143,15 @@ namespace Game.Infra.Platform.Logging
         {
             lock (_gate)
             {
-                if (_disposed) return;
+                if (_disposed || _capReached) return;
+                // [IMP-004, SEC-003] 파일 크기 상한. 넘으면 한 줄 남기고 이후는 버린다(디스크를 채우는 로그 폭주 방지).
+                _written += line.Length + 2;
+                if (_written > _maxBytes)
+                {
+                    _capReached = true;
+                    _writer.WriteLine("[로그 크기 상한(" + _maxBytes + "바이트)에 도달해 이후 기록을 멈춥니다.]");
+                    return;
+                }
                 _writer.WriteLine(line);
             }
         }

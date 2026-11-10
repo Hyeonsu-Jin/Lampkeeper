@@ -74,6 +74,13 @@ namespace Game.Bootstrap.Runtime
     {
         public static UnityLog Instance { get; } = new UnityLog();
 
+        static UnityLog()
+        {
+            // [IMP-004, SEC-003] 경고·정보 로그마다 스택 추적을 모으지 않는다(폭주 때 비용). 오류·예외는 그대로 둔다.
+            UnityEngine.Application.SetStackTraceLogType(LogType.Warning, StackTraceLogType.None);
+            UnityEngine.Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
+        }
+
         public void Info(string category, string message) => Debug.Log("[" + category + "] " + message);
         public void Warn(string category, string message) => Debug.LogWarning("[" + category + "] " + message);
         public void Error(string category, string message) => Debug.LogError("[" + category + "] " + message);
