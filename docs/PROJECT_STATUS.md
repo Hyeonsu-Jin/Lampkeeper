@@ -1,7 +1,7 @@
 # 프로젝트 진행 상황
 - 현재 사이클: 1
-- 현재 단계: Do (M1 완료: M1-01~M1-13, 사용자 승인 대기)
-- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **Do 단계 완료 승인 → cycle/1-mvp push → Check 단계(code-reviewer·security-auditor 동시 → test-engineer)**. 남은 사용자 수동 시험: 친구 계정 2PC 초대·참가와 Steam 릴레이 접속(M1-12 미확인, 사용자가 Steam으로 플레이하며 나중에 확인), Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
+- 현재 단계: Do 완료·승인됨 (M1-01~M1-13) → Check 시작 전
+- 다음에 할 일: (cycle/1-mvp, 에디터 열어 둔 채 Unity MCP로 조작, 토큰 절약 진행 방식) **Check 단계(code-reviewer·security-auditor 동시 → test-engineer)**. 남은 사용자 수동 시험: 친구 계정 2PC 초대·참가와 Steam 릴레이 접속(M1-12 미확인, 사용자가 Steam으로 플레이하며 나중에 확인), Xbox 패드(나중에 한꺼번에). M2 착수 전 결정: C-04 남은 부분(허기·갈증·피로도·혹한), C-05 남은 부분, C-37, C-45, C-67 패드 입력, C-68 버전 상시 표시. 미결 제안: CLAUDE.md에 「작은 사실 반영은 총괄이 직접 수정」 예외
 
 ## 프로젝트 개요
 - Unity 3D 생존 게임 (SRP 기반 실사 그래픽)
@@ -12,7 +12,7 @@
 | 사이클 | 단계 | 상태 (대기/진행 중/완료/승인됨) | 날짜 | 산출물 |
 |---|---|---|---|---|
 | 1 | Plan | 승인됨 | 2026-11-03 | docs/SRS.md v0.8 (승인), docs/SDD.md v0.6 (승인), docs/DESIGN_PROPOSAL.md, docs/wireframes/ (hud, defense, cooking), docs/STORYBOARD.md v1.3 |
-| 1 | Do | 완료 (M1-01~M1-13, 승인 대기) | 2026-11-10 | src/ (M1 기술 검증: Steam·FishNet 접속, 1인칭 이동, 자원 2만 개 동기화·중도 참가, 시험 AI 60체·생물 복제, 봇·측정 스크립트, 출시 IL2CPP 빌드), docs/test/perf/M1_tech_verification.md, tools/perf/RunM1Perf.ps1, SRS v0.12·SDD v0.14·STORYBOARD v1.8 |
+| 1 | Do | 승인됨 (M1-01~M1-13) | 2026-11-10 | src/ (M1 기술 검증: Steam·FishNet 접속, 1인칭 이동, 자원 2만 개 동기화·중도 참가, 시험 AI 60체·생물 복제, 봇·측정 스크립트, 출시 IL2CPP 빌드), docs/test/perf/M1_tech_verification.md, tools/perf/RunM1Perf.ps1, SRS v0.12·SDD v0.14·STORYBOARD v1.8 |
 | 1 | Check | 대기 | - | - |
 | 1 | Act | 대기 | - | - |
 
@@ -136,6 +136,7 @@
 | 2026-11-10 | 사용자 수동 시험: 개발 빌드를 Steam 전송(실행 옵션 없음)으로 실행해 방 열기 → 친구 초대에서 **Steam 오버레이 초대 창이 뜨는 것 확인**. 친구 계정 실제 초대·참가와 Steam 릴레이 접속은 사용자가 나중에 Steam으로 플레이하며 확인 | 사용자 시험 |
 | 2026-11-10 | **묶음 끝 문서 반영**(반영 대기 9건 해소, 문서 에이전트 3개 동시·sonnet): SRS v0.12(2.6.1 자연 에셋 도입 일정과 원칙, 새 ID 없음, FR 179·NFR 58 유지), SDD v0.14(월드 좌표 0~3072·압축 범위, 스폰, 자원 델타·타격 검사, 중도 참가, 지형 재질·인스턴싱 빌드 주의, terrainphysics, World 씬 구성, IAiNavigationBackend 실제 시그니처·보행 격자 600 m, 생물 복제 보간·Despawn 여유, asmdef 참조, 폴더 트리(총괄이 실제 파일과 대조해 4줄 정정), 개발 옵션 `-resourcechanges`·`-testcreatures`·`-bot`·`-gameversion`·F1·F3, 화면 없는 실행 안전 규칙, 기호 제거·CJK 보류, M1-12 결과, R-41~R-45 신설, 자연 에셋 원칙(DES-089); 새 DES 없음, 상태 승인 유지), STORYBOARD v1.8(UI 기호 약 150곳 글자 표기, 개발 전용 키 F1·F3 표). **사용자 결정**: STORYBOARD에 남은 기호(핑·쓰러짐·부활·위협 모양·체력·손목 계기 게이지·햇빛·잠김·체크박스·선택 화살표·슬라이더 손잡이)는 글꼴 문자가 아니라 **앞으로 만들 아이콘 그림 자리**로 명시, 구현 때 TMP 글자로 찍지 않고 아이콘 전에는 글자 라벨로 대신 | 사용자 결정 + 문서 에이전트 |
 | 2026-11-10 | **M1-13 결과 → M1 완료**(developer, focus 1회): 아키텍처 시험 약 35건 통과(새 폴더·asmdef 규칙 위반 없음). M1 FR·NFR 대응표: 자동 시험 약 33건, 수동 확인됨 9건, 추가 시험 1건(출시↔개발 채널 접속 거부 `ReleaseAndDevBuilds_WithSameCoreVersion_AreRejected`). **수동 남음**: 2PC 참가(FR-003), Steam 릴레이(FR-005), Xbox 패드, 참가자 프레임(NFR-012), 반영 지연(NFR-015), 출시 빌드 메모리(NFR-048), 사양(NFR-005), Steam Cloud(NFR-007), 호스트 끊김 실제(NFR-039), 화면 표시(HUD·그래픽 설정), 출시↔개발 실제 접속 거부. 출시 IL2CPP 빌드 Succeeded(약 1.87 GB), Pipeline 런타임 어셈블리 0건, 버전 `0.1.0+rel.20261110090052.5d3f33e.dirty`(시험 1개 커밋 전이라 dirty), bundleVersion 원상 복구, 출시 exe에서 개발 옵션 무시 경고·Steam 필요 판정 확인(F1·F3 화면 미표시는 소스 조건부로 확인). 총괄 재확인: EditMode 663/663, PlayMode 26/26, ProjectSettings 차이 없음, 남은 프로세스 0. 위험: 출시 빌드 용량 1.8 GB(Steam 업로드 전 검토) | developer 보고 + 총괄 검증 |
+| 2026-11-10 | **Do 단계 완료 승인**, 커밋 후 cycle/1-mvp push(ce571b7..a50c508, LFS 117 MB) | 사용자 결정 |
 
 ## 위험 목록
 | 위험 | 출처 | 영향 | 대응 |
