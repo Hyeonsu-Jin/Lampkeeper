@@ -79,6 +79,7 @@ namespace Game.Bootstrap.Runtime
         private TerrainViewBuilder _terrain;
         private ResourceViewStreamer _resourceViews;
         private CreatureViews _creatureViews;
+        private Game.Bootstrap.DevTools.CreatureInterestHud _interestHud;
         private ResourceHitInput _hitInput;
         private bool _hostStarting;
         private bool _inGame;
@@ -466,6 +467,12 @@ namespace Game.Bootstrap.Runtime
             {
                 Debug.LogWarning(LogTag + "World 씬에 CreatureViews가 없어 생물이 보이지 않습니다.");
             }
+            if (BuildFlags.IsDevelopment)
+            {
+                // [개발 도구] F1 관심 범위 표시(기본 꺼짐). 호스트일 때만 서버 전체 생물 수를 함께 보인다.
+                _interestHud = Game.Bootstrap.DevTools.CreatureInterestHud.Create(_runtime.Mirror.Creatures, _runtime.Pose,
+                    CreatureInterestSettings.FromConfig(_deps.Runtime.Config.Network), _runtime.IsHost ? _runtime.World : null);
+            }
 
             if (_deps.MenuCamera != null)
             {
@@ -535,6 +542,11 @@ namespace Game.Bootstrap.Runtime
             _controller = null;
             _remoteViews = null;
             _creatureViews = null;
+            if (_interestHud != null)
+            {
+                UnityEngine.Object.Destroy(_interestHud.gameObject);
+            }
+            _interestHud = null;
         }
 
         /// <summary>UI 상태에 맞게 로컬 입력 경로와 커서를 바꾼다. 서버·복제·시각은 건드리지 않는다. [I-07]</summary>
