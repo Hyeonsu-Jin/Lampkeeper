@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game.Infra.Config::Game.Infra.Config.GameDataConfig
   Balance: {fileID: 11400000, guid: 63b1abbe85850794f971b1b03168144a, type: 2}
   Network: {fileID: 11400000, guid: d77a112dbca13704ba448724977242e4, type: 2}
+  Graphics: {fileID: 11400000, guid: 19c42777d80dfdf4d9027be2f241570c, type: 2}
   Contents: []

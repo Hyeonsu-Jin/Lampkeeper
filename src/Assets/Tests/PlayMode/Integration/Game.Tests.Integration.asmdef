@@ -5,9 +5,17 @@
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
         "Game.Application",
+        "Game.Domain",
+        "Game.Adapters.Net",
+        "Game.Adapters.Presentation",
+        "Game.Infra.Platform",
+        "Game.Bootstrap",
+        "Game.Infra.Rendering",
         "Game.Infra.Transport",
         "FishNet.Runtime",
-        "FishySteamworks"
+        "FishySteamworks",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -16,7 +16,8 @@
         "Game.Infra.Rendering",
         "FishNet.Runtime",
         "com.rlabrecque.steamworks.net",
-        "FishySteamworks"
+        "FishySteamworks",
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

@@ -106,6 +106,32 @@ namespace Game.Tests.Application
         }
 
         [Test]
+        public void Validate_MoveCheckConstants_MustBePositive_AndPoseHzNotBelowSendHz()
+        {
+            // [R-47] 이동 검사 상수: 0 이하 거부, 수신 상한이 송신 주기보다 낮으면 거부.
+            BalanceValues b = BalanceValues.CreateCandidate();
+            b.Movement.MaxPoseHz = 0f;
+            Assert.IsTrue(ValidateBalance(b).Any(i => i.Path == "Balance.Movement.MaxPoseHz"));
+            b = BalanceValues.CreateCandidate();
+            b.Movement.PoseBurstCapacity = 0;
+            Assert.IsTrue(ValidateBalance(b).Any(i => i.Path == "Balance.Movement.PoseBurstCapacity"));
+            b = BalanceValues.CreateCandidate();
+            b.Movement.SpawnRadiusMeters = 0f;
+            Assert.IsTrue(ValidateBalance(b).Any(i => i.Path == "Balance.Movement.SpawnRadiusMeters"));
+            b = BalanceValues.CreateCandidate();
+            b.Movement.SpawnHeightToleranceMeters = -1f;
+            Assert.IsTrue(ValidateBalance(b).Any(i => i.Path == "Balance.Movement.SpawnHeightToleranceMeters"));
+
+            var issues = new List<ConfigIssue>();
+            var net = new NetworkTuning { AvatarSendHz = 60 };
+            ConfigValidator.ValidateMovementAgainstNetwork(BalanceValues.CreateCandidate(), net, issues);
+            Assert.IsTrue(issues.Any(i => i.Path == "Balance.Movement.MaxPoseHz"), "45 < 60");
+            issues.Clear();
+            ConfigValidator.ValidateMovementAgainstNetwork(BalanceValues.CreateCandidate(), new NetworkTuning(), issues);
+            Assert.IsEmpty(issues);
+        }
+
+        [Test]
         public void Validate_DaytimeRatio_MustBeBetweenZeroAndOneExclusive()
         {
             BalanceValues b = BalanceValues.CreateCandidate();

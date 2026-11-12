@@ -1,0 +1,67 @@
+{
+  "Summary": {
+    "Total": 7,
+    "Passed": 1,
+    "Failed": 6,
+    "Skipped": 0,
+    "Inconclusive": 0
+  },
+  "Results": [
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC050_달리기_속도의_2배로_정직한_시각을_보내면_거부된다",
+      "Status": "Failed",
+      "Duration": 0.013607,
+      "Message": "  14 m/s 이동이 한 번도 거부되지 않음(자세마다 0.5 m 여유가 더해짐, SEC-001 항목 1)\r\n  Expected: greater than 0\r\n  But was:  0\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC050_달리기_속도의_2배로_정직한_시각을_보내면_거부된다 () [0x0007a] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:41\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC051_시각을_500ms씩_부풀린_자세_폭주는_거부된다",
+      "Status": "Failed",
+      "Duration": 0.0004953,
+      "Message": "  30개 모두 수락됨: 호스트 수신 시각 기준 검사·자세 빈도 제한 없음(REV-001, SEC-001 항목 2·3)\r\n  Expected: less than 30\r\n  But was:  30\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC051_시각을_500ms씩_부풀린_자세_폭주는_거부된다 () [0x00067] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:56\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC052_첫_자세는_스폰_위치에서_멀면_거부된다",
+      "Status": "Failed",
+      "Duration": 0.0151319,
+      "Message": "  참가 직후 첫 자세로 월드 어디든 순간 이동됨(REV-003, SEC-001 항목 5)\r\n  Expected: Rejected\r\n  But was:  Accepted\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC052_첫_자세는_스폰_위치에서_멀면_거부된다 () [0x00071] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:67\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC053_한_참가자가_대기열을_채워도_다른_참가자_명령은_받아들여진다",
+      "Status": "Failed",
+      "Duration": 0.0024772,
+      "Message": "  공유 대기열이 가득 차 정상 참가자의 명령이 버려짐(REV-004, SEC-004)\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC053_한_참가자가_대기열을_채워도_다른_참가자_명령은_받아들여진다 () [0x000ac] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:83\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC054_버전_불일치_거부에는_호스트_버전이_실리고_문구에_자리가_있다",
+      "Status": "Failed",
+      "Duration": 0.0021776,
+      "Message": "  JoinRejected에 버전 문자열이 없고 문구에 버전 자리({0})도 없음(REV-002)\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC054_버전_불일치_거부에는_호스트_버전이_실리고_문구에_자리가_있다 () [0x0006c] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:95\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ReleaseHygieneTests.TC055_Assets_아래에_원본이_없는_meta_파일이_없다",
+      "Status": "Passed",
+      "Duration": 0.0396472,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ReleaseHygieneTests.TC056_Player_log가_꺼져_있다",
+      "Status": "Failed",
+      "Duration": 0.0036848,
+      "Message": "  Player.log에 SteamID·사용자 경로가 가려지지 않고 남음(SEC-005)\r\n  String lengths are both 15. Strings differ at index 14.\r\n  Expected: \"usePlayerLog: 0\"\r\n  But was:  \"usePlayerLog: 1\"\r\n  -------------------------^\r\n",
+      "StackTrace": "at Game.Tests.Architecture.ReleaseHygieneTests.TC056_Player_log가_꺼져_있다 () [0x00048] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Architecture\\ReleaseHygieneTests.cs:31\r\n"
+    }
+  ],
+  "Duration": 5.07,
+  "StatusPath": null,
+  "Mode": "EditMode",
+  "FilterApplied": "testname: TC05",
+  "success": true,
+  "result": null
+}
+<claude-code-hint v="1" type="plugin" value="unity@claude-plugins-official" />

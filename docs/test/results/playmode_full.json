@@ -1,0 +1,196 @@
+{
+  "status": "completed",
+  "duration": 12.91,
+  "summary": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "inconclusive": 0
+  },
+  "results": [
+    {
+      "FullName": "Game.Tests.Integration.BenchScenePlayTests.BenchScene_RunsToEnd_WritesCsvAndSummary",
+      "Status": "Passed",
+      "Duration": 3.0686209,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.GraphicsAndTelemetryPlayTests.Backend_AppliesEveryPreset_QualityLevelAndRuntimeValues",
+      "Status": "Passed",
+      "Duration": 0.4352814,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.GraphicsAndTelemetryPlayTests.Backend_ApplyPreset_WithBadQualityLevel_KeepsLevelAndWarns",
+      "Status": "Passed",
+      "Duration": 0.114434,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.GraphicsAndTelemetryPlayTests.Backend_Upscaler_OnAndOff_ReportsStatus_AndConfiguresCamera",
+      "Status": "Passed",
+      "Duration": 0.1281693,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.GraphicsAndTelemetryPlayTests.TelemetryBehaviour_RunsInFrameLoop_WritesCsvAndHud",
+      "Status": "Passed",
+      "Duration": 2.3728761,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.AvatarPose_IsValidatedByHost_AcceptedUpdatesServerPosition_RejectedIsCorrected",
+      "Status": "Passed",
+      "Duration": 1.1965936,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.Command_RoundTrips_ThroughGateway_AndIsProcessedByServerWorld",
+      "Status": "Passed",
+      "Duration": 0.3304273,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.Creatures_SixtyTestCreatures_AreReplicatedToTheParticipantMirror_AndShownByViews",
+      "Status": "Passed",
+      "Duration": 2.8651493,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.HostClient_JoinsThroughTheSamePath_AndSeesItselfInTheRoster",
+      "Status": "Passed",
+      "Duration": 0.2495634,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.LateJoin_With5000ChangedResources_MirrorEqualsHost_ThenHitDeltaArrives",
+      "Status": "Passed",
+      "Duration": 0.441069,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.LeavingSession_FreesSlot_AndStopsServer",
+      "Status": "Passed",
+      "Duration": 0.2764437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.MalformedPacket_FromClient_DoesNotBreakTheServer",
+      "Status": "Passed",
+      "Duration": 0.4236861,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.HostClientLoopbackPlayTests.Serialization_Allocation_IsMeasuredAndReported_R31",
+      "Status": "Passed",
+      "Duration": 0.3047049,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.TransportSelectorTests.Apply_Twice_ReusesComponent",
+      "Status": "Passed",
+      "Duration": 0.0083615,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.TransportSelectorTests.ApplyTuning_SetsServerTickRate",
+      "Status": "Passed",
+      "Duration": 0.006951,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.TransportSelectorTests.DevBuild_NoRequest_DefaultsToSteam",
+      "Status": "Passed",
+      "Duration": 0.0084561,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.TransportSelectorTests.DevBuild_Tugboat_AttachesTugboat",
+      "Status": "Passed",
+      "Duration": 0.0066518,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.TransportSelectorTests.ReleaseBuild_IgnoresTugboatRequest",
+      "Status": "Passed",
+      "Duration": 0.0066215,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.InGame_LobbyHidden_NothingBlocksTheCenter",
+      "Status": "Passed",
+      "Duration": 0.167128,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.InGame_WithMenuOpen_TopHitIsTheMenu_AndLobbyIsNeverHit",
+      "Status": "Passed",
+      "Duration": 0.0351075,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.Lobby_TopRaycastHit_IsTheLobbyBackdropOrPanel",
+      "Status": "Passed",
+      "Duration": 0.0265764,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.MenuOpen_Navigation_NeverLeavesTheMenu",
+      "Status": "Passed",
+      "Duration": 0.0298713,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.PointerClick_OnMenuButtons_RaisesEvents",
+      "Status": "Passed",
+      "Duration": 0.0258299,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.UiLayerPlayTests.ScreenStack_SelectsFirstOnOpen_AndRestoresFocusOnClose",
+      "Status": "Passed",
+      "Duration": 0.0361654,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.WorldViewPlayTests.Streamer_NearObjectsArePooledAndReused_AndStateIsReflected",
+      "Status": "Passed",
+      "Duration": 0.1003575,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Integration.WorldViewPlayTests.Terrain_BuildsOneTilePerWorldTile_WithCollider",
+      "Status": "Passed",
+      "Duration": 0.157084,
+      "Message": null,
+      "StackTrace": null
+    }
+  ]
+}
+<claude-code-hint v="1" type="plugin" value="unity@claude-plugins-official" />

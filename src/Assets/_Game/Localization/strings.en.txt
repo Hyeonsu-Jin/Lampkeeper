@@ -2,9 +2,81 @@
 # Rules: keys are lowercase letters, digits, underscore, dot. \n in text is a line break. Every key must also exist in strings.ko.txt (NFR-044).
 
 # SCR-001 Steam required notice
-steam.required.title	⚠ Steam is not running
+steam.required.title	Steam is not running
 steam.required.desc	Start Steam and sign in, then press [Retry].\nThis game can only start while Steam is running.
 steam.required.retry	Retry
 steam.required.quit	Quit
 steam.required.checking	Checking...
 steam.required.retry_failed	Still not connected to Steam
+
+# M1 dev lobby / connect screens (SCR-004 minimal, SCR-012)
+lobby.title	Dark Sky · Dev Lobby
+lobby.desc	M1 development screen. Open a friends-only room, or join through a Steam invite or "Join Game".
+lobby.host	Open room (friends only)
+lobby.refresh	Refresh room list
+lobby.invite	Invite friends
+lobby.leave	Leave
+lobby.status.ready	Ready
+lobby.status.opening	Opening room…
+lobby.status.generating	Building the world
+lobby.status.open	Room is open ({0}/{1} connected)
+lobby.status.failed	Could not open the room. Check your Steam connection
+lobby.status.dev_host	Opened a direct-connection dev room ({0}/{1} connected)
+lobby.list.loading	Loading list…
+lobby.list.empty	No public sessions are open right now. Join a friend's room from the Steam friends list with "Join Game"
+lobby.list.error	Could not load the list. Check your Steam connection
+lobby.join	Join
+lobby.row	{0} · {1} · {2}/{3}
+connect.title	Joining
+connect.step.host	Connect to host
+connect.step.info	Receive world info
+connect.step.world	Build world
+connect.step.apply	Apply changes
+connect.state.done	Done
+connect.state.active	In progress
+connect.state.pending	Waiting
+connect.cancel	Cancel
+connect.ok	OK
+join.fail.noresponse.title	Could not connect to the host
+join.fail.noresponse.cause	The host is not responding
+join.fail.noresponse.fix	Check that the host is in game and your internet connection works, then try again
+join.fail.full.title	Session full
+join.fail.full.cause	The session is full or a spot is reserved
+join.fail.full.fix	Try again later or ask the host
+join.fail.version.title	Game version mismatch
+join.fail.version.cause	Your game version differs from the host's. Yours {0} / Host {1}
+join.fail.version.fix	Update the game on Steam and try again
+join.fail.password.title	Wrong password
+join.fail.password.cause	The password you entered is incorrect
+join.fail.password.fix	Ask the host for the password
+join.fail.attempts.title	Try again later
+join.fail.attempts.cause	Too many wrong attempts within a minute
+join.fail.attempts.fix	Try again in one minute
+join.fail.banned.title	Cannot join
+join.fail.banned.cause	The host has blocked this account
+join.fail.banned.fix	Contact the host directly
+join.fail.access.title	Join condition not met
+join.fail.access.cause	This room only accepts invited people or friends
+join.fail.access.fix	Ask the host for an invite
+join.fail.gen_mismatch.title	World generation error
+join.fail.gen_mismatch.cause	The world built on this PC differs from the host's
+join.fail.gen_mismatch.fix	Restart the game and join again. If it continues, use "Create error report file"
+join.fail.lost.title	Connection lost
+join.fail.lost.cause	The connection to the host was lost
+join.fail.lost.fix	Check that the host is in game and join again
+join.fail.generic.title	Could not join
+join.fail.generic.cause	The host did not accept the join request
+join.fail.generic.fix	Try again in a moment
+
+# Game HUD (SCR-015, M1 scope)
+hud.roster.title	Players {0}/{1}
+hud.roster.host	Host
+hud.stamina.low	Low stamina
+hud.net.status	{0}
+hud.menu.title	Game menu
+hud.menu.desc	Opening the menu does not pause the game.
+hud.menu.leave	Leave session
+hud.menu.close	Close
+hud.menu.running	Game running
+hud.menu.invite	Invite friends
+hud.menu.invite_unavailable	Cannot open the invite window now (Steam overlay is off or this is not a Steam room)

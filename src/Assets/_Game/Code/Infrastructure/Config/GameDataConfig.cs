@@ -17,6 +17,9 @@ namespace Game.Infra.Config
     {
         public BalanceConfig Balance;
         public NetworkTuningConfig Network;
+
+        /// <summary>그래픽 프리셋 4종(FR-120). 비어 있으면 부트가 경고하고 프리셋 적용을 건너뛴다.</summary>
+        public GraphicsPresetConfig Graphics;
         public List<ContentDef> Contents = new List<ContentDef>();
     }
 }

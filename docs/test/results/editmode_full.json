@@ -1,0 +1,4715 @@
+{
+  "Summary": {
+    "Total": 671,
+    "Passed": 665,
+    "Failed": 6,
+    "Skipped": 0,
+    "Inconclusive": 0
+  },
+  "Results": [
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC050_달리기_속도의_2배로_정직한_시각을_보내면_거부된다",
+      "Status": "Failed",
+      "Duration": 0.0091605,
+      "Message": "  14 m/s 이동이 한 번도 거부되지 않음(자세마다 0.5 m 여유가 더해짐, SEC-001 항목 1)\r\n  Expected: greater than 0\r\n  But was:  0\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC050_달리기_속도의_2배로_정직한_시각을_보내면_거부된다 () [0x0007a] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:41\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC051_시각을_500ms씩_부풀린_자세_폭주는_거부된다",
+      "Status": "Failed",
+      "Duration": 0.0004198,
+      "Message": "  30개 모두 수락됨: 호스트 수신 시각 기준 검사·자세 빈도 제한 없음(REV-001, SEC-001 항목 2·3)\r\n  Expected: less than 30\r\n  But was:  30\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC051_시각을_500ms씩_부풀린_자세_폭주는_거부된다 () [0x00067] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:56\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC052_첫_자세는_스폰_위치에서_멀면_거부된다",
+      "Status": "Failed",
+      "Duration": 0.0090945,
+      "Message": "  참가 직후 첫 자세로 월드 어디든 순간 이동됨(REV-003, SEC-001 항목 5)\r\n  Expected: Rejected\r\n  But was:  Accepted\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC052_첫_자세는_스폰_위치에서_멀면_거부된다 () [0x00071] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:67\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC053_한_참가자가_대기열을_채워도_다른_참가자_명령은_받아들여진다",
+      "Status": "Failed",
+      "Duration": 0.0016104,
+      "Message": "  공유 대기열이 가득 차 정상 참가자의 명령이 버려짐(REV-004, SEC-004)\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC053_한_참가자가_대기열을_채워도_다른_참가자_명령은_받아들여진다 () [0x000ac] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:83\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AdversarialClientTests.TC054_버전_불일치_거부에는_호스트_버전이_실리고_문구에_자리가_있다",
+      "Status": "Failed",
+      "Duration": 0.001646,
+      "Message": "  JoinRejected에 버전 문자열이 없고 문구에 버전 자리({0})도 없음(REV-002)\r\n  Expected: True\r\n  But was:  False\r\n",
+      "StackTrace": "at Game.Tests.Application.AdversarialClientTests.TC054_버전_불일치_거부에는_호스트_버전이_실리고_문구에_자리가_있다 () [0x0006c] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\AdversarialClientTests.cs:95\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.DeadCreature_IsSkipped",
+      "Status": "Passed",
+      "Duration": 0.0029694,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Decide_60Creatures_Near_EachTickOneThird_EveryCreatureOncePerThreeTicks",
+      "Status": "Passed",
+      "Duration": 0.001696,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Decide_FrozenCreature_NeitherDecidesNorMoves",
+      "Status": "Passed",
+      "Duration": 0.0012236,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Decide_NoPlayers_AllCreaturesFrozen",
+      "Status": "Passed",
+      "Duration": 0.0001694,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Lod_ClassifiesByDistance",
+      "Status": "Passed",
+      "Duration": 0.0001714,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Lod_Decisions_Near10Hz_Mid5Hz_Far2Hz_FrozenNever",
+      "Status": "Passed",
+      "Duration": 0.0002448,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Lod_MoveSeconds_FarMovesEveryThirdTickWithTripleTime",
+      "Status": "Passed",
+      "Duration": 0.0011364,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Registry_AssignsIncreasingIds_RaisesEvents_RemovesById",
+      "Status": "Passed",
+      "Duration": 0.0016728,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.ScheduleAfterDecideFalse_HostSchedulesFromLateUpdate",
+      "Status": "Passed",
+      "Duration": 0.0002412,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Seek_MovesTowardPlayer_AndStopsInAttackRange_ThenAttacks",
+      "Status": "Passed",
+      "Duration": 0.001376,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.Seek_RequestsFlowTargets_AtOneHzAndWhenFirstChasing",
+      "Status": "Passed",
+      "Duration": 0.0002493,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.ServerWorld_SpawnTestCreatures_RequiresAi_AndTicksDriveAi",
+      "Status": "Passed",
+      "Duration": 0.0034542,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.TestLayout_RetriesWhenNotWalkable",
+      "Status": "Passed",
+      "Duration": 0.0001654,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AiSchedulerTests.TestLayout_SameSeedSamePositions_InsideRing",
+      "Status": "Passed",
+      "Duration": 0.0011077,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.FirstPose_IsAcceptedAsBaseline",
+      "Status": "Passed",
+      "Duration": 0.0005236,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.LongGap_IsCappedAtMaxDelta_SoTeleportAfterPauseIsRejected",
+      "Status": "Passed",
+      "Duration": 0.000128,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.OutsideWorld_AndNaN_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.0001281,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.RunSpeed_NeedsRunningFlag",
+      "Status": "Passed",
+      "Duration": 0.0001167,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.ServerWorld_ServerSideStamina_DrainsWhileRunningPosesAreAccepted",
+      "Status": "Passed",
+      "Duration": 0.0003029,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.ServerWorld_UpdatesPlayerPosition_OnlyForAcceptedPose",
+      "Status": "Passed",
+      "Duration": 0.0007032,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.StalePose_IsIgnored_NotCorrected",
+      "Status": "Passed",
+      "Duration": 0.0001395,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.StaminaGrace_AllowsRunSpeedRightAfterEstimateReachesZero",
+      "Status": "Passed",
+      "Duration": 0.0001633,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.TimeWrapAround_IsHandled",
+      "Status": "Passed",
+      "Duration": 0.0001158,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.VerticalSpeed_IsLimited",
+      "Status": "Passed",
+      "Duration": 0.0001111,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.WalkingSpeed_IsAccepted_FiveTimesFasterIsRejected",
+      "Status": "Passed",
+      "Duration": 0.0001703,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.WorldCenterSpawn_FirstAndMovingPoses_AreAccepted",
+      "Status": "Passed",
+      "Duration": 0.0001495,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.AvatarMoveValidatorTests.ZeroStamina_LimitsToWalkingSpeed_AfterGrace",
+      "Status": "Passed",
+      "Duration": 0.000194,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_Chase_MovesTowardCreature_AndNoCreatureAdvancesWaypoint",
+      "Status": "Passed",
+      "Duration": 0.0010571,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_Harvest_FarFromResource_MovesInsteadOfHitting",
+      "Status": "Passed",
+      "Duration": 0.0001506,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_Harvest_NoResource_GoesToChase",
+      "Status": "Passed",
+      "Duration": 0.0001421,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_NullWorld_Throws",
+      "Status": "Passed",
+      "Duration": 0.0002324,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_RunsOnlyWhenFarAndAllowed",
+      "Status": "Passed",
+      "Duration": 0.0001195,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_StartsInTravel_AndMovesTowardWaypoint",
+      "Status": "Passed",
+      "Duration": 0.000175,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_Travel_ArrivalMovesToHarvest_ThenHitsAtInterval",
+      "Status": "Passed",
+      "Duration": 0.0004042,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Brain_TravelTimeout_MovesOn",
+      "Status": "Passed",
+      "Duration": 0.0012975,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.InsertNearest_KeepsSortedAndDropsFarthest",
+      "Status": "Passed",
+      "Duration": 0.0003699,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.JoinTimeline_ComputesStageDurations",
+      "Status": "Passed",
+      "Duration": 0.0004158,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.JoinTimeline_Incomplete_HasNoTotal_AndFirstMarkWins",
+      "Status": "Passed",
+      "Duration": 0.0001266,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.JoinTimeline_Json_HasStagesAndNullForMissing",
+      "Status": "Passed",
+      "Duration": 0.0007802,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.JoinTimeline_ViewsReady_ExtendsTotal",
+      "Status": "Passed",
+      "Duration": 0.0001581,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Waypoint_DifferentSeed_DifferentRoute",
+      "Status": "Passed",
+      "Duration": 0.0000893,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Waypoint_SameInputs_SameResult",
+      "Status": "Passed",
+      "Duration": 0.0000991,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.Waypoint_StaysInRingAroundCenter_AndDiffersByBotAndIndex",
+      "Status": "Passed",
+      "Duration": 0.0006166,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.BotBrainTests.YawDegrees_ZeroIsPlusZ_NinetyIsPlusX",
+      "Status": "Passed",
+      "Duration": 0.0000912,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.Constructor_NullPlatform_Throws",
+      "Status": "Passed",
+      "Duration": 0.0003592,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.DevBuild_DevPlayerIdWithoutTugboat_StillNeedsSteam",
+      "Status": "Passed",
+      "Duration": 0.0022734,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.DevBuild_TugboatWithDevPlayerId_SkipsSteam",
+      "Status": "Passed",
+      "Duration": 0.0005462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.DevBuild_TugboatWithoutDevPlayerId_StillNeedsSteam",
+      "Status": "Passed",
+      "Duration": 0.0001359,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.DevPlayerIdentity_ZeroThrows_AndNamesAreStable",
+      "Status": "Passed",
+      "Duration": 0.0002773,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.NullOptions_AreTreatedAsNone",
+      "Status": "Passed",
+      "Duration": 0.0001464,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.ReleaseBuild_IgnoresDevOptions_AndForcesSteam",
+      "Status": "Passed",
+      "Duration": 0.0001525,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.Retry_AfterSteamStarts_Continues",
+      "Status": "Passed",
+      "Duration": 0.0001538,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.SteamAvailable_ContinuesToMainMenu_WithSteamTransport",
+      "Status": "Passed",
+      "Duration": 0.0002771,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.SteamUnavailable_ShowsSteamRequired_NoIdentity(SteamNotRunning)",
+      "Status": "Passed",
+      "Duration": 0.0003094,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.SteamUnavailable_ShowsSteamRequired_NoIdentity(InitFailed)",
+      "Status": "Passed",
+      "Duration": 0.0000429,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.SteamUnavailable_ShowsSteamRequired_NoIdentity(LibraryUnavailable)",
+      "Status": "Passed",
+      "Duration": 0.0000292,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.SteamUnavailable_ShowsSteamRequired_NoIdentity(RestartRequested)",
+      "Status": "Passed",
+      "Duration": 0.000051,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.TransportPolicy_Resolve(null,False,Steam)",
+      "Status": "Passed",
+      "Duration": 0.0004741,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.TransportPolicy_Resolve(Tugboat,False,Steam)",
+      "Status": "Passed",
+      "Duration": 0.0000703,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.TransportPolicy_Resolve(Steam,True,Steam)",
+      "Status": "Passed",
+      "Duration": 0.0000396,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.TransportPolicy_Resolve(Tugboat,True,Tugboat)",
+      "Status": "Passed",
+      "Duration": 0.0000314,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CheckPlatformReadyTests.TransportPolicy_Resolve(null,True,Steam)",
+      "Status": "Passed",
+      "Duration": 0.0000351,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.CanReconnectAfterEnded",
+      "Status": "Passed",
+      "Duration": 0.0036704,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.Connect_SendsJoinRequest_WithoutOwnSteamId",
+      "Status": "Passed",
+      "Duration": 0.0007276,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.ConnectFailure_EndsImmediately",
+      "Status": "Passed",
+      "Duration": 0.0001195,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.ConnectionLostInGame_ReportsConnectionLost",
+      "Status": "Passed",
+      "Duration": 0.0007569,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.FullFlow_AcceptedThenComplete_ReachesInGame_AndSetsSpawn",
+      "Status": "Passed",
+      "Duration": 0.0012041,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.Leave_GoesIdle_ClearsMirror_NotAFailure",
+      "Status": "Passed",
+      "Duration": 0.0002976,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.NoResponse_TimesOut",
+      "Status": "Passed",
+      "Duration": 0.000358,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.PrepareWorldException_EndsSession_NotSwallowed",
+      "Status": "Passed",
+      "Duration": 0.0005978,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.Rejected_EndsWithReason_AndDisconnects",
+      "Status": "Passed",
+      "Duration": 0.0001978,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.UnexpectedMessages_AreIgnored",
+      "Status": "Passed",
+      "Duration": 0.0001996,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ClientSessionTests.WorldHashMismatch_EndsWithWorldMismatch_AndTellsHost",
+      "Status": "Passed",
+      "Duration": 0.0002642,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.ClientCannotBypassRate_ByFlooding",
+      "Status": "Passed",
+      "Duration": 0.0065125,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.CommandFromUnknownPlayer_IsNotQueued",
+      "Status": "Passed",
+      "Duration": 0.000153,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.HandlerException_IsLogged_AndDoesNotEscape",
+      "Status": "Passed",
+      "Duration": 0.0026193,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.PingCodec_RoundTrip_AndBadPayloadRejected",
+      "Status": "Passed",
+      "Duration": 0.0015636,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.PingOutsideWorld_IsRejectedWithInvalidValue",
+      "Status": "Passed",
+      "Duration": 0.0011955,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.QueueIsBounded_AndPerTickBudgetLimitsWork",
+      "Status": "Passed",
+      "Duration": 0.0003259,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.Tick_RecordsServerMarkers_InOrder",
+      "Status": "Passed",
+      "Duration": 0.0010677,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.UnknownCommandKind_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0001123,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.CommandPipelineTests.ValidPing_IsExecutedOnTick_AndResultSentToRequester",
+      "Status": "Passed",
+      "Duration": 0.0003351,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Assemble_EmptyContent_IsAllowed_WithWarning",
+      "Status": "Passed",
+      "Duration": 0.0074877,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Assemble_InvalidBalance_Throws_AndCollectsAllErrors",
+      "Status": "Passed",
+      "Duration": 0.0006484,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Candidate_MatchesSrsAppendixC1_Samples",
+      "Status": "Passed",
+      "Duration": 0.0002599,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Candidate_PassesValidation",
+      "Status": "Passed",
+      "Duration": 0.0003357,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.CanonicalText_CoversEveryBalanceField",
+      "Status": "Passed",
+      "Duration": 0.0003405,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_AssignsIdsByOrdinalKeyOrder_IndependentOfInputOrder",
+      "Status": "Passed",
+      "Duration": 0.0024486,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"\")",
+      "Status": "Passed",
+      "Duration": 0.0003812,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"wood\")",
+      "Status": "Passed",
+      "Duration": 0.0001643,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"Item.wood\")",
+      "Status": "Passed",
+      "Duration": 0.0001189,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"item.Wood\")",
+      "Status": "Passed",
+      "Duration": 0.0003493,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"item.\")",
+      "Status": "Passed",
+      "Duration": 0.0001165,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_BadKeyFormat_Throws(\"item. wood\")",
+      "Status": "Passed",
+      "Duration": 0.0000999,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_DuplicateKey_Throws",
+      "Status": "Passed",
+      "Duration": 0.0003437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_DuplicatePropertyName_Throws",
+      "Status": "Passed",
+      "Duration": 0.0005024,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_EmptyNameKey_Throws",
+      "Status": "Passed",
+      "Duration": 0.0002294,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_KeyPrefixMustMatchKind_Throws",
+      "Status": "Passed",
+      "Duration": 0.0002347,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_LookupById_RoundTrips",
+      "Status": "Passed",
+      "Duration": 0.0004257,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_UnknownReference_Throws",
+      "Status": "Passed",
+      "Duration": 0.0003105,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Catalog_ValidReference_Passes",
+      "Status": "Passed",
+      "Duration": 0.0002994,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.ConfigChange_IsReflectedInProvider_ForTenSampleValues",
+      "Status": "Passed",
+      "Duration": 0.000404,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_Changes_WhenBalanceChanges",
+      "Status": "Passed",
+      "Duration": 0.000571,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_Changes_WhenContentPropertyChanges",
+      "Status": "Passed",
+      "Duration": 0.0008873,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_Changes_WhenStringBalanceChanges",
+      "Status": "Passed",
+      "Duration": 0.0004246,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_DoesNotDependOnNetworkTuning",
+      "Status": "Passed",
+      "Duration": 0.0004119,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_IgnoresPropertyOrder_ButNotKeys",
+      "Status": "Passed",
+      "Duration": 0.0012045,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Hash_IsStable_ForSameData",
+      "Status": "Passed",
+      "Duration": 0.000611,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.NetworkTuning_Defaults_MatchSdd3121",
+      "Status": "Passed",
+      "Duration": 0.0001102,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Provider_ReturnsCopies_EditingSourceAfterAssembleDoesNotChangeIt",
+      "Status": "Passed",
+      "Duration": 0.0002408,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_DaytimeRatio_MustBeBetweenZeroAndOneExclusive",
+      "Status": "Passed",
+      "Duration": 0.0003475,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_FatigueDepleteZero_IsAllowed_ForM2M3Testing",
+      "Status": "Passed",
+      "Duration": 0.0001482,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_MaxPlayers_OverEight_IsError",
+      "Status": "Passed",
+      "Duration": 0.0001969,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_MissingSection_IsError_NotCrash",
+      "Status": "Passed",
+      "Duration": 0.0003083,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_NaN_IsError",
+      "Status": "Passed",
+      "Duration": 0.0002085,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_NegativeValue_IsError_WithPath",
+      "Status": "Passed",
+      "Duration": 0.0002138,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_NullBalance_IsError",
+      "Status": "Passed",
+      "Duration": 0.0001166,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_RunSlowerThanWalk_IsError",
+      "Status": "Passed",
+      "Duration": 0.0003406,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.Validate_TreeMinHitsAboveMax_IsError",
+      "Status": "Passed",
+      "Duration": 0.0003868,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConfigTests.ValidateNetwork_BadTick_IsError",
+      "Status": "Passed",
+      "Duration": 0.0001709,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.OtherFailures_MapToKeys",
+      "Status": "Passed",
+      "Duration": 0.0002272,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.ProgressFraction_NeverDecreasesAcrossStates",
+      "Status": "Passed",
+      "Duration": 0.0003544,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(Full,\"join.fail.full\")",
+      "Status": "Passed",
+      "Duration": 0.0002009,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(VersionMismatch,\"join.fail.version\")",
+      "Status": "Passed",
+      "Duration": 0.000048,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(Banned,\"join.fail.banned\")",
+      "Status": "Passed",
+      "Duration": 0.0000284,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(AccessDenied,\"join.fail.access\")",
+      "Status": "Passed",
+      "Duration": 0.000027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(GenMismatch,\"join.fail.gen_mismatch\")",
+      "Status": "Passed",
+      "Duration": 0.0000259,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.RejectionReasons_MapToSddTextKeys(Timeout,\"join.fail.noresponse\")",
+      "Status": "Passed",
+      "Duration": 0.000027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ConnectScreenModelTests.StepsFollowSessionState",
+      "Status": "Passed",
+      "Duration": 0.0002463,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.FallDirection_QuantizesTo16Steps(0.0f,1.0f,0)",
+      "Status": "Passed",
+      "Duration": 0.0004863,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.FallDirection_QuantizesTo16Steps(1.0f,0.0f,4)",
+      "Status": "Passed",
+      "Duration": 0.0000355,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.FallDirection_QuantizesTo16Steps(0.0f,-1.0f,8)",
+      "Status": "Passed",
+      "Duration": 0.0000191,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.FallDirection_QuantizesTo16Steps(-1.0f,0.0f,12)",
+      "Status": "Passed",
+      "Duration": 0.0000169,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.HitResourceCommand_RejectsWrongBodyLength",
+      "Status": "Passed",
+      "Duration": 0.0002161,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.HitResourceCommand_RoundTrips_ThreeByteBody",
+      "Status": "Passed",
+      "Duration": 0.0002786,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.LocalWorldProvider_ReusesSameWorld_AndRejectsUnknownGeneratorVersion",
+      "Status": "Passed",
+      "Duration": 0.0848852,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.ResourceState_PackRoundTrip_UsesSixteenBits",
+      "Status": "Passed",
+      "Duration": 0.0004327,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.ResourceState_UnpackRejectsUnknownPhase",
+      "Status": "Passed",
+      "Duration": 0.0001437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.SnapshotSplitsIntoChunksUnderLimit_For5000Entries",
+      "Status": "Passed",
+      "Duration": 0.0035788,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.Stone_BecomesBroken_OnFourthHit",
+      "Status": "Passed",
+      "Duration": 0.0003313,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.Table_EntryIsFourBytes_AndPayloadSizeIsFixed",
+      "Status": "Passed",
+      "Duration": 0.000498,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.Table_RejectsCorruptedPhase",
+      "Status": "Passed",
+      "Duration": 0.0001038,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GatheringRulesTests.Tree_BecomesFelled_OnFifthHit_WithFallDirection",
+      "Status": "Passed",
+      "Duration": 0.000215,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Clone_CopiesValues",
+      "Status": "Passed",
+      "Duration": 0.0003862,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Defaults_AreValid_FourPresets_BenchmarkIsHigh",
+      "Status": "Passed",
+      "Duration": 0.0019431,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Defaults_GetHeavierWithHigherPresets",
+      "Status": "Passed",
+      "Duration": 0.0001778,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Defaults_GetsEachPresetByIdInOrder",
+      "Status": "Passed",
+      "Duration": 0.000711,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.ErrorsAreReportedTogether_NotJustTheFirst",
+      "Status": "Passed",
+      "Duration": 0.0002776,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.QualityMap_MatchesEngineEnumValues",
+      "Status": "Passed",
+      "Duration": 0.0001968,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4318,True,True,Dlss)",
+      "Status": "Passed",
+      "Duration": 0.0002453,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4318,True,False,Dlss)",
+      "Status": "Passed",
+      "Duration": 0.0000573,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4318,False,True,Fsr2)",
+      "Status": "Passed",
+      "Duration": 0.0000371,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4098,True,True,Fsr2)",
+      "Status": "Passed",
+      "Duration": 0.0000325,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(32902,False,True,Fsr2)",
+      "Status": "Passed",
+      "Duration": 0.0000318,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4098,False,False,Off)",
+      "Status": "Passed",
+      "Duration": 0.0000336,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerSelector_PicksDlssForNvidia_Fsr2Otherwise(4318,False,False,Off)",
+      "Status": "Passed",
+      "Duration": 0.0000304,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.UpscalerStatus_IsActiveOnlyWhenModeIsNotOff",
+      "Status": "Passed",
+      "Duration": 0.0001788,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Validate_RejectsDuplicateIdAndDuplicateQualityLevel",
+      "Status": "Passed",
+      "Duration": 0.0002656,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Validate_RejectsOutOfRangeValues",
+      "Status": "Passed",
+      "Duration": 0.0005509,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Validate_RejectsWrongCount",
+      "Status": "Passed",
+      "Duration": 0.0004119,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.GraphicsPresetTests.Validate_RequiresExactlyOneBenchmark_AndItMustBeHighWithUpscalerQuality",
+      "Status": "Passed",
+      "Duration": 0.0004127,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\"127.0.0.1\")",
+      "Status": "Passed",
+      "Duration": 0.0004519,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\"127.0.0.1:\")",
+      "Status": "Passed",
+      "Duration": 0.0000351,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\":7770\")",
+      "Status": "Passed",
+      "Duration": 0.0000221,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\"host:abc\")",
+      "Status": "Passed",
+      "Duration": 0.0002522,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\"host:0\")",
+      "Status": "Passed",
+      "Duration": 0.0000302,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_InvalidEndpoint_RecordsError(\"host:70000\")",
+      "Status": "Passed",
+      "Duration": 0.0000201,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Connect_ParsesEndpoint_AndImpliesTugboat",
+      "Status": "Passed",
+      "Duration": 0.0004718,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.DevPlayerId_Invalid_RecordsError(\"0\")",
+      "Status": "Passed",
+      "Duration": 0.0002939,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.DevPlayerId_Invalid_RecordsError(\"-3\")",
+      "Status": "Passed",
+      "Duration": 0.0000501,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.DevPlayerId_Invalid_RecordsError(\"abc\")",
+      "Status": "Passed",
+      "Duration": 0.0000207,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.DevPlayerId_Invalid_RecordsError(\"1.5\")",
+      "Status": "Passed",
+      "Duration": 0.0001058,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.DevPlayerId_IsParsed",
+      "Status": "Passed",
+      "Duration": 0.000163,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Host_ImpliesTugboat_WhenTransportNotGiven",
+      "Status": "Passed",
+      "Duration": 0.0002094,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.HostAndConnectTogether_RecordsError",
+      "Status": "Passed",
+      "Duration": 0.0001021,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.HostWithSteam_RecordsError",
+      "Status": "Passed",
+      "Duration": 0.0000966,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.NoArgs_ReturnsNoOptions",
+      "Status": "Passed",
+      "Duration": 0.0001736,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Null_IsSafe",
+      "Status": "Passed",
+      "Duration": 0.0000573,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_IsParsed_CaseInsensitive(\"tugboat\",Tugboat)",
+      "Status": "Passed",
+      "Duration": 0.0002189,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_IsParsed_CaseInsensitive(\"TUGBOAT\",Tugboat)",
+      "Status": "Passed",
+      "Duration": 0.0000405,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_IsParsed_CaseInsensitive(\"steam\",Steam)",
+      "Status": "Passed",
+      "Duration": 0.000024,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_MissingValue_RecordsError",
+      "Status": "Passed",
+      "Duration": 0.0001145,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_NextArgIsAnotherFlag_RecordsError",
+      "Status": "Passed",
+      "Duration": 0.0001143,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.Transport_UnknownValue_RecordsError",
+      "Status": "Passed",
+      "Duration": 0.0001113,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.TypicalTwoClientSetup_Parses",
+      "Status": "Passed",
+      "Duration": 0.0002141,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LaunchOptionsParserTests.UnknownOptions_AreIgnored",
+      "Status": "Passed",
+      "Duration": 0.0001226,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LobbyMetaBuilderTests.AccessValue_MapsAllThree",
+      "Status": "Passed",
+      "Duration": 0.0003167,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LobbyMetaBuilderTests.Build_HasAllKeysFromSdd37",
+      "Status": "Passed",
+      "Duration": 0.0005462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LocalPlayerPoseBufferTests.PoseAndCorrection_PassThroughOnce",
+      "Status": "Passed",
+      "Duration": 0.0003417,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.Empty_AndNull_AreSafe",
+      "Status": "Passed",
+      "Duration": 0.0013405,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"연결 192.168.0.15:7770\",\"연결 192.168.x.x:7770\")",
+      "Status": "Passed",
+      "Duration": 0.000361,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"peer 203.0.113.42 left\",\"peer 203.0.x.x left\")",
+      "Status": "Passed",
+      "Duration": 0.0000504,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"local 127.0.0.1:7770\",\"local 127.0.0.1:7770\")",
+      "Status": "Passed",
+      "Duration": 0.0000449,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"any 0.0.0.0\",\"any 0.0.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000255,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"버전 6000.3.27.1\",\"버전 6000.3.27.1\")",
+      "Status": "Passed",
+      "Duration": 0.0000211,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"not ip 1.2.3\",\"not ip 1.2.3\")",
+      "Status": "Passed",
+      "Duration": 0.0000194,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.ExternalIpv4_IsMasked_LoopbackAndVersionsAreKept(\"범위 밖 300.1.1.1\",\"범위 밖 300.1.1.1\")",
+      "Status": "Passed",
+      "Duration": 0.0000394,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.Formatter_PutsTimeLevelAndSanitizedMessage",
+      "Status": "Passed",
+      "Duration": 0.0003987,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.MultipleKindsInOneLine_AreAllMasked",
+      "Status": "Passed",
+      "Duration": 0.0002736,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretKeyWithoutValue_IsLeftAlone",
+      "Status": "Passed",
+      "Duration": 0.0000722,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"password=hunter2\",\"password=[redacted]\")",
+      "Status": "Passed",
+      "Duration": 0.0001983,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"Password: hunter2 end\",\"Password: [redacted] end\")",
+      "Status": "Passed",
+      "Duration": 0.0000373,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"login ok token=abc123xyz;next\",\"login ok token=[redacted];next\")",
+      "Status": "Passed",
+      "Duration": 0.0000214,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"ticket = ABCDEF012345\",\"ticket = [redacted]\")",
+      "Status": "Passed",
+      "Duration": 0.0000227,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"{\\\"apikey\\\":\\\"K-12345\\\"}\",\"{\\\"apikey\\\":\\\"[redacted]\\\"}\")",
+      "Status": "Passed",
+      "Duration": 0.000078,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SecretValues_AreMasked(\"secret=a&other=1\",\"secret=[redacted]&other=1\")",
+      "Status": "Passed",
+      "Duration": 0.0000348,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.SteamId_IsMasked_OnlyWhenSeventeenDigitsWithPrefix",
+      "Status": "Passed",
+      "Duration": 0.0001582,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.UserFolderName_IsMasked(\"C:\\\\Users\\\\kim\\\\AppData\\\\LocalLow\\\\Co\\\\Game\\\\Logs\",\"C:\\\\Users\\\\<user>\\\\AppData\\\\LocalLow\\\\Co\\\\Game\\\\Logs\")",
+      "Status": "Passed",
+      "Duration": 0.0000943,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.UserFolderName_IsMasked(\"c:\\\\users\\\\Bob Smith\\\\x\",\"c:\\\\users\\\\<user> Smith\\\\x\")",
+      "Status": "Passed",
+      "Duration": 0.0000262,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.UserFolderName_IsMasked(\"/Users/alice/Library/Logs\",\"/Users/<user>/Library/Logs\")",
+      "Status": "Passed",
+      "Duration": 0.0000221,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.UserFolderName_IsMasked(\"/home/dev/.config/x\",\"/home/<user>/.config/x\")",
+      "Status": "Passed",
+      "Duration": 0.0000193,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.LogSanitizerTests.UserFolderName_IsMasked(\"E:\\\\Claude_Project\\\\Game\\\\src\",\"E:\\\\Claude_Project\\\\Game\\\\src\")",
+      "Status": "Passed",
+      "Duration": 0.0000187,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Aggregator_Counters_KeepLatestValue_AndIgnoreUnknownNames",
+      "Status": "Passed",
+      "Duration": 0.0030345,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Aggregator_HandlesVeryHighFrameRate_WithoutOverflow",
+      "Status": "Passed",
+      "Duration": 0.0037512,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Aggregator_MarkerStats_AveragePercentilesAndMaxCall",
+      "Status": "Passed",
+      "Duration": 0.0004521,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Aggregator_NextWindow_DoesNotInheritOldMarkerValues",
+      "Status": "Passed",
+      "Duration": 0.0002583,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Aggregator_ProducesSnapshotEveryOneSecond",
+      "Status": "Passed",
+      "Duration": 0.0004201,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Budget_Default_MatchesSddValues",
+      "Status": "Passed",
+      "Duration": 0.000322,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.BudgetChecker_PassesWithinBudget_AndReportsEachViolation",
+      "Status": "Passed",
+      "Duration": 0.0017334,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.BudgetChecker_SkipsServerItems_WhenNotHost",
+      "Status": "Passed",
+      "Duration": 0.0001147,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Csv_HeaderAndRow_HaveSameColumnCount_AndUseInvariantNumbers",
+      "Status": "Passed",
+      "Duration": 0.0011508,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.NullProbe_AndScope_DoNothing",
+      "Status": "Passed",
+      "Duration": 0.0004079,
+      "Message": "",
+      "StackTrace": "at Game.Tests.Application.PerfTests.NullProbe_AndScope_DoNothing () [0x00054] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Application\\PerfTests.cs:232\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.OnePercentLow_AveragesWorstOnePercent",
+      "Status": "Passed",
+      "Duration": 0.0001328,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Options_Defaults_AndBenchDurationPerScenario",
+      "Status": "Passed",
+      "Duration": 0.0008923,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Options_ParseAll",
+      "Status": "Passed",
+      "Duration": 0.0002657,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Options_ReportBadValues",
+      "Status": "Passed",
+      "Duration": 0.0001861,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Percentile_UsesNearestRank",
+      "Status": "Passed",
+      "Duration": 0.0002103,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PerfTests.Scope_CallsBeginThenEnd_EvenWhenExceptionThrown",
+      "Status": "Passed",
+      "Duration": 0.0006481,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.DevTransport_UsesDevPlayerId_AndRequiresIt",
+      "Status": "Passed",
+      "Duration": 0.0002036,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_InvalidRemoteId_IsRejected(\"\")",
+      "Status": "Passed",
+      "Duration": 0.0000926,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_InvalidRemoteId_IsRejected(\"abc\")",
+      "Status": "Passed",
+      "Duration": 0.0000246,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_InvalidRemoteId_IsRejected(\"0\")",
+      "Status": "Passed",
+      "Duration": 0.0000152,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_InvalidRemoteId_IsRejected(\"-5\")",
+      "Status": "Passed",
+      "Duration": 0.000015,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_InvalidRemoteId_IsRejected(\"99999999999999999999999\")",
+      "Status": "Passed",
+      "Duration": 0.0000155,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PlayerIdentityPolicyTests.Steam_UsesRemoteId_IgnoringDevId",
+      "Status": "Passed",
+      "Duration": 0.000095,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.AvatarPose_Decode_RejectsWrongLengthAndFlags",
+      "Status": "Passed",
+      "Duration": 0.0004045,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ByteReader_ReadBool_RejectsValuesOverOne",
+      "Status": "Passed",
+      "Duration": 0.0001523,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ByteReader_ReadingPastEnd_FailsWithoutException",
+      "Status": "Passed",
+      "Duration": 0.0001122,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ByteWriter_OverCapacity_FailsWithoutException",
+      "Status": "Passed",
+      "Duration": 0.0001082,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ChannelsAndDirections_FollowSdd",
+      "Status": "Passed",
+      "Duration": 0.0001575,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.CreatureQuantization_ErrorIsUnderThreeCm_AcrossWholeWorld",
+      "Status": "Passed",
+      "Duration": 0.0005817,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.CreatureQuantization_HeightRangeCoversTerrain_AndClampsOutside",
+      "Status": "Passed",
+      "Duration": 0.0003788,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.Decode_RejectsInvalidUtf8_InSeedText",
+      "Status": "Passed",
+      "Duration": 0.0022938,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.Decode_RejectsOutOfRangeEnumValues",
+      "Status": "Passed",
+      "Duration": 0.0005456,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.Decode_RejectsSnapshotChunkWithBadIndex",
+      "Status": "Passed",
+      "Duration": 0.0002579,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.Encode_FailsInsteadOfThrowing_WhenOverLimit",
+      "Status": "Passed",
+      "Duration": 0.0006478,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ExtraBytesInsideLimit_AreMalformed",
+      "Status": "Passed",
+      "Duration": 0.000299,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_AvatarPose_Is20Bytes",
+      "Status": "Passed",
+      "Duration": 0.0005055,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_CommandResult",
+      "Status": "Passed",
+      "Duration": 0.0003605,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_CreatureEntry_Is11Bytes",
+      "Status": "Passed",
+      "Duration": 0.0001828,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_JoinRejected",
+      "Status": "Passed",
+      "Duration": 0.0001017,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_JoinRequest",
+      "Status": "Passed",
+      "Duration": 0.0001074,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.FixedBytes_WorldReady",
+      "Status": "Passed",
+      "Duration": 0.000562,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.JoinRequest_GameVersionOver64Bytes_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0002973,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.JoinRequest_OtherProtocolVersion_SkipsRestAndYieldsProtocolOnly",
+      "Status": "Passed",
+      "Duration": 0.0002208,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.OversizedPacket_IsRejected_BeforeParsing",
+      "Status": "Passed",
+      "Duration": 0.0000939,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.ProtocolVersion_IsTwo",
+      "Status": "Passed",
+      "Duration": 0.0000555,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_AvatarPose",
+      "Status": "Passed",
+      "Duration": 0.0002603,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_CreatureMessages",
+      "Status": "Passed",
+      "Duration": 0.0014776,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_JoinAccepted_WithKoreanSeedText",
+      "Status": "Passed",
+      "Duration": 0.0002728,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_JoinRequest",
+      "Status": "Passed",
+      "Duration": 0.000201,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_SimpleMessages",
+      "Status": "Passed",
+      "Duration": 0.0010713,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.RoundTrip_SnapshotChunk_AndTableDelta_AtMaxPayload",
+      "Status": "Passed",
+      "Duration": 0.0122126,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.TrailingBytes_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.000193,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.Truncated_AnyPrefix_IsRejectedWithoutException",
+      "Status": "Passed",
+      "Duration": 0.0010412,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ProtocolCodecTests.UnknownKind_AndEmpty_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.0001802,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.PvpAbsenceTests.TC010_M1_명령_종류에는_플레이어를_공격하는_명령이_없다",
+      "Status": "Passed",
+      "Duration": 0.0000515,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RemoteAvatarTrackTests.OutOfOrderPose_IsDropped",
+      "Status": "Passed",
+      "Duration": 0.001045,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RemoteAvatarTrackTests.Sample_ClampsOutsideRange_AndFailsWithoutSamples",
+      "Status": "Passed",
+      "Duration": 0.0005744,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RemoteAvatarTrackTests.Sample_InterpolatesBetweenTwoPoses",
+      "Status": "Passed",
+      "Duration": 0.0001718,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RemoteAvatarTrackTests.Sample_YawInterpolatesTheShortWayAround360",
+      "Status": "Passed",
+      "Duration": 0.0001564,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.ApplyingTheSameDeltaTwice_GivesSameResult",
+      "Status": "Passed",
+      "Duration": 0.0024049,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.ApplyPayload_RejectsTruncatedAndTrailing",
+      "Status": "Passed",
+      "Duration": 0.001563,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.DeltaPayload_FixedBytes_EntryIsFourBytes",
+      "Status": "Passed",
+      "Duration": 0.0003175,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.DrainJournal_ClearsChanges_AndKeepsInsertionOrder",
+      "Status": "Passed",
+      "Duration": 0.0003494,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.Remove_IsReplicated_AndSetAfterRemoveCancelsIt",
+      "Status": "Passed",
+      "Duration": 0.0007669,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.Snapshot_IsSplitIntoChunksUnderMaxBytes",
+      "Status": "Passed",
+      "Duration": 0.0032278,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.SnapshotPlusDeltas_EqualHostState",
+      "Status": "Passed",
+      "Duration": 0.0078774,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.TwoByteKey_RejectsLargerKeys",
+      "Status": "Passed",
+      "Duration": 0.0002627,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ReplicatedTableTests.Version_ChangesOnEveryChange",
+      "Status": "Passed",
+      "Duration": 0.0001128,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RequestGuardTests.Buckets_AreSeparatePerPlayer",
+      "Status": "Passed",
+      "Duration": 0.0003517,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RequestGuardTests.Flood_ProcessesNoMoreThanTheLimitPerSecond",
+      "Status": "Passed",
+      "Duration": 0.0004135,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RequestGuardTests.PerKindRate_AppliesInAdditionToGlobal",
+      "Status": "Passed",
+      "Duration": 0.0009842,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RequestGuardTests.TokenBucket_AllowsBurstThenRefills",
+      "Status": "Passed",
+      "Duration": 0.0001769,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.CellGrid_AllResourcesAreInExactlyOneCell",
+      "Status": "Passed",
+      "Duration": 0.0830118,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.CellGrid_CellIndex_ClampsOutsideWorld",
+      "Status": "Passed",
+      "Duration": 0.0002114,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.CellGrid_CollectWithin_MatchesBruteForce",
+      "Status": "Passed",
+      "Duration": 0.0009471,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.Surface_HeightIsFinite_AndMatchesGrid",
+      "Status": "Passed",
+      "Duration": 0.0002136,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.Visual_BrokenHarvestedOrFelledStone_AreHidden",
+      "Status": "Passed",
+      "Duration": 0.0002803,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.Visual_FelledTree_LiesInGivenDirection",
+      "Status": "Passed",
+      "Duration": 0.0001282,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ResourceViewRulesTests.Visual_PristineAndDamaged_AreStanding",
+      "Status": "Passed",
+      "Duration": 0.0001358,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RosterAndMirrorTests.Mirror_AppliesSnapshotChunksAndDeltas_AndRejectsUnknownTable",
+      "Status": "Passed",
+      "Duration": 0.0025817,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RosterAndMirrorTests.RosterEntry_RoundTrip_AndLongNameIsTruncatedByUtf8Bytes",
+      "Status": "Passed",
+      "Duration": 0.0004716,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.RosterAndMirrorTests.Utf8Text_Truncate_DoesNotSplitCharacters",
+      "Status": "Passed",
+      "Duration": 0.0001007,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ServerWorldPlayersTests.AddPlayer_AssignsLowestFreeSlot_AndReusesAfterLeaving",
+      "Status": "Passed",
+      "Duration": 0.0016284,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ServerWorldPlayersTests.EightPlayersFit_NinthGetsNoSlot",
+      "Status": "Passed",
+      "Duration": 0.0009373,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ServerWorldPlayersTests.Roster_FollowsPlayers_AndPublishesChanges",
+      "Status": "Passed",
+      "Duration": 0.0015178,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ServerWorldPlayersTests.ServerSettings_FromConfig_UsesAssetValues",
+      "Status": "Passed",
+      "Duration": 0.0004696,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.ServerWorldPlayersTests.Spawn_PositionsDifferBySlot",
+      "Status": "Passed",
+      "Duration": 0.0001201,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.BuildAccepted_CarriesSlotAndPlayer",
+      "Status": "Passed",
+      "Duration": 0.0019368,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Evaluate_NinthPlayer_IsFull",
+      "Status": "Passed",
+      "Duration": 0.00083,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Evaluate_Rejects_VersionHashAndBannedAndUnsupportedGenerator",
+      "Status": "Passed",
+      "Duration": 0.0007533,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Evaluate_Steam_RequiresLobbyMembership",
+      "Status": "Passed",
+      "Duration": 0.0001701,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Open_DevTransport_SkipsLobby",
+      "Status": "Passed",
+      "Duration": 0.0002812,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Open_LobbyUnavailable_ReportsError",
+      "Status": "Passed",
+      "Duration": 0.0003369,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.Open_Steam_CreatesFriendsOnlyLobby_WithMetadata",
+      "Status": "Passed",
+      "Duration": 0.0006702,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.SessionServiceTests.PlayerCountChange_UpdatesLobbyCountMeta",
+      "Status": "Passed",
+      "Duration": 0.0002585,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.StaminaHudModelTests.FullAndIdle_FadesOutOverOneSecond",
+      "Status": "Passed",
+      "Duration": 0.0011248,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.StaminaHudModelTests.LowThreshold_IsTwentyFivePercentAndBelow",
+      "Status": "Passed",
+      "Duration": 0.0001431,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.StaminaHudModelTests.RatioIsClamped",
+      "Status": "Passed",
+      "Duration": 0.0001689,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.StaminaHudModelTests.Reappears_ImmediatelyWhenSpendingStartsAgain",
+      "Status": "Passed",
+      "Duration": 0.0001136,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.FirstRunLanguage_FromSteamLanguage(\"koreana\",Korean)",
+      "Status": "Passed",
+      "Duration": 0.0002425,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.FirstRunLanguage_FromSteamLanguage(\"KOREANA\",Korean)",
+      "Status": "Passed",
+      "Duration": 0.0000624,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.FirstRunLanguage_FromSteamLanguage(\"english\",English)",
+      "Status": "Passed",
+      "Duration": 0.000031,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.FirstRunLanguage_FromSteamLanguage(\"japanese\",English)",
+      "Status": "Passed",
+      "Duration": 0.0000264,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.FirstRunLanguage_FromSteamLanguage(null,English)",
+      "Status": "Passed",
+      "Duration": 0.000027,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.Parse_DuplicateKey_ReportsError_KeepsFirst",
+      "Status": "Passed",
+      "Duration": 0.0006421,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.Parse_LineWithoutTab_ReportsError",
+      "Status": "Passed",
+      "Duration": 0.0001213,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.Parse_NullOrEmpty_GivesEmptyTable",
+      "Status": "Passed",
+      "Duration": 0.0001309,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.Parse_ReadsKeyAndText_IgnoresCommentsAndBlankLines",
+      "Status": "Passed",
+      "Duration": 0.0001207,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.Parse_Unescapes_NewlineTabBackslash",
+      "Status": "Passed",
+      "Duration": 0.0000949,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.SystemLanguageFallback(\"Korean\",Korean)",
+      "Status": "Passed",
+      "Duration": 0.0003173,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.SystemLanguageFallback(\"English\",English)",
+      "Status": "Passed",
+      "Duration": 0.0000533,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.TextTableTests.SystemLanguageFallback(\"German\",English)",
+      "Status": "Passed",
+      "Duration": 0.0000249,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.UiStateTests.ApplicationLayer_HasNoPauseConcept",
+      "Status": "Passed",
+      "Duration": 0.0038396,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.UiStateTests.EmptyScreenId_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0004191,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.UiStateTests.OpeningAnyScreen_SwitchesToOverlay_ClosingAllReturnsToGameplay",
+      "Status": "Passed",
+      "Duration": 0.0013926,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.UiStateTests.SameScreenOpenedTwice_CountsOnce_AndCloseAllResets",
+      "Status": "Passed",
+      "Duration": 0.0003409,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Application.UiStateTests.ServerWorldTick_DoesNotDependOnUiState",
+      "Status": "Passed",
+      "Duration": 0.0005611,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Adapters_DoNotReferenceEachOther",
+      "Status": "Passed",
+      "Duration": 0.0170647,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.ApplicationAndDomain_DoNotMentionFishNetOrSteamworks",
+      "Status": "Passed",
+      "Duration": 0.042275,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Bootstrap_ReferencesOnlyAllowedAssemblies",
+      "Status": "Passed",
+      "Duration": 0.0005008,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.DeclaredReferences_MatchSddTable_Exactly",
+      "Status": "Passed",
+      "Duration": 0.0005017,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Dependencies_PointInwardOnly",
+      "Status": "Passed",
+      "Duration": 0.0009846,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.DomainAndApplication_DoNotUseForbiddenNamespaces",
+      "Status": "Passed",
+      "Duration": 0.0016317,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.EveryGameAsmdef_HasUniqueName_MatchingItsFileName",
+      "Status": "Passed",
+      "Duration": 0.0007005,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.FishNet_OnlyInNetTransportBootstrap",
+      "Status": "Passed",
+      "Duration": 0.0004779,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.FishySteamworks_OnlyInTransportAndBootstrap",
+      "Status": "Passed",
+      "Duration": 0.0002403,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.GameAssemblies_AreExactlyTheThirteenInSdd_PlusEditorAndTests",
+      "Status": "Passed",
+      "Duration": 0.0014055,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.GameAssemblies_NeverReferenceUnityPipeline",
+      "Status": "Passed",
+      "Duration": 0.0003689,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.GameCode_DoesNotUseUiToolkit_AndNoUxmlUssPanelSettingsExist",
+      "Status": "Passed",
+      "Duration": 0.0439221,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.InfrastructureAssemblies_DoNotReferenceEachOther",
+      "Status": "Passed",
+      "Duration": 0.000605,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Manifest_PinsExactVersions_NoRangesOrLatest",
+      "Status": "Passed",
+      "Duration": 0.0004552,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.NetAdapter_FishNetTypes_OnlyInTransportAndAvatarFolders",
+      "Status": "Passed",
+      "Duration": 0.0022902,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.NoEngineReferences_FlagsMatchSddTable",
+      "Status": "Passed",
+      "Duration": 0.0004357,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.NoScriptsOutsideAssemblyDefinitions",
+      "Status": "Passed",
+      "Duration": 0.2111459,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PlayerAssemblies_ContainNoPipelineEditorOrTestAssemblies",
+      "Status": "Passed",
+      "Duration": 0.0376528,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.ProjectFiles_DoNotMentionRuntimePipelineSymbols",
+      "Status": "Passed",
+      "Duration": 0.0085437,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.ProjectSettings_ForceText_Il2cppStandalone_LinearColor",
+      "Status": "Passed",
+      "Duration": 0.0003816,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PureAssemblies_AreFourExactly",
+      "Status": "Passed",
+      "Duration": 0.0004975,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PureAssemblies_CompiledReferences_AreOnlyBclAndAllowedGameAssemblies(\"Game.Domain\")",
+      "Status": "Passed",
+      "Duration": 0.0009992,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PureAssemblies_CompiledReferences_AreOnlyBclAndAllowedGameAssemblies(\"Game.WorldGen\")",
+      "Status": "Passed",
+      "Duration": 0.0003961,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PureAssemblies_CompiledReferences_AreOnlyBclAndAllowedGameAssemblies(\"Game.Application\")",
+      "Status": "Passed",
+      "Duration": 0.0003478,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.PureAssemblies_CompiledReferences_AreOnlyBclAndAllowedGameAssemblies(\"Game.Adapters.Persistence\")",
+      "Status": "Passed",
+      "Duration": 0.00029,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Rendering_OnlyInfraRenderingReferencesRenderPipelines_Compiled",
+      "Status": "Passed",
+      "Duration": 0.0012642,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.Rendering_OnlyInfraRenderingReferencesRenderPipelines_Declared",
+      "Status": "Passed",
+      "Duration": 0.000328,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.ScriptingDefines_AllPlatforms_DoNotEnableRuntimePipeline",
+      "Status": "Passed",
+      "Duration": 0.000653,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.SteamAppIdFile_ContainsDevelopmentAppId480",
+      "Status": "Passed",
+      "Duration": 0.0003603,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.SteamworksNet_OnlyInSteamAndBootstrap",
+      "Status": "Passed",
+      "Duration": 0.0003256,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.TestAssemblies_ReferenceExactlyTheAssembliesInSddTable",
+      "Status": "Passed",
+      "Duration": 0.0006914,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.ThirdPartyNetworkLibraries_AreAtPinnedVersions",
+      "Status": "Passed",
+      "Duration": 0.0005362,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.UguiAndTextMeshPro_OnlyPresentationAmongGameRuntimeAssemblies",
+      "Status": "Passed",
+      "Duration": 0.0006115,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.UnityEditorVersion_IsPinnedTo_6000_3_27f2",
+      "Status": "Passed",
+      "Duration": 0.0001026,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ArchitectureRulesTests.UnityPipeline_WhenInstalled_OnlyAttributesAssemblyMayBeNonEditor",
+      "Status": "Passed",
+      "Duration": 0.0034898,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ReleaseHygieneTests.TC055_Assets_아래에_원본이_없는_meta_파일이_없다",
+      "Status": "Passed",
+      "Duration": 0.0261209,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Architecture.ReleaseHygieneTests.TC056_Player_log가_꺼져_있다",
+      "Status": "Failed",
+      "Duration": 0.0015004,
+      "Message": "  Player.log에 SteamID·사용자 경로가 가려지지 않고 남음(SEC-005)\r\n  String lengths are both 15. Strings differ at index 14.\r\n  Expected: \"usePlayerLog: 0\"\r\n  But was:  \"usePlayerLog: 1\"\r\n  -------------------------^\r\n",
+      "StackTrace": "at Game.Tests.Architecture.ReleaseHygieneTests.TC056_Player_log가_꺼져_있다 () [0x00048] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Architecture\\ReleaseHygieneTests.cs:31\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Domain.CommonIdTests.ContentId_Negative_Throws",
+      "Status": "Passed",
+      "Duration": 0.0003849,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CommonIdTests.ContentId_Zero_IsNone_AndPositiveIsValid",
+      "Status": "Passed",
+      "Duration": 0.0002902,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CommonIdTests.PlayerId_Compare_OrdersByValue",
+      "Status": "Passed",
+      "Duration": 0.0001875,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CommonIdTests.PlayerId_SameValue_IsEqual_AndHasSameHash",
+      "Status": "Passed",
+      "Duration": 0.0001978,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CommonIdTests.PlayerId_Zero_IsNotValid_AndNoneIsZero",
+      "Status": "Passed",
+      "Duration": 0.0001104,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Definition_RejectsLoseRangeSmallerThanDetect",
+      "Status": "Passed",
+      "Duration": 0.0003991,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.FacingYaw_ZeroIsPlusZ_NinetyIsPlusX",
+      "Status": "Passed",
+      "Duration": 0.0001385,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Idle_OutsideDetectRange_StaysIdleAndPicksWanderPoint",
+      "Status": "Passed",
+      "Duration": 0.0002531,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Idle_PlayerWithinDetectRange_StartsSeek",
+      "Status": "Passed",
+      "Duration": 0.0001621,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.ResolveAttack_NotAttackMode_NeverHits",
+      "Status": "Passed",
+      "Duration": 0.0000863,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.ResolveAttack_RequiresAttackModeRangeAngleAndCooldown",
+      "Status": "Passed",
+      "Duration": 0.0003088,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Seek_BetweenDetectAndLoseRange_KeepsChasing",
+      "Status": "Passed",
+      "Duration": 0.0001207,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Seek_InAttackRange_BecomesAttack_AndLeavesOnlyBeyondHysteresis",
+      "Status": "Passed",
+      "Duration": 0.0001901,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Seek_TargetBeyondLoseRange_ReturnsToIdle",
+      "Status": "Passed",
+      "Duration": 0.0001829,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.TakeDamage_ReducesHealth_ThenKillsAndStopsDeciding",
+      "Status": "Passed",
+      "Duration": 0.0002622,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Wander_KeepsPointUntilArrived",
+      "Status": "Passed",
+      "Duration": 0.0001817,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.CreatureBrainTests.Wander_SameSeedGivesSamePoints_DifferentSeedDiffers",
+      "Status": "Passed",
+      "Duration": 0.0001385,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Channel_IsFirstMetadataIdentifier(\"0.1.0+dev.1.abc\",\"dev\")",
+      "Status": "Passed",
+      "Duration": 0.0003444,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Channel_IsFirstMetadataIdentifier(\"0.1.0+rel.1.abc\",\"rel\")",
+      "Status": "Passed",
+      "Duration": 0.0000604,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Channel_IsFirstMetadataIdentifier(\"0.1.0+editor\",\"editor\")",
+      "Status": "Passed",
+      "Duration": 0.0000387,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Channel_IsFirstMetadataIdentifier(\"0.1.0+other.1\",\"\")",
+      "Status": "Passed",
+      "Duration": 0.0000247,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Channel_IsFirstMetadataIdentifier(\"0.1.0\",\"\")",
+      "Status": "Passed",
+      "Duration": 0.0000243,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ComposeBuildMetadata_FollowsFormat",
+      "Status": "Passed",
+      "Duration": 0.0005513,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ComposedMetadata_AppendedToCore_IsAlwaysParseable",
+      "Status": "Passed",
+      "Duration": 0.0006322,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"\")",
+      "Status": "Passed",
+      "Duration": 0.0004106,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(null)",
+      "Status": "Passed",
+      "Duration": 0.000075,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1\")",
+      "Status": "Passed",
+      "Duration": 0.0000428,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000422,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000384,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"01.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.000037,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.00.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000377,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.00\")",
+      "Status": "Passed",
+      "Duration": 0.0000647,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0-\")",
+      "Status": "Passed",
+      "Duration": 0.0000362,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0-01\")",
+      "Status": "Passed",
+      "Duration": 0.0000365,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0-a..b\")",
+      "Status": "Passed",
+      "Duration": 0.0000306,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0+\")",
+      "Status": "Passed",
+      "Duration": 0.0000335,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0+a..b\")",
+      "Status": "Passed",
+      "Duration": 0.0000537,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0+a+b\")",
+      "Status": "Passed",
+      "Duration": 0.0000435,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0+.a\")",
+      "Status": "Passed",
+      "Duration": 0.0000425,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"65536.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000376,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"0.65536.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000474,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"0.0.65536\")",
+      "Status": "Passed",
+      "Duration": 0.000054,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"-1.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000438,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"v1.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.000029,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\" 1.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000332,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0 \")",
+      "Status": "Passed",
+      "Duration": 0.000066,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0-한글\")",
+      "Status": "Passed",
+      "Duration": 0.0000406,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.0.0+한글\")",
+      "Status": "Passed",
+      "Duration": 0.0000302,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.InvalidStrings_AreRejected_WithoutException(\"1.a.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000371,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.IsSameBuild_ComparesWholeStringIncludingMetadata",
+      "Status": "Passed",
+      "Duration": 0.0003063,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.IsSameBuild_IsCaseSensitive",
+      "Status": "Passed",
+      "Duration": 0.000098,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Length_64IsAllowed_65IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0001771,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.Parts_AreSplitCorrectly",
+      "Status": "Passed",
+      "Duration": 0.00021,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ToDisplayString_ReleaseShowsCore_OthersShowFull(\"0.1.0+rel.20261110090000.9f8e7d6\",\"v0.1.0\")",
+      "Status": "Passed",
+      "Duration": 0.0001486,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ToDisplayString_ReleaseShowsCore_OthersShowFull(\"1.0.0-rc.1+rel.20270301120000.0c1d2e3\",\"v1.0.0-rc.1\")",
+      "Status": "Passed",
+      "Duration": 0.0000453,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ToDisplayString_ReleaseShowsCore_OthersShowFull(\"0.1.0+dev.20261104153012.a1b2c3d\",\"v0.1.0+dev.20261104153012.a1b2c3d\")",
+      "Status": "Passed",
+      "Duration": 0.000031,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ToDisplayString_ReleaseShowsCore_OthersShowFull(\"0.1.0+editor\",\"v0.1.0+editor\")",
+      "Status": "Passed",
+      "Duration": 0.0000696,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ToDisplayString_ReleaseShowsCore_OthersShowFull(\"0.1.0\",\"v0.1.0\")",
+      "Status": "Passed",
+      "Duration": 0.0001696,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"0.1.0\")",
+      "Status": "Passed",
+      "Duration": 0.0002227,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0\")",
+      "Status": "Passed",
+      "Duration": 0.0000441,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"65535.65535.65535\")",
+      "Status": "Passed",
+      "Duration": 0.0000926,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"0.3.0-alpha.1\")",
+      "Status": "Passed",
+      "Duration": 0.0000724,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0-rc.1\")",
+      "Status": "Passed",
+      "Duration": 0.0000378,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0-0\")",
+      "Status": "Passed",
+      "Duration": 0.0000476,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0-x-y.z\")",
+      "Status": "Passed",
+      "Duration": 0.0000614,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"0.1.0+editor\")",
+      "Status": "Passed",
+      "Duration": 0.000056,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"0.1.0+dev.20261104153012.a1b2c3d\")",
+      "Status": "Passed",
+      "Duration": 0.0000349,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"0.1.0+dev.20261104153012.a1b2c3d.dirty\")",
+      "Status": "Passed",
+      "Duration": 0.00006,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0-rc.1+rel.20270301120000.0c1d2e3\")",
+      "Status": "Passed",
+      "Duration": 0.0003995,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.GameVersionTests.ValidStrings_Parse_AndFullIsOriginal(\"1.0.0+001\")",
+      "Status": "Passed",
+      "Duration": 0.0002788,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.Banned_IsRejected_BeforeOtherChecks",
+      "Status": "Passed",
+      "Duration": 0.0005409,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.Constructor_RejectsNonPositiveCapacity",
+      "Status": "Passed",
+      "Duration": 0.0002644,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.DevTransport_DoesNotRequireLobbyMembership",
+      "Status": "Passed",
+      "Duration": 0.0002009,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.EighthPlayer_IsAccepted_NinthIsFull",
+      "Status": "Passed",
+      "Duration": 0.0002459,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.FriendsOnly_RejectsPublicListPath",
+      "Status": "Passed",
+      "Duration": 0.0001646,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.InviteOnly_AllowsInviteAndRejoin_ButNotFriendPath",
+      "Status": "Passed",
+      "Duration": 0.0003947,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.Normal_Join_IsAccepted",
+      "Status": "Passed",
+      "Duration": 0.000185,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.Reservations_CountTowardCapacity",
+      "Status": "Passed",
+      "Duration": 0.0001959,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.SteamTransport_NonLobbyMember_IsAccessDenied",
+      "Status": "Passed",
+      "Duration": 0.0001522,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.UnsupportedGeneratorVersion_IsVersionMismatch",
+      "Status": "Passed",
+      "Duration": 0.0001871,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(2,\"0.1.0+dev.20261104153012.a1b2c3d\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.000519,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.1+dev.20261104153012.a1b2c3d\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0001238,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0+dev.20261104153013.a1b2c3d\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0001896,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0+dev.20261104153012.a1b2c3d.dirty\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0001747,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0+rel.20261104153012.a1b2c3d\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0001074,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0002231,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0+editor\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.000104,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0000982,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"garbage\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0000348,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"01.0.0\",43981UL)",
+      "Status": "Passed",
+      "Duration": 0.0000348,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.SessionRulesTests.VersionOrContentMismatch_IsRejected(1,\"0.1.0+dev.20261104153012.a1b2c3d\",4660UL)",
+      "Status": "Passed",
+      "Duration": 0.0000291,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.NonPositiveDelta_DoesNothing",
+      "Status": "Passed",
+      "Duration": 0.0002572,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.Recovery_StartsOnlyAfterDelay",
+      "Status": "Passed",
+      "Duration": 0.0001924,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.Recovery_StopsAtMax",
+      "Status": "Passed",
+      "Duration": 0.000112,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.Running_DrainsAtConfiguredRate",
+      "Status": "Passed",
+      "Duration": 0.0000713,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.Spending_AgainRestartsTheDelay",
+      "Status": "Passed",
+      "Duration": 0.0001341,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Domain.StaminaStateTests.Zero_CannotRun_AndDoesNotGoNegative",
+      "Status": "Passed",
+      "Duration": 0.0000955,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.FlowField_GoesAroundWallToTarget_NeverEntersBlockedCells",
+      "Status": "Passed",
+      "Duration": 0.022418,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.FlowField_TargetOutsideWalkableWorld_FallsBackToStraight_NoCrash",
+      "Status": "Passed",
+      "Duration": 0.0012056,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.FlowField_TargetsBeyondMax_AreIgnored",
+      "Status": "Passed",
+      "Duration": 0.0016217,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.Server_60Creatures_8Players_ObserveTickTime",
+      "Status": "Passed",
+      "Duration": 0.1020984,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.SpatialHash_QueryMatchesBruteForce_EvenWithManyBucketCollisions",
+      "Status": "Passed",
+      "Duration": 0.0021826,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.SpatialHash_RejectsBadArguments",
+      "Status": "Passed",
+      "Duration": 0.000462,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.Steering_BlockedAhead_SetsBlockedFlag_AndKeepsPosition",
+      "Status": "Passed",
+      "Duration": 0.0007844,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.Steering_NoGrid_Throws_ButIsWalkableIsFalse",
+      "Status": "Passed",
+      "Duration": 0.0003146,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.Steering_OutputHeightFollowsHeightGrid_AndStandingAgentKeepsPosition",
+      "Status": "Passed",
+      "Duration": 0.0008115,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.Steering_SeparationPushesCloseAgentsApart",
+      "Status": "Passed",
+      "Duration": 0.0007486,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.WalkGrid_SteepAndBlockedCellsAreNotWalkable_FlatAreWalkable",
+      "Status": "Passed",
+      "Duration": 0.0005566,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.AiJobsBackendTests.WithoutFlowField_StraightLineGetsStuckAtWall",
+      "Status": "Passed",
+      "Duration": 0.0078434,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildArtifactInspectorTests.ExtractDllNames_FindsOnlyDllTokens",
+      "Status": "Passed",
+      "Duration": 0.0013988,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildArtifactInspectorTests.Inspector_AttributesAllowed_RuntimeServerForbidden",
+      "Status": "Passed",
+      "Duration": 0.0148616,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildArtifactInspectorTests.Inspector_ManagedFolderDlls_AreChecked",
+      "Status": "Passed",
+      "Duration": 0.0034351,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildInfoAndTextTests.BuildInfo_Resolve_EditorAppendsEditorChannel_PlayerKeepsBuildMetadata",
+      "Status": "Passed",
+      "Duration": 0.0003478,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildInfoAndTextTests.EveryTextKeyUsedByM1Screens_ExistsInKorean",
+      "Status": "Passed",
+      "Duration": 0.0037286,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.BuildInfoAndTextTests.TextTables_KoreanAndEnglish_HaveTheSameKeys",
+      "Status": "Passed",
+      "Duration": 0.0017671,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_BalanceEditedInAsset_ChangesProviderAndHash",
+      "Status": "Passed",
+      "Duration": 0.0029481,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_ContentDefs_AreSortedAndHashed",
+      "Status": "Passed",
+      "Duration": 0.001569,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_ContentProperties_ReachTheHash",
+      "Status": "Passed",
+      "Duration": 0.0009511,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_DefaultAssets_GivesCandidateValues",
+      "Status": "Passed",
+      "Duration": 0.000376,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_EmptyContentSlot_Throws",
+      "Status": "Passed",
+      "Duration": 0.0003073,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_MissingBalance_ThrowsWithClearPath",
+      "Status": "Passed",
+      "Duration": 0.0002602,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_MissingNetwork_Throws",
+      "Status": "Passed",
+      "Duration": 0.0002104,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.Load_NullRoot_Throws",
+      "Status": "Passed",
+      "Duration": 0.0002139,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.ConfigLoaderTests.ShippedAssets_AreValid_AndLinked",
+      "Status": "Passed",
+      "Duration": 0.0018674,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.FileLogSink_AfterDispose_IgnoresFurtherWrites",
+      "Status": "Passed",
+      "Duration": 0.0134507,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.FileLogSink_ConcurrentWrites_DoNotCorruptLines",
+      "Status": "Passed",
+      "Duration": 0.0174855,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.FileLogSink_NormalLogs_DoNotIncludeStackTrace",
+      "Status": "Passed",
+      "Duration": 0.0076725,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.FileLogSink_WritesSanitizedLines_AndHeader",
+      "Status": "Passed",
+      "Duration": 0.0091666,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Probe_MeasuresRealElapsedTime_PerMarker",
+      "Status": "Passed",
+      "Duration": 0.9291455,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Probe_NestedAndUnpairedCalls_AreSafe",
+      "Status": "Passed",
+      "Duration": 0.0010936,
+      "Message": "",
+      "StackTrace": "at Game.Tests.Infrastructure.DiagnosticsTests.Probe_NestedAndUnpairedCalls_AreSafe () [0x00072] in E:\\Claude_Project\\U_SRP_Survive\\src\\Assets\\Tests\\EditMode\\Infrastructure\\DiagnosticsTests.cs:82\r\n"
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Probe_UnknownMarkerName_WarnsOnce_AndIsIgnored",
+      "Status": "Passed",
+      "Duration": 0.0021865,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Telemetry_BudgetViolation_IsWarned_WithCooldown",
+      "Status": "Passed",
+      "Duration": 4.0525645,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Telemetry_CsvPathUnwritable_ThrowsInsteadOfSilentlyIgnoring",
+      "Status": "Passed",
+      "Duration": 0.0030245,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Telemetry_HudText_ShowsRequiredFr163Items",
+      "Status": "Passed",
+      "Duration": 1.8612012,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.DiagnosticsTests.Telemetry_WritesCsv_HeaderAndOneRowPerSecond",
+      "Status": "Passed",
+      "Duration": 0.0042861,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.Hud_StaminaArc_ShowsWhileConsumingAndWarnsWhenLow",
+      "Status": "Passed",
+      "Duration": 0.0046907,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.LobbyButtons_RaiseEvents_AndUnavailableButtonsKeepFocusable",
+      "Status": "Passed",
+      "Duration": 0.0084848,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.LobbyHideAll_TurnsOffCanvasRaycasterAndGroup_ShowLobbyRestores",
+      "Status": "Passed",
+      "Duration": 0.0064904,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.LobbyPanels_SwitchBetweenLobbyConnectingAndFailure",
+      "Status": "Passed",
+      "Duration": 0.0063655,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.LobbyVersionLine_ShowsGivenDisplayText",
+      "Status": "Passed",
+      "Duration": 0.0048816,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.MenuBadge_ShowsGameRunning_WithGlyphAndText",
+      "Status": "Passed",
+      "Duration": 0.0028602,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.MenuButtons_RaiseEvents_AndCloseClosesMenu",
+      "Status": "Passed",
+      "Duration": 0.0029097,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.MenuCancel_ClosesMenu",
+      "Status": "Passed",
+      "Duration": 0.0028741,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.MenuNotice_ShowsReason_AndResetsOnReopen",
+      "Status": "Passed",
+      "Duration": 0.0023024,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.StatusText_UsesLightTextToken",
+      "Status": "Passed",
+      "Duration": 0.0058175,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GameMenuAndLobbyViewTests.TextTables_HaveInviteUnavailable_InBothLanguages",
+      "Status": "Passed",
+      "Duration": 0.00089,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.BenchScene_ExistsButIsNotInBuildSettings",
+      "Status": "Passed",
+      "Duration": 0.0009215,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.GameDataConfig_LinksGraphicsPresets",
+      "Status": "Passed",
+      "Duration": 0.0001438,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.HdrpAssets_EnableDynamicResolution_AndUpscalerList_AndFollowPresetValues",
+      "Status": "Passed",
+      "Duration": 0.0053842,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.PresetAsset_Invalid_Throws",
+      "Status": "Passed",
+      "Duration": 0.0004219,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.PresetAsset_IsValid_AndBenchmarkIsHigh",
+      "Status": "Passed",
+      "Duration": 0.0001607,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.PresetAsset_ToCatalog_CopiesData_SoRuntimeCannotChangeAsset",
+      "Status": "Passed",
+      "Duration": 0.0003171,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.PresetQualityLevelIndexes_PointAtExistingLevels",
+      "Status": "Passed",
+      "Duration": 0.0002261,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.QualitySettings_HasFourLevels_EachWithOwnHdrpAsset",
+      "Status": "Passed",
+      "Duration": 0.0025687,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.GraphicsDataTests.UpscalerQualityMap_MatchesEngineEnums_WhenModulesInstalled",
+      "Status": "Passed",
+      "Duration": 0.0004813,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.Asset_ExistsAndIsImportedAsInputActionAsset",
+      "Status": "Passed",
+      "Duration": 0.0016606,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.Builder_IsDeterministic_AndFileMatchesBuilderOutput",
+      "Status": "Passed",
+      "Duration": 0.004097,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.ControlSchemes_AreKeyboardMouseAndGamepad_OnlyTwo",
+      "Status": "Passed",
+      "Duration": 0.0027019,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.Gameplay_Gamepad_MatchesStoryboardTable_WithHeldButtonsLeftEmpty",
+      "Status": "Passed",
+      "Duration": 0.0016885,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.Gameplay_KeyboardMouse_MatchesStoryboardTable",
+      "Status": "Passed",
+      "Duration": 0.0009955,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.NoDuplicatePath_WithinGameplayPerControlScheme",
+      "Status": "Passed",
+      "Duration": 0.00267,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.InputActionsAssetTests.Ui_Map_MatchesMenuCommonInput",
+      "Status": "Passed",
+      "Duration": 0.0011352,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.BootScene_IsWired_AndRegisteredFirstInBuildSettings",
+      "Status": "Passed",
+      "Duration": 0.0190081,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.Buttons_RaiseEvents_ThroughOnClick",
+      "Status": "Passed",
+      "Duration": 0.0026971,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.Cancel_DoesNotCloseTheScreen",
+      "Status": "Passed",
+      "Duration": 0.0020113,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.CheckingState_MakesRetryUnavailable_ShowsCheckingText_AndKeepsInteractable",
+      "Status": "Passed",
+      "Duration": 0.0021856,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.DefaultState_HidesStatus_EnablesRetry",
+      "Status": "Passed",
+      "Duration": 0.0017444,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.FailedState_ShowsRetryFailedMessage_AndRestoresRetry",
+      "Status": "Passed",
+      "Duration": 0.0018669,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.Hide_TurnsOffCanvasRaycasterAndGroupTogether",
+      "Status": "Passed",
+      "Duration": 0.0019279,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.LocalizedText_FallsBackToOtherLanguage_ThenToVisibleMarker",
+      "Status": "Passed",
+      "Duration": 0.0017974,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.LocalizedText_FormatsArguments_AndSurvivesBadFormat",
+      "Status": "Passed",
+      "Duration": 0.0017795,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.Prefab_HasAllElements_AndRetryComesBeforeQuit",
+      "Status": "Passed",
+      "Duration": 0.0019213,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.Screen_FillsTexts_FromKeys",
+      "Status": "Passed",
+      "Duration": 0.0020673,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.TextScaleChange_ReappliesFontSizes_AcrossAllThemedTexts",
+      "Status": "Passed",
+      "Duration": 0.0019717,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.TextTables_ContainAllScreenKeys_InBothLanguages",
+      "Status": "Passed",
+      "Duration": 0.0020264,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.SteamRequiredScreenTests.TextTables_HaveIdenticalKeySets",
+      "Status": "Passed",
+      "Duration": 0.004781,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.TerrainMaterialSceneTests.WorldScene_TerrainViewBuilder_HasTerrainLitMaterial",
+      "Status": "Passed",
+      "Duration": 0.0069811,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ActiveInputHandling_IsInputSystemOnly",
+      "Status": "Passed",
+      "Duration": 0.0070216,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.BootScene_HasOneEventSystemWithInputSystemModule_AndUnmodifiedPrefabInstances",
+      "Status": "Passed",
+      "Duration": 0.0162182,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ExpectedPrefabs_Exist",
+      "Status": "Passed",
+      "Duration": 0.0003193,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.Fonts_CoverGlyphsAndTextTableCharacters",
+      "Status": "Passed",
+      "Duration": 0.0014764,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.Graphics_HaveThemedGraphic_AndColorMatchesToken",
+      "Status": "Passed",
+      "Duration": 0.0433868,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.RaycastTarget_OnlyOnSelectableTargetsAndBlockers",
+      "Status": "Passed",
+      "Duration": 0.0238911,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ScreenRoots_HaveCanvasScalerGroupRaycasterAndLayerOrder",
+      "Status": "Passed",
+      "Duration": 0.0257736,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.Selectables_AreUiButtons_WithThemedSelectable_NoColorTransition_AndNavigable",
+      "Status": "Passed",
+      "Duration": 0.0238328,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.TextKeys_ExistInBothLanguages_OrTextIsDynamic",
+      "Status": "Passed",
+      "Duration": 0.0246406,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.Texts_HaveThemedText_WithTokenValues_AndNoAutoSizeOrRichText",
+      "Status": "Passed",
+      "Duration": 0.0239501,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.Theme_FontSizeRounding_HalfRoundsUp",
+      "Status": "Passed",
+      "Duration": 0.0002015,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ThemeAsset_ColorValues_EqualStoryboardPalette",
+      "Status": "Passed",
+      "Duration": 0.0004847,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ThemeAsset_ContrastPairs_MeetMinimumRatio",
+      "Status": "Passed",
+      "Duration": 0.0014331,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ThemeAsset_FontSizesPerStep_EqualV012BaseUssValues",
+      "Status": "Passed",
+      "Duration": 0.0005609,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.ThemeAsset_HasAllTokens_ScalesAndMinimumFontSize",
+      "Status": "Passed",
+      "Duration": 0.0009013,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.WorldAndBenchScenes_HaveNoCanvasOrEventSystem(\"Assets/_Game/Scenes/World.unity\")",
+      "Status": "Passed",
+      "Duration": 0.0023642,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Infrastructure.UiPrefabRulesTests.WorldAndBenchScenes_HaveNoCanvasOrEventSystem(\"Assets/_Game/Scenes/Bench.unity\")",
+      "Status": "Passed",
+      "Duration": 0.0020661,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureInterestStatsTests.Recompute_BeyondLimit_CountsOut",
+      "Status": "Passed",
+      "Duration": 0.0018556,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureInterestStatsTests.Recompute_CountsTiersAndDistances",
+      "Status": "Passed",
+      "Duration": 0.0004579,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureInterestStatsTests.Recompute_Empty_GivesZeroCountsAndMinusOneDistances",
+      "Status": "Passed",
+      "Duration": 0.0001371,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.ClientCreature_Interpolates_AndStartsFromShownPosition",
+      "Status": "Passed",
+      "Duration": 0.0010561,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.ClientCreature_Yaw_TakesShortWayAround360",
+      "Status": "Passed",
+      "Duration": 0.00026,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.ClientMirror_Reset_ClearsCreatures",
+      "Status": "Passed",
+      "Duration": 0.0001691,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.ClientStore_OldTick_IsIgnored",
+      "Status": "Passed",
+      "Duration": 0.0001921,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.ClientStore_SpawnSnapshotDespawn_Roundtrip",
+      "Status": "Passed",
+      "Duration": 0.0006599,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Interest_Classify_UsesTierBoundaries",
+      "Status": "Passed",
+      "Duration": 0.0002016,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Interest_FromConfig_DerivesIntervalsFromHz",
+      "Status": "Passed",
+      "Duration": 0.0003724,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Interest_Hysteresis_KeepsKnownCreaturesSlightlyLonger",
+      "Status": "Passed",
+      "Duration": 0.0001372,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_BoundaryJitter_DoesNotFlapSpawnDespawn",
+      "Status": "Passed",
+      "Duration": 0.005379,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_LateJoiner_ReceivesInRangeCreatures_AndOnlyAfterReady",
+      "Status": "Passed",
+      "Duration": 0.0058414,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_MoreThanBatchLimit_SplitsSnapshots",
+      "Status": "Passed",
+      "Duration": 0.0030189,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_OutOfRange_IsNeverSent_AndEntering_SendsSpawn_LeavingSendsDespawn",
+      "Status": "Passed",
+      "Duration": 0.0013328,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_PerParticipant_IndependentInterest",
+      "Status": "Passed",
+      "Duration": 0.0002219,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_PlayerLeaves_ForgetsConnection_SoRejoinGetsSpawnAgain",
+      "Status": "Passed",
+      "Duration": 0.0004975,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_RegistryRemoval_DespawnsEvenInsideRange",
+      "Status": "Passed",
+      "Duration": 0.000263,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_SendsSpawnOnce_ThenSnapshotsAtTierRate",
+      "Status": "Passed",
+      "Duration": 0.0015968,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.CreatureReplicationTests.Replicator_SixtyCreatures_OneParticipant_BytesPerSecondIsWithinBudget",
+      "Status": "Passed",
+      "Duration": 0.0060796,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.CommandBeforeJoin_IsDropped",
+      "Status": "Passed",
+      "Duration": 0.0048728,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.Flood_IsRateLimited_AndFloodRepliesAreNotAmplified",
+      "Status": "Passed",
+      "Duration": 0.0055102,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.MalformedCommandPayload_GetsRejectionReply_AndDoesNotChangeState",
+      "Status": "Passed",
+      "Duration": 0.0004706,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.OutOfRangeValue_IsRejected_ByRangeCheck",
+      "Status": "Passed",
+      "Duration": 0.0002535,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.ServerToClientKinds_SentByAClient_AreDropped",
+      "Status": "Passed",
+      "Duration": 0.000288,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.UnknownCommandKind_GetsRejectionReply",
+      "Status": "Passed",
+      "Duration": 0.0002257,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.ValidCommand_IsProcessedOnTick_AndResultSentToRequesterOnly",
+      "Status": "Passed",
+      "Duration": 0.0004785,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.GatewayTests.WorldState_CanOnlyBeChangedThroughServerWorld",
+      "Status": "Passed",
+      "Duration": 0.0002748,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.AcceptedButNoWorldReady_TimesOut_AndFreesTheSlot",
+      "Status": "Passed",
+      "Duration": 0.0007648,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.DevTransport_WithoutDevId_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0002107,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.Disconnect_RemovesPlayer_FreesSlot_AndRaisesPlayerLeft",
+      "Status": "Passed",
+      "Duration": 0.0013785,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.DisconnectDuringSync_StopsSendingAndFreesSlot",
+      "Status": "Passed",
+      "Duration": 0.0003605,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.DuplicateJoinRequest_OnSameConnection_IsIgnored",
+      "Status": "Passed",
+      "Duration": 0.0002878,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.EightPlayersJoin_NinthIsRejectedFull_AndDisconnectedAfterDelay",
+      "Status": "Passed",
+      "Duration": 0.0012245,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.ExceptionInHandling_DoesNotEscapeTheGateway",
+      "Status": "Passed",
+      "Duration": 0.0005276,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.NoJoinRequest_TimesOut",
+      "Status": "Passed",
+      "Duration": 0.0002456,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.NormalJoin_FullSequence_AcceptedThenSnapshotThenComplete",
+      "Status": "Passed",
+      "Duration": 0.0005847,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.ReleaseAndDevBuilds_WithSameCoreVersion_AreRejected",
+      "Status": "Passed",
+      "Duration": 0.0002508,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.SamePlayerSecondConnection_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0002518,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.Steam_NonLobbyMember_IsAccessDenied",
+      "Status": "Passed",
+      "Duration": 0.0002356,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.Steam_UnparsableRemoteId_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0001626,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.Steam_UsesRemoteId_NotTheIdInTheRequest",
+      "Status": "Passed",
+      "Duration": 0.000254,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.VersionMismatch_IsRejected_AndPlayerNotAdded",
+      "Status": "Passed",
+      "Duration": 0.0002728,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.WorldHashMismatch_IsRecordedAndRejected",
+      "Status": "Passed",
+      "Duration": 0.0002873,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.JoinHandshakeTests.WorldReadyBeforeRequest_AndUnexpectedKinds_AreIgnored",
+      "Status": "Passed",
+      "Duration": 0.0001643,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ReplicationPublisherTests.ChunksAreUnderSixteenKilobytes",
+      "Status": "Passed",
+      "Duration": 0.0045573,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ReplicationPublisherTests.LateJoiner_SnapshotPlusDeltas_EqualsHostRoster",
+      "Status": "Passed",
+      "Duration": 0.0032758,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ReplicationPublisherTests.ReadyConnection_ReceivesDeltaOnTickEnd",
+      "Status": "Passed",
+      "Duration": 0.0003049,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ReplicationPublisherTests.SnapshotRate_StaysUnderLimit_PerSecond",
+      "Status": "Passed",
+      "Duration": 0.0053227,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ReplicationPublisherTests.SyncingConnection_DoesNotReceiveDeltasBeforeJoinComplete",
+      "Status": "Passed",
+      "Duration": 0.0044573,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.ChangeTool_IsDeterministic_AndChangesExactlyRequestedCount",
+      "Status": "Passed",
+      "Duration": 0.6266896,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.FullWorld_HasAboutTwentyThousandResources",
+      "Status": "Passed",
+      "Duration": 0.0001979,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.Hit_FiveTimes_FellsTree_OnceAndSixthIsRejected",
+      "Status": "Passed",
+      "Duration": 0.080481,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.Hit_FromFarAway_IsRejected_AndChangesNothing",
+      "Status": "Passed",
+      "Duration": 0.0003529,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.Hit_WithBadValues_IsRejected",
+      "Status": "Passed",
+      "Duration": 0.0003573,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.LateJoin_With5000Changes_SnapshotEqualsHost_ThenHitDeltaIsApplied",
+      "Status": "Passed",
+      "Duration": 0.0421229,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.Receiver_HoldsDeltasUntilJoinComplete_ThenAppliesInOrder",
+      "Status": "Passed",
+      "Duration": 0.0005911,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.Net.ResourceSyncTests.TwoPlayersHittingSameTree_FellItOnlyOnce",
+      "Status": "Passed",
+      "Duration": 0.0014489,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Fbm_MatchesReference",
+      "Status": "Passed",
+      "Duration": 0.0001632,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.LatticeQ15_MatchesReference_AndStaysInRange",
+      "Status": "Passed",
+      "Duration": 0.000387,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Mix64_KnownValues",
+      "Status": "Passed",
+      "Duration": 0.0000887,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.MulQ16_UsesArithmeticShift_ForNegativeValues",
+      "Status": "Passed",
+      "Duration": 0.0000973,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Rand_MatchesReferenceImplementation_IncludingNegativeCoordinates",
+      "Status": "Passed",
+      "Duration": 0.0000987,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.RandBelow_StaysInRange_AndCoversRangeRoughlyEvenly",
+      "Status": "Passed",
+      "Duration": 0.0155898,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.RetrySeed_AttemptZeroKeepsSeed_OthersDiffer",
+      "Status": "Passed",
+      "Duration": 0.0001954,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SeedCodec_IsCaseSensitive_AndKeepsInnerHyphens",
+      "Status": "Passed",
+      "Duration": 0.0004819,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SeedCodec_MatchesReferenceHash_AndTrimsAsciiWhitespaceOnly",
+      "Status": "Passed",
+      "Duration": 0.0001926,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SeedCodec_RandomSeedText_UsesSafeAlphabet_AndFormatsForDisplay",
+      "Status": "Passed",
+      "Duration": 0.0015295,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SeedCodec_Rejects_EmptyAndTooLong_AcceptsExactly64Bytes",
+      "Status": "Passed",
+      "Duration": 0.0004233,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SeedCodec_UsesUtf8Bytes_NotCharacterCount",
+      "Status": "Passed",
+      "Duration": 0.0002189,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SmoothQ16_ReferenceValues",
+      "Status": "Passed",
+      "Duration": 0.0000983,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.SplitMix64_Next_MatchesPublishedVector",
+      "Status": "Passed",
+      "Duration": 0.0001099,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.StreamKey_DiffersByRegionStageAndAttempt",
+      "Status": "Passed",
+      "Duration": 0.000089,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.StreamKey_MatchesReferenceImplementation",
+      "Status": "Passed",
+      "Duration": 0.0000674,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.ValueNoise_AtLatticePoint_EqualsLatticeValue",
+      "Status": "Passed",
+      "Duration": 0.000056,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.ValueNoise_MatchesReference",
+      "Status": "Passed",
+      "Duration": 0.0000609,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Xxh64_Int32Array_IsLittleEndianBytes",
+      "Status": "Passed",
+      "Duration": 0.0001764,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Xxh64_MatchesPublishedVectors",
+      "Status": "Passed",
+      "Duration": 0.0002353,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Xxh64_Stream_AnyChunking_EqualsOneShot",
+      "Status": "Passed",
+      "Duration": 0.0003563,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.DetMathTests.Xxh64_Stream_Digest_DoesNotChangeState",
+      "Status": "Passed",
+      "Duration": 0.0001045,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Compare_DetectsMismatch_AndPointsAtTile",
+      "Status": "Passed",
+      "Duration": 0.0847005,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Compare_MissingSeedAndProfileMismatch_AreReported",
+      "Status": "Passed",
+      "Duration": 0.1367234,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Compare_SameReports_Match",
+      "Status": "Passed",
+      "Duration": 0.8252917,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.MiniJson_ParsesBasicShapes_AndRejectsGarbage",
+      "Status": "Passed",
+      "Duration": 0.00186,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Options_ParseCompare_CollectsPathsUntilNextFlag",
+      "Status": "Passed",
+      "Duration": 0.0006821,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Options_ParseGenerate",
+      "Status": "Passed",
+      "Duration": 0.0002979,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Options_ReportMissingValuesAndBadVersion",
+      "Status": "Passed",
+      "Duration": 0.0002523,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Report_Json_RoundTrips",
+      "Status": "Passed",
+      "Duration": 0.1511022,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.Runner_RejectsInvalidSeedText",
+      "Status": "Passed",
+      "Duration": 0.0002472,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.GenHashToolTests.SeedList_SkipsBlankLinesAndComments",
+      "Status": "Passed",
+      "Duration": 0.000387,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.DifferentSeedsAndAttempts_GiveDifferentWorlds",
+      "Status": "Passed",
+      "Duration": 0.2074535,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.Erosion_ConservesTotalHeight",
+      "Status": "Passed",
+      "Duration": 0.0883256,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.Erosion_ReducesRoughness",
+      "Status": "Passed",
+      "Duration": 0.1151401,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.FullProfile_ProducesAboutTwentyThousandResources_InReasonableTime",
+      "Status": "Passed",
+      "Duration": 0.5546018,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.GoldenHash_Full_MatchesPinnedValues",
+      "Status": "Passed",
+      "Duration": 2.0100263,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.GoldenHash_Full_RepeatedGenerationOnSamePc_IsIdentical",
+      "Status": "Passed",
+      "Duration": 4.4345404,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.GoldenHash_Small_MatchesPinnedValues",
+      "Status": "Passed",
+      "Duration": 0.2035634,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.Hash_ChangesWhenOneHeightChanges_AndOnlyThatTileHashChanges",
+      "Status": "Passed",
+      "Duration": 0.1122473,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.Hash_HasTileAndRegionPartialHashes",
+      "Status": "Passed",
+      "Duration": 0.0673704,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.HeightQueries_AreIntegerAndConsistent",
+      "Status": "Passed",
+      "Duration": 0.0352644,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.ParallelDegree_DoesNotChangeResult",
+      "Status": "Passed",
+      "Duration": 0.9374945,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.ResourceCellsAndSlots_AreEncodedInId",
+      "Status": "Passed",
+      "Duration": 0.0384339,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.Resources_AreSortedByUniqueId_InsideWorld_WithValidTypes",
+      "Status": "Passed",
+      "Duration": 0.046734,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.SameSeed_GeneratedTwice_GivesIdenticalWorldAndHash",
+      "Status": "Passed",
+      "Duration": 0.5381954,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "Game.Tests.WorldGen.V0GeneratorTests.TowerSites_KeepMinSpacing_AndAreSortedById",
+      "Status": "Passed",
+      "Duration": 0.0490971,
+      "Message": null,
+      "StackTrace": null
+    },
+    {
+      "FullName": "AddressableAssets.DocExampleCode.TestStub.RequiredTest",
+      "Status": "Passed",
+      "Duration": 0.0000786,
+      "Message": null,
+      "StackTrace": null
+    }
+  ],
+  "Duration": 26.81,
+  "StatusPath": null,
+  "Mode": "EditMode",
+  "FilterApplied": null,
+  "success": true,
+  "result": null
+}
+<claude-code-hint v="1" type="plugin" value="unity@claude-plugins-official" />

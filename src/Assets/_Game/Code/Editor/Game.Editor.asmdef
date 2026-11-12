@@ -6,7 +6,9 @@
         "Game.Application",
         "Game.Adapters.Presentation",
         "Game.Infra.Config",
-        "Game.Bootstrap"
+        "Game.Bootstrap",
+        "UnityEngine.UI",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

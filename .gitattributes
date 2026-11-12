@@ -2,13 +2,17 @@
 # Unity 게임 개발용 .gitattributes
 # - 텍스트 파일 줄바꿈 통일
 # - 씬·프리팹 병합에 Unity Smart Merge(UnityYAMLMerge) 사용
-#   (사용 전에 git config로 merge 드라이버를 한 번 등록해야 함)
+#   (merge 드라이버는 등록하지 않음. 충돌이 나면 git mergetool로 UnityYAMLMerge를 실행하며,
+#    저장소 로컬 git 설정 절차는 docs/dev/SMART_MERGE_SETUP.md 참고)
 # - 큰 바이너리 파일은 Git LFS로 관리
 #   (사용 전에 Git LFS 설치와 git lfs install 필요)
 # =============================================================
 
 # 기본: git이 텍스트 여부를 판단하고 줄바꿈을 통일
 * text=auto
+
+# git 훅(셸 스크립트)은 Windows에서도 LF 유지. CRLF면 sh가 실행하지 못함 (IMP-011)
+tools/git/*        text eol=lf
 
 # -------------------------------------------------------------
 # 코드와 텍스트
@@ -110,6 +114,8 @@ LightingData.asset filter=lfs diff=lfs merge=lfs -text -eol
 # -------------------------------------------------------------
 *.ttf filter=lfs diff=lfs merge=lfs -text
 *.otf filter=lfs diff=lfs merge=lfs -text
+# TMP 글꼴 애셋: 아틀라스 텍스처가 들어 있어 파일 하나가 수십 MB (2026-11-04)
+src/Assets/_Game/UI/Fonts/*.asset filter=lfs diff=lfs merge=lfs -text
 
 # -------------------------------------------------------------
 # Git LFS: 네이티브 플러그인과 압축 파일

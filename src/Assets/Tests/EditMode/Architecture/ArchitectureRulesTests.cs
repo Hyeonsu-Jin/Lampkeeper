@@ -47,6 +47,8 @@ namespace Game.Tests.Architecture
         private const string RenderPipelinePrefix = "Unity.RenderPipelines";
         private const string PipelinePackageName = "com.unity.pipeline";
         private const string PipelineAssemblyPrefix = "Unity.Pipeline";
+        private const string UguiRuntime = "UnityEngine.UI";
+        private const string TmpRuntime = "Unity.TextMeshPro";
 
         // 사용자 결정 2026-11-03: 런타임 기능이 없는 속성 정의 어셈블리만 플레이어에 들어가도 좋다.
         private const string PipelineAllowedRuntimeAssembly = "Unity.Pipeline.Attributes";
@@ -60,7 +62,7 @@ namespace Game.Tests.Architecture
             [App] = (new[] { Domain, WorldGen }, true),
             [Persistence] = (new[] { App, Domain }, true),
             [Net] = (new[] { App, Domain, WorldGen, FishNet }, false),
-            [Presentation] = (new[] { App, Domain, WorldGen, "Unity.InputSystem", "Unity.Localization" }, false),
+            [Presentation] = (new[] { App, Domain, WorldGen, "Unity.InputSystem", "Unity.Localization", UguiRuntime, TmpRuntime }, false),
             [Steam] = (new[] { App, Domain, SteamworksNet }, false),
             [Transport] = (new[] { Net, App, FishNet, FishySteamworks }, false),
             [AiJobs] = (new[] { App, Domain, "Unity.Burst", "Unity.Collections", "Unity.Mathematics" }, false),
@@ -174,6 +176,31 @@ namespace Game.Tests.Architecture
             // 규칙 2: Domain, WorldGen, Application, Adapters.Persistence만 순수 C#
             var pure = RuntimeGameAsmdefs().Where(a => a.NoEngineReferences).Select(a => a.Name).OrderBy(n => n, StringComparer.Ordinal);
             CollectionAssert.AreEqual(new[] { Persistence, App, Domain, WorldGen }.OrderBy(n => n, StringComparer.Ordinal), pure);
+        }
+
+        /// <summary>SDD 3.4.2 표(v0.8 + M1-04~M1-06, M1-11 갱신): 시험 어셈블리가 참조하는 게임·라이브러리 어셈블리.</summary>
+        private static readonly Dictionary<string, string[]> ExpectedTestReferences = new Dictionary<string, string[]>
+        {
+            ["Game.Tests.Domain"] = new[] { Domain },
+            ["Game.Tests.Application"] = new[] { App, Domain, WorldGen },
+            ["Game.Tests.Infrastructure"] = new[] { App, Domain, Config, Presentation, Transport, Steam, Platform, AiJobs, Bootstrap, EditorTools, FishNet, UguiRuntime, TmpRuntime }, // M1-11: AiJobs 추가(SDD 3.4.2 표 갱신 필요)
+            ["Game.Tests.Architecture"] = new string[0],
+            ["Game.Tests.WorldGen"] = new[] { WorldGen, App },
+            ["Game.Tests.Net"] = new[] { App, Domain, Net },
+            ["Game.Tests.Integration"] = new[] { App, Domain, Net, Presentation, Platform, Rendering, Bootstrap, Transport, FishNet, FishySteamworks, UguiRuntime, TmpRuntime },
+        };
+
+        [Test]
+        public void TestAssemblies_ReferenceExactlyTheAssembliesInSddTable()
+        {
+            var testAsmdefs = All.Where(a => a.Name.StartsWith("Game.Tests.", StringComparison.Ordinal)).Select(a => a.Name).OrderBy(n => n, StringComparer.Ordinal);
+            CollectionAssert.AreEqual(ExpectedTestReferences.Keys.OrderBy(n => n, StringComparer.Ordinal), testAsmdefs, "SDD 3.4.2의 시험 어셈블리 목록과 다릅니다.");
+            foreach (KeyValuePair<string, string[]> entry in ExpectedTestReferences)
+            {
+                // Test Runner·NUnit 참조는 표에서 공통이라 비교에서 뺀다.
+                var actual = Get(entry.Key).References.Where(r => !r.EndsWith("TestRunner", StringComparison.Ordinal));
+                CollectionAssert.AreEquivalent(entry.Value, actual, entry.Key + "의 참조가 SDD 3.4.2 표와 다릅니다.");
+            }
         }
 
         // =========================================================
@@ -321,6 +348,50 @@ namespace Game.Tests.Architecture
             foreach (AsmdefInfo asm in RuntimeGameAsmdefs().Where(a => a.References.Contains(FishySteamworks)))
             {
                 CollectionAssert.Contains(allowed, asm.Name, asm.Name + "이(가) FishySteamworks를 참조합니다.");
+            }
+        }
+
+        // =========================================================
+        // 5-1) UI 패키지 격리 (SDD 3.4.1 규칙 9, D-27)
+        // =========================================================
+        [Test]
+        public void UguiAndTextMeshPro_OnlyPresentationAmongGameRuntimeAssemblies()
+        {
+            foreach (AsmdefInfo asm in RuntimeGameAsmdefs().Where(a => a.Name != Presentation))
+            {
+                CollectionAssert.DoesNotContain(asm.References, UguiRuntime, asm.Name + "이(가) UnityEngine.UI를 참조합니다.");
+                CollectionAssert.DoesNotContain(asm.References, TmpRuntime, asm.Name + "이(가) Unity.TextMeshPro를 참조합니다.");
+            }
+            CollectionAssert.Contains(Get(Presentation).References, UguiRuntime);
+            CollectionAssert.Contains(Get(Presentation).References, TmpRuntime);
+        }
+
+        [Test]
+        public void GameCode_DoesNotUseUiToolkit_AndNoUxmlUssPanelSettingsExist()
+        {
+            // 엔진 내장 모듈이라 asmdef 로 막을 수 없으므로 소스 글자와 파일 종류를 검사한다.
+            var offenders = new List<string>();
+            foreach (string folder in new[] { Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code"), Path.Combine(AsmdefModel.AssetsFolder, "Tests") })
+            {
+                foreach (string file in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
+                {
+                    if (Path.GetFileName(file) == "ArchitectureRulesTests.cs")
+                    {
+                        continue; // 이 시험 자신은 검사 글자를 문자열로 가진다
+                    }
+                    string text = File.ReadAllText(file);
+                    if (text.Contains("UnityEngine." + "UIElements") || text.Contains("UnityEditor." + "UIElements"))
+                    {
+                        offenders.Add(file.Replace('\\', '/'));
+                    }
+                }
+            }
+            CollectionAssert.IsEmpty(offenders, "코드가 UI Toolkit을 씁니다(D-27):\n" + string.Join("\n", offenders));
+
+            foreach (string pattern in new[] { "*.uxml", "*.uss", "*.tss", "PanelSettings*.asset" })
+            {
+                CollectionAssert.IsEmpty(Directory.GetFiles(Path.Combine(AsmdefModel.AssetsFolder, "_Game"), pattern, SearchOption.AllDirectories),
+                    "UI Toolkit 자산이 남아 있습니다: " + pattern);
             }
         }
 
@@ -494,6 +565,43 @@ namespace Game.Tests.Architecture
             string assets = AsmdefModel.AssetsFolder;
             StringAssert.Contains("\"version\": \"4.7.4\"", File.ReadAllText(Path.Combine(assets, "ThirdParty", "FishNet", "package.json")), "FishNet 4.7.4R");
             StringAssert.Contains("\"version\": \"4.1.1\"", File.ReadAllText(Path.Combine(assets, "ThirdParty", "FishySteamworks", "package.json")), "FishySteamworks 4.1.1");
+        }
+
+        [Test]
+        public void NetAdapter_FishNetTypes_OnlyInTransportAndAvatarFolders()
+        {
+            // [SDD 3.4.1 규칙 8] FishNet 형식을 쓰는 코드는 Transport/(DES-121)와 Avatar/(DES-084)뿐이다.
+            // 게이트웨이·참가 절차·복제는 포트와 Protocol 메시지에만 의존해야 FishNet 없이 시험된다.
+            string netFolder = Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code", "Adapters", "Net");
+            int checkedFiles = 0;
+            foreach (string file in Directory.GetFiles(netFolder, "*.cs", SearchOption.AllDirectories))
+            {
+                string relative = file.Substring(netFolder.Length + 1).Replace('\\', '/');
+                if (relative.StartsWith("Transport/", StringComparison.Ordinal) || relative.StartsWith("Avatar/", StringComparison.Ordinal))
+                {
+                    continue;
+                }
+                checkedFiles++;
+                string code = string.Join(" ", File.ReadAllLines(file).Where(l => !l.TrimStart().StartsWith("//", StringComparison.Ordinal)));
+                StringAssert.DoesNotContain("FishNet", code, relative + ": Transport/·Avatar/ 밖에서 FishNet 형식을 쓰면 안 됩니다.");
+            }
+            Assert.Greater(checkedFiles, 3, "검사 대상 파일을 찾지 못했습니다.");
+        }
+
+        [Test]
+        public void ApplicationAndDomain_DoNotMentionFishNetOrSteamworks()
+        {
+            foreach (string layer in new[] { "Application", "Domain", "WorldGen" })
+            {
+                string folder = Path.Combine(AsmdefModel.AssetsFolder, "_Game", "Code", layer);
+                foreach (string file in Directory.GetFiles(folder, "*.cs", SearchOption.AllDirectories))
+                {
+                    string text = File.ReadAllText(file);
+                    StringAssert.DoesNotContain("using FishNet", text, file);
+                    StringAssert.DoesNotContain("using Steamworks", text, file);
+                    StringAssert.DoesNotContain("using UnityEngine", text, file);
+                }
+            }
         }
 
         [Test]

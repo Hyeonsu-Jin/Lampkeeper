@@ -1,0 +1,12 @@
+{
+  "player": "5",
+  "bot": true,
+  "complete": true,
+  "connect_s": 0.238,
+  "generate_s": 0.344,
+  "snapshot_s": 0.159,
+  "views_s": null,
+  "total_s": 0.741,
+  "budget_total_s": 60,
+  "within_budget": true
+}

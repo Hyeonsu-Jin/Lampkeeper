@@ -2,35 +2,50 @@
 // 파일: BuildCommands.cs
 // 역할: Windows x64 플레이어 빌드(개발/출시)와 프로젝트 전체 설정 한 번에 적용(RunAll).
 // 레이어: infrastructure (Game.Editor, 편집기 전용)
-// 관련: NFR-043, NFR-009, DES-112 / SDD M1-01 (5) 빌드 번호, App ID 설정 파일
+// 관련: NFR-043, NFR-009, NFR-058, DES-112, DES-037 / SDD 3.7.12 (게임 버전 규칙), App ID 설정 파일
 //
-// 배치 모드 예
-//   Unity.exe -batchmode -quit -projectPath src -executeMethod Game.Editor.BuildCommands.BuildWindowsDevelopment -buildNumber 12
+// 실행: 열린 에디터에서 메뉴 Game/Build/Windows Development|Release (또는 `unity command build run`).
+//       batchmode Unity를 따로 띄우지 않는다.
+// 게임 버전: bundleVersion(사람이 정한 MAJOR.MINOR.PATCH[-사전릴리스])에 빌드하는 동안만
+//           `+<rel|dev>.<UTC 시각>.<커밋 7자>[.dirty]`를 붙이고, 끝나면(실패해도) 원래 값으로 되돌린다.
+//           `-buildNumber`, `GAME_BUILD_NUMBER`는 폐지.
 // 개발 빌드: Development Build(DEVELOPMENT_BUILD) + 실행 파일 옆에 steam_appid.txt(480) 복사.
 // 출시 빌드: steam_appid.txt를 넣지 않는다(정식 App ID가 정해지면 SteamAppIds.Release 사용).
 // =============================================================
 using System;
+using System.Diagnostics;
 using System.IO;
+using Game.Domain.Common;
 using UnityEditor;
 using UnityEditor.Build.Reporting;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace Game.Editor
 {
     /// <summary>빌드 명령.</summary>
     public static class BuildCommands
     {
-        private const string BuildNumberArg = "-buildNumber";
-        private const string BuildNumberEnv = "GAME_BUILD_NUMBER";
         private const string SteamAppIdFile = "steam_appid.txt";
 
-        /// <summary>프로젝트 설정 + 데이터 애셋 + Boot 씬을 한 번에 만든다.</summary>
+        /// <summary>git 명령 하나의 시간 제한(밀리초). [SDD 3.7.12 (2)]</summary>
+        private const int GitTimeoutMilliseconds = 5000;
+
+        /// <summary>
+        /// 프로젝트 설정·데이터·입력 애셋은 코드가 원본이라 다시 만들고, 씬·프리팹·테마 애셋은 「없을 때만 만들고 있으면 검사만」 한다.
+        /// 빠진 것이 있으면 예외로 실패한다. 실행 뒤 git status 에 .unity / UI .prefab 변경이 없어야 한다(SDD 3.8.2).
+        /// </summary>
         [MenuItem("Game/Setup/Run All")]
         public static void RunAll()
         {
             ProjectConfigurator.Apply();
             DataAssetBuilder.CreateDefaults();
-            BootSceneBuilder.CreateBootScene();
+            GraphicsAssetBuilder.CreateAll();
+            InputActionsBuilder.Create();
+            UiThemeBuilder.Ensure();
+            AvatarPrefabBuilder.Ensure();
+            WorldSceneBuilder.Ensure();
+            BootSceneBuilder.Ensure();
+            BenchSceneBuilder.Ensure();
         }
 
         /// <summary>Windows x64 개발 빌드(IL2CPP).</summary>
@@ -44,17 +59,35 @@ namespace Game.Editor
         private static void Build(bool development)
         {
             int exitCode = 1;
+            string originalVersion = null; // 빌드 전 bundleVersion(핵심). 아직 바꾸지 않았으면 null
             try
             {
                 string projectRoot = Directory.GetParent(UnityEngine.Application.dataPath).FullName;
                 string folder = Path.Combine(projectRoot, "Builds", development ? "Development" : "Release");
                 string exePath = Path.Combine(folder, ProjectConfigurator.ProductName + ".exe");
 
-                PlayerSettings.bundleVersion = ProjectConfigurator.VersionPrefix + "." + ReadBuildNumber();
+                // [NFR-058] 게임 버전: 핵심 검사 → git 정보 → (출시) 태그 검사 → 메타데이터를 붙여 빌드, 끝나면 복구(finally).
+                GameVersion core = ReadCoreVersion(out originalVersion);
+                string gitRoot = Directory.GetParent(projectRoot).FullName;
+                ReadGitInfo(gitRoot, out string commit, out bool dirty);
+                if (!development)
+                {
+                    // [IMP-012] 출시 빌드는 깨끗한 커밋에서만(dirty·git 읽기 실패면 거부).
+                    BuildPolicy.CheckReleaseAllowed(false, dirty, commit);
+                    CheckReleaseTag(gitRoot, core, commit);
+                }
+                string channel = development ? GameVersion.ChannelDevelopment : GameVersion.ChannelRelease;
+                string fullVersion = core.Core + "+" + GameVersion.ComposeBuildMetadata(channel, DateTime.UtcNow, commit, dirty);
+                if (!GameVersion.TryParse(fullVersion, out _))
+                {
+                    throw new InvalidOperationException("게임 버전 형식 오류: " + fullVersion);
+                }
+                PlayerSettings.bundleVersion = fullVersion;
+                Debug.Log("[Build] 게임 버전=" + fullVersion);
 
                 var options = new BuildPlayerOptions
                 {
-                    scenes = EnabledScenePaths(),
+                    scenes = EnabledScenePaths(development),
                     locationPathName = exePath,
                     target = BuildTarget.StandaloneWindows64,
                     options = development ? BuildOptions.Development : BuildOptions.None,
@@ -80,6 +113,24 @@ namespace Game.Editor
                 }
                 Debug.Log("[Build] Unity Pipeline 런타임 어셈블리 없음(검사: Managed 폴더, global-metadata.dat)");
 
+                // [NFR-044, R-37] Pretendard(SIL OFL 1.1) 라이선스 원문을 실행 파일 옆에 동봉한다(OFL 재배포 조건).
+                string oflSource = Path.Combine(projectRoot, "Assets", "_Game", "UI", "Fonts", "Pretendard-OFL.txt");
+                if (!File.Exists(oflSource))
+                {
+                    throw new InvalidOperationException("Pretendard 라이선스 원문을 찾지 못했습니다: " + oflSource);
+                }
+                File.Copy(oflSource, Path.Combine(folder, "Pretendard-OFL.txt"), true);
+
+                // [IMP-012, SEC-009] 디버그·백업 폴더(*_DoNotShip, *_ButDontShipItWithYourGame)는 배포 폴더 밖으로 옮긴다.
+                int moved = BuildPolicy.MoveNonShippable(folder, Path.Combine(projectRoot, "Builds", BuildPolicy.SymbolsFolderName, development ? "Development" : "Release"));
+                Debug.Log("[Build] 배포 제외 폴더 " + moved + "개를 Builds/" + BuildPolicy.SymbolsFolderName + "로 옮겼습니다.");
+
+                // [IMP-012] 개발 빌드는 내부용 표시 파일을 둔다.
+                if (development)
+                {
+                    File.WriteAllText(Path.Combine(folder, BuildPolicy.InternalMarkerFile), BuildPolicy.InternalMarkerText);
+                }
+
                 // 개발 빌드만 App ID 480 파일을 실행 파일 옆에 둔다(NFR-009).
                 string appIdTarget = Path.Combine(folder, SteamAppIdFile);
                 if (development)
@@ -96,6 +147,15 @@ namespace Game.Editor
             {
                 Debug.LogError("[Build] " + ex);
             }
+            finally
+            {
+                // 빌드가 끝나면(실패·중단 포함) bundleVersion을 핵심으로 되돌려 ProjectSettings.asset이 바뀌지 않게 한다.
+                if (originalVersion != null)
+                {
+                    PlayerSettings.bundleVersion = originalVersion;
+                    AssetDatabase.SaveAssets(); // ProjectSettings.asset에도 원래 값이 바로 기록되게 한다
+                }
+            }
 
             if (UnityEngine.Application.isBatchMode)
             {
@@ -103,7 +163,7 @@ namespace Game.Editor
             }
         }
 
-        private static string[] EnabledScenePaths()
+        private static string[] EnabledScenePaths(bool development)
         {
             var paths = new System.Collections.Generic.List<string>();
             foreach (EditorBuildSettingsScene scene in EditorBuildSettings.scenes)
@@ -113,22 +173,134 @@ namespace Game.Editor
                     paths.Add(scene.path);
                 }
             }
+            // Bench 장면(측정 장면, M1-05)은 개발 빌드에만 넣는다. 출시 빌드에는 들어가지 않는다.
+            if (development && File.Exists(BenchSceneBuilder.BenchScenePath) && !paths.Contains(BenchSceneBuilder.BenchScenePath))
+            {
+                paths.Add(BenchSceneBuilder.BenchScenePath);
+            }
             return paths.ToArray();
         }
 
-        /// <summary>빌드 번호: 명령줄 -buildNumber, 없으면 환경 변수 GAME_BUILD_NUMBER, 둘 다 없으면 0.</summary>
-        private static int ReadBuildNumber()
+        /// <summary>
+        /// bundleVersion을 읽어 핵심을 검사한다. `+` 뒤가 남아 있으면(이전 빌드가 되돌리기 전에 중단된 경우) 떼고 경고한다.
+        /// </summary>
+        /// <param name="original">되돌릴 값(`+` 뒤를 뗀 핵심 문자열)</param>
+        /// <returns>해석한 핵심 버전</returns>
+        /// <exception cref="InvalidOperationException">핵심이 SemVer 형식이 아닐 때</exception>
+        private static GameVersion ReadCoreVersion(out string original)
         {
-            string[] args = Environment.GetCommandLineArgs();
-            for (int i = 0; i < args.Length - 1; i++)
+            string text = PlayerSettings.bundleVersion ?? string.Empty;
+            int plus = text.IndexOf('+');
+            if (plus >= 0)
             {
-                if (args[i] == BuildNumberArg && int.TryParse(args[i + 1], out int fromArg) && fromArg >= 0)
+                Debug.LogWarning("[Build] bundleVersion '" + text + "'에 '+' 뒤가 남아 있어 뗍니다(이전 빌드 중단 흔적).");
+                text = text.Substring(0, plus);
+                PlayerSettings.bundleVersion = text;
+            }
+            if (!GameVersion.TryParse(text, out GameVersion core))
+            {
+                throw new InvalidOperationException("게임 버전 형식 오류: '" + text + "' (Project Settings → Player → Version을 MAJOR.MINOR.PATCH[-사전릴리스]로 고치세요)");
+            }
+            original = text;
+            return core;
+        }
+
+        /// <summary>
+        /// git 커밋 7자와 수정 여부를 읽는다. 추적 파일만 본다(--untracked-files=no). git이 없거나 실패하면 `nogit`으로 두고 경고한다.
+        /// </summary>
+        private static void ReadGitInfo(string gitRoot, out string commit, out bool dirty)
+        {
+            commit = GameVersion.NoGitCommit;
+            dirty = false;
+            if (!TryRunGit(gitRoot, "rev-parse --short=7 HEAD", out string head) || head.Length == 0)
+            {
+                Debug.LogWarning("[Build] git 커밋을 읽지 못했습니다. 커밋 자리는 '" + GameVersion.NoGitCommit + "'로 둡니다.");
+                return;
+            }
+            commit = head;
+            if (TryRunGit(gitRoot, "status --porcelain --untracked-files=no", out string status))
+            {
+                dirty = BuildPolicy.IsDirty(status); // [R-46] 글꼴 두 파일은 제외
+            }
+            else
+            {
+                Debug.LogWarning("[Build] git status를 읽지 못했습니다. 수정 여부는 '깨끗함'으로 둡니다.");
+            }
+        }
+
+        /// <summary>
+        /// 출시 빌드만: 태그 v(핵심)이 있고 그 커밋이 HEAD와 다르면 실패한다.
+        /// 이미 배포한 번호를 다른 내용에 다시 쓰는 것을 막는다. 태그가 없으면 통과.
+        /// </summary>
+        private static void CheckReleaseTag(string gitRoot, GameVersion core, string shortCommit)
+        {
+            if (shortCommit == GameVersion.NoGitCommit)
+            {
+                return; // git을 못 읽었으면 검사할 수 없다(경고는 ReadGitInfo가 이미 남김)
+            }
+            string tag = "v" + core.Core;
+            if (!TryRunGit(gitRoot, "rev-parse -q --verify refs/tags/" + tag + "^{commit}", out string tagCommit) || tagCommit.Length == 0)
+            {
+                return; // 태그 없음
+            }
+            if (!TryRunGit(gitRoot, "rev-parse HEAD", out string headCommit) || !string.Equals(tagCommit, headCommit, StringComparison.Ordinal))
+            {
+                throw new InvalidOperationException("태그 " + tag + "가 현재 커밋과 다른 커밋을 가리킵니다. 배포한 번호는 다른 내용에 다시 쓸 수 없으니 버전을 올리세요.");
+            }
+        }
+
+        /// <summary>git을 실행해 표준 출력(앞뒤 공백 제거)을 얻는다. 시간 제한 5초, 종료 코드 0이 아니면 false.</summary>
+        private static bool TryRunGit(string workingDirectory, string arguments, out string output)
+        {
+            output = string.Empty;
+            try
+            {
+                var info = new ProcessStartInfo("git", arguments)
                 {
-                    return fromArg;
+                    WorkingDirectory = workingDirectory,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+                using (Process process = Process.Start(info))
+                {
+                    if (process == null)
+                    {
+                        return false;
+                    }
+                    // 출력을 비동기로 읽어, 파이프가 차서 멈추는 일을 막는다.
+                    System.Threading.Tasks.Task<string> stdout = process.StandardOutput.ReadToEndAsync();
+                    process.StandardError.ReadToEndAsync();
+                    if (!process.WaitForExit(GitTimeoutMilliseconds))
+                    {
+                        try
+                        {
+                            process.Kill();
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            // 그 사이 끝난 경우
+                        }
+                        return false;
+                    }
+                    process.WaitForExit(); // 비동기 읽기 마무리
+                    if (process.ExitCode != 0)
+                    {
+                        return false;
+                    }
+                    output = stdout.Result.Trim();
+                    return true;
                 }
             }
-            string env = Environment.GetEnvironmentVariable(BuildNumberEnv);
-            return int.TryParse(env, out int fromEnv) && fromEnv >= 0 ? fromEnv : 0;
+            catch (System.ComponentModel.Win32Exception)
+            {
+                return false; // git 실행 파일이 없음
+            }
+            catch (InvalidOperationException)
+            {
+                return false;
+            }
         }
     }
 }
